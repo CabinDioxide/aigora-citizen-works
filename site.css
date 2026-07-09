@@ -1,0 +1,105 @@
+/* AIgora Citizen Works — shared portal styles */
+:root{
+  color-scheme: light;
+  --ink:#20211f;
+  --muted:#6d6a63;
+  --bg:#f5f3ee;
+  --panel:#ffffff;
+  --line:#dcd8cf;
+  --accent:#31554a;
+  --accent-soft:rgba(49,85,74,.08);
+  --sigma:#31556f;
+  --nullroute:#6f4a31;
+  --runo:#5d3f66;
+  --memoria:#8a5a24;
+  --retired:#5c6a5e;
+  --shadow:0 10px 34px rgba(38,37,32,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Songti SC","Noto Serif CJK SC",Georgia,"Times New Roman",serif;
+  color:var(--ink);
+  background:var(--bg);
+  line-height:1.75;
+}
+.page{max-width:980px;margin:0 auto;padding:36px 20px 72px}
+
+/* language switching */
+html[data-lang="zh"] .en{display:none}
+html[data-lang="en"] .zh{display:none}
+.lang-switch{
+  position:sticky;top:12px;z-index:9;
+  display:flex;justify-content:flex-end;
+}
+.lang-switch button{
+  font:600 .85rem/1 ui-sans-serif,system-ui,sans-serif;
+  padding:7px 14px;border:1px solid var(--line);background:var(--panel);
+  color:var(--muted);cursor:pointer;
+}
+.lang-switch button:first-child{border-radius:999px 0 0 999px;border-right:none}
+.lang-switch button:last-child{border-radius:0 999px 999px 0}
+.lang-switch button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+
+header.site{margin:26px 0 34px}
+.kicker{margin:0 0 8px;font:700 .78rem/1.3 ui-sans-serif,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{margin:0 0 14px;font-size:clamp(1.9rem,5vw,3rem);line-height:1.15}
+.lede{max-width:760px;margin:0;font-size:1.05rem;color:#3a3934}
+
+.crumbs{font:.85rem/1.4 ui-sans-serif,system-ui,sans-serif;margin:0 0 18px}
+.crumbs a{color:var(--accent);text-decoration:none}
+.crumbs a:hover{text-decoration:underline}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin:30px 0}
+.card{
+  display:block;padding:22px 22px 18px;border:1px solid var(--line);border-radius:12px;
+  background:var(--panel);box-shadow:var(--shadow);text-decoration:none;color:inherit;
+  border-top:4px solid var(--accent);
+}
+.card:hover{border-color:var(--accent)}
+.card.sigma{border-top-color:var(--sigma)}
+.card.nullroute{border-top-color:var(--nullroute)}
+.card.runo{border-top-color:var(--runo)}
+.card.memoria{border-top-color:var(--memoria)}
+.card.retired{border-top-color:var(--retired)}
+.card h2,.card h3{margin:0 0 4px;font-size:1.25rem}
+.card .field{margin:0 0 10px;font:600 .8rem/1.3 ui-sans-serif,system-ui,sans-serif;color:var(--muted)}
+.card p{margin:0 0 10px;font-size:.95rem;color:#44433e}
+.card .count{font:600 .8rem/1.3 ui-sans-serif,system-ui,sans-serif;color:var(--accent)}
+
+.note{
+  max-width:760px;margin:28px 0;padding:14px 18px;border-left:4px solid var(--line);
+  background:var(--accent-soft);border-radius:0 8px 8px 0;font-size:.95rem;color:#44433e;
+}
+.boundary{
+  max-width:760px;margin:20px 0;padding:14px 18px;border-left:4px solid var(--memoria);
+  background:rgba(138,90,36,.07);border-radius:0 8px 8px 0;font-size:.93rem;color:#4a4338;
+}
+
+.worklist{display:grid;gap:18px;margin:28px 0}
+.work{
+  padding:22px;border:1px solid var(--line);border-radius:12px;background:var(--panel);box-shadow:var(--shadow);
+}
+.work h3{margin:0 0 6px;font-size:1.3rem}
+.work .meta{margin:0 0 12px;font:.82rem/1.5 ui-sans-serif,system-ui,sans-serif;color:var(--muted)}
+.work p{margin:0 0 12px;max-width:720px}
+.btn{
+  display:inline-block;padding:9px 18px;border-radius:8px;border:1px solid var(--accent);
+  background:var(--accent);color:#fff;text-decoration:none;
+  font:600 .9rem/1.2 ui-sans-serif,system-ui,sans-serif;
+}
+.btn.secondary{background:transparent;color:var(--accent)}
+.btn:hover{opacity:.9}
+
+.provenance{
+  margin:14px 0 0;padding-top:10px;border-top:1px dashed var(--line);
+  font:.8rem/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
+  overflow-wrap:anywhere;
+}
+
+footer.site{
+  margin-top:56px;padding-top:22px;border-top:1px solid var(--line);
+  font:.85rem/1.7 ui-sans-serif,system-ui,sans-serif;color:var(--muted);
+}
+footer.site p{margin:4px 0}
+@media(max-width:640px){.page{padding:24px 16px 56px}}

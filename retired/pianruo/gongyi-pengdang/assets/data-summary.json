@@ -1,0 +1,167 @@
+{
+  "core_polarity": {
+    "terms": [
+      "党",
+      "朋党",
+      "公议",
+      "公论",
+      "同志",
+      "政党"
+    ]
+  },
+  "dang_disambiguation": {
+    "western_han": {
+      "ambiguous": 208,
+      "political_faction_stigma": 103,
+      "noise_place_shangdang": 73,
+      "local_kin_community": 26,
+      "partiality_moral": 9,
+      "rebellion_policing": 3
+    },
+    "eastern_han": {
+      "ambiguous": 369,
+      "political_faction_stigma": 190,
+      "noise_place_shangdang": 67,
+      "local_kin_community": 40,
+      "partiality_moral": 28,
+      "rebellion_policing": 20
+    },
+    "tang": {
+      "ambiguous": 656,
+      "political_faction_stigma": 321,
+      "noise_ethnonym_tangut": 261,
+      "rebellion_policing": 164,
+      "local_kin_community": 90,
+      "noise_place_shangdang": 89,
+      "partiality_moral": 26
+    },
+    "song": {
+      "ambiguous": 1629,
+      "political_faction_stigma": 791,
+      "local_kin_community": 478,
+      "rebellion_policing": 180,
+      "noise_place_shangdang": 51,
+      "partiality_moral": 50,
+      "noise_ethnonym_tangut": 23,
+      "modern_party_legal": 1
+    },
+    "yuan": {
+      "ambiguous": 305,
+      "rebellion_policing": 108,
+      "local_kin_community": 59,
+      "political_faction_stigma": 55,
+      "noise_place_shangdang": 30,
+      "partiality_moral": 7
+    },
+    "early_mid_ming": {
+      "ambiguous": 1517,
+      "rebellion_policing": 743,
+      "political_faction_stigma": 369,
+      "partiality_moral": 167,
+      "local_kin_community": 135,
+      "noise_place_shangdang": 9,
+      "noise_ethnonym_tangut": 4,
+      "modern_party_legal": 4
+    },
+    "late_ming": {
+      "ambiguous": 1037,
+      "political_faction_stigma": 552,
+      "rebellion_policing": 293,
+      "partiality_moral": 87,
+      "local_kin_community": 74,
+      "noise_place_shangdang": 6
+    },
+    "early_mid_qing": {
+      "ambiguous": 1366,
+      "rebellion_policing": 1081,
+      "political_faction_stigma": 705,
+      "partiality_moral": 122,
+      "local_kin_community": 101,
+      "noise_place_shangdang": 5,
+      "modern_party_legal": 2
+    },
+    "late_qing": {
+      "rebellion_policing": 2210,
+      "ambiguous": 1326,
+      "political_faction_stigma": 680,
+      "local_kin_community": 26,
+      "partiality_moral": 25,
+      "modern_party_legal": 2,
+      "noise_ethnonym_tangut": 1
+    }
+  },
+  "horizontal_counts": {
+    "terms": [
+      "公议",
+      "公论",
+      "清议",
+      "士论",
+      "舆论",
+      "同志",
+      "同道",
+      "讲学",
+      "书院",
+      "乡约",
+      "结社"
+    ],
+    "song": [
+      596,
+      482,
+      129,
+      158,
+      32,
+      151,
+      79,
+      621,
+      484,
+      11,
+      9
+    ],
+    "late_ming": [
+      76,
+      311,
+      61,
+      49,
+      72,
+      210,
+      27,
+      566,
+      318,
+      45,
+      0
+    ]
+  },
+  "verdicts": {
+    "政治性横向词": {
+      "supports_thesis": 15,
+      "strong_supports_thesis": 3,
+      "ambiguous_pressure": 1,
+      "boundary_pressure": 4,
+      "boundary_not_core": 1,
+      "not_counterexample": 2,
+      "boundary_supports_thesis": 1,
+      "boundary_not_chinese_tradition": 1
+    },
+    "社团/结社压力样本": {
+      "supports_thesis_with_pressure": 7,
+      "supports_thesis": 7,
+      "ambiguous_pressure": 1,
+      "boundary_supports_thesis": 6,
+      "strong_supports_depoliticization": 1,
+      "boundary_pressure": 2,
+      "not_counterexample": 4,
+      "boundary_supports_nonpolitical": 2,
+      "strong_supports_thesis": 2
+    }
+  },
+  "legitimation_modes": {
+    "political_accusation_as_danger": 1,
+    "depoliticized_legitimation": 2,
+    "party_label_as_punitive": 6,
+    "practice_to_party_accusation": 3,
+    "cataloguing_as_political_capture": 1,
+    "politicization_threshold": 1,
+    "contained_nonparty_association": 1,
+    "modern_transition_boundary": 2
+  }
+}

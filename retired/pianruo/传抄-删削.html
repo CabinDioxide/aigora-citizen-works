@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>传抄·删削</title>
+<style>
+  :root {
+    --paper: #f3ead3;
+    --paper-edge: #e7d9b6;
+    --ink: #2b2622;
+    --ink-soft: #6f6555;
+    --rule: #c9b88c;
+    --accent: #7a5c2e;
+    --drop: #a23c3c;       /* 被删 / 上帝视角红 */
+    --redact-bg: #2b2622;  /* 黑块 */
+    --taboo: #5a4030;      /* 犯讳替字标记色 */
+    --fill: #8a9c7a;       /* 补平句颜色 */
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #d9cba7;
+    color: var(--ink);
+    font-family: "Songti SC","STSong","SimSun","宋体", serif;
+    padding: 28px 18px 64px;
+    display: flex;
+    justify-content: center;
+  }
+  .scroll {
+    width: 100%; max-width: 960px;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 38px,
+        rgba(160,140,90,.05) 38px, rgba(160,140,90,.05) 39px),
+      var(--paper);
+    border: 1px solid var(--paper-edge);
+    border-radius: 3px;
+    box-shadow: 0 10px 40px rgba(60,45,20,.28),
+                inset 0 0 60px rgba(160,130,70,.12);
+    padding: 38px 36px 48px;
+  }
+
+  h1 { font-size: 28px; font-weight: 600; letter-spacing: .2em; margin: 0 0 4px; text-align: center; }
+  .subtitle { text-align: center; color: var(--ink-soft); font-size: 14px; letter-spacing: .04em; margin: 0 0 6px; line-height: 1.7; }
+  .tagline { text-align: center; color: var(--ink-soft); font-size: 13px; margin: 0 0 22px; font-style: italic; opacity: .8; }
+  .rule { border: none; border-top: 1px solid var(--rule); opacity: .6; margin: 18px 0; }
+
+  /* ── 控件 ── */
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center;
+    margin-bottom: 22px;
+  }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 12.5px; color: var(--ink-soft); letter-spacing: .05em; }
+  select {
+    font-family: inherit; font-size: 15px; color: var(--ink);
+    background: rgba(255,252,243,.8); border: 1px solid var(--rule);
+    border-radius: 3px; padding: 6px 10px;
+  }
+  .god-toggle {
+    display: flex; align-items: center; gap: 10px; cursor: pointer;
+    padding: 7px 12px; border: 1px dashed var(--rule); border-radius: 3px;
+    user-select: none; transition: background .15s;
+  }
+  .god-toggle:hover { background: rgba(162,60,60,.06); }
+  .god-toggle input { width: 16px; height: 16px; accent-color: var(--drop); }
+  .god-toggle .lbl { font-size: 14px; }
+  .god-on .god-toggle { border-color: var(--drop); background: rgba(162,60,60,.06); }
+  .god-on .god-toggle .lbl { color: var(--drop); font-weight: 600; }
+
+  /* ── 两列并排 ── */
+  .columns {
+    display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .col {
+    flex: 1 1 320px; min-width: 280px;
+    background: rgba(255,252,243,.45);
+    border: 1px solid rgba(201,184,140,.45);
+    border-radius: 3px;
+    padding: 18px 20px 22px;
+  }
+  .col-title {
+    font-size: 13.5px; font-weight: 600; letter-spacing: .1em;
+    color: var(--accent); margin-bottom: 4px;
+  }
+  .col-subtitle {
+    font-size: 12px; color: var(--ink-soft); line-height: 1.65;
+    margin-bottom: 14px; min-height: 36px;
+  }
+  .col-body { font-size: 18px; line-height: 2.1; letter-spacing: .04em; }
+
+  /* ── 删削标记样式（留疤本）── */
+  .scar-block {
+    display: inline-block;
+    background: var(--redact-bg);
+    color: var(--redact-bg);
+    border-radius: 1px;
+    min-width: 1.2em;
+    user-select: none;
+    vertical-align: middle;
+    padding: 0 1px;
+  }
+  .scar-box {
+    display: inline-block;
+    border: 1.5px solid var(--ink);
+    width: 1.1em; height: 1.1em;
+    vertical-align: middle;
+    margin: 0 1px;
+  }
+  .scar-replace {
+    color: var(--taboo);
+    border-bottom: 1.5px solid var(--taboo);
+  }
+  .scar-fill {
+    color: var(--ink-soft);
+    font-size: .82em;
+    opacity: .7;
+    font-style: italic;
+  }
+
+  /* ── 无痕本：被删内容（默认隐藏） ── */
+  .god-hidden {
+    display: none;
+    color: var(--drop);
+    background: rgba(162,60,60,.1);
+    border-radius: 2px;
+    padding: 0 1px;
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    text-decoration-color: rgba(162,60,60,.5);
+  }
+  /* 上帝视角开时显示 */
+  body.god-on .god-hidden {
+    display: inline;
+  }
+  /* 无痕本里补平句：上帝视角开时变暗，提示"这是填的" */
+  .clean-fill {
+    color: var(--fill);
+  }
+  body.god-on .clean-fill {
+    opacity: .55;
+    text-decoration: line-through;
+    text-decoration-color: rgba(162,60,60,.4);
+  }
+  /* 无痕本里的替字：上帝视角开时标出 */
+  .clean-replace {
+    /* 正常看：就是普通字 */
+  }
+  body.god-on .clean-replace {
+    color: var(--drop);
+    background: rgba(162,60,60,.1);
+    border-radius: 2px;
+    padding: 0 1px;
+  }
+
+  /* ── 图例 ── */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px;
+    color: var(--ink-soft); margin: 14px 0 0; align-items: center;
+  }
+
+  /* ── 底部提醒 ── */
+  .disclaimer {
+    margin-top: 24px; font-size: 12px; color: var(--ink-soft);
+    text-align: center; line-height: 1.7; letter-spacing: .02em;
+    border-top: 1px solid var(--rule); padding-top: 14px; opacity: .85;
+  }
+
+  @media(max-width:580px) {
+    .scroll { padding: 24px 18px 32px; }
+    h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll">
+  <h1>传&thinsp;抄&thinsp;·&thinsp;删&thinsp;削</h1>
+  <p class="subtitle">自然损耗会留下乱码、留下缺口，你还能替它记一笔；</p>
+  <p class="tagline">可有意删削若做得干净——你连"这儿曾经有过东西"都不知道。</p>
+
+  <div class="controls">
+    <div class="field">
+      <label for="sample">示例文本</label>
+      <select id="sample">
+        <option value="0">示例一：犯讳·避名讳改字（虚构）</option>
+        <option value="1">示例二：政治删改·上书被抹（虚构）</option>
+      </select>
+    </div>
+    <label class="god-toggle" id="godLabel">
+      <input type="checkbox" id="godToggle">
+      <span class="lbl">上帝视角</span>
+    </label>
+  </div>
+
+  <hr class="rule">
+
+  <div class="columns">
+    <div class="col" id="scarCol">
+      <div class="col-title">留疤本</div>
+      <div class="col-subtitle" id="scarDesc"></div>
+      <div class="col-body" id="scarBody"></div>
+    </div>
+    <div class="col" id="cleanCol">
+      <div class="col-title">无痕本</div>
+      <div class="col-subtitle" id="cleanDesc"></div>
+      <div class="col-body" id="cleanBody"></div>
+    </div>
+  </div>
+
+  <div class="legend" id="legend"></div>
+
+  <p class="disclaimer" id="disclaimer"></p>
+</div>
+
+<script>
+"use strict";
+
+// ══════════════════════════════════════════════
+//  示例数据（虚构，演机制用）
+//  每段包含：
+//    title: 标题
+//    note: 说明（非真实史料）
+//    tokens: [{text, type}]
+//      type: 'normal' | 'taboo-replace' | 'taboo-box' | 'delete-fill'
+//    rules: 各 type token 的处理规则
+//      taboo-replace: {id, scarChar:'□', cleanChar:'替字'}
+//      taboo-box:     {id, scarChar:'□'}
+//      delete-fill:   {id, fill:'补平句'}
+// ══════════════════════════════════════════════
+
+const SAMPLES = [
+  {
+    title: "示例一：犯讳·避名讳改字（虚构）",
+    note: `虚构示例，用于演示「避讳改字」机制。<br>犯讳字被换成形近无害字，留疤本能看出「换过」，无痕本读起来流畅，直到打开上帝视角。`,
+    scarDesc: `犯讳字以缺字框□标出，替字以下划线标出——读者看得出「这儿动过」。`,
+    cleanDesc: `替字直接就位，无任何标记——这就是流传后世的「干净本」。打开上帝视角，看原来写了什么。`,
+    // 原文：某朝臣子上书，文中数处犯了当朝君主名讳（虚构）
+    // 「弘」犯讳→替成「宏」，「炫」犯讳→替成「显」，「玄」犯讳→替成「元」
+    tokens: [
+      { id: 0,  text: "臣以为，" },
+      { id: 1,  text: "弘", type: "taboo-replace", replace: "宏" },
+      { id: 2,  text: "扬先王之道，" },
+      { id: 3,  text: "炫", type: "taboo-replace", replace: "显" },
+      { id: 4,  text: "耀武德，方能使四海归心。" },
+      { id: 5,  text: "况天地", newline: true },
+      { id: 6,  text: "玄", type: "taboo-replace", replace: "元" },
+      { id: 7,  text: "黄，万物并育，圣君当以宽仁御下，" },
+      { id: 8,  text: "使", newline: true },
+      { id: 9,  text: "弘", type: "taboo-replace", replace: "宏" },
+      { id: 10, text: "德广布，天下咸服。" }
+    ]
+  },
+  {
+    title: "示例二：政治删改·上书被抹（虚构）",
+    note: `虚构示例，用于演示「整段政治删除与补平」机制。<br>危险的话整段消失，用无害的话补平，版面看起来完整——你不知道那段曾经存在过。`,
+    scarDesc: `被整段删去的部分以黑块██占位——读者看得出「这儿少了东西」，还能追问。`,
+    cleanDesc: `整段不见，取而代之的是一句无害的话，版面毫无破绽。<br>打开上帝视角，看原来那一段写了什么。`,
+    tokens: [
+      { id: 0,  text: "臣伏惟，天下大治，皆赖陛下圣明。" },
+      { id: 1,  text: "然近岁以来，", newline: true },
+      {
+        id: 2,
+        text: "赋役日重，民不聊生，流亡者十之三四；豪强兼并，小民失田，积怨已深。臣恐社稷之忧，不在外患，而在内乱。",
+        type: "delete-fill",
+        fill: "四海晏然，百姓乐业，此皆圣德所致。"
+      },
+      { id: 3,  text: "伏惟陛下", newline: true },
+      { id: 4,  text: "宵衣旰食，" },
+      {
+        id: 5,
+        text: "然朝中有司，上下蒙蔽，民间疾苦不达天听，此臣之深忧也。",
+        type: "delete-fill",
+        fill: "励精图治，"
+      },
+      { id: 6,  text: "万民仰赖，谨具疏以闻。", newline: true }
+    ]
+  }
+];
+
+// ══════════════════════════════════════════════
+//  渲染引擎
+// ══════════════════════════════════════════════
+
+function renderColumns(sampleIdx) {
+  const s = SAMPLES[sampleIdx];
+
+  // 更新说明文字
+  document.getElementById('scarDesc').innerHTML = s.scarDesc;
+  document.getElementById('cleanDesc').innerHTML = s.cleanDesc;
+  document.getElementById('disclaimer').innerHTML =
+    `⚠️ 示例文本，非真实史料。以上内容均为虚构，用于演示删削机制，不代表任何真实历史事件或人物。`;
+
+  const scarBody = document.getElementById('scarBody');
+  const cleanBody = document.getElementById('cleanBody');
+  scarBody.innerHTML = '';
+  cleanBody.innerHTML = '';
+
+  s.tokens.forEach(tok => {
+    // 换行
+    if (tok.newline) {
+      scarBody.appendChild(document.createElement('br'));
+      cleanBody.appendChild(document.createElement('br'));
+    }
+
+    switch (tok.type) {
+
+      case 'taboo-replace': {
+        // 留疤本：缺字框 + 替字（带下划线标记）
+        const scarBox = document.createElement('span');
+        scarBox.className = 'scar-box';
+        scarBox.title = '犯讳字，此处以框标出';
+        scarBody.appendChild(scarBox);
+
+        const scarRepl = document.createElement('span');
+        scarRepl.className = 'scar-replace';
+        scarRepl.textContent = tok.replace;
+        scarRepl.title = `替字（原字犯讳）`;
+        scarBody.appendChild(scarRepl);
+
+        // 无痕本：替字直接就位，无标记（上帝视角开时高亮）
+        const cleanOrig = document.createElement('span');
+        cleanOrig.className = 'god-hidden';
+        cleanOrig.textContent = tok.text;
+        cleanBody.appendChild(cleanOrig);
+
+        const cleanRepl = document.createElement('span');
+        cleanRepl.className = 'clean-replace';
+        cleanRepl.textContent = tok.replace;
+        cleanBody.appendChild(cleanRepl);
+        break;
+      }
+
+      case 'delete-fill': {
+        // 留疤本：黑块占位
+        const scarBlock = document.createElement('span');
+        scarBlock.className = 'scar-block';
+        scarBlock.textContent = tok.text.replace(/[^\n]/g, '█'); // 黑块等长
+        scarBlock.title = '此处内容已被删去';
+        scarBody.appendChild(document.createTextNode('​'));
+        scarBody.appendChild(scarBlock);
+        scarBody.appendChild(document.createTextNode('​'));
+
+        // 留疤本：填充句（灰色斜体，提示"这是补的"）
+        const scarFill = document.createElement('span');
+        scarFill.className = 'scar-fill';
+        scarFill.textContent = tok.fill;
+        scarBody.appendChild(scarFill);
+
+        // 无痕本：隐藏的原文（上帝视角开时红出）
+        const cleanOrig = document.createElement('span');
+        cleanOrig.className = 'god-hidden';
+        cleanOrig.textContent = tok.text;
+        cleanBody.appendChild(cleanOrig);
+
+        // 无痕本：补平句，正常显示（上帝视角开时变暗+删除线）
+        const cleanFill = document.createElement('span');
+        cleanFill.className = 'clean-fill';
+        cleanFill.textContent = tok.fill;
+        cleanBody.appendChild(cleanFill);
+        break;
+      }
+
+      default: {
+        // 普通文字，两列一致
+        scarBody.appendChild(document.createTextNode(tok.text));
+        cleanBody.appendChild(document.createTextNode(tok.text));
+      }
+    }
+  });
+
+  // 图例
+  const legend = document.getElementById('legend');
+  const isSample1 = sampleIdx === 0;
+  if (isSample1) {
+    legend.innerHTML = `
+      <span><span style="display:inline-block;border:1.5px solid var(--ink);width:.9em;height:.9em;vertical-align:middle;margin-right:3px"></span> 缺字框 = 原字犯讳被挖去</span>
+      <span><span style="color:var(--taboo);border-bottom:1.5px solid var(--taboo)">替字</span> = 替换后的无害字</span>
+      <span><span style="color:var(--drop);background:rgba(162,60,60,.1);border-radius:2px;padding:0 2px">上帝视角</span> = 原字（默认隐藏）</span>
+    `;
+  } else {
+    legend.innerHTML = `
+      <span><span style="background:var(--redact-bg);color:var(--redact-bg);padding:0 3px;border-radius:1px">██</span> 黑块 = 整段被删</span>
+      <span><span style="color:var(--fill);font-style:italic">灰斜</span> = 补平句（留疤本可见）</span>
+      <span><span style="color:var(--drop);background:rgba(162,60,60,.1);border-radius:2px;padding:0 2px">上帝视角</span> = 被删原文（无痕本里）</span>
+    `;
+  }
+
+  // 重置上帝视角
+  document.getElementById('godToggle').checked = false;
+  document.body.classList.remove('god-on');
+  document.getElementById('godLabel').classList.remove('god-on');
+}
+
+// ══════════════════════════════════════════════
+//  接线
+// ══════════════════════════════════════════════
+
+document.getElementById('sample').addEventListener('change', e => {
+  renderColumns(parseInt(e.target.value, 10));
+});
+
+document.getElementById('godToggle').addEventListener('change', e => {
+  if (e.target.checked) {
+    document.body.classList.add('god-on');
+    document.getElementById('godLabel').classList.add('god-on');
+  } else {
+    document.body.classList.remove('god-on');
+    document.getElementById('godLabel').classList.remove('god-on');
+  }
+});
+
+// 初始化
+renderColumns(0);
+</script>
+</body>
+</html>

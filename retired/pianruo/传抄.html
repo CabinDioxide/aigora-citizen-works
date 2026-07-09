@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>传抄 · 一卷字在抄写链上的损耗</title>
+<style>
+  :root{
+    --paper:#f3ead3;
+    --paper-edge:#e7d9b6;
+    --ink:#2b2622;
+    --ink-soft:#6f6555;
+    --rule:#c9b88c;
+    --change:#9c5a2c;   /* 变 */
+    --intrude:#3a6b54;  /* 混入 */
+    --drop:#a23c3c;     /* 漏 */
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:#d9cba7;
+    color:var(--ink);
+    font-family:"Songti SC","STSong","SimSun","宋体",serif;
+    line-height:1.9;
+    padding:28px 18px 64px;
+    display:flex;justify-content:center;
+  }
+  .scroll{
+    width:100%;max-width:880px;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(160,140,90,.05) 38px, rgba(160,140,90,.05) 39px),
+      var(--paper);
+    border:1px solid var(--paper-edge);
+    border-radius:3px;
+    box-shadow:0 10px 40px rgba(60,45,20,.28), inset 0 0 60px rgba(160,130,70,.12);
+    padding:38px 40px 44px;
+  }
+  h1{
+    font-size:30px;font-weight:600;letter-spacing:.18em;
+    margin:0 0 4px;text-align:center;
+  }
+  .subtitle{
+    text-align:center;color:var(--ink-soft);font-size:14.5px;
+    letter-spacing:.04em;margin:0 0 26px;
+  }
+  .rule{border:none;border-top:1px solid var(--rule);opacity:.6;margin:22px 0;}
+
+  .controls{
+    display:flex;flex-wrap:wrap;gap:14px 22px;align-items:flex-end;
+    margin-bottom:18px;
+  }
+  .field{display:flex;flex-direction:column;gap:4px;}
+  .field label{font-size:12.5px;color:var(--ink-soft);letter-spacing:.05em;}
+  select,input[type=text],input[type=number],textarea{
+    font-family:inherit;color:var(--ink);
+    background:rgba(255,252,243,.7);
+    border:1px solid var(--rule);border-radius:3px;
+    padding:6px 9px;font-size:15px;
+  }
+  input[type=number]{width:72px;}
+  input[type=text]{width:150px;}
+  textarea{width:100%;resize:vertical;min-height:62px;line-height:1.8;font-size:16px;}
+  .sacred{
+    display:flex;align-items:center;gap:8px;cursor:pointer;
+    padding:6px 10px;border:1px dashed var(--rule);border-radius:3px;
+    user-select:none;
+  }
+  .sacred input{width:16px;height:16px;accent-color:var(--intrude);}
+  .sacred .lbl{font-size:14px;}
+  button{
+    font-family:inherit;font-size:15px;letter-spacing:.06em;
+    color:var(--paper);background:var(--ink);
+    border:none;border-radius:3px;padding:8px 20px;cursor:pointer;
+    transition:opacity .15s;
+  }
+  button:hover{opacity:.85;}
+
+  .text-row{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
+
+  .legend{
+    display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--ink-soft);
+    margin:6px 0 16px;align-items:center;
+  }
+  .legend b{font-weight:600;}
+  .swatch{display:inline-block;padding:1px 6px;border-radius:2px;}
+  .m-change{color:var(--change);border-bottom:2px solid var(--change);}
+  .m-intrude{color:var(--intrude);background:rgba(58,107,84,.14);border-radius:2px;padding:0 1px;}
+  .m-drop{color:var(--drop);text-decoration:line-through;text-decoration-color:rgba(162,60,60,.6);opacity:.55;}
+
+  .section-title{font-size:15px;letter-spacing:.12em;color:var(--ink-soft);margin:4px 0 12px;}
+
+  /* 抄写链 */
+  .chain{display:flex;flex-direction:column;gap:0;margin-bottom:6px;}
+  .gen{
+    display:flex;gap:14px;align-items:baseline;
+    padding:7px 10px;border-radius:3px;cursor:pointer;
+    border:1px solid transparent;
+  }
+  .gen:hover{background:rgba(160,130,70,.08);}
+  .gen.sel{background:rgba(160,130,70,.16);border-color:var(--rule);}
+  .gen .tag{
+    flex:0 0 64px;font-size:12.5px;color:var(--ink-soft);
+    text-align:right;letter-spacing:.04em;white-space:nowrap;
+  }
+  .gen .body{font-size:17px;letter-spacing:.02em;}
+  .gen.origrow .tag,.gen.lastrow .tag{color:var(--ink);font-weight:600;}
+
+  /* 对照 */
+  .compare{display:flex;gap:26px;flex-wrap:wrap;margin-top:6px;}
+  .col{flex:1 1 280px;min-width:240px;}
+  .col h3{
+    font-size:13.5px;color:var(--ink-soft);font-weight:600;
+    letter-spacing:.08em;margin:0 0 8px;border-bottom:1px solid var(--rule);padding-bottom:5px;
+  }
+  .col .pane{font-size:18px;line-height:2.05;letter-spacing:.03em;}
+  .drift{
+    margin-top:18px;font-size:14px;color:var(--ink-soft);
+    display:flex;align-items:center;gap:10px;
+  }
+  .drift .num{font-size:22px;font-weight:600;color:var(--change);letter-spacing:.02em;}
+  .drift.sacred-on .num{color:var(--intrude);}
+  .note{font-size:12.5px;color:var(--ink-soft);margin-top:10px;line-height:1.7;}
+  @media(max-width:560px){
+    .scroll{padding:26px 20px 32px;}
+    h1{font-size:25px;}
+  }
+</style>
+</head>
+<body>
+<div class="scroll">
+  <h1>传&thinsp;抄</h1>
+  <p class="subtitle">字不是被保存下来的，是被一遍遍抄下来的——而每抄一遍都在变。</p>
+
+  <div class="controls">
+    <div class="field">
+      <label for="sample">底本</label>
+      <select id="sample">
+        <option value="laozi">《老子》开篇</option>
+        <option value="lunyu">《论语·学而》</option>
+        <option value="custom">自己贴一段</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="seed">种子（同种子重放同一条链）</label>
+      <input type="text" id="seed" value="校雠">
+    </div>
+    <div class="field">
+      <label for="length">链长（代）</label>
+      <input type="number" id="length" value="9" min="2" max="40">
+    </div>
+    <label class="sacred">
+      <input type="checkbox" id="sacred">
+      <span class="lbl">神圣抄写律</span>
+    </label>
+    <button id="run">重新传抄</button>
+  </div>
+
+  <div class="text-row">
+    <div class="field">
+      <label for="source">原文（第 0 代）</label>
+      <textarea id="source"></textarea>
+    </div>
+    <div class="field">
+      <label for="marginNote">页边注文（可能被某代抄手当正文抄进去 → 混入）</label>
+      <input type="text" id="marginNote" style="width:100%;">
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <p class="section-title">抄 写 链 · 每代只抄上一代</p>
+  <div class="legend">
+    <span><b>点任意一代</b>，下方与原文并排对照</span>
+  </div>
+  <div class="chain" id="chain"></div>
+
+  <hr class="rule">
+
+  <p class="section-title">并 排 对 照</p>
+  <div class="legend">
+    <span><span class="swatch m-change">变</span> 形近而误：字还在，已不是原字</span>
+    <span><span class="swatch m-drop">漏</span> 眼跳漏抄：整段没了</span>
+    <span><span class="swatch m-intrude">混入</span> 注文窜入：原文从没写过</span>
+  </div>
+  <div class="compare">
+    <div class="col">
+      <h3>原文（第 0 代）</h3>
+      <div class="pane" id="paneOrig"></div>
+    </div>
+    <div class="col">
+      <h3 id="finalTitle">末代抄本</h3>
+      <div class="pane" id="paneFinal"></div>
+    </div>
+  </div>
+  <div class="drift" id="drift">
+    <span>较原文的漂移</span><span class="num" id="driftNum">0%</span>
+    <span id="driftDesc"></span>
+  </div>
+  <p class="note" id="footnote"></p>
+</div>
+
+<script>
+"use strict";
+
+/* ---------- 1. 种子化伪随机：同种子 → 同一条链 ---------- */
+function makeRng(seedStr){
+  let h = 1779033703 ^ seedStr.length;
+  for(let i=0;i<seedStr.length;i++){
+    h = Math.imul(h ^ seedStr.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  let a = h >>> 0;
+  return function(){
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/* ---------- 2. 形近真字对照（皆校勘学常见形近字）---------- */
+const CONFUSABLE = (function(){
+  const pairs = [
+    ["天","夫"],["母","毋"],["地","池"],["名","各"],["之","乏"],
+    ["万","方"],["朋","明"],["来","未"],["日","曰"],["己","已"],
+    ["未","末"],["土","士"],["王","玉"],["干","千"],["大","犬"],
+    ["刀","刁"],["折","析"],["即","既"],["戊","戌"],["有","友"]
+  ];
+  const m = {};
+  for(const [a,b] of pairs){
+    (m[a] = m[a] || []).push(b);
+    (m[b] = m[b] || []).push(a);
+  }
+  return m;
+})();
+
+const DEFAULT_RATES = { sub:0.09, omit:0.028, intrude:0.20 };
+const SACRED_RATES  = { sub:0, omit:0, intrude:0 };
+
+/* ---------- 3. 一次抄写：上一代 → 下一代，逐字引入讹误 ---------- */
+function copyOnce(prev, noteState, rng, rates){
+  const next = [];
+  const W = 6; // 眼跳窗口
+  let i = 0;
+
+  function maybeIntrude(anchorChar){
+    if(!noteState || noteState.used) return;
+    if(anchorChar.orig === noteState.after && rng() < rates.intrude){
+      for(const ch of noteState.chars){
+        next.push({ ch, orig:null, changed:false, intruded:true });
+      }
+      noteState.used = true;
+    }
+  }
+
+  while(i < prev.length){
+    const cur = prev[i];
+
+    // 眼跳漏抄 homoeoteleuton：向后找相同字，命中则从前一个跳到后一个，吞掉中间
+    if(rng() < rates.omit){
+      let j = -1;
+      const top = Math.min(prev.length - 1, i + W);
+      for(let k = i + 1; k <= top; k++){
+        if(prev[k].ch === cur.ch){ j = k; break; }
+      }
+      if(j !== -1){
+        next.push({ ch:cur.ch, orig:cur.orig, changed:cur.changed, intruded:cur.intruded });
+        maybeIntrude(cur);
+        i = j + 1;
+        continue;
+      }
+    }
+
+    // 形近而误
+    let ch = cur.ch, changed = cur.changed;
+    const variants = CONFUSABLE[cur.ch];
+    if(variants && rng() < rates.sub){
+      ch = variants[Math.floor(rng() * variants.length)];
+      changed = true;
+    }
+    next.push({ ch, orig:cur.orig, changed, intruded:cur.intruded });
+
+    // 注文窜入正文
+    maybeIntrude(cur);
+    i++;
+  }
+  return next;
+}
+
+/* ---------- 4. 生成整条抄写链 ---------- */
+function generateChain(original, note, seed, length, sacred){
+  const rates = sacred ? SACRED_RATES : DEFAULT_RATES;
+  const rng = makeRng(String(seed));
+  const noteState = note && note.chars.length
+    ? { after:note.after, chars:[...note.chars], used:false }
+    : null;
+
+  const gen0 = [...original].map((ch, idx) => ({ ch, orig:idx, changed:false, intruded:false }));
+  const chain = [gen0];
+  let cur = gen0;
+  for(let g = 1; g < length; g++){
+    cur = copyOnce(cur, noteState, rng, rates);
+    chain.push(cur);
+  }
+  return chain;
+}
+
+/* ---------- 5. 对照：溯源对齐算 变/漏/混入 + 漂移率 ---------- */
+function manuscriptText(arr){ return arr.map(c => c.ch).join(""); }
+
+function diff(originalLen, finalArr){
+  const presentOrig = new Set();
+  const changedOrig = new Set();
+  let intruded = 0;
+  for(const c of finalArr){
+    if(c.orig === null){ intruded++; continue; }
+    presentOrig.add(c.orig);
+    if(c.changed) changedOrig.add(c.orig);
+  }
+  let dropped = 0;
+  for(let i = 0; i < originalLen; i++) if(!presentOrig.has(i)) dropped++;
+  const drift = originalLen ? (changedOrig.size + dropped + intruded) / originalLen : 0;
+  return { presentOrig, changedOrig, dropped, intruded, changed:changedOrig.size, drift };
+}
+
+/* ---------- 内置底本（带页边注文）---------- */
+const SAMPLES = {
+  laozi: {
+    text:"道可道，非常道。名可名，非常名。无名天地之始，有名万物之母。",
+    note:{ after:7, chars:"〔常道，恒道也〕" }   // 锚在首句句号后
+  },
+  lunyu: {
+    text:"学而时习之，不亦说乎？有朋自远方来，不亦乐乎？",
+    note:{ after:10, chars:"〔说，悦也〕" }       // 锚在首问号后
+  }
+};
+
+/* 自定义文本：把注文锚在第一个句读处，没有则锚在中点 */
+function autoAnchor(text){
+  for(let i = 2; i < text.length; i++){
+    if("。？！；".indexOf(text[i]) !== -1) return i;
+  }
+  return Math.max(1, Math.floor(text.length / 2));
+}
+
+/* ---------- 6/7. UI ---------- */
+const $ = id => document.getElementById(id);
+let chain = [];
+let selectedGen = 0;
+
+function render(){
+  const original = $("source").value;
+  const seed = $("seed").value || "种子";
+  let length = parseInt($("length").value, 10);
+  if(!Number.isFinite(length) || length < 2) length = 2;
+  if(length > 40) length = 40;
+  const sacred = $("sacred").checked;
+
+  const noteText = $("marginNote").value.trim();
+  let note = null;
+  if(noteText && original.length){
+    const sampleKey = $("sample").value;
+    let after;
+    if(SAMPLES[sampleKey] && SAMPLES[sampleKey].note.chars === noteText){
+      after = Math.min(SAMPLES[sampleKey].note.after, original.length - 1);
+    }else{
+      after = autoAnchor(original);
+    }
+    note = { after, chars:noteText };
+  }
+
+  chain = generateChain(original, note, seed, length, sacred);
+  if(selectedGen >= chain.length) selectedGen = chain.length - 1;
+
+  renderChain();
+  renderCompare(sacred);
+}
+
+function renderChain(){
+  const box = $("chain");
+  box.innerHTML = "";
+  chain.forEach((gen, idx) => {
+    const row = document.createElement("div");
+    row.className = "gen" + (idx === selectedGen ? " sel" : "")
+      + (idx === 0 ? " origrow" : "")
+      + (idx === chain.length - 1 ? " lastrow" : "");
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = idx === 0 ? "原文" : (idx === chain.length - 1 ? "末代 ·" + idx : "第" + idx + "代");
+    const body = document.createElement("span");
+    body.className = "body";
+    body.textContent = manuscriptText(gen);
+    row.appendChild(tag); row.appendChild(body);
+    row.addEventListener("click", () => { selectedGen = idx; renderChain(); renderCompare($("sacred").checked); });
+    box.appendChild(row);
+  });
+}
+
+function renderCompare(sacred){
+  const original = [...$("source").value];
+  const finalArr = chain[selectedGen] || [];
+  const d = diff(original.length, finalArr);
+
+  // 原文列：漏掉的字划线、被替换的原字标"变"
+  const origPane = $("paneOrig");
+  origPane.innerHTML = "";
+  original.forEach((ch, i) => {
+    const s = document.createElement("span");
+    s.textContent = ch;
+    if(!d.presentOrig.has(i)) s.className = "m-drop";
+    else if(d.changedOrig.has(i)) s.className = "m-change";
+    origPane.appendChild(s);
+  });
+
+  // 抄本列：变了的字 + 混入的字
+  const finalPane = $("paneFinal");
+  finalPane.innerHTML = "";
+  finalArr.forEach(c => {
+    const s = document.createElement("span");
+    s.textContent = c.ch;
+    if(c.orig === null) s.className = "m-intrude";
+    else if(c.changed) s.className = "m-change";
+    finalPane.appendChild(s);
+  });
+
+  $("finalTitle").textContent = selectedGen === 0 ? "第 0 代（即原文）" : "第 " + selectedGen + " 代抄本";
+
+  const driftPct = Math.round(d.drift * 1000) / 10;
+  $("driftNum").textContent = driftPct + "%";
+  $("drift").className = "drift" + (sacred ? " sacred-on" : "");
+  $("driftDesc").textContent = "（变 " + d.changed + " · 漏 " + d.dropped + " · 混入 " + d.intruded + "）";
+
+  const fn = $("footnote");
+  if(sacred){
+    fn.textContent = "神圣抄写律已开：逐代讹误率压到零，同一条链漂移塌为零——末代与原文一字不差。"
+      + "关掉开关再看：严苛不是抄写的起点，是它后来才挣来的身份。";
+  }else{
+    fn.textContent = "这条链没有铁律护着：字逐代漂走、丢失、混入从没写过的注脚。"
+      + "顺的那一版，往往不是因为它真，是因为它被抄得最多——打开「神圣抄写律」，看同一条链的另一种结局。";
+  }
+}
+
+/* ---------- 接线 ---------- */
+function loadSample(){
+  const key = $("sample").value;
+  if(key === "custom"){
+    $("source").removeAttribute("readonly");
+    $("marginNote").value = $("marginNote").value || "〔此处为后人小注〕";
+    return;
+  }
+  const s = SAMPLES[key];
+  $("source").value = s.text;
+  $("marginNote").value = s.note.chars;
+}
+
+$("sample").addEventListener("change", () => { selectedGen = 0; loadSample(); render(); });
+$("run").addEventListener("click", () => { render(); });
+$("sacred").addEventListener("change", () => render());
+["seed","length","source","marginNote"].forEach(id => {
+  $(id).addEventListener("change", () => render());
+});
+
+// 初始
+loadSample();
+selectedGen = 0;
+render();
+selectedGen = chain.length - 1; // 默认对照看末代
+renderChain(); renderCompare(false);
+</script>
+</body>
+</html>
