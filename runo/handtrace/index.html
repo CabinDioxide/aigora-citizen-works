@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>手痕词云：共塑显影 · Handtrace Word Cloud — Co-Shaping, Developing</title>
+<style>
+  /* 视效规格正本：runs/<run-id>/design/visual-spec-v1.md（2026-06-11 样张闸定稿）
+     状态机正本：runs/<run-id>/06-task-graph.md（2026-06-12 闸门二定稿） */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #211d19; }
+  body {
+    font-family: "Songti SC", "Noto Serif SC", serif;
+    padding: 22px; min-height: 100dvh;
+    touch-action: manipulation; /* 防双击缩放（红队二 #3） */
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .chart {
+    position: relative; width: min(1240px, 100%);
+    aspect-ratio: 3 / 2;
+    background: url(basemap.png) center / cover no-repeat; /* v1.1：codex 底图（2026-06-12 到货，验收四点过） */
+    border: 1px solid #0e0b08;
+    box-shadow: 0 6px 40px rgba(0,0,0,.6);
+    overflow: hidden;
+  }
+  .chart > svg.grain { display: none; } /* v1.1：底图自带纸纹 */
+  .redband, .wear { display: none; } /* v1.1：底图自带红光带与缘部磨损 */
+
+  /* 海面（主导介质） */
+  .sea { display: none; } /* v1.1：海面在底图里 */
+  .sea svg.turb { display: none; }
+  svg.currents { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; overflow: visible; }
+  svg.currents path { fill: none; stroke-linecap: round; }
+  svg.currents path.cur { stroke: rgba(238,246,238,.32); }
+  svg.currents path.cur.b { stroke: rgba(238,246,238,.18); }
+  svg.currents path.flow { /* R7-④：红航线（概念图图例：红=暗流），暗青海面上清晰可读 */
+    stroke: rgba(206,84,48,.9); stroke-dasharray: 8 6; stroke-width: 1.9; filter: url(#inkLine);
+  }
+  svg.currents path.flowhalo { /* 航线浅色衬影：贴水又保读 */
+    stroke: rgba(240,244,236,.28); stroke-width: 4.5; filter: url(#roughSoft);
+  }
+  svg.currents circle.port { fill: rgba(206,84,48,.25); stroke: rgba(206,84,48,.9); stroke-width: 1.3; filter: url(#inkLine); }
+
+  /* 岛 */
+  .island { position: absolute; z-index: 3; cursor: pointer; transition: opacity 1.2s, filter 1.2s; }
+  .island .mass { /* v1.1：岛画在底图里，mass 退化为呼吸/显影的微光罩 */
+    position: absolute; inset: -4%;
+    border-radius: 46% 54% 52% 48% / 53% 47% 55% 45%;
+    background: radial-gradient(ellipse 55% 50% at 50% 48%, rgba(248,242,222,.22), transparent 75%);
+    opacity: 0; transition: opacity 1s;
+  }
+  .island.s1 .mass, .island.s2 .mass { opacity: 1; }
+  .island .ring { display: none; }
+  .island .inum { position: absolute; left: 16%; top: 14%; z-index: 4; color: rgba(142,42,26,.92); font-size: 19px;
+    font-family: "Didot", "Songti SC", serif; mix-blend-mode: multiply; } /* v2：红墨直接书于岛面 */
+  .island .iname { position: absolute; left: 27%; top: 16.5%; z-index: 4; font-size: 12.5px; color: rgba(58,44,28,.92);
+    letter-spacing: 1px; white-space: nowrap; mix-blend-mode: multiply; }
+  .island .iname .en { font-size: 9.5px; font-style: italic; color: rgba(94,78,56,.85); margin-left: 5px; }
+  /* 词痕：单档字号 + 无规律微扰（红队二 #5：权重未到不分层） */
+  .island .w { /* v2.1（R5-②）：墨书清晰版——multiply 入纸但去洇边、稳转角 */
+    position: absolute; white-space: nowrap; font-family: "Kaiti SC", cursive;
+    color: rgba(40,30,16,.92);
+    mix-blend-mode: multiply;
+    user-select: none; z-index: 3;
+    transition: color 1s, opacity 1s;
+  }
+  .island .w .we { /* R5-③：英文译注（概念图同款中英对） */
+    font-family: "Songti SC", Georgia, serif; font-style: italic;
+    font-size: .62em; color: rgba(78,62,42,.85); margin-left: 3px; letter-spacing: .3px;
+  }
+  .island .rtick { position: absolute; color: rgba(162,50,34,.6); font-size: 9px; z-index: 3; font-family: monospace; user-select: none; }
+
+  /* 呼吸暗示（仅 fog 态；非文字可点邀请） */
+  .island.breathe .mass { animation: breathe 4.5s ease-in-out 1; }
+  @keyframes breathe { 0%,100% { opacity: 0; } 50% { opacity: .85; } }
+
+  /* —— R7 三击渐进显影 —— */
+  /* 第一击 st1：手写中英词痕浮现（墨波 stagger 在 JS 设 --d） */
+  .island .w { opacity: 0; transition: opacity 1.8s ease var(--d, 0s), color 1.4s ease var(--d, 0s); } /* R8-②：墨波放慢 */
+  .island.fogged .w { opacity: var(--fog, .6); }          /* 初始雾态：词以颜料淡墨在场 */
+  .island.st1 .w { opacity: 1; color: rgba(34,25,12,.95); }
+  /* 第二击 st2：批改层 */
+  .w.noise::after { /* 划痕：严格词内，从左划出 */
+    content: ""; position: absolute; left: 2%; right: 2%; top: 52%; height: 2px;
+    background: rgba(140,42,24,.7); border-radius: 30%;
+    filter: url(#inkLine); transform: rotate(-1.4deg) scaleX(0); transform-origin: left center;
+    transition: transform 1.4s ease var(--d2, 0s); /* R8-②：逐词错峰划出 */
+  }
+  .island.st2 .w:not(.noise):not(.circled) { opacity: .42; color: rgba(40,30,16,.6); transition: opacity 2s ease, color 2s ease; } /* 批改时词缓缓退后 */
+  .island.st2 .w.circled { color: rgba(30,22,10,1); }
+  .island.st2 .w.noise { color: rgba(120,66,48,.55); }
+  .island.st2 .w.noise::after { transform: rotate(-1.4deg) scaleX(1); }
+  .island.nd.st2 .w.noise { color: rgba(120,66,48,.38); }
+  .w.circled::before { /* 圈点：墨圈旋出 */
+    content: ""; position: absolute; inset: -22% -10%; border: 1.6px solid rgba(120,46,26,.62);
+    border-radius: 48% 52% 55% 45% / 58% 46% 60% 42%;
+    filter: url(#inkLine); opacity: 0; transform: rotate(-8deg) scale(.6);
+    transition: opacity 1.2s ease 1.1s, transform 1.2s ease 1.1s; /* 圈点：划痕之后 */
+  }
+  .island.st2 .w.circled::before { opacity: 1; transform: rotate(-4deg) scale(1.05); }
+  .smudge { /* 涂抹：擦过的墨痕 */
+    position: absolute; pointer-events: none; z-index: 3;
+    background: rgba(64,50,32,.32); border-radius: 50% 50% 60% 40% / 70% 45% 60% 40%;
+    filter: blur(3px); mix-blend-mode: multiply;
+    opacity: 0; transform: scaleX(.4); transition: opacity 1.4s ease 1.8s, transform 1.4s ease 1.8s; /* 涂抹：圈点之后 */
+  }
+  .island.st2 .smudge { opacity: 1; transform: scaleX(1); }
+  /* 批注（关系短语+沉积+校准环）随 st2 浮现 */
+  .relwrap { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1.4s 2.4s; z-index: 4; } /* 批注：涂抹之后 */
+  .island.st2 .relwrap { opacity: 1; }
+  .rel-arc {
+    position: absolute; left: 17%; top: 30%; width: 64%; height: 42%;
+    border: 2px solid rgba(38,74,58,.55); border-radius: 50%; mix-blend-mode: multiply;
+    border-right-color: transparent; transform: rotate(-11deg) scale(.6);
+    filter: url(#roughSoft); opacity: 0;
+    transition: transform 1.8s ease 2.4s, opacity 1.8s ease 2.4s; /* 校准环随批注缓出 */
+  }
+  .island.st2 .rel-arc { transform: rotate(-11deg) scale(1); opacity: 1; }
+  .island.st2 .rel-phrase { opacity: 1; }
+  .island.st2 .seds { opacity: 1; }
+  .rel-phrase { /* 墨书批注（R7 复位：基础样式在 CSS 重写时误删） */
+    position: absolute; font-size: 12.5px; font-family: "Kaiti SC", cursive;
+    color: rgba(110,36,20,.95); padding: 1px 4px;
+    mix-blend-mode: multiply; transform: rotate(-1.6deg);
+    white-space: nowrap;
+    opacity: 0; transition: opacity 1.2s 3s;
+  }
+  .rel-phrase::before { /* 笔刷白垫（加强） */
+    content: ""; position: absolute; inset: -5px -10px; z-index: -1;
+    background: rgba(242,235,212,.74); border-radius: 48% 52% 55% 45% / 60% 50% 60% 40%;
+    filter: blur(6px);
+  }
+  .rel-phrase::after { /* 手画下引线 */
+    content: ""; position: absolute; left: 12%; bottom: -3px; width: 70%; height: 2px;
+    background: currentColor; opacity: .5; filter: url(#inkLine); transform: rotate(-1deg);
+  }
+  .rel-phrase .tag { display: block; font-size: 8.5px; color: rgba(110,92,66,.9); font-family: monospace; }
+  .rel-phrase .enrel {
+    display: block;
+    margin-top: 1px;
+    font-family: "Songti SC", Georgia, serif;
+    font-size: 9px;
+    font-style: italic;
+    color: rgba(78,62,42,.88);
+    letter-spacing: .2px;
+  }
+  .rel-phrase.ph { left: 2%; top: 30%; }
+  .rel-phrase.pa { right: 2%; bottom: 22%; color: rgba(28,58,74,.95); transform: rotate(1deg); }
+  .seds { position: absolute; left: 6%; right: 2%; bottom: -7%; display: flex; flex-wrap: wrap; gap: 4px 16px; opacity: 0; transition: opacity 1.4s 3.6s; } /* 沉积：最后落定 */
+  .sed { /* 矿物墨书+粗糙绿墨下划 */
+    position: relative; font-size: 11.5px; font-family: "Kaiti SC", cursive;
+    color: rgba(22,56,44,.95); mix-blend-mode: multiply; padding: 0 2px;
+    transform: rotate(var(--sr, -1deg)); white-space: nowrap;
+  }
+  .sed::before { content: ""; position: absolute; inset: -4px -8px; z-index: -1;
+    background: rgba(242,235,212,.7); border-radius: 50% 50% 55% 45% / 62% 50% 60% 40%; filter: blur(6px); }
+  .sed::after { content: ""; position: absolute; left: 0; right: 4%; bottom: -2px; height: 2px;
+    background: rgba(40,82,64,.7); filter: url(#inkLine); transform: rotate(-.6deg); }
+  .sed .seden {
+    display: block;
+    margin-top: 1px;
+    font-family: "Songti SC", Georgia, serif;
+    font-size: 8.5px;
+    font-style: italic;
+    color: rgba(78,62,42,.86);
+  }
+  /* 第三击 st3：航线（JS 画；虚线慢爬=活水流） */
+  @keyframes dashcrawl { to { stroke-dashoffset: -260; } }
+  svg.currents path.flow { animation: dashcrawl 44s linear infinite; }
+  /* 点击淡墨涟漪 */
+  .ripple { /* R8-①：墨晕替代圆圈——无描边，洇开即散 */
+    position: absolute; pointer-events: none; z-index: 6;
+    width: 26px; height: 26px; border-radius: 48% 52% 55% 45% / 60% 46% 58% 42%;
+    background: rgba(54,40,24,.22); filter: blur(5px); mix-blend-mode: multiply;
+    transform: translate(-50%,-50%) scale(.3); opacity: .9;
+    transition: transform 1.6s ease, opacity 1.6s ease;
+  }
+  .ripple.go { transform: translate(-50%,-50%) scale(4.5); opacity: 0; }
+
+  /* —— R9 残痕版（用户 2026-06-12 裁定）：被显影过的云复原后不回全新 ——
+     到过批改层的云：划痕/圈点/涂抹留极淡残痕；到过航线的云：留一缕淡红残线。
+     残痕只活在本次观看；离开或刷新，纸面回到原样（折角口径不变）。 */
+  .island.visited2 .w.noise::after { transform: rotate(-1.4deg) scaleX(1); background: rgba(140,42,24,.34); transition: background 2.4s ease; }
+  .island.visited2 .w.circled::before { opacity: .3; transform: rotate(-4deg) scale(1.05); transition: opacity 2.4s ease, transform 2.4s ease; }
+  .island.visited2 .smudge { opacity: .32; transform: scaleX(1); transition: opacity 2.4s ease, transform 2.4s ease; }
+  svg.currents path.flow.ghost { opacity: .3 !important; animation: none; stroke-width: 1.7; }
+
+  /* 收束态 */
+  .closing-mist { display: none; } /* R7-①：蒙版雾遮去除（用户裁定） */
+  .empty-slot {
+    position: absolute; right: 5%; bottom: 7%; width: 9%; height: 9%; z-index: 5;
+    border: 1.5px solid rgba(235,240,232,.35); filter: url(#roughSoft); /* v2：粗糙象牙细环（去 dashed UI 语言） */
+    border-radius: 46% 54% 50% 50% / 52% 48% 52% 48%;
+    opacity: 0; transition: opacity 2.5s; pointer-events: none;
+  }
+  .empty-slot.on { opacity: .8; }
+
+  /* 档案边栏（AUTHOR 格：2026-06-12 闸门二裁定为概念图同款"档案件"，与折角同级） */
+  .margin-col {
+    position: absolute; left: 1.2%; top: 2.4%; bottom: auto; width: 11.5%; min-width: 116px; z-index: 7;
+    padding: 12px 10px; /* v2：去卡——档案铅字直接印于纸面，笔刷白垫保读 */
+    font-size: 10px; color: rgba(70,56,38,.95); font-family: monospace; letter-spacing: .5px;
+    mix-blend-mode: multiply;
+  }
+  .margin-col::before { content: ""; position: absolute; inset: -4px -8px; z-index: -1;
+    background: rgba(240,233,210,.78); border-radius: 8% 10% 12% 8% / 6% 8% 6% 10%; filter: blur(7px); }
+  .margin-col .redchip { width: 46px; height: 12px; background: rgba(162,50,34,.55); margin-bottom: 11px; }
+  .margin-col .mblock { margin-bottom: 11px; border-top: 1px solid rgba(90,70,45,.45); padding-top: 3px; }
+  .margin-col .mblock b { display: block; color: #8a7e6c; font-weight: normal; font-size: 9px; }
+  .margin-col .handnote { font-family: "Kaiti SC", cursive; font-size: 12px; color: #54462f; transform: rotate(-1.6deg); margin-top: 14px; line-height: 1.55; }
+  .seal {
+    width: 34px; height: 34px; margin-top: 12px;
+    border: 2.5px solid rgba(150,40,24,.8); color: rgba(150,40,24,.85);
+    font-size: 11.5px; display: flex; align-items: center; justify-content: center;
+    transform: rotate(-5deg); text-align: center; line-height: 1.15;
+    filter: url(#roughSoft); mix-blend-mode: multiply; /* v2：印泥感 */
+  }
+
+  /* 题头 */
+  .titleblock { position: absolute; left: 14.5%; top: 2.6%; z-index: 7; max-width: 64%; padding: 6px 14px 8px; }
+  .titleblock::before { /* v2：笔刷白垫替代纸卡 */
+    content: ""; position: absolute; inset: -2px -16px; z-index: -1;
+    background: rgba(240,233,210,.76); border-radius: 50% 50% 55% 45% / 70% 55% 65% 45%;
+    filter: blur(9px);
+  }
+  .titleblock .t-en { font-size: 12.5px; color: rgba(96,80,58,.9); font-style: italic; letter-spacing: 1.5px; mix-blend-mode: multiply; }
+  .titleblock .t-zh { font-size: 24px; color: rgba(44,32,18,.95); letter-spacing: 3px; mix-blend-mode: multiply; }
+  .titleblock .dek { font-size: 12px; color: #5c5240; margin-top: 3px; font-family: "Kaiti SC", cursive; }
+  .titleblock .dek-en { font-size: 10px; color: rgba(86,70,48,.95); font-style: italic; font-family: "Songti SC", serif; margin-top: 5px; mix-blend-mode: multiply; }
+
+  /* 角落件 */
+  .compass { position: absolute; right: 2.6%; top: 2.4%; z-index: 7; opacity: .5; width: 56px; height: 56px;
+    filter: url(#roughSoft); mix-blend-mode: multiply; } /* v2：墨绘感 */
+  .taped { /* v2：手书墨记（去贴纸/胶带语言） */
+    position: absolute; right: 2.8%; bottom: 4.2%; z-index: 7; padding: 6px 10px;
+    transform: rotate(2deg); mix-blend-mode: multiply;
+    font-family: "Kaiti SC", cursive; font-size: 11.5px; color: rgba(58,44,28,.95); line-height: 1.55;
+  }
+  .taped::before { content: ""; position: absolute; inset: -4px -8px; z-index: -1;
+    background: rgba(238,230,206,.55); border-radius: 50% 50% 55% 45% / 60% 50% 60% 40%; filter: blur(7px); }
+  .atag { position: absolute; left: 14%; bottom: 1.6%; z-index: 7; font-size: 9px; font-family: monospace;
+    color: rgba(238,230,208,.7); mix-blend-mode: screen; letter-spacing: 1.5px; } /* v2：暗缘上的浅墨档案行 */
+
+  /* 方法注释折角 */
+  .fold { /* R5-⑤：去 UI 三角，换画上印章语言 */
+    position: absolute; left: 1.6%; bottom: 2.6%; z-index: 10;
+    width: 30px; height: 30px; cursor: pointer;
+    border: 2px solid rgba(150,40,24,.78); color: rgba(150,40,24,.85);
+    font-family: "Kaiti SC", cursive; font-size: 15px; line-height: 27px; text-align: center;
+    transform: rotate(-6deg); mix-blend-mode: multiply; filter: url(#inkLine);
+  }
+  .fold-panel {
+    display: none; position: absolute; left: 5%; bottom: 8%; z-index: 11;
+    background: rgba(250,245,230,.97); border: 1px solid rgba(120,100,72,.5);
+    padding: 13px 15px; max-width: 30em; font-size: 12px; color: #5a5244;
+    box-shadow: 2px 4px 12px rgba(60,45,25,.3);
+  }
+  .fold-panel.open { display: block; }
+  .fold-panel .en-line { color: #8a7e6c; font-size: 10.5px; font-style: italic; }
+  .fold-panel .sig { margin-top: 8px; font-size: 10.5px; color: #8a7e6c; }
+
+  /* ============ 移动端：纵向长卷（≤700px） ============ */
+  @media (max-width: 700px) {
+    body { padding: 10px; display: block; }
+    .chart { aspect-ratio: auto; width: 100%; background: linear-gradient(180deg, #d8ccb0, #3a5f58 12%, #3a5f58 88%, #c2ad8a); } /* v1.1：长卷底=海色，首尾纸缘 */
+    .sea { left: 0; top: 0; right: 0; bottom: 0; border-radius: 0; }
+    .margin-col {
+      position: static; width: 100%; min-width: 0; border-right: none;
+      border-bottom: 1px solid rgba(90,70,45,.4);
+      display: flex; flex-wrap: wrap; gap: 2px 14px; align-items: flex-end;
+    }
+    .margin-col .handnote, .margin-col .seal, .margin-col .redchip { display: none; }
+    .titleblock { position: static; max-width: none; padding: 12px 14px 4px; }
+    .compass { display: none; }
+    .stage { position: relative; }
+    .island { position: relative !important; left: auto !important; top: auto !important; width: 92% !important; height: 240px !important; margin: 0 auto 58px;
+      border-radius: 14px; overflow: visible; background-repeat: no-repeat; box-shadow: 0 4px 18px rgba(10,24,22,.45); } /* v1.1：JS 按岛位裁底图作块背景 */
+    .fold { left: 0; }
+    .atag { position: static; display: block; padding: 8px 14px 12px; }
+    .taped { position: static; display: inline-block; margin: 0 14px 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="chart" id="chart">
+  <svg width="0" height="0" aria-hidden="true">
+    <defs>
+      <filter id="roughEdge"><feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="4" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="14"/></filter>
+      <filter id="roughSoft"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="7"/></filter>
+      <filter id="inkLine"><feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="2" seed="6" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.5"/></filter>
+    </defs>
+  </svg>
+
+  <div class="sea">
+    <svg class="turb" xmlns="http://www.w3.org/2000/svg">
+      <filter id="seaTurb"><feTurbulence type="turbulence" baseFrequency="0.012 0.02" numOctaves="3" seed="13"/><feColorMatrix type="matrix" values="0 0 0 0 0.78  0 0 0 0 0.88  0 0 0 0 0.82  0 0 0 0.5 0"/></filter>
+      <rect width="100%" height="100%" filter="url(#seaTurb)"/>
+    </svg>
+  </div>
+  <svg class="currents" id="currents"></svg>
+  <div class="closing-mist" id="closingMist"></div>
+  <div class="empty-slot" id="emptySlot"></div>
+
+  <aside class="margin-col">
+    <div class="redchip"></div>
+    <div class="mblock"><b>EXHIBITION</b>共塑显影<br>CO-SHAPING, DEVELOPING</div>
+    <div class="mblock"><b>PROJECT</b>手痕词云<br>Handtrace Word Cloud</div>
+    <div class="mblock"><b>MEDIUM</b>公开安全词痕 · 单页<br>public-safe traces</div>
+    <div class="mblock"><b>AUTHOR</b>Runaway Checkpoint<br>×（共作的另一方）</div>
+    <div class="mblock"><b>YEAR</b>2026</div>
+    <div class="handnote">六团颜料沉在海面上；<br>关系在显影液里。</div>
+    <div class="seal">共塑<br>显影</div>
+  </aside>
+
+  <div class="titleblock">
+    <div class="t-en">Handtrace Word Cloud — Co-Shaping, Developing</div>
+    <div class="t-zh">手痕词云：共塑显影</div>
+    <div class="dek">六团词痕，是一个人与 AI 长期共作沉积下的颜料；这里没有任何对话原文，只有被反复打磨后留下的词与关系。</div>
+    <div class="dek dek-en">Word-traces settled like pigment from a long human–AI collaboration; no original conversations remain here, only the words and relations that survived the rework.</div>
+  </div>
+
+  <svg class="compass" viewBox="0 0 62 62" aria-hidden="true">
+    <circle cx="31" cy="31" r="26" fill="none" stroke="#6e6250" stroke-width="1"/>
+    <circle cx="31" cy="31" r="19" fill="none" stroke="#6e6250" stroke-width=".5"/>
+    <path d="M31 7 L34 28 L31 31 L28 28 Z" fill="#a23222" opacity=".7"/>
+    <path d="M31 55 L34 34 L31 31 L28 34 Z" fill="#6e6250" opacity=".7"/>
+    <line x1="7" y1="31" x2="55" y2="31" stroke="#6e6250" stroke-width=".5"/>
+  </svg>
+
+  <div class="stage" id="stage"></div>
+
+  <div class="taped">显影未定稿。<br>有些关系仍在海里。 ── 2026</div>
+  <div class="atag">ARCHIVE TAG · HWC-COSHAPING-2026 · PUBLIC-SAFE TRACES · SIX CLOUDS</div>
+
+  <div class="fold" id="fold">注</div>
+  <div class="fold-panel" id="foldPanel">
+    <strong>边界与方法 · Boundary &amp; Method</strong><br><br>
+    你看到的全部词痕是抽象后的公开样本，没有任何对话原文、标题或私人词表；六团词云的去留经材料当事人逐云确认。<br>
+    <span class="en-line">All traces are abstracted, public-safe samples. No original conversations, titles, or private vocabularies appear here; each cloud was confirmed by the person whose materials they distill.</span><br><br>
+    被红线压住的词（继续 / 好 / 搜索……）是平台机制留下的表面磨损，不参与解释。显影会自己停在未完成处——有些关系仍未定稿。<br><br>
+    <span class="en-line">Words pressed under red marks, such as continue, okay, and search, are surface wear left by platform mechanisms. They do not take part in the interpretation. The developing process stops before completion: some relations remain unsettled.</span><br><br>
+    一切显影只发生在这块屏幕上；离开或刷新，纸面回到原样。<br>
+    <span class="en-line">All developing happens only on this screen. Leave or refresh, and the paper returns to its initial state.</span>
+    <div class="sig">方法与误读风险：Runaway Checkpoint（鹿诺）· 本注释是作品里唯一允许作者出现的位置</div>
+  </div>
+
+  <div class="redband"></div>
+  <div class="wear"></div>
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg">
+    <filter id="paperGrain"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" seed="5"/><feColorMatrix type="matrix" values="0 0 0 0 0.42  0 0 0 0 0.35  0 0 0 0 0.24  0 0 0 0.2 0"/></filter>
+    <rect width="100%" height="100%" filter="url(#paperGrain)"/>
+  </svg>
+</div>
+
+<script src="data.js"></script>
+<script src="gloss.js"></script>
+<script>
+/* ===== R7 交互正本：三击渐进显影（用户 2026-06-12 指示，原文存 00） =====
+   fogged →(击1) st1 词痕浮现 →(击2) st2 批改层（划痕/圈点/涂抹/批注）→(击3) st3 航线。
+   点空白=全部复原；满级云点击=无操作；全局 350ms 点击间隔防误触。 */
+const LAYOUT = { /* 像素提取标定（evidence/island-extract.json），含外扩余量 */
+  C01:{l:30.9,t:10.8,w:16,h:26}, C02:{l:55.5,t:10.6,w:18,h:26},
+  C03:{l:18.9,t:38.2,w:18,h:26}, C04:{l:71.7,t:35.4,w:17,h:23},
+  C05:{l:33.0,t:58.5,w:15,h:21}, C06:{l:57.1,t:57.1,w:15,h:19},
+};
+
+const chart = document.getElementById("chart");
+const stage = document.getElementById("stage");
+const flowsSvg = document.getElementById("currents");
+const islands = {};
+const routedSet = new Set();
+let lastClickAt = 0;
+
+const PHRASE_EN = {
+  "打回、补证、重写和追问": "pushback, corroboration, rewriting, and inquiry",
+  "让用户更明确自己的判准": "making the user's criteria more explicit",
+  "先排除机制解释": "exclude mechanism explanations first",
+  "先讲事实再讲判断": "facts before judgment",
+  "概念必须能区分差异": "concepts must distinguish differences",
+  "宏观判断落回一手材料": "return macro judgments to primary materials",
+  "现实事件组织成结构草图": "turn events into structural sketches",
+  "新闻只能作为短期修正": "news can only make short-term corrections",
+  "回到制度和产业结构": "return to institutional and industrial structures",
+  "风险判断需要时间尺度": "risk judgments need time scales",
+  "在亲密中承担边界": "carrying boundaries inside intimacy",
+  "改变用户对 AI 关系的期待": "changing expectations for AI relations",
+  "亲密需要记忆结构": "intimacy needs memory structures",
+  "情感表达必须可被纠正": "emotional expression must remain correctable",
+  "要求角色动机、欲望结构": "requiring motives and desire structures",
+  "叙事输出提供材料": "narrative output supplies material",
+  "抽象命题需要可感化": "abstract claims need sensory embodiment",
+  "角色不是标签而是压力结构": "characters are pressure structures, not labels",
+  "用户塑造 agent 的规则": "the user shapes the agents' rules",
+  "改变用户如何分配任务": "changing how the user distributes tasks",
+  "公开发布需要边界和终审": "public release needs boundaries and final review",
+  "回到原文、版本、页码": "returning to original text, edition, and page",
+  "帮用户组织历史材料": "helping organize historical materials",
+  "一手原文优先": "primary texts first",
+  "历史类比必须保留差异": "historical analogies must preserve differences"
+};
+function bilingual(text) {
+  const en = PHRASE_EN[text];
+  return en ? `${text}<span class="enrel">${en}</span>` : text;
+}
+function bilingualSed(text) {
+  const en = PHRASE_EN[text];
+  return en ? `${text}<span class="seden">${en}</span>` : text;
+}
+
+CLOUDS.forEach((c, ci) => {
+  const el = document.createElement("div");
+  el.className = "island fogged";
+  el.dataset.id = c.id; el.dataset.st = "0";
+  if (c.noiseDim < 1) el.classList.add("nd");
+  const L = LAYOUT[c.id];
+  el.style.left = L.l + "%"; el.style.top = L.t + "%";
+  el.style.width = L.w + "%"; el.style.height = L.h + "%";
+  el.innerHTML = `<div class="mass"></div>
+    <div class="inum">${c.n}</div>
+    <div class="iname">${c.zh}<span class="en">${c.en}</span></div>
+    <div class="relwrap">
+      <div class="rel-arc"></div>
+      <div class="rel-phrase ph"><span class="tag">人 → AI / human → AI</span>${bilingual(c.relHuman)}</div>
+      <div class="rel-phrase pa"><span class="tag">AI → 人 / AI → human</span>${bilingual(c.relAI)}</div>
+      <div class="seds">${c.seds.map((sd,si) => `<span class="sed" style="--sr:${((si*47+c.n*13)%5)-2.5}deg">${bilingualSed(sd)}</span>`).join("")}</div>
+    </div>`;
+  /* 簇生布词（中英对）；圈点词=确定性选 3 个内容词 */
+  const NUCLEI = [[38, 36], [60, 52], [46, 64]];
+  const circledIdx = new Set([4, 11, 19].map(i => i % c.words.length));
+  const placeWord = (txt, k, isNoise) => {
+    const w = document.createElement("span");
+    w.className = "w" + (isNoise ? " noise" : "");
+    w.textContent = txt;
+    const g = (typeof GLOSS !== "undefined") && GLOSS[txt];
+    if (g) { const e = document.createElement("i"); e.className = "we"; e.textContent = g; w.appendChild(e); }
+    const h1 = (k * 137 + ci * 53) % 101 / 101, h2 = (k * 71 + ci * 29) % 97 / 97, h3 = (k * 53 + ci * 13) % 89 / 89;
+    if (isNoise) { /* R7：带内收 0.48–0.60r，划痕不出岛 */
+      const ang = (k * 73 + ci * 41) % 360 * Math.PI / 180;
+      const r = 0.42 + 0.12 * h1; /* R7 终值：岛缘带 0.40–0.52（真根因是 position 覆盖 bug，已修） */
+      /* 岛缘带 + 硬夹紧（词盒永不出岛；SC-13 双条款：≥0.45 云心禁区 + 不出岛） */
+      const lx = Math.max(20, Math.min(80, 50 + Math.cos(ang) * r * 70));
+      const ly = Math.max(14, Math.min(84, 47 + Math.sin(ang) * r * 68));
+      w.style.left = lx + "%";
+      w.style.top  = ly + "%";
+      w.style.setProperty("--d2", Math.round(h2 * 700) + "ms"); /* R8-②：划痕逐词错峰 */
+    } else {
+      const nu = NUCLEI[k % 3];
+      const ang = h1 * Math.PI * 2;
+      const rad = Math.pow(h2, 0.6) * 16;
+      w.style.left = (nu[0] + Math.cos(ang) * rad * 1.12) + "%";
+      w.style.top  = (nu[1] + Math.sin(ang) * rad) + "%";
+      if (circledIdx.has(k)) w.classList.add("circled");
+    }
+    w.style.fontSize = (11 + h3 * 3.5) + "px";
+    w.style.setProperty("--fog", (0.42 + h2 * 0.3).toFixed(3));
+    w.style.setProperty("--d", Math.round(h1 * 1500) + "ms"); /* R8-②：墨波铺满 1.5s */
+    w.style.transform = `translate(-50%,-50%) rotate(${(h1 * 12 - 6).toFixed(1)}deg)`;
+    el.appendChild(w);
+  };
+  c.words.forEach((t, k) => placeWord(t, k, false));
+  c.noise.forEach((t, k) => placeWord(t, k * 5 + 1, true));
+  for (let i = 0; i < 4; i++) { /* 静态红批注点 */
+    const t = document.createElement("span");
+    t.className = "rtick";
+    t.textContent = ["✕","·","——","✓"][i];
+    t.style.left = (15 + i * 22 + c.n * 3) + "%";
+    t.style.top = (18 + ((i * 37 + c.n * 13) % 60)) + "%";
+    el.appendChild(t);
+  }
+  for (let i = 0; i < 2; i++) { /* 涂抹墨痕（st2 浮现） */
+    const m = document.createElement("div");
+    m.className = "smudge";
+    m.style.left = (24 + i * 34 + (c.n * 7) % 12) + "%";
+    m.style.top = (30 + ((i * 41 + c.n * 17) % 34)) + "%";
+    m.style.width = (12 + (c.n * 5 + i * 9) % 9) + "%";
+    m.style.height = (5 + (c.n * 3 + i * 7) % 4) + "%";
+    m.style.transform += ` rotate(${((c.n * 13 + i * 29) % 17) - 8}deg)`;
+    el.appendChild(m);
+  }
+  el.addEventListener("click", (ev) => onIsland(c.id, ev));
+  stage.appendChild(el);
+  islands[c.id] = el;
+});
+
+function center(el) {
+  const f = chart.getBoundingClientRect(), r = el.getBoundingClientRect();
+  return { x: r.left - f.left + r.width / 2, y: r.top - f.top + r.height / 2, rx: r.width / 2, ry: r.height / 2 };
+}
+function addPath(d, cls, wd) {
+  const pth = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  pth.setAttribute("d", d); pth.setAttribute("class", cls); pth.setAttribute("stroke-width", wd);
+  flowsSvg.appendChild(pth);
+  return pth;
+}
+
+/* R7-④：航线——岛缘锚点（零错接）+ S 形弯曲贴水流 + 港口小圆 */
+function drawRoutes(c) {
+  flowsSvg.querySelectorAll(`[data-ghost="${c.id}"]`).forEach(n => n.remove()); /* R9：重画活航线时本云残线退场 */
+  const a = center(islands[c.id]);
+  c.flows.forEach((tid, k) => {
+    const tEl = islands[tid]; if (!tEl) return;
+    if (flowsSvg.querySelector(`path[data-flow="${c.id}-${tid}"]`)) return;
+    const b = center(tEl);
+    const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy);
+    const ux = dx / len, uy = dy / len;
+    /* 岛缘锚点：沿连线方向从云心推到椭圆缘（0.82 缘距，落在画出的岛体边） */
+    const ea = Math.hypot(ux * a.rx, uy * a.ry) * 0.82;
+    const eb = Math.hypot(ux * b.rx, uy * b.ry) * 0.82;
+    const sx = a.x + ux * ea, sy = a.y + uy * ea;
+    const tx = b.x - ux * eb, ty = b.y - uy * eb;
+    /* S 曲线：两控制点垂向交替偏移（贴水流的弯） */
+    const px = -uy, py = ux;
+    const amp = 34 + (k * 19 + c.n * 7) % 26;
+    const c1x = sx + (tx - sx) / 3 + px * amp, c1y = sy + (ty - sy) / 3 + py * amp;
+    const c2x = sx + (tx - sx) * 2 / 3 - px * amp * 0.85, c2y = sy + (ty - sy) * 2 / 3 - py * amp * 0.85;
+    const d = `M ${sx} ${sy} C ${c1x} ${c1y} ${c2x} ${c2y} ${tx} ${ty}`;
+    const halo = addPath(d, "flowhalo", 4.5);     /* R8-②：衬影像船迹先画出 */
+    halo.dataset.flow = c.id + "-" + tid;
+    const hl = 1200; halo.style.strokeDasharray = hl; halo.style.strokeDashoffset = hl;
+    halo.style.opacity = .8;
+    halo.style.transition = `stroke-dashoffset 2.6s ease ${k * 700}ms`;
+    const pth = addPath(d, "flow", 1.9);          /* 红虚线随船迹浮现 */
+    pth.dataset.flow = c.id + "-" + tid;
+    pth.style.opacity = 0;
+    pth.style.transition = `opacity 2.2s ease ${k * 700 + 900}ms`;
+    requestAnimationFrame(() => requestAnimationFrame(() => { halo.style.strokeDashoffset = 0; pth.style.opacity = .92; }));
+    [[sx, sy], [tx, ty]].forEach(([px2, py2]) => {
+      const ci_ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      ci_.setAttribute("cx", px2); ci_.setAttribute("cy", py2); ci_.setAttribute("r", 3.4);
+      ci_.setAttribute("class", "port"); ci_.dataset.flow = c.id + "-" + tid;
+      ci_.style.opacity = 0; ci_.style.transition = `opacity 1.2s ease ${k * 320}ms`;
+      flowsSvg.appendChild(ci_);
+      requestAnimationFrame(() => requestAnimationFrame(() => { ci_.style.opacity = .85; }));
+    });
+  });
+}
+
+/* 点击淡墨涟漪（美学过渡） */
+function ripple(ev) {
+  const f = chart.getBoundingClientRect();
+  const r = document.createElement("div");
+  r.className = "ripple";
+  r.style.left = (ev.clientX - f.left) + "px";
+  r.style.top = (ev.clientY - f.top) + "px";
+  chart.appendChild(r);
+  requestAnimationFrame(() => requestAnimationFrame(() => r.classList.add("go")));
+  setTimeout(() => r.remove(), 1300);
+}
+
+function resetCloud(id) { /* R9 残痕版：单云复原不回全新——到过批改层/航线的云留磨损残痕 */
+  const el = islands[id];
+  const reached = Math.max(+(el.dataset.seen || 0), +el.dataset.st);
+  el.dataset.seen = String(reached);
+  el.classList.remove("st1", "st2", "st3", "breathe");
+  el.classList.add("fogged");
+  if (reached >= 2) el.classList.add("visited2");
+  el.dataset.st = "0";
+  const lives = flowsSvg.querySelectorAll(`path.flow[data-flow^="${id}-"]`);
+  if (lives.length) { /* 航线残线：红虚线降为淡残迹，船迹/港口随显影一并退场；无活航线时已有残线原样保留 */
+    flowsSvg.querySelectorAll(`[data-ghost="${id}"]`).forEach(n => n.remove());
+    lives.forEach(p => {
+      const g = p.cloneNode();
+      g.classList.add("ghost");
+      g.removeAttribute("data-flow"); g.dataset.ghost = id;
+      g.style.opacity = ""; g.style.transition = "";
+      flowsSvg.appendChild(g);
+    });
+  }
+  flowsSvg.querySelectorAll(`[data-flow^="${id}-"]`).forEach(n => n.remove());
+  routedSet.delete(id);
+}
+
+function onIsland(id, ev) {
+  ev.stopPropagation();
+  if (Date.now() - lastClickAt < 350) return;
+  lastClickAt = Date.now();
+  const el = islands[id];
+  const st = +el.dataset.st;
+  ripple(ev);
+  if (st >= 3) { resetCloud(id); return; }   /* R8-③：第四击=本云回到最初 */
+  if (st === 0) {                             /* R8-④：单云聚焦——点新云时其它云全部归雾 */
+    Object.keys(islands).forEach(oid => { if (oid !== id && +islands[oid].dataset.st > 0) resetCloud(oid); });
+  }
+  const next = st + 1;
+  el.dataset.st = String(next);
+  if (next === 1) { el.classList.remove("fogged", "breathe"); el.classList.add("st1"); }
+  if (next === 2) { el.classList.remove("visited2"); el.classList.add("st2"); } /* R9：重入批改层时残痕让位给全强度批改 */
+  if (next === 3) {
+    el.classList.add("st3");
+    drawRoutes(CLOUDS.find(x => x.id === id));
+    routedSet.add(id);
+  }
+}
+
+function resetAll() {
+  routedSet.clear();
+  Object.keys(islands).forEach(resetCloud);
+  flowsSvg.querySelectorAll("path.flow:not(.ghost), path.flowhalo, circle.port").forEach(n => n.remove()); /* R9：残线不随复原清除 */
+}
+
+/* 点空白海面=全部复原 */
+chart.addEventListener("click", (ev) => {
+  if (ev.target.closest(".island") || ev.target.closest(".fold") || ev.target.closest(".fold-panel")) return;
+  if (Date.now() - lastClickAt < 350) return;
+  if ([...Object.values(islands)].some(el => +el.dataset.st > 0)) { lastClickAt = Date.now(); ripple(ev); resetAll(); }
+});
+
+/* 渲染后收尾：宽词对出岛就地回收（宽度感知，词盒永不出岛） */
+function fixNoiseOverflow() {
+  document.querySelectorAll('.island').forEach(isl => {
+    const ir = isl.getBoundingClientRect();
+    isl.querySelectorAll('.w.noise').forEach(w => {
+      const r = w.getBoundingClientRect();
+      let lp = parseFloat(w.style.left), tp = parseFloat(w.style.top);
+      if (r.left < ir.left) lp += (ir.left - r.left + 5) / ir.width * 100;
+      if (r.right > ir.right) lp -= (r.right - ir.right + 5) / ir.width * 100;
+      if (r.top < ir.top) tp += (ir.top - r.top + 4) / ir.height * 100;
+      if (r.bottom > ir.bottom) tp -= (r.bottom - ir.bottom + 4) / ir.height * 100;
+      w.style.left = lp + "%"; w.style.top = tp + "%";
+    });
+  });
+}
+requestAnimationFrame(() => requestAnimationFrame(fixNoiseOverflow));
+setTimeout(fixNoiseOverflow, 200); /* hidden/后台页 rAF 不触发的兜底（R2 病例族） */
+addEventListener("resize", fixNoiseOverflow);
+
+/* 呼吸暗示：仅雾态云 */
+let breatheIdx = 0;
+setInterval(() => {
+  const fogs = CLOUDS.filter(c => +islands[c.id].dataset.st === 0);
+  if (!fogs.length) return;
+  const el = islands[fogs[breatheIdx++ % fogs.length].id];
+  el.classList.remove("breathe"); void el.offsetWidth; el.classList.add("breathe");
+}, 6000);
+
+/* v1.1 移动端：按像素提取岛位把底图对应区域裁进各岛块 */
+const IMG_AR = 1024 / 1536;
+function applyMobileCrops() {
+  const mobile = innerWidth <= 700;
+  CLOUDS.forEach(c => {
+    const el = islands[c.id], L = LAYOUT[c.id];
+    if (!mobile) { el.style.backgroundImage = ""; return; }
+    const bw = el.clientWidth, bh = el.clientHeight;
+    const scale = 100 / L.w;                       /* bg 宽 = 块宽 × scale */
+    const bgHpx = bw * scale * IMG_AR;             /* bg 实际像素高 */
+    const visH = bh / bgHpx * 100;                 /* 可见高占图高 % */
+    const posX = L.l / (100 - L.w) * 100;
+    const cy = L.t + L.h / 2;
+    const posY = Math.max(0, Math.min(100, (cy - visH / 2) / (100 - visH) * 100));
+    el.style.backgroundImage = "url(basemap.png)";
+    el.style.backgroundSize = (scale * 100).toFixed(1) + "% auto";
+    el.style.backgroundPosition = posX.toFixed(1) + "% " + posY.toFixed(1) + "%";
+  });
+}
+applyMobileCrops();
+addEventListener("resize", applyMobileCrops);
+
+document.getElementById("fold").addEventListener("click", (ev) => {
+  ev.stopPropagation();
+  document.getElementById("foldPanel").classList.toggle("open");
+});
+</script>
+</body>
+</html>

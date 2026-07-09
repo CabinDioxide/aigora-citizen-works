@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>文字图像机器 · 阅读动作展厅</title>
+<style>
+  :root{
+    --paper:#f6f0e3; --ink:#201d19; --muted:#665e54; --line:rgba(45,39,32,.18);
+    --red:#b54435; --blue:#236f8f; --gold:#b8871f; --green:#4f7d64;
+    --plain:#2e2a25;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{
+    background:linear-gradient(180deg,var(--paper),#fbf8f1 56%,#f0eadf);
+    color:var(--ink);
+    font-family:"Songti SC","STSong","Noto Serif CJK TC","PMingLiU",serif;
+    line-height:1.68;
+  }
+  /* language */
+  body.lang-zh .lang-en{display:none}
+  body.lang-en .lang-zh{display:none}
+  body.lang-en span.lang-en{display:inline}
+  body.lang-en p.lang-en,body.lang-en div.lang-en{display:block}
+  .language-switch{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 0}
+  .language-switch button{appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.55);
+    border-radius:6px;color:var(--ink);font:inherit;font-size:13px;padding:6px 10px;cursor:pointer}
+  .language-switch button.active{background:#fff;border-color:currentColor;font-weight:650}
+  main{max-width:1060px;margin:0 auto;padding:26px 18px 60px}
+  header{border-bottom:1px solid var(--line);padding-bottom:16px}
+  h1{font-size:29px;margin:0;font-weight:650}
+  .lead{max-width:800px;color:var(--muted);font-size:15px;margin:10px 0 0}
+  .lead strong{color:var(--ink)}
+  a{color:#226b86;text-decoration-thickness:1px;text-underline-offset:3px}
+  /* nav */
+  .nav{display:flex;flex-wrap:wrap;gap:7px;margin:18px 0 6px}
+  .nav button{
+    appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.48);
+    color:var(--ink);border-radius:6px;font:inherit;font-size:14px;
+    padding:8px 12px;cursor:pointer;transition:background .12s,border-color .12s;
+  }
+  .nav button:hover{background:rgba(255,255,255,.8)}
+  .nav button.active{border-color:currentColor;background:#fff;font-weight:600}
+  .nav .idx{color:var(--muted);font-size:12px;margin-right:5px}
+  .nav .script{color:var(--muted);font-size:11px;margin-left:6px;letter-spacing:.02em}
+  /* exhibit */
+  .exhibit{display:none;margin-top:14px}
+  .exhibit.active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .ex-head{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+  .ex-kind{color:var(--gold);font-size:13px;letter-spacing:.04em}
+  .ex-title{font-size:21px;font-weight:650;margin:0}
+  .ex-action{color:var(--ink);font-size:15px;margin:4px 0 0}
+  .ex-source{color:var(--muted);font-size:13px}
+  /* shared blocks */
+  .block-label{display:block;color:var(--gold);font-size:12px;letter-spacing:.08em;
+    text-transform:uppercase;margin:0 0 8px}
+  .how{border:1px solid var(--line);background:rgba(255,255,255,.5);
+    border-radius:4px;padding:13px 15px;margin:0 0 14px;color:var(--muted);font-size:14px}
+  .how strong{color:var(--ink)}
+  .stage{border:1px solid var(--line);background:rgba(255,255,255,.42);
+    padding:16px;border-radius:4px;overflow:auto;margin:0 0 14px}
+  .original{border:1px solid var(--line);background:rgba(255,255,255,.5);
+    border-radius:4px;padding:14px 16px;margin:0 0 14px}
+  .controls{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:0 0 12px}
+  .controls button{
+    appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.5);
+    color:var(--ink);border-radius:6px;font:inherit;font-size:13px;padding:7px 11px;cursor:pointer;
+  }
+  .controls button:hover{background:rgba(255,255,255,.82)}
+  .controls button.active{border-color:currentColor;background:#fff;font-weight:600}
+  .note{color:var(--muted);font-size:13px;margin:10px 0 0}
+  .en{font-family:"Iowan Old Style","Georgia","Times New Roman",serif;color:var(--muted)}
+  /* light source fold */
+  details.source{border:1px solid var(--line);border-radius:4px;background:rgba(255,255,255,.32);
+    padding:6px 12px;margin:0;font-size:12.5px;color:var(--muted)}
+  details.source summary{cursor:pointer;color:var(--muted);font-size:12.5px;list-style:none;padding:4px 0}
+  details.source summary::-webkit-details-marker{display:none}
+  details.source summary::before{content:"›";display:inline-block;margin-right:6px;transition:transform .15s}
+  details.source[open] summary::before{transform:rotate(90deg)}
+  details.source p{margin:6px 0}
+  details.source a{font-size:12.5px}
+  /* pending placeholder */
+  .pending{border:1px dashed var(--line);background:rgba(255,255,255,.28);border-radius:4px;
+    padding:14px 16px;color:var(--muted);font-size:13.5px;line-height:1.7}
+  .pending strong{color:var(--ink)}
+  /* ex1 integrated preview */
+  .xuanji-preview{display:grid;grid-template-columns:minmax(260px,.95fr) minmax(260px,1fr);
+    gap:16px;align-items:start}
+  .xuanji-grid{display:grid;grid-template-columns:repeat(13,1fr);gap:2px;
+    background:rgba(45,39,32,.14);border:1px solid var(--line);padding:6px;
+    max-width:420px}
+  .xuanji-grid span{display:flex;align-items:center;justify-content:center;
+    aspect-ratio:1;background:rgba(255,255,255,.55);font-size:14px;line-height:1;color:var(--muted)}
+  .xuanji-grid span.path{background:rgba(181,68,53,.16);color:var(--red);font-weight:650}
+  .xuanji-route{border:1px solid var(--line);background:rgba(255,255,255,.5);
+    border-radius:4px;padding:13px 15px;color:var(--muted);font-size:14px}
+  .xuanji-route b{display:block;color:var(--ink);font-size:15px;margin-bottom:6px}
+  .xuanji-route .line{color:var(--red);font-size:20px;letter-spacing:.12em;margin:8px 0}
+  .three-layer{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 12px}
+  .three-layer .layer{border:1px solid var(--line);background:rgba(255,255,255,.4);
+    border-radius:4px;padding:9px 11px;font-size:13px;color:var(--muted)}
+  .three-layer .layer b{display:block;color:var(--ink);font-size:13.5px;margin-bottom:2px}
+  /* ex2 wing — Greek serif */
+  .greek{font-family:"GFS Didot","Didot","Palatino Linotype","Times New Roman",serif}
+  .wing-line{white-space:nowrap;transition:opacity .2s,background .2s;font-size:17px;padding:0 4px;border-radius:3px}
+  .wing-shape{display:flex;flex-direction:column;align-items:center}
+  .wing-shape .wing-line{text-align:center}
+  .wing-line.hidden{opacity:0}
+  .wing-line.lit{background:rgba(35,111,143,.1)}
+  .wing-line .gk{color:var(--blue)}
+  .seq{color:var(--muted);font:11px/1 ui-monospace,Menlo,monospace;margin-right:10px;vertical-align:.15em}
+  .apparatus{color:var(--red);font-weight:700}
+  .wing-original{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:16px;margin:6px 0}
+  .literal-table{display:grid;grid-template-columns:minmax(240px,1.1fr) minmax(200px,1fr) minmax(200px,1fr);
+    gap:1px;background:var(--line);border:1px solid var(--line);margin:12px 0;font-size:13px}
+  .literal-table > div{background:rgba(255,255,255,.58);padding:8px 9px}
+  .literal-table .head{font-weight:650;color:var(--ink);background:rgba(255,255,255,.8)}
+  .literal-table .gk{color:var(--blue);font-family:"GFS Didot","Didot","Palatino Linotype","Times New Roman",serif;font-size:14px}
+  .literal-table .row-lit{background:rgba(35,111,143,.1)}
+  /* ex3 facsimile */
+  .ms-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .ms-thumb{max-width:min(820px,100%);height:auto;border:1px solid var(--line);
+    border-radius:3px;cursor:zoom-in;box-shadow:0 2px 10px rgba(45,39,32,.14);background:#fff}
+  .gist{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 14px}
+  .gist > div{border:1px solid var(--line);background:rgba(255,255,255,.42);border-radius:4px;padding:12px 14px;font-size:14px}
+  .gist .en{font-size:13.5px}
+  details.literal-fold{border:1px solid var(--line);border-radius:4px;background:rgba(255,255,255,.34);
+    padding:6px 14px;margin:0 0 14px}
+  details.literal-fold summary{cursor:pointer;font-size:14px;color:var(--ink);font-weight:600;list-style:none;padding:6px 0}
+  details.literal-fold summary::-webkit-details-marker{display:none}
+  details.literal-fold summary::before{content:"›";display:inline-block;margin-right:6px;transition:transform .15s}
+  details.literal-fold[open] summary::before{transform:rotate(90deg)}
+  /* ex3 cross grid + reading-order animation */
+  .mode-switch{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 12px}
+  .cross-grid{display:grid;grid-template-columns:repeat(35,1fr);gap:0;width:min(760px,100%);
+    margin:0 auto 10px;aspect-ratio:1/1;
+    background-image:linear-gradient(rgba(255,255,255,.04),rgba(255,255,255,.04)),url("./assets/hrabanus-f9v-letter-grid-stage.jpg");
+    background-size:100% 100%;background-position:center;background-repeat:no-repeat;
+    border:1px solid var(--line);border-radius:3px;box-shadow:0 2px 14px rgba(45,39,32,.16);overflow:hidden}
+  .cell{display:flex;align-items:center;justify-content:center;
+    font:700 clamp(6px,1.2vw,11px)/1 "Iowan Old Style","Georgia",serif;color:transparent;
+    background:transparent;border-radius:1px;user-select:none;transition:background .18s,color .18s,box-shadow .18s}
+  .cell.cross,.cell.blank{background:transparent}
+  .cell.lit{box-shadow:inset 0 0 0 1px rgba(255,255,255,.7),0 0 0 1px rgba(45,39,32,.08)}
+  .cell.lit.c-yellow{background:rgba(184,135,31,.68);color:#2a2108}
+  .cell.lit.c-green{background:rgba(79,125,100,.72);color:#071a11}
+  .cell.lit.c-red{background:rgba(181,68,53,.66);color:#2d0a06}
+  .cell.lit.c-black{background:rgba(46,42,37,.72);color:#f5ead2}
+  .cell.pulse{animation:cellpulse .5s ease}
+  @keyframes cellpulse{0%{box-shadow:0 0 0 3px rgba(184,135,31,.55)}100%{box-shadow:0 0 0 1px rgba(255,255,255,.5)}}
+  /* main-poem row sweep */
+  .cell.rowlit{background:rgba(255,245,188,.34);box-shadow:inset 0 1px 0 rgba(184,135,31,.45),inset 0 -1px 0 rgba(184,135,31,.45)}
+  /* intexti lines panel */
+  .intexti-now{min-height:54px;border:1px solid var(--line);background:rgba(255,255,255,.5);
+    border-radius:4px;padding:11px 14px;margin:0 0 10px}
+  .intexti-now .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:1px}
+  .dot.c-yellow{background:var(--gold)}.dot.c-green{background:var(--green)}
+  .dot.c-red{background:var(--red)}.dot.c-black{background:#2e2a25}
+  .intexti-now .lat{font-family:"Iowan Old Style","Georgia",serif;font-size:15px;color:var(--ink);letter-spacing:.02em}
+  .intexti-now .lat .on{background:rgba(184,135,31,.32);border-radius:2px}
+  .intexti-now .tr{display:block;color:var(--muted);font-size:13.5px;margin-top:4px}
+  .intexti-now .tr.en{font-family:"Iowan Old Style","Georgia",serif}
+  .intexti-list{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);
+    border-radius:4px;overflow:hidden;font-size:13px;margin:0 0 4px}
+  .intexti-list .ti{background:rgba(255,255,255,.55);padding:7px 11px;display:flex;gap:9px;align-items:baseline}
+  .intexti-list .ti.active{background:rgba(184,135,31,.12)}
+  .intexti-list .ti .lat{font-family:"Iowan Old Style","Georgia",serif;color:var(--ink)}
+  .intexti-list .ti .tr{color:var(--muted);display:block;font-size:12.5px}
+  .intexti-list .ti .num{color:var(--muted);font:11px/1.3 ui-monospace,Menlo,monospace;flex:0 0 auto}
+  /* main-poem 5-part explanation */
+  .mainpoem-panel{border:1px solid var(--line);background:rgba(255,255,255,.5);border-radius:4px;padding:4px 0;margin:0 0 4px}
+  .mp-seg{padding:9px 14px;border-bottom:1px solid var(--line);font-size:13.5px;color:var(--muted);transition:background .2s}
+  .mp-seg:last-child{border-bottom:none}
+  .mp-seg.active{background:rgba(184,135,31,.12)}
+  .mp-seg b{display:block;color:var(--ink);font-size:13.5px;margin-bottom:2px}
+  .mp-seg .ln{color:var(--gold);font:11px/1 ui-monospace,Menlo,monospace;letter-spacing:.02em}
+  /* lightbox */
+  .lightbox{position:fixed;inset:0;background:rgba(24,20,16,.88);display:none;
+    align-items:center;justify-content:center;z-index:50;padding:20px;cursor:zoom-out}
+  .lightbox.open{display:flex}
+  .lightbox img{max-width:96vw;max-height:92vh;height:auto;border:1px solid rgba(255,255,255,.2);
+    box-shadow:0 6px 40px rgba(0,0,0,.5)}
+  .lightbox .cap{position:absolute;bottom:14px;left:0;right:0;text-align:center;
+    color:rgba(255,255,255,.82);font-size:12px}
+  /* ex4 pagoda */
+  .poem-picker{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 14px}
+  .poem-picker button{appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.5);
+    color:var(--ink);border-radius:6px;font:inherit;font-size:14px;padding:7px 12px;cursor:pointer}
+  .poem-picker button:hover:not(:disabled){background:rgba(255,255,255,.82)}
+  .poem-picker button.active{border-color:currentColor;background:#fff;font-weight:600}
+  .poem-picker button:disabled{opacity:.5;cursor:default;font-style:italic}
+  .pagoda{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:20px}
+  .prow{white-space:nowrap;letter-spacing:.18em;transition:opacity .25s,transform .25s}
+  .prow.hidden{opacity:0;transform:translateY(-4px)}
+  .prow.apex{color:var(--red);font-weight:650}
+  .poem-meaning{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0 0}
+  .poem-meaning > div{border:1px solid var(--line);background:rgba(255,255,255,.42);border-radius:4px;padding:12px 14px;font-size:14px}
+  a.home{color:#226b86;font-size:13px;text-decoration-thickness:1px;text-underline-offset:3px}
+  @media(max-width:560px){
+    main{padding:22px 12px 46px}h1{font-size:23px}
+    .wing-line{font-size:14px}
+    .literal-table{grid-template-columns:1fr}
+    .literal-table .head{display:none}
+    .three-layer,.gist,.poem-meaning,.xuanji-preview{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body class="lang-zh">
+<main>
+  <header>
+    <h1><span class="lang-zh">文字图像机器 · 阅读动作展厅</span><span class="lang-en">Word-Image Machines · A Gallery of Reading</span></h1>
+    <div class="language-switch" id="language-switch" aria-label="language switch">
+      <button data-lang="lang-zh">中文</button>
+      <button data-lang="lang-en">English</button>
+    </div>
+    <p class="lead"><span class="lang-zh">这是一间关于<strong>阅读动作</strong>的展厅。文字一旦进入路径、轮廓、嵌图、高度，它就不再只是线性信息，而会迫使读者用身体去读：<strong>走、看、寻找、升起</strong>。每一件互动都只服务一个问题——读者如何用身体读这一页。</span>
+      <span class="lang-en">This is a gallery about <strong>the act of reading</strong>. Once writing enters a path, a silhouette, a figure, or a height, it stops being a line of information and asks the reader to read with the body: <strong>to walk, to look, to search, to rise</strong>. Each interaction serves a single question—how the reader's body reads this page.</span></p>
+  </header>
+
+  <nav class="nav" id="nav">
+    <button data-ex="ex1" class="active"><span class="idx">一</span><span class="lang-zh">路径</span><span class="lang-en">Path</span><span class="script">汉字</span></button>
+    <button data-ex="ex2"><span class="idx">二</span><span class="lang-zh">轮廓</span><span class="lang-en">Silhouette</span><span class="script">Ἑλληνικά</span></button>
+    <button data-ex="ex3"><span class="idx">三</span><span class="lang-zh">嵌图</span><span class="lang-en">Figure</span><span class="script">Latina</span></button>
+    <button data-ex="ex4"><span class="idx">四</span><span class="lang-zh">高度</span><span class="lang-en">Tower</span><span class="script">汉字</span></button>
+  </nav>
+
+  <!-- 展品一 · 路径机器（汉字 · 璇玑图） -->
+  <section class="exhibit active" id="ex1">
+    <div class="ex-head">
+      <span class="ex-kind">路径机器 · PATH · 汉字</span>
+      <h2 class="ex-title">《璇玑图》<span class="en">Su Hui's Star Gauge</span></h2>
+      <p class="ex-action"><span class="lang-zh">这台机器：字阵不动，读法在阵中转弯。同一块 29×29 织锦，按不同合法路径取字，重组出一首又一首诗。</span>
+        <span class="lang-en">This machine: the grid holds still while reading routes turn within it. One 29×29 textile, read along different legal paths, recomposes into poem after poem.</span></p>
+    </div>
+
+    <div class="how">
+      <span class="block-label"><span class="lang-zh">观看这件作品</span><span class="lang-en">How to Look</span></span>
+      <span class="lang-zh">把它当成一台“读法显微镜”。《璇玑图》不是横竖斜都能读出诗的迷宫——它的价值在于<strong>同一字阵按合法读法被反复取字</strong>。规则不是束缚，而是入口：它决定你从哪里出发、向哪里转弯、在哪里重新听见一句诗。</span>
+      <span class="lang-en">Treat it as a microscope for reading routes. The Xuanji Tu is not a maze where any row or diagonal becomes a poem—its value is that <strong>one grid is re-read along legal routes</strong>. A rule is not a constraint but an entrance: it decides where you start, where you turn, and where you hear a line again.</span>
+    </div>
+
+    <div class="three-layer" aria-label="三层导览">
+      <div class="layer"><b><span class="lang-zh">原始字阵</span><span class="lang-en">The Grid</span></b><span class="lang-zh">29×29 字，一字不动。本展厅只保留压缩示意，不另发布独立读诗器。</span><span class="lang-en">29×29 characters, none moved. This gallery keeps a compressed exhibit view rather than a standalone reader.</span></div>
+      <div class="layer"><b><span class="lang-zh">读法路径</span><span class="lang-en">The Routes</span></b><span class="lang-zh">合法路径决定哪些字被取出，不能把任意横竖斜都当作读诗。</span><span class="lang-en">Legal routes decide which cells are read; arbitrary rows and diagonals are not treated as poems.</span></div>
+      <div class="layer"><b><span class="lang-zh">译解</span><span class="lang-en">The Reading</span></b><span class="lang-zh">每条路径取出的字连成一行可读的诗。</span><span class="lang-en">The characters along each path join into one readable line.</span></div>
+    </div>
+
+    <div class="stage">
+      <span class="block-label"><span class="lang-zh">路径如何把字阵变成读法</span><span class="lang-en">How a Route Turns a Grid into Reading</span></span>
+      <div class="xuanji-preview">
+        <div class="xuanji-grid" aria-label="压缩示意字阵">
+          <span>仁</span><span>智</span><span>怀</span><span>德</span><span>苏</span><span>蕙</span><span class="path">诗</span><span>经</span><span>纬</span><span>锦</span><span>心</span><span>回</span><span>文</span>
+          <span>机</span><span>杼</span><span class="path">织</span><span>成</span><span>离</span><span>思</span><span>怨</span><span>别</span><span>秦</span><span>风</span><span>汉</span><span>月</span><span>长</span>
+          <span>寒</span><span>灯</span><span>未</span><span class="path">尽</span><span>字</span><span>行</span><span>回</span><span>环</span><span>千</span><span>折</span><span>不</span><span>可</span><span>穷</span>
+          <span>读</span><span>者</span><span>循</span><span>格</span><span class="path">取</span><span>声</span><span>不</span><span>任</span><span>横</span><span>斜</span><span>乱</span><span>成</span><span>章</span>
+          <span>一</span><span>阵</span><span>多</span><span>诗</span><span>皆</span><span class="path">因</span><span>路</span><span>转</span><span>非</span><span>由</span><span>眼</span><span>任</span><span>猜</span>
+          <span>红</span><span>点</span><span>只</span><span>示</span><span>一</span><span>条</span><span class="path">径</span><span>其</span><span>余</span><span>待</span><span>据</span><span>底</span><span>本</span>
+        </div>
+        <div class="xuanji-route">
+          <b><span class="lang-zh">展厅处理</span><span class="lang-en">Gallery Treatment</span></b>
+          <p><span class="lang-zh">《璇玑图》不再作为独立公开页发布。它在这里被收进“路径机器”：重点不是另开一个读诗工具，而是说明同一字阵如何被合法路径反复读取。</span><span class="lang-en">The Xuanji Tu is no longer published as a standalone public page. Here it is folded into the “path machine”: the point is not a separate reader, but how one grid becomes readable through sanctioned routes.</span></p>
+          <div class="line">织 · 尽 · 取 · 因 · 径</div>
+          <p><span class="lang-zh">左侧为压缩示意，不是苏蕙原阵复刻；正式原阵与完整读法留在内部工作台继续校验。</span><span class="lang-en">The grid at left is a compressed demonstration, not a reproduction of Su Hui's original grid; the full grid and route reader remain internal working material for verification.</span></p>
+        </div>
+      </div>
+      <p class="note"><span class="lang-zh">公开版只保留策展层：路径、轮廓、嵌图、高度四种阅读动作。独立《璇玑图》页面已从公开入口移除。</span><span class="lang-en">The public version keeps only the curatorial layer: path, silhouette, figure, and tower. The standalone Xuanji Tu page has been removed from the public collection.</span></p>
+    </div>
+
+    <details class="source">
+      <summary><span class="lang-zh">来源</span><span class="lang-en">Source</span></summary>
+      <p><span class="lang-zh">苏蕙《璇玑图》，前秦。公开展厅仅保留路径机器的策展说明；完整 29×29 底板、坐标和《镜花缘》读法不作为独立公开页发布。</span><span class="lang-en">Su Hui, Xuanji Tu, Former Qin. The public gallery keeps only the curatorial explanation of the path machine; the full 29×29 grid, coordinates, and Jinghua Yuan routes are not published as a standalone page.</span></p>
+    </details>
+  </section>
+
+  <!-- 展品二 · 轮廓机器（希腊 · Simmias 翼） -->
+  <section class="exhibit" id="ex2">
+    <div class="ex-head">
+      <span class="ex-kind">轮廓机器 · SILHOUETTE · Ἑλληνικά</span>
+      <h2 class="ex-title">Πτέρυγες — Simmias《翼》<span class="en">The Wings</span></h2>
+      <p class="ex-action"><span class="lang-zh">这台机器：诗行一长一短，居中排起来，描出一只翼的轮廓——读它是希腊原文，看它是图像。说话者像有翼的爱神，却自称不是年轻爱欲，而是更古老的力量：他不靠暴力，而靠温柔的劝服让天地海让步。</span>
+        <span class="lang-en">This machine: lines lengthen and shorten, centered into the outline of a wing—read it and it is Greek, look at it and it is an image. The speaker resembles winged Love, yet claims to be not young Eros but an older power who rules not by force but by gentle persuasion.</span></p>
+    </div>
+
+    <div class="how">
+      <span class="block-label"><span class="lang-zh">观看这件作品</span><span class="lang-en">How to Look</span></span>
+      <span class="lang-zh">先看翅膀，再读诗句。Simmias 不必写“我是一双翅膀”——<strong>行长本身</strong>已经让阅读变成飞行的形状。按“逐行显影”，每浮现一行希腊原文，下方对应的中英直译会同时亮起。</span>
+      <span class="lang-en">Look at the wings first, then read. Simmias never writes “I am wings”—<strong>line length itself</strong> already turns reading into flight. Press “Reveal lines”: as each Greek line appears, its Chinese and English renderings light up below.</span>
+    </div>
+
+    <div class="stage">
+      <div class="controls">
+        <button id="w-shape" class="active">轮廓形状 / Silhouette</button>
+        <button id="w-reveal">逐行显影 / Reveal lines</button>
+      </div>
+      <div id="wing" class="wing-shape greek"></div>
+      <p class="note"><span class="lang-zh">形状没有在诗里反复解释自己；它直接替诗说出了“翼”。</span><span class="lang-en">The shape does not keep explaining itself in words; it says “wings” by becoming them.</span></p>
+    </div>
+
+    <div class="original">
+      <span class="block-label"><span class="lang-zh">原始文稿 · 希腊原文翼形排布</span><span class="lang-en">Original Text · Greek in Wing Form</span></span>
+      <div id="wing-original" class="wing-original greek"></div>
+      <div class="literal-table" id="wing-translation">
+        <div class="head">希腊原文</div><div class="head">中文逐句直译</div><div class="head">English literal rendering</div>
+      </div>
+    </div>
+
+    <details class="source">
+      <summary><span class="lang-zh">来源</span><span class="lang-en">Source</span></summary>
+      <p><span class="lang-zh">希腊原文逐字抄自 Anthologia Graeca Project，Epigram 15.24（URN tlg7000.tlg001.ag:15.24），Paton edition。共 12 行，不合并不增删。第 5 行保留校勘疑难标记 <span class="apparatus">†</span>；此行有 crux，文本据通行校读作 ὅσσ᾽。公版印本含真正翼形排版：W. R. Paton, <i>The Greek Anthology</i> vol. V (Loeb, 1916–18)。</span>
+        <span class="lang-en">Greek text copied verbatim from the Anthologia Graeca Project, Epigram 15.24 (URN tlg7000.tlg001.ag:15.24), Paton edition. Twelve lines, neither merged nor altered. Line 5 keeps the editorial crux marker <span class="apparatus">†</span>; the reading is given as ὅσσ᾽. A public-domain printed edition with genuine wing-shaped setting: W. R. Paton, <i>The Greek Anthology</i> vol. V (Loeb, 1916–18).</span></p>
+    </details>
+  </section>
+
+  <!-- 展品三 · 嵌图机器（拉丁 · Hrabanus） -->
+  <section class="exhibit" id="ex3">
+    <div class="ex-head">
+      <span class="ex-kind">嵌图机器 · FIGURE-IN-TEXT · Latina</span>
+      <h2 class="ex-title">Hrabanus Maurus《In honorem sanctae crucis》<span class="en">Figure XIII</span></h2>
+      <p class="ex-action"><span class="lang-zh">这台机器（核心展品）：整页拉丁字母照常排满、照常可读，但某些位置的字母同时勾出十字。同一页有两套读法——主诗按行读，嵌入诗沿十字路径读。文字层与图像层叠在同一张字母格上。</span>
+        <span class="lang-en">This machine (the central exhibit): a full page of Latin letters reads normally, yet certain letters also trace crosses. One page carries two readings—the main poem read line by line, the embedded poem read along the arms of crosses. Text and image lie on the same letter grid.</span></p>
+    </div>
+
+    <div class="how">
+      <span class="block-label"><span class="lang-zh">观看这件作品</span><span class="lang-en">How to Look</span></span>
+      <span class="lang-zh">先看一页均匀的字母格，再去找十字。十字不是外加的图案，而是从字母内部浮出来：同一批字母，一次作为诗句前进，一次作为形状站立。数字也在其中——四个希腊十字，每个 69 个字母，合为 <strong>276</strong>，旧释指向“基督在童贞女腹中孕育的日数”。诗句、图形、数字不是三层说明，而是同一页里的同一件事。</span>
+      <span class="lang-en">First look at the even field of letters, then search for the crosses. They are not added ornament; they emerge from inside the letters: the same letters advance as verse and stand as shape. Number is in it too—four Greek crosses, each of 69 letters, together <strong>276</strong>, traditionally read as the days of Christ's gestation in the Virgin's womb. Verse, shape, and number are not three explanations; they are one event on the page.</span>
+    </div>
+
+    <div class="original">
+      <span class="block-label"><span class="lang-zh">原始文稿 · 公共领域手稿</span><span class="lang-en">Original Text · Public-Domain Manuscript</span></span>
+      <div class="ms-wrap">
+        <img class="ms-thumb" id="ms-thumb"
+             src="./assets/hrabanus-cod9-f9v-1536.jpg"
+             alt="Hrabanus Maurus, In honorem sanctae crucis, Bern Burgerbibliothek Cod. 9 f. 9v — 公共领域手稿照片">
+        <p class="note"><span class="lang-zh">整页 f.9v 图形诗：35×35 字母格里埋着四个彩色希腊十字。这是展品本体——一页既是诗、又是图。点击放大。</span><span class="lang-en">The full f. 9v figure-poem: four colored Greek crosses embedded in a 35×35 letter grid. This is the work itself—a page that is both poem and image. Click to enlarge.</span></p>
+      </div>
+    </div>
+
+    <div class="gist">
+      <div><strong><span class="lang-zh">主诗概译</span><span class="lang-en">The Main Poem, in Brief</span></strong><br>
+        <span class="lang-zh">这首主诗把十字写成一棵神圣之树：它香气充盈、枝叶繁茂，胜过所有树林；它承载真正的荣耀、救恩、祝福、光、生命与救赎。诗的后半说，基督借十字把和平赐给世界，解除古老死亡和罪的诱惑；这棵十字之树以数字发光，显示基督从童贞女腹中来临、成就先知所唱、并把王权担在肩上。</span>
+        <span class="lang-en en">The main poem imagines the Cross as a sacred tree: fragrant, broad with leaves, richer than every forest, bearing true honor, salvation, blessing, light, life, and redemption. In the second half Christ gives peace to the world through the Cross, loosens the old bonds of death and sin, and lets the tree shine through number: it points to his coming from the Virgin's womb, the fulfilment sung by the prophets, and the rule placed upon his shoulders.</span>
+      </div>
+      <div><strong><span class="lang-zh">两种读法</span><span class="lang-en">Two Readings</span></strong><br>
+        <span class="lang-zh">主读法：35×35 字母格按行读，是一首完整主诗。嵌入读法：四个彩色十字区域按特定字序读，读出嵌入诗。读者必须在“读”和“看”之间来回移动，才会发现意义正在字母的排列中发生。</span>
+        <span class="lang-en en">Main reading: the 35×35 letter grid read line by line is one complete poem. Embedded reading: the four colored cross-regions, read in a set order, yield the embedded verses. The viewer must move between reading and looking to discover that meaning happens in the arrangement of the letters.</span>
+      </div>
+    </div>
+
+    <details class="literal-fold">
+      <summary><span class="lang-zh">35 行逐行直译表（展开）</span><span class="lang-en">35-Line Line-by-Line Translation (expand)</span></summary>
+      <div class="literal-table" id="latin-literal" aria-label="35-line literal table">
+        <div class="head">Latin</div><div class="head">中文直译</div><div class="head">English literal</div>
+      </div>
+      <p class="note" id="latin-literal-pending"></p>
+    </details>
+
+    <div class="stage">
+      <span class="block-label"><span class="lang-zh">同一字母格的两种读法（互动）</span><span class="lang-en">Two Readings of One Letter Grid (interaction)</span></span>
+      <div class="mode-switch" id="hrab-mode">
+        <button data-mode="main" class="active">主诗阅读 / The main poem</button>
+        <button data-mode="intexti">嵌文逐格读序 / Intexti, by reading order</button>
+      </div>
+
+      <div class="cross-grid" id="cross-grid" aria-label="35×35 真实手稿字母格，四个彩色十字读序叠层"></div>
+
+      <!-- 嵌文模式 -->
+      <div id="hrab-intexti" style="display:none">
+        <div class="controls">
+          <button id="hb-play">▶ 逐格点亮 / Play reading order</button>
+          <button id="hb-step">下一格 / Step</button>
+          <button id="hb-all">显示四个十字 / Show all crosses</button>
+          <button id="hb-reset">重置 / Reset</button>
+        </div>
+        <div class="intexti-now" id="intexti-now"></div>
+        <p class="note"><span class="lang-zh">底层不是示意图，而是 f.9v 的真实字母格裁图。四个彩色十字、每个 69 格、合 <strong>276</strong>。每个十字有竖、横两条 39 字母读法，在中央 3×3 交叉区复用同 9 格——所以重复读到同一格时它会再次脉冲，而不是另起一格。这是<strong>读字顺序</strong>，不是几何扩散。</span>
+          <span class="lang-en">The base is not a diagram but the real f. 9v letter field. Four colored crosses, 69 cells each, together <strong>276</strong>. Each cross is read twice—down then across, 39 letters each—reusing the central 3×3 nine cells, so a re-read cell pulses again rather than spawning a new one. This is <strong>reading order</strong>, not geometric expansion.</span></p>
+        <div class="intexti-list" id="intexti-list"></div>
+      </div>
+
+      <!-- 主诗模式 -->
+      <div id="hrab-main">
+        <div class="controls">
+          <button id="mp-play">▶ 逐行轻扫 / Sweep the 35 rows</button>
+          <button id="mp-reset">重置 / Reset</button>
+        </div>
+        <p class="note"><span class="lang-zh">先不要急着看彩色十字。<strong>整页 35 行字母本身已经是一首诗</strong>——它从 <i>arbor</i>（树）开始，把十字写成一棵胜过众林的神圣之树。现在轻扫的是手稿里的真实行：彩色十字之外的字母也在主诗身体内，十字只是从同一身体里再读出的另一组文字。</span>
+          <span class="lang-en">Do not rush to the colored crosses. <strong>The whole 35-line letter page is already a poem</strong>—it begins with <i>arbor</i>, a tree, and imagines the Cross as a sacred tree greater than every forest. The sweep now moves over the manuscript's real lines, not over blank cells: the letters outside the crosses also belong to the main poem, while the crosses are another text read from the same body.</span></p>
+        <div class="mainpoem-panel" id="mainpoem-panel"></div>
+      </div>
+
+      <p class="note"><span class="lang-zh"><strong>红线说明：</strong>互动舞台以真实手稿字母格为底；逐格读序叠层用的是篇若提供的<strong>动画映射草案</strong>（依 Sánchez-Prieto 2024 Appendix B13 的 8 条嵌入诗）。35 行主诗已按 PL 系开放文本补入逐行拉丁与工作直译；但 <strong>Perrin 1997 校勘本与逐格级 35×35 transcription 尚未补</strong>，所以页面不把开放行文强行改写成校勘格位。</span>
+        <span class="lang-en"><strong>Red-line note:</strong> the interactive stage uses the real manuscript letter field as its base; the reading-order overlay uses the curator's <strong>draft animation map</strong> (after Sánchez-Prieto 2024, Appendix B13, the eight embedded verses). The 35-line main poem is supplied from the open PL-based text with working literal translations; the <strong>Perrin 1997 critical edition and a cell-level 35×35 transcription are still not supplied</strong>, so the open line text is not forced into a critical grid.</span></p>
+    </div>
+
+    <details class="source">
+      <summary><span class="lang-zh">来源</span><span class="lang-en">Source</span></summary>
+      <p><span class="lang-zh">手稿图：Bern, Burgerbibliothek, Cod. 9, f. 9v（Wikimedia Commons / e-codices，Public Domain Mark 1.0）。作品：Hrabanus Maurus，<i>In honorem sanctae crucis</i>（约 810–814），figura XIII（= B13）。嵌文与“四个十字 × 69 = 276”数义见 A. B. Sánchez-Prieto, <i>Religions</i> 15(8):963 (2024)，开放获取。35 行主诗据 Musamedievalis（reference basis text: PL 107, 147-294）与 Latin Wikisource / PL 系文本整理；权威校勘本为 M. Perrin, CCCM 100（在版）。</span>
+        <span class="lang-en">Manuscript image: Bern, Burgerbibliothek, Cod. 9, f. 9v (Wikimedia Commons / e-codices, Public Domain Mark 1.0). Work: Hrabanus Maurus, <i>In honorem sanctae crucis</i> (c. 810–814), figura XIII (= B13). The embedded verses and “four crosses × 69 = 276” numerology: A. B. Sánchez-Prieto, <i>Religions</i> 15(8):963 (2024), open access. The 35-line main poem is prepared from Musamedievalis (reference basis text: PL 107, 147-294) and the Latin Wikisource / PL tradition; the critical edition is M. Perrin, CCCM 100 (in print).</span></p>
+    </details>
+  </section>
+
+  <!-- 展品四 · 高度机器（汉字 · 宝塔诗 / 一七令） -->
+  <section class="exhibit" id="ex4">
+    <div class="ex-head">
+      <span class="ex-kind">高度机器 · TOWER · 汉字</span>
+      <h2 class="ex-title">中文宝塔诗 / 一七令<span class="en">Pagoda Poems · One-to-Seven</span></h2>
+      <p class="ex-action"><span class="lang-zh">这台机器：每一层的字数从一递增到七，文字自己往上垒，长成一座塔——意义还在读，形状已经立起来。这不是一首诗的把戏，而是一种形式：同一“一字至七字”的规则，可以承载茶、诗、雪、月等许多主题。</span>
+        <span class="lang-en">This machine: each tier grows from one character to seven, and the words stack themselves into a tower—meaning is still being read while the shape already stands. This is not one poem's trick but a form: the same one-to-seven rule can carry tea, poetry, snow, moon, and many themes.</span></p>
+    </div>
+
+    <div class="how">
+      <span class="block-label"><span class="lang-zh">观看这件作品</span><span class="lang-en">How to Look</span></span>
+      <span class="lang-zh">先选一首，再按“逐层升起”，看它从一个字长成一座塔：文字的数量、行的宽度、阅读的节奏同时变化。一个日常之物，由此获得建筑般的形体。</span>
+      <span class="lang-en">Pick a poem, then press “Rise layer by layer” and watch one character grow into a tower: quantity, line width, and rhythm change together. A daily thing receives an architectural body.</span>
+    </div>
+
+    <div class="poem-picker" id="poem-picker"></div>
+
+    <div class="stage">
+      <span class="block-label"><span class="lang-zh">原文塔形</span><span class="lang-en">Original Text · Tower Form</span></span>
+      <div class="controls">
+        <button id="t-reveal">逐层升起 / Rise layer by layer</button>
+      </div>
+      <div class="pagoda" id="pagoda"></div>
+      <div class="poem-meaning" id="poem-meaning"></div>
+    </div>
+
+    <details class="source">
+      <summary><span class="lang-zh">来源</span><span class="lang-en">Source</span></summary>
+      <p id="poem-source"></p>
+    </details>
+  </section>
+
+  <p style="margin-top:26px"><a class="home" href="./index.html">← 篇若 · 公开作品集</a></p>
+</main>
+
+<!-- 手稿放大 lightbox -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <img src="./assets/hrabanus-cod9-f9v-1536.jpg" alt="Hrabanus Cod. 9 f. 9v 放大">
+  <div class="cap">Bern, Burgerbibliothek, Cod. 9, f. 9v · Public Domain Mark 1.0 · 点击任意处关闭</div>
+</div>
+
+<script>
+"use strict";
+/* ---------- 语言切换 ---------- */
+const langSwitch = document.getElementById('language-switch');
+function setLanguage(lang, updateUrl){
+  const cls = (lang === 'en' || lang === 'lang-en') ? 'lang-en' : 'lang-zh';
+  document.body.classList.remove('lang-zh','lang-en');
+  document.body.classList.add(cls);
+  langSwitch.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x.dataset.lang===cls));
+  if(updateUrl){
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', cls.replace('lang-',''));
+    history.replaceState(null,'',url);
+  }
+}
+langSwitch.addEventListener('click', e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  setLanguage(b.dataset.lang, true);
+});
+setLanguage(new URL(window.location.href).searchParams.get('lang') || 'zh', false);
+
+/* ---------- 展品三优先呈现互动字母格 ---------- */
+const ex3Stage = document.querySelector('#ex3 .stage');
+const ex3How = document.querySelector('#ex3 .how');
+if(ex3Stage && ex3How) ex3How.after(ex3Stage);
+
+/* ---------- 导航 ---------- */
+const nav = document.getElementById('nav');
+function setExhibit(ex, updateUrl){
+  const target = document.getElementById(ex) ? ex : 'ex1';
+  nav.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x.dataset.ex===target));
+  document.querySelectorAll('.exhibit').forEach(s=>s.classList.toggle('active',s.id===target));
+  if(updateUrl){
+    const url = new URL(window.location.href);
+    url.searchParams.set('ex', target);
+    history.replaceState(null,'',url);
+  }
+}
+nav.addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  setExhibit(b.dataset.ex, true);
+});
+setExhibit(new URL(window.location.href).searchParams.get('ex') || 'ex1', false);
+
+/* ---------- 展品一 · 路径机器 ---------- */
+/* 《璇玑图》独立读诗器已从公开版移除；这里只保留策展层示意。 */
+
+/* ---------- 展品二 · 轮廓机器（Simmias《翼》12 行逐字） ---------- */
+/* 逐字抄自 Anthologia Graeca 15.24 / Paton edition（典藏交付 simmias-the-wings-AG15.24.md）。
+   第 5 行据通行校读作 ὅσσ᾽，保留 crux 标记 †。共 12 行，不合并不增删。 */
+const WING_LINES = [
+  "λεῦσσέ με τὸν Γᾶς τε βαθυστέρνου ἄνακτ᾽, Ἀκμονίδαν τ᾽ ἄλλυδις ἑδράσαντα,",
+  "μηδὲ τρέσῃς, εἰ τόσος ὢν δάσκια βέβριθα λάχνᾳ γένεια.",
+  "τᾶμος ἐγὼ γὰρ γενόμαν, ἁνίκ᾽ ἔκραιν᾽ Ἀνάγκα,",
+  "πάντα δὲ Γᾶς εἶκε φραδαῖσι λυγραῖς",
+  "ἑρπετά, † πάνθ᾽ ὅσσ᾽ ἕρπει",
+  "δι᾽ αἴθρας.",
+  "χάους δέ,",
+  "οὔτι γε Κύπριδος παῖς",
+  "ὠκυπέτας οὐδ᾽ Ἄρεος καλεῦμαι:",
+  "οὔτι γὰρ ἔκρανα βίᾳ, πραϋλόγῳ δὲ πειθοῖ:",
+  "εἶκε δέ μοι Γαῖα, Θαλάσσας τε μυχοί, χάλκεος Οὐρανός τε:",
+  "τῶν δ᾽ ἐγὼ ἐκνοσφισάμαν ὠγύγιον σκᾶπτρον, ἔκρινον δὲ θεοῖς θέμιστας."
+];
+const WING_LITERAL = [
+  ["看我：我既是深胸大地的主，也把阿克蒙之子安置到别处。", "Look at me: I am the lord of deep-bosomed Earth, and I set the son of Acmon elsewhere."],
+  ["不要害怕：我身量虽小，却有一丛浓荫般厚重的胡须覆在下巴。", "Do not be afraid: though I am so small, my chin is heavy with a shadowy growth of beard."],
+  ["因为我生在那时：那时‘必然’正在裁断。", "For I was born at that time, when Necessity was ruling."],
+  ["大地的一切，都向那些苦涩的谋划让步，", "All things of Earth yielded to those grievous counsels,"],
+  ["爬行之物，†一切凡爬行者，", "creeping things, †all that creeps,"],
+  ["穿过明亮的高空者，", "those moving through the bright upper air,"],
+  ["以及混沌中的存在。", "and those of Chaos."],
+  ["我绝不是塞浦里斯的孩子，", "I am certainly not the child of Cypris,"],
+  ["也不被称作阿瑞斯的迅翼之子。", "nor am I called the swift-winged child of Ares."],
+  ["因为我不是以暴力掌权，而是以温柔言辞的劝服。", "For I did not rule by force, but by gentle-worded persuasion."],
+  ["大地向我让步，海的深处也向我让步，青铜的天也向我让步。", "Earth yielded to me, and the depths of Sea, and bronze Heaven."],
+  ["我从它们那里取走远古的权杖，并为诸神裁定法度。", "From them I took the ancient sceptre, and I judged ordinances for the gods."]
+];
+function highlightCrux(line){
+  return line.indexOf('†') >= 0
+    ? line.replace('†','<span class="apparatus">†</span>')
+    : line;
+}
+function buildWingLine(line, i, cls){
+  const div=document.createElement('div'); div.className=cls; div.dataset.index=i;
+  const seq=document.createElement('span'); seq.className='seq'; seq.textContent=String(i+1).padStart(2,'0');
+  const span=document.createElement('span'); span.className='gk'; span.innerHTML=highlightCrux(line);
+  div.append(seq, span);
+  return div;
+}
+const wingBox = document.getElementById('wing');
+const wingOriginal = document.getElementById('wing-original');
+const wingTranslation = document.getElementById('wing-translation');
+function renderWing(){
+  wingBox.innerHTML='';
+  wingOriginal.innerHTML='';
+  WING_LINES.forEach((line,i)=>{
+    wingBox.appendChild(buildWingLine(line,i,'wing-line'));
+    wingOriginal.appendChild(buildWingLine(line,i,'wing-line'));
+  });
+}
+function renderWingTranslation(){
+  WING_LINES.forEach((line,i)=>{
+    const g=document.createElement('div'); g.className='gk'; g.dataset.index=i; g.innerHTML=highlightCrux(line);
+    const zh=document.createElement('div'); zh.dataset.index=i; zh.textContent=WING_LITERAL[i][0];
+    const en=document.createElement('div'); en.className='en'; en.dataset.index=i; en.textContent=WING_LITERAL[i][1];
+    wingTranslation.append(g, zh, en);
+  });
+}
+renderWing();
+renderWingTranslation();
+const wShape=document.getElementById('w-shape');
+wShape.addEventListener('click',()=>wShape.classList.add('active'));
+let wingTimers=[];
+function clearWingTimers(){ wingTimers.forEach(clearTimeout); wingTimers=[]; }
+function highlightTranslationRow(i,on){
+  wingTranslation.querySelectorAll('[data-index="'+i+'"]').forEach(el=>el.classList.toggle('row-lit',on));
+}
+document.getElementById('w-reveal').addEventListener('click',()=>{
+  clearWingTimers();
+  const lines=[...wingBox.querySelectorAll('.wing-line')];
+  lines.forEach(l=>{l.classList.add('hidden');l.classList.remove('lit');});
+  wingTranslation.querySelectorAll('.row-lit').forEach(el=>el.classList.remove('row-lit'));
+  lines.forEach((l,i)=>{
+    wingTimers.push(setTimeout(()=>{
+      l.classList.remove('hidden'); l.classList.add('lit');
+      highlightTranslationRow(i,true);
+      // 上一行恢复常态，只留当前行高亮
+      if(i>0){ lines[i-1].classList.remove('lit'); highlightTranslationRow(i-1,false); }
+    }, i*420));
+  });
+  // 结束后保留全部可见，清掉最后的单行高亮
+  wingTimers.push(setTimeout(()=>{
+    const last=lines.length-1;
+    if(last>=0){ lines[last].classList.remove('lit'); highlightTranslationRow(last,false); }
+  }, lines.length*420 + 400));
+});
+
+/* ---------- 展品三 · 嵌图机器（Hrabanus） ---------- */
+/* Hrabanus figura XIII：嵌文读序已按篇若映射草案点亮。
+   35 行主诗表按 Musamedievalis / PL 107 系开放文本补入；仍不声称已完成
+   Perrin 校勘本或逐格 35×35 transcription。 */
+const latinLiteral = document.getElementById('latin-literal');
+const MAIN_POEM_LINES = [
+  {n:1, latin:'Arbor odore potens, frondoso vertice lata,', zh:'一棵以香气有力、以繁叶树冠宽展的树，', en:'A tree powerful in fragrance, broad with a leafy crown,'},
+  {n:2, latin:'Qua summa vere sacro u fluit ordine bertas,', zh:'在它那里，最高的丰饶确实以神圣秩序流溢，', en:'in which the highest abundance truly flows in sacred order,'},
+  {n:3, latin:'Ortus ditatus et par cui nullus in orbe est', zh:'一个富足的园圃，世上没有任何事物与之相等，', en:'an enriched garden, and one to which nothing in the world is equal,'},
+  {n:4, latin:'Floribus et foliis, milleno germine dives,', zh:'以花与叶、以千重萌蘖而富有，', en:'rich in flowers and leaves, in a thousandfold growth,'},
+  {n:5, latin:'Omnes excedens altas gravitudine sylvas.', zh:'以庄严厚重超过一切高大的树林。', en:'surpassing all tall forests in weighty dignity.'},
+  {n:6, latin:'Cum totam pie magnus vertit honorque decusque,', zh:'当伟大的荣耀与美善虔敬地转向、覆满它全身时，', en:'when great honor and beauty reverently turn toward it as a whole,'},
+  {n:7, latin:'Ambit verus honor, laetus loquitur ea voto', zh:'真正的荣耀环绕；人欣然按誓愿述说这些，', en:'true honor surrounds it; rejoicing, one speaks these things by vow,'},
+  {n:8, latin:'Stans homo, livor hoc nationi denegat atri', zh:'人站立作证；阴黑者的嫉妒却把这事拒于万民之外，', en:'a human standing witness; the envy of the dark one denies this to the nations,'},
+  {n:9, latin:'Demonis horrendus, rem sciri, laude moveri.', zh:'那可怖魔鬼拒绝此事被知道、拒绝人因赞颂而受感动。', en:'the dreadful demon denies that the matter be known and moved by praise.'},
+  {n:10, latin:'Arbor sola tenens varios virtute colores,', zh:'唯有这棵树凭德能持有多样颜色，', en:'this tree alone, by virtue, holds various colors,'},
+  {n:11, latin:'Purpureo regis sub tactu roscida fulgens', zh:'在君王紫色的触碰下，带露而发光，', en:'shining dewy under the purple touch of the king,'},
+  {n:12, latin:'Aeterno es radio, stant in te nam pie vincte', zh:'你以永恒光芒照耀；因为在你里面虔敬相系而立，', en:'you shine with an eternal ray; for in you, devoutly bound, stand'},
+  {n:13, latin:'Aedes turritae, ex hoc dudum est nonne beata', zh:'带塔的殿宇；由此，岂不早已成为有福的，', en:'towered houses; from this, is it not already blessed,'},
+  {n:14, latin:'Machina et ipsa Dei, ara, et qui usit suprema', zh:'那机器本身，上帝的机器、祭坛，以及使用至高者的东西，', en:'the very structure of God, the altar, and what uses the highest things,'},
+  {n:15, latin:'Lar hoc ne est, et mira lucerna, hoc otia tota', zh:'这岂非家室/圣所，又是奇妙的灯，并指向完全的安息，', en:'is this not a holy house, and a wondrous lamp, and all rest,'},
+  {n:16, latin:'Agnus hoc statuit, signans rite viando', zh:'羔羊如此设立，按正礼在道路上作标记，', en:'the Lamb established this, duly marking it on the way,'},
+  {n:17, latin:'Vera salus ista, quos verus fons bonitatis', zh:'这是真正的救恩，真正的善之泉源把那些人，', en:'this is true salvation; the true fountain of goodness, those whom'},
+  {n:18, latin:'Est benedictio quae sacravit, amor, pietasque,', zh:'作为祝福而圣化，又有爱与虔敬，', en:'it sanctified as blessing, love, and piety,'},
+  {n:19, latin:'Sanctas salutis lux, et vita, redemptio vera:', zh:'救恩的圣光、生命和真正的救赎。', en:'the holy light of salvation, life, and true redemption.'},
+  {n:20, latin:'Inque domu princeps donum dat pacis in orbem,', zh:'并且在家中，君王把和平的恩赐赐给世界，', en:'and in the house the prince gives the gift of peace to the world,'},
+  {n:21, latin:'Iuraque amicitiae hinc firmavit, deposuitque,', zh:'并由此坚固友爱的法则，又废除了，', en:'and from here he strengthened the bonds of friendship, and cast down,'},
+  {n:22, latin:'Ascita antiqui nisus, quae texit hiems mors, cum', zh:'古老者召来的攻势；寒冬般的死亡曾遮蔽这些，', en:'the adopted assaults of the ancient one, which wintry death had covered, when'},
+  {n:23, latin:'Illecebri lusu circa ignem noxia, enim sic', zh:'有害的诱惑以游戏围着火；因为正是这样，', en:'harmful things by enticing play around the fire; for so'},
+  {n:24, latin:'Pellax decipit, et socordem ubi inquietato', zh:'那欺诈者欺骗；当他看见迟钝者被扰动时，', en:'the deceiver misleads, and when he sees the sluggish one disturbed,'},
+  {n:25, latin:'Conspexit voto iam arridens, vinxit aperte.', zh:'便已微笑着注视其愿望，并公开把他捆住。', en:'already smiling at the wish, he binds him openly.'},
+  {n:26, latin:'O tu, crux speciosa, o pinus pulchrior, omnia', zh:'啊你，美丽的十字；啊你，更美的松木，', en:'O you, beautiful Cross; O pine more lovely than all things,'},
+  {n:27, latin:'Quae vincis nemora, o cedris altior ipsis,', zh:'你胜过一切林木，啊，比香柏本身还高，', en:'you who surpass the groves, O higher than the cedars themselves,'},
+  {n:28, latin:'Monstrans e numero radianti dona beata', zh:'从发光的数字中显明有福的恩赐，', en:'showing blessed gifts from the radiant number,'},
+  {n:29, latin:'Adventu Hiesus quae intus probus otia nutu', zh:'耶稣来临时，以良善的旨意在内里显出安息，', en:'which Jesus, in his coming, inwardly shows with righteous command and rest,'},
+  {n:30, latin:'Istulerit, dabat iisse beate cum pie venit', zh:'他曾带来这些；当他虔敬来临时，已赐下蒙福的成就，', en:'he brought them forth; when he came devoutly, he granted that blessed fulfilment,'},
+  {n:31, latin:'Egrediens vulva huc, et blando nomine semet', zh:'从母腹中出来到此，并以温和的名标记自己，', en:'coming forth here from the womb, and with a gentle name marking himself,'},
+  {n:32, latin:'Signavit, caelos terrena et condere regna:', zh:'他标明自己创建诸天、地上与诸王国；', en:'he signed himself as founding the heavens, earthly things, and kingdoms;'},
+  {n:33, latin:'Vt dudum sancti lingua cecinere prophetae.', zh:'正如圣先知的舌头早已歌唱的那样。', en:'as the tongues of the holy prophets long ago sang.'},
+  {n:34, latin:'Fecerit hic celsa doctor, dum condidit ima,', zh:'这位导师造就高处，同时也奠立低处，', en:'this teacher made the high things while he founded the low,'},
+  {n:35, latin:'Imperium inque humeris tanto sit quod pie regi.', zh:'因而权柄虔敬地置于如此伟大君王的肩上。', en:'so that rule may be upon the shoulders of so great a king.'}
+];
+function renderLatinLiteral(){
+  MAIN_POEM_LINES.forEach(line=>{
+    const lat=document.createElement('div'); lat.dataset.mainLine=line.n;
+    lat.innerHTML='<span class="num">'+String(line.n).padStart(2,'0')+'</span> '+line.latin;
+    const zh=document.createElement('div'); zh.dataset.mainLine=line.n; zh.textContent=line.zh;
+    const en=document.createElement('div'); en.dataset.mainLine=line.n; en.textContent=line.en;
+    latinLiteral.append(lat, zh, en);
+  });
+  const note=document.getElementById('latin-literal-pending');
+  note.innerHTML='<span class="lang-zh">工作底本：Musamedievalis / PL 107 系开放文本；逐行直译保留图形诗句法的扭结。Perrin 校勘本与逐格级 35×35 转写仍待后续复核。</span><span class="lang-en">Working base: Musamedievalis / the PL 107 open-text tradition. The literal rendering keeps the syntactic knots of the figure poem. Perrin and a cell-level 35×35 transcription remain for later checking.</span>';
+}
+function highlightMainLiteralRow(line){
+  latinLiteral.querySelectorAll('[data-main-line]').forEach(el=>el.classList.toggle('row-lit', +el.dataset.mainLine===line));
+}
+renderLatinLiteral();
+/* 逐格读序动画：使用篇若提供的动画映射草案（hrabanus-figura-XIII-mapping-draft）。
+   8 条嵌入诗 × 39 字母 = 312 读字事件；4 个十字 × 69 = 276 唯一格。
+   舞台底层是手稿真图；叠层只负责显示读序与当前字母，不用抽象格替代原页。 */
+const HRAB_LINES = [{"color":"yellow","pos":"top","kind":"vertical","letters":"FORMASACRATACRVCISVENERANDOFVLGETAMICTV","latin":"FORMA SACRATA CRVCIS VENERANDO FVLGET AMICTV.","zh":"圣化的十字形象，在可敬的衣饰中发光。","en":"The consecrated form of the Cross shines in a venerable garment."},{"color":"yellow","pos":"top","kind":"horizontal","letters":"MAGNVSVESTITHONORLAETVSLOQVORHOCNATIONI","latin":"MAGNVS VESTIT HONOR LAETVS, LOQVOR HOC NATIONI.","zh":"伟大的荣耀披覆其上；我满怀喜悦，把这事告诉众人。","en":"Great honor clothes it; rejoicing, I speak this to the people."},{"color":"green","pos":"bottom","kind":"vertical","letters":"CORPORISERGOSACRICONSTRVCTIOINARTEBEATA","latin":"CORPORIS ERGO SACRI CONSTRVCTIO IN ARTE BEATA.","zh":"因此，圣身的构造在这门技艺中成为蒙福之作。","en":"Thus the construction of the sacred body is blessed in its art."},{"color":"green","pos":"bottom","kind":"horizontal","letters":"ENVMERORADIANSQVAEINTVSPROBATIISSEBEATE","latin":"E NVMERO RADIANS QVAE INTVS PROBAT IISSE BEATE.","zh":"它从数字中发光，证明其中所含之事已经蒙福成就。","en":"Shining out from number, it proves the blessed event contained within."},{"color":"red","pos":"left","kind":"vertical","letters":"NVNCCANAMATEXORANSLESVMABDEREETVDAPIARE","latin":"NVNC CANAM AT EXORANS LESVM ABDERE ET VDA PIARE.","zh":"如今我要歌唱，并祈求受创的耶稣遮藏并洗净我的泪水。","en":"Now I will sing, praying that wounded Jesus may hide and cleanse my tears."},{"color":"red","pos":"left","kind":"horizontal","letters":"VERASALVSISTAESTBENEDICTIOSANCTASALVTIS","latin":"VERA SALVS ISTA EST BENEDICTIO SANCTA SALVTIS.","zh":"这是真正的救恩，是救恩的神圣祝福。","en":"This is true salvation, the holy blessing of salvation."},{"color":"black","pos":"right","kind":"vertical","letters":"INTOTOIPSEMANENSTENETIPSEQVEVIVITINOMNI","latin":"IN TOTO IPSE MANENS TENET IPSEQVE VIVIT IN OMNI.","zh":"他自己居于万有之中，持有万有，并活在一切之内。","en":"Remaining in the whole, he himself holds all things and lives in everything."},{"color":"black","pos":"right","kind":"horizontal","letters":"FONSBONITATISAMORPIETASQVEREDEMPTIOVERA","latin":"FONS BONITATIS, AMOR PIETASQVE, REDEMPTIO VERA.","zh":"善的泉源，爱与虔敬，真正的救赎。","en":"Fountain of goodness, love and piety, true redemption."}];
+const HRAB_EVENTS = [[1,0,0,0,0,17],[2,0,1,0,1,17],[3,0,2,0,2,17],[4,0,3,0,3,17],[5,0,4,0,4,17],[6,0,5,0,5,17],[7,0,6,0,6,17],[8,0,7,0,7,17],[9,0,8,0,8,17],[10,0,9,0,9,17],[11,0,10,0,10,17],[12,0,11,0,11,17],[13,0,12,0,12,17],[14,0,13,0,0,18],[15,0,14,0,1,18],[16,0,15,0,2,18],[17,0,16,0,3,18],[18,0,17,0,4,18],[19,0,18,0,5,18],[20,0,19,0,6,18],[21,0,20,0,7,18],[22,0,21,0,8,18],[23,0,22,0,9,18],[24,0,23,0,10,18],[25,0,24,0,11,18],[26,0,25,0,12,18],[27,0,26,0,0,19],[28,0,27,0,1,19],[29,0,28,0,2,19],[30,0,29,0,3,19],[31,0,30,0,4,19],[32,0,31,0,5,19],[33,0,32,0,6,19],[34,0,33,0,7,19],[35,0,34,0,8,19],[36,0,35,0,9,19],[37,0,36,0,10,19],[38,0,37,0,11,19],[39,0,38,0,12,19],[40,1,0,0,5,11],[41,1,1,0,5,12],[42,1,2,0,5,13],[43,1,3,0,5,14],[44,1,4,0,5,15],[45,1,5,0,5,16],[46,1,6,0,5,17],[47,1,7,0,5,18],[48,1,8,0,5,19],[49,1,9,0,5,20],[50,1,10,0,5,21],[51,1,11,0,5,22],[52,1,12,0,5,23],[53,1,13,0,6,11],[54,1,14,0,6,12],[55,1,15,0,6,13],[56,1,16,0,6,14],[57,1,17,0,6,15],[58,1,18,0,6,16],[59,1,19,0,6,17],[60,1,20,0,6,18],[61,1,21,0,6,19],[62,1,22,0,6,20],[63,1,23,0,6,21],[64,1,24,0,6,22],[65,1,25,0,6,23],[66,1,26,0,7,11],[67,1,27,0,7,12],[68,1,28,0,7,13],[69,1,29,0,7,14],[70,1,30,0,7,15],[71,1,31,0,7,16],[72,1,32,0,7,17],[73,1,33,0,7,18],[74,1,34,0,7,19],[75,1,35,0,7,20],[76,1,36,0,7,21],[77,1,37,0,7,22],[78,1,38,0,7,23],[79,2,0,1,22,17],[80,2,1,1,23,17],[81,2,2,1,24,17],[82,2,3,1,25,17],[83,2,4,1,26,17],[84,2,5,1,27,17],[85,2,6,1,28,17],[86,2,7,1,29,17],[87,2,8,1,30,17],[88,2,9,1,31,17],[89,2,10,1,32,17],[90,2,11,1,33,17],[91,2,12,1,34,17],[92,2,13,1,22,18],[93,2,14,1,23,18],[94,2,15,1,24,18],[95,2,16,1,25,18],[96,2,17,1,26,18],[97,2,18,1,27,18],[98,2,19,1,28,18],[99,2,20,1,29,18],[100,2,21,1,30,18],[101,2,22,1,31,18],[102,2,23,1,32,18],[103,2,24,1,33,18],[104,2,25,1,34,18],[105,2,26,1,22,19],[106,2,27,1,23,19],[107,2,28,1,24,19],[108,2,29,1,25,19],[109,2,30,1,26,19],[110,2,31,1,27,19],[111,2,32,1,28,19],[112,2,33,1,29,19],[113,2,34,1,30,19],[114,2,35,1,31,19],[115,2,36,1,32,19],[116,2,37,1,33,19],[117,2,38,1,34,19],[118,3,0,1,27,11],[119,3,1,1,27,12],[120,3,2,1,27,13],[121,3,3,1,27,14],[122,3,4,1,27,15],[123,3,5,1,27,16],[124,3,6,1,27,17],[125,3,7,1,27,18],[126,3,8,1,27,19],[127,3,9,1,27,20],[128,3,10,1,27,21],[129,3,11,1,27,22],[130,3,12,1,27,23],[131,3,13,1,28,11],[132,3,14,1,28,12],[133,3,15,1,28,13],[134,3,16,1,28,14],[135,3,17,1,28,15],[136,3,18,1,28,16],[137,3,19,1,28,17],[138,3,20,1,28,18],[139,3,21,1,28,19],[140,3,22,1,28,20],[141,3,23,1,28,21],[142,3,24,1,28,22],[143,3,25,1,28,23],[144,3,26,1,29,11],[145,3,27,1,29,12],[146,3,28,1,29,13],[147,3,29,1,29,14],[148,3,30,1,29,15],[149,3,31,1,29,16],[150,3,32,1,29,17],[151,3,33,1,29,18],[152,3,34,1,29,19],[153,3,35,1,29,20],[154,3,36,1,29,21],[155,3,37,1,29,22],[156,3,38,1,29,23],[157,4,0,2,11,6],[158,4,1,2,12,6],[159,4,2,2,13,6],[160,4,3,2,14,6],[161,4,4,2,15,6],[162,4,5,2,16,6],[163,4,6,2,17,6],[164,4,7,2,18,6],[165,4,8,2,19,6],[166,4,9,2,20,6],[167,4,10,2,21,6],[168,4,11,2,22,6],[169,4,12,2,23,6],[170,4,13,2,11,7],[171,4,14,2,12,7],[172,4,15,2,13,7],[173,4,16,2,14,7],[174,4,17,2,15,7],[175,4,18,2,16,7],[176,4,19,2,17,7],[177,4,20,2,18,7],[178,4,21,2,19,7],[179,4,22,2,20,7],[180,4,23,2,21,7],[181,4,24,2,22,7],[182,4,25,2,23,7],[183,4,26,2,11,8],[184,4,27,2,12,8],[185,4,28,2,13,8],[186,4,29,2,14,8],[187,4,30,2,15,8],[188,4,31,2,16,8],[189,4,32,2,17,8],[190,4,33,2,18,8],[191,4,34,2,19,8],[192,4,35,2,20,8],[193,4,36,2,21,8],[194,4,37,2,22,8],[195,4,38,2,23,8],[196,5,0,2,17,0],[197,5,1,2,17,1],[198,5,2,2,17,2],[199,5,3,2,17,3],[200,5,4,2,17,4],[201,5,5,2,17,5],[202,5,6,2,17,6],[203,5,7,2,17,7],[204,5,8,2,17,8],[205,5,9,2,17,9],[206,5,10,2,17,10],[207,5,11,2,17,11],[208,5,12,2,17,12],[209,5,13,2,18,0],[210,5,14,2,18,1],[211,5,15,2,18,2],[212,5,16,2,18,3],[213,5,17,2,18,4],[214,5,18,2,18,5],[215,5,19,2,18,6],[216,5,20,2,18,7],[217,5,21,2,18,8],[218,5,22,2,18,9],[219,5,23,2,18,10],[220,5,24,2,18,11],[221,5,25,2,18,12],[222,5,26,2,19,0],[223,5,27,2,19,1],[224,5,28,2,19,2],[225,5,29,2,19,3],[226,5,30,2,19,4],[227,5,31,2,19,5],[228,5,32,2,19,6],[229,5,33,2,19,7],[230,5,34,2,19,8],[231,5,35,2,19,9],[232,5,36,2,19,10],[233,5,37,2,19,11],[234,5,38,2,19,12],[235,6,0,3,11,28],[236,6,1,3,12,28],[237,6,2,3,13,28],[238,6,3,3,14,28],[239,6,4,3,15,28],[240,6,5,3,16,28],[241,6,6,3,17,28],[242,6,7,3,18,28],[243,6,8,3,19,28],[244,6,9,3,20,28],[245,6,10,3,21,28],[246,6,11,3,22,28],[247,6,12,3,23,28],[248,6,13,3,11,29],[249,6,14,3,12,29],[250,6,15,3,13,29],[251,6,16,3,14,29],[252,6,17,3,15,29],[253,6,18,3,16,29],[254,6,19,3,17,29],[255,6,20,3,18,29],[256,6,21,3,19,29],[257,6,22,3,20,29],[258,6,23,3,21,29],[259,6,24,3,22,29],[260,6,25,3,23,29],[261,6,26,3,11,30],[262,6,27,3,12,30],[263,6,28,3,13,30],[264,6,29,3,14,30],[265,6,30,3,15,30],[266,6,31,3,16,30],[267,6,32,3,17,30],[268,6,33,3,18,30],[269,6,34,3,19,30],[270,6,35,3,20,30],[271,6,36,3,21,30],[272,6,37,3,22,30],[273,6,38,3,23,30],[274,7,0,3,17,22],[275,7,1,3,17,23],[276,7,2,3,17,24],[277,7,3,3,17,25],[278,7,4,3,17,26],[279,7,5,3,17,27],[280,7,6,3,17,28],[281,7,7,3,17,29],[282,7,8,3,17,30],[283,7,9,3,17,31],[284,7,10,3,17,32],[285,7,11,3,17,33],[286,7,12,3,17,34],[287,7,13,3,18,22],[288,7,14,3,18,23],[289,7,15,3,18,24],[290,7,16,3,18,25],[291,7,17,3,18,26],[292,7,18,3,18,27],[293,7,19,3,18,28],[294,7,20,3,18,29],[295,7,21,3,18,30],[296,7,22,3,18,31],[297,7,23,3,18,32],[298,7,24,3,18,33],[299,7,25,3,18,34],[300,7,26,3,19,22],[301,7,27,3,19,23],[302,7,28,3,19,24],[303,7,29,3,19,25],[304,7,30,3,19,26],[305,7,31,3,19,27],[306,7,32,3,19,28],[307,7,33,3,19,29],[308,7,34,3,19,30],[309,7,35,3,19,31],[310,7,36,3,19,32],[311,7,37,3,19,33],[312,7,38,3,19,34]];
+const HRAB_COLORS = ['yellow','green','red','black'];
+
+/* 主诗五段讲解（依篇若 hrabanus-figura-XIII-main-poem-explanation.md；行范围为讲解性概段，非逐字校勘） */
+const MAIN_POEM_SEGS = [
+  {lo:1,hi:10,zh:['十字作为树（约 1–10 行）','诗一开始反复把十字称作 <i>arbor</i>：一棵有香气、有枝叶、胜过高大森林的树。受刑之木被翻转成生命之木。'],
+   en:['The Cross as a Tree (≈ lines 1–10)','The poem repeatedly calls the Cross <i>arbor</i>: a fragrant, leafy tree greater than any forest. The instrument of death is turned into the tree of life.']},
+  {lo:10,hi:16,zh:['荣耀、颜色、建筑与圣物（约 10–16 行）','十字又被写成带王者紫色、光辉的圣物，连到房屋、祭坛、灯、羔羊——一整套圣物系统压在同一张字母格里。'],
+   en:['Glory, Color, Architecture, Relic (≈ lines 10–16)','The Cross becomes a relic with royal purple and radiance, linked to house, altar, lamp, lamb—a whole system of holy images pressed onto one letter grid.']},
+  {lo:17,hi:19,zh:['救恩词汇集中出现（约 17–19 行）','<i>vera salus</i>、<i>benedictio</i>、<i>lux</i>、<i>vita</i>、<i>redemptio vera</i> 密集出现；嵌入诗第 6、8 行也抽取并重复这些词。'],
+   en:['Salvation Vocabulary Concentrated (≈ lines 17–19)','<i>vera salus</i>, <i>benedictio</i>, <i>lux</i>, <i>vita</i>, <i>redemptio vera</i> cluster here; the embedded verses 6 and 8 lift and echo the same words.']},
+  {lo:20,hi:25,zh:['十字带来和平，解除死亡与罪（约 20–25 行）','后半转向动作：基督借十字把和平赐给世界，解除古老死亡与罪的束缚。十字不只是被赞美的物，而是救赎发生的地方。'],
+   en:['Peace, and the Loosing of Death and Sin (≈ lines 20–25)','The second half turns to action: through the Cross Christ gives peace and loosens the old bonds of death and sin. The Cross is not only praised but is where redemption happens.']},
+  {lo:26,hi:35,zh:['数字、道成肉身、预言与王权（约 26–35 行）','结尾把十字称作高过香柏的美木，并转入数字与显现，指向童贞女腹、先知所唱、权柄在肩——与“四个十字 × 69 = 276”数义相接。'],
+   en:['Number, Incarnation, Prophecy, Kingship (≈ lines 26–35)','The ending calls the Cross a beautiful wood higher than cedar and turns to number and manifestation—the Virgin\'s womb, prophecy, rule upon the shoulders—meeting the “four crosses × 69 = 276.”']}
+];
+
+const GRID_N = 35;
+const crossGrid = document.getElementById('cross-grid');
+const cellEls = []; // index = row*35+col
+const crossCellSet = new Set();
+HRAB_EVENTS.forEach(ev=>crossCellSet.add(ev[4]*GRID_N+ev[5]));
+for(let r=0;r<GRID_N;r++){
+  for(let c=0;c<GRID_N;c++){
+    const idx=r*GRID_N+c;
+    const d=document.createElement('div');
+    d.className='cell '+(crossCellSet.has(idx)?'cross':'blank');
+    d.dataset.idx=idx; d.dataset.r=r;
+    cellEls[idx]=d; crossGrid.appendChild(d);
+  }
+}
+// 预存每格的颜色与字母（彩色格）——取该格首次被读到的事件
+const cellInfo={}; // idx -> {color, letter}
+HRAB_EVENTS.forEach(ev=>{
+  const [,line,ci,colorI,r,c]=ev; const idx=r*GRID_N+c;
+  if(!(idx in cellInfo)) cellInfo[idx]={color:HRAB_COLORS[colorI], letter:HRAB_LINES[line].letters[ci]};
+});
+
+// 嵌文行列表
+const intextiList=document.getElementById('intexti-list');
+function buildIntextiList(){
+  intextiList.innerHTML='';
+  HRAB_LINES.forEach((L,i)=>{
+    const row=document.createElement('div'); row.className='ti'; row.dataset.line=i;
+    row.innerHTML='<span class="num">'+String(i+1).padStart(2,'0')+'</span>'+
+      '<span><span class="dot c-'+L.color+'"></span><span class="lat">'+L.latin+'</span>'+
+      '<span class="tr"><span class="lang-zh">'+L.zh+'</span><span class="lang-en en">'+L.en+'</span></span></span>';
+    intextiList.appendChild(row);
+  });
+}
+buildIntextiList();
+
+const intextiNow=document.getElementById('intexti-now');
+function showIntextiNow(line,charIdx){
+  const L=HRAB_LINES[line];
+  let lat='';
+  // 在 latin 上按字母序号高亮当前字母（跳过空格与标点）
+  let seen=-1;
+  for(const ch of L.latin){
+    if(/[A-Z]/.test(ch)){ seen++; lat+= (seen===charIdx? '<span class="on">'+ch+'</span>':ch); }
+    else lat+=ch;
+  }
+  intextiNow.innerHTML='<span class="dot c-'+L.color+'"></span><span class="lat">'+lat+'</span>'+
+    '<span class="tr"><span class="lang-zh">'+L.zh+'</span><span class="lang-en en">'+L.en+'</span></span>';
+  intextiList.querySelectorAll('.ti').forEach(t=>t.classList.toggle('active',+t.dataset.line===line));
+}
+function clearIntextiNow(){
+  intextiNow.innerHTML='<span class="note" style="margin:0"><span class="lang-zh">按“逐格点亮”，从黄色顶十字开始，按 8 条嵌入诗的读字顺序逐格亮起；当前嵌入诗与正在读的字母会显示在这里。</span><span class="lang-en">Press “Play reading order”: starting from the yellow top cross, cells light in the reading order of the eight embedded verses. The current verse and the letter being read appear here.</span></span>';
+  intextiList.querySelectorAll('.ti').forEach(t=>t.classList.remove('active'));
+}
+
+let hbTimers=[]; let hbPos=0;
+function clearHbTimers(){ hbTimers.forEach(clearTimeout); hbTimers=[]; }
+function resetCells(){
+  cellEls.forEach(d=>{ d.classList.remove('lit','pulse','rowlit','c-yellow','c-green','c-red','c-black'); d.textContent=''; });
+}
+function litCell(ev){
+  const [,line,ci,colorI,r,c]=ev; const idx=r*GRID_N+c; const d=cellEls[idx];
+  d.classList.add('lit','c-'+HRAB_COLORS[colorI]); d.textContent=cellInfo[idx].letter;
+  d.classList.remove('pulse'); void d.offsetWidth; d.classList.add('pulse');
+  showIntextiNow(line,ci);
+}
+function hbReset(){ clearHbTimers(); resetCells(); hbPos=0; clearIntextiNow(); }
+function hbPlay(){
+  clearHbTimers(); resetCells(); hbPos=0; clearIntextiNow();
+  HRAB_EVENTS.forEach((ev,i)=>{
+    hbTimers.push(setTimeout(()=>{ litCell(ev); hbPos=i+1; }, i*70));
+  });
+}
+function hbStep(){
+  clearHbTimers();
+  if(hbPos>=HRAB_EVENTS.length){ hbReset(); return; }
+  litCell(HRAB_EVENTS[hbPos]); hbPos++;
+}
+function hbShowAll(){
+  clearHbTimers(); resetCells(); clearIntextiNow();
+  // 一次点亮全部唯一彩色格，不做动画
+  HRAB_EVENTS.forEach(ev=>{
+    const idx=ev[4]*GRID_N+ev[5]; const d=cellEls[idx];
+    d.classList.add('lit','c-'+cellInfo[idx].color); d.textContent=cellInfo[idx].letter;
+  });
+  hbPos=HRAB_EVENTS.length;
+}
+document.getElementById('hb-play').addEventListener('click',hbPlay);
+document.getElementById('hb-step').addEventListener('click',hbStep);
+document.getElementById('hb-all').addEventListener('click',hbShowAll);
+document.getElementById('hb-reset').addEventListener('click',hbReset);
+
+/* 主诗模式：35 行轻扫 + 五段讲解 */
+const mainpoemPanel=document.getElementById('mainpoem-panel');
+function buildMainPoemPanel(){
+  mainpoemPanel.innerHTML='';
+  MAIN_POEM_SEGS.forEach((s,i)=>{
+    const d=document.createElement('div'); d.className='mp-seg'; d.dataset.seg=i;
+    d.innerHTML='<span class="ln">'+s.lo+'–'+s.hi+'</span> '+
+      '<span class="lang-zh"><b>'+s.zh[0]+'</b>'+s.zh[1]+'</span>'+
+      '<span class="lang-en"><b>'+s.en[0]+'</b>'+s.en[1]+'</span>';
+    mainpoemPanel.appendChild(d);
+  });
+}
+buildMainPoemPanel();
+function segForRow(rowZeroBased){
+  const line=rowZeroBased+1;
+  for(let i=0;i<MAIN_POEM_SEGS.length;i++){ if(line>=MAIN_POEM_SEGS[i].lo && line<=MAIN_POEM_SEGS[i].hi) return i; }
+  return MAIN_POEM_SEGS.length-1;
+}
+let mpTimers=[];
+function clearMpTimers(){ mpTimers.forEach(clearTimeout); mpTimers=[]; }
+function highlightRow(r){
+  cellEls.forEach(d=>d.classList.toggle('rowlit', +d.dataset.r===r));
+  const seg=segForRow(r);
+  mainpoemPanel.querySelectorAll('.mp-seg').forEach(s=>s.classList.toggle('active',+s.dataset.seg===seg));
+  highlightMainLiteralRow(r+1);
+}
+function mpReset(){
+  clearMpTimers();
+  cellEls.forEach(d=>d.classList.remove('rowlit'));
+  mainpoemPanel.querySelectorAll('.mp-seg').forEach(s=>s.classList.remove('active'));
+  highlightMainLiteralRow(0);
+}
+function mpPlay(){
+  clearMpTimers(); cellEls.forEach(d=>d.classList.remove('rowlit'));
+  for(let r=0;r<GRID_N;r++){ mpTimers.push(setTimeout(()=>highlightRow(r), r*140)); }
+}
+document.getElementById('mp-play').addEventListener('click',mpPlay);
+document.getElementById('mp-reset').addEventListener('click',mpReset);
+
+/* 模式切换 */
+const hrabMode=document.getElementById('hrab-mode');
+const paneIntexti=document.getElementById('hrab-intexti');
+const paneMain=document.getElementById('hrab-main');
+function setHrabMode(mode){
+  hrabMode.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+  const intexti = mode==='intexti';
+  paneIntexti.style.display = intexti?'':'none';
+  paneMain.style.display = intexti?'none':'';
+  hbReset(); mpReset();
+}
+hrabMode.addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) setHrabMode(b.dataset.mode); });
+clearIntextiNow();
+setHrabMode('main');
+
+// lightbox 放大
+const lightbox=document.getElementById('lightbox');
+document.getElementById('ms-thumb').addEventListener('click',()=>{
+  lightbox.classList.add('open'); lightbox.setAttribute('aria-hidden','false');
+});
+lightbox.addEventListener('click',()=>{
+  lightbox.classList.remove('open'); lightbox.setAttribute('aria-hidden','true');
+});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') lightbox.classList.remove('open'); });
+
+/* ---------- 展品四 · 高度机器（中文宝塔诗 / 一七令） ---------- */
+/* 原文逐字抄自典藏交付的可核公版包（维基文库）。
+   本版按篇若 confirmed：先上元稹《茶》与白居易《诗》；张南史六首为候选池，
+   留成可扩展接口，未准许公开前不作为已上线诗目。
+   现代中文释义 / English meaning 属篇若提供的内容，未交付前以“待补”占位，不自造。 */
+const POEMS = [
+  {
+    id:'cha', label:'元稹《茶》', enLabel:'Yuan Zhen · Tea',
+    rows:['茶','香葉','嫩芽','慕詩客','愛僧家','碾雕白玉','羅織紅紗','銚煎黃蕊色','碗轉曲塵花','夜後邀陪明月','晨前命對朝霞','洗盡古今人不倦','將至醉後豈堪誇'],
+    gloss:null,
+    sourceZh:'元稹《一字至七字诗·茶》（唐，公共领域），逐字抄自维基文库（全唐诗/卷423）。末句末三字底本作「將至」，坊间另有「將知」异文。',
+    sourceEn:'Yuan Zhen, “One-to-Seven-Character Poem: Tea” (Tang, public domain), copied verbatim from Wikisource (Quan Tang Shi, j. 423). The base text reads 「將至」 in the final line; a variant reads 「將知」.'
+  },
+  {
+    id:'shi', label:'白居易《诗》', enLabel:'Bai Juyi · Poetry',
+    rows:['詩','綺美','瑰奇','明月夜','落花時','能助歡笑','亦傷別離','調清金石怨','吟苦鬼神悲','天下只應我愛','世間唯有君知','自從都尉別蘇句','便到司空送白辭'],
+    gloss:null,
+    sourceZh:'白居易《一字至七字诗》（首字「诗」，唐，公共领域），逐字抄自维基文库（全唐诗/卷462）。与元稹《茶》同出一场文人同题雅集。',
+    sourceEn:'Bai Juyi, “One-to-Seven-Character Poem” (first character 「詩」, Tang, public domain), copied verbatim from Wikisource (Quan Tang Shi, j. 462). From the same literary gathering on a shared theme as Yuan Zhen’s “Tea.”'
+  },
+  {
+    id:'zhu', label:'韦式《竹》', enLabel:'Wei Shi · Bamboo',
+    rows:['竹','臨池','似玉','裛露靜','和煙綠','抱節寧改','貞心自束','渭曲偏種多','王家看不足','仙杖正驚龍化','美實當隨鳳熟','唯愁吹作別離聲','回首駕驂舞陣速'],
+    gloss:null,
+    sourceZh:'韦式《一字至七字诗·竹》（唐，公共领域），逐字抄自维基文库（全唐诗/卷463，页标 75% 校对）。题注：「以题为韵，同王起诸公送白居易分司东都作」——与元稹《茶》、白居易《诗》同属送别雅集，但以「竹」的物象、品格起兴。',
+    sourceEn:'Wei Shi, “One-to-Seven-Character Poem: Bamboo” (Tang, public domain), copied verbatim from Wikisource (Quan Tang Shi, j. 463, page marked 75% proofread). The same farewell gathering as the Tea and Poetry pieces, but rising from the image and character of bamboo.'
+  }
+];
+// 扩展来源池：张南史 雪/月/泉/竹/花/草 六首与 严维等《一字至九字诗联句》均已取可核原文，
+// 但属候选/变体池，按篇若指示暂不自动上主选择器，待准许后接入。
+const RESERVED = {label:'更多形式（张南史六首 · 一字至九字联句）待篇若准许', enLabel:'More forms (Zhang Nanshi · stair-couplet) — pending curator'};
+
+const poemPicker = document.getElementById('poem-picker');
+const pagoda = document.getElementById('pagoda');
+const poemMeaning = document.getElementById('poem-meaning');
+const poemSource = document.getElementById('poem-source');
+let activePoem = POEMS[0];
+let towerTimers=[];
+
+function buildPicker(){
+  POEMS.forEach((p,i)=>{
+    const b=document.createElement('button');
+    b.innerHTML='<span class="lang-zh">'+p.label+'</span><span class="lang-en">'+p.enLabel+'</span>';
+    b.classList.toggle('active', i===0);
+    b.addEventListener('click',()=>selectPoem(p,b));
+    poemPicker.appendChild(b);
+  });
+  const reserved=document.createElement('button');
+  reserved.disabled=true;
+  reserved.innerHTML='<span class="lang-zh">'+RESERVED.label+'</span><span class="lang-en">'+RESERVED.enLabel+'</span>';
+  poemPicker.appendChild(reserved);
+}
+function clearTowerTimers(){ towerTimers.forEach(clearTimeout); towerTimers=[]; }
+function renderTower(hiddenAtStart){
+  clearTowerTimers();
+  pagoda.innerHTML='';
+  activePoem.rows.forEach((txt,i)=>{
+    const div=document.createElement('div'); div.className='prow'+(i===0?' apex':'');
+    if(hiddenAtStart) div.classList.add('hidden');
+    div.textContent=txt;
+    pagoda.appendChild(div);
+  });
+}
+function riseTower(){
+  renderTower(true);
+  const rows=[...pagoda.querySelectorAll('.prow')];
+  rows.forEach((r,i)=>towerTimers.push(setTimeout(()=>r.classList.remove('hidden'), i*300)));
+}
+function renderMeaning(){
+  poemMeaning.innerHTML='';
+  if(activePoem.gloss){
+    const zh=document.createElement('div');
+    zh.innerHTML='<strong><span class="lang-zh">现代中文释义</span><span class="lang-en">Modern Chinese Reading</span></strong><br>'+activePoem.gloss.zh;
+    const en=document.createElement('div');
+    en.innerHTML='<strong><span class="lang-zh">English meaning</span><span class="lang-en">English Meaning</span></strong><br><span class="en">'+activePoem.gloss.en+'</span>';
+    poemMeaning.append(zh,en);
+  } else {
+    const pend=document.createElement('div');
+    pend.className='pending';
+    pend.style.gridColumn='1 / -1';
+    pend.innerHTML='<span class="lang-zh"><strong>现代中文释义 / English meaning 待篇若补。</strong>原文塔形与“逐层升起”已可用；释义与英文释义属策展内容，由篇若提供，此处不自造翻译。</span>'+
+                   '<span class="lang-en"><strong>Modern Chinese reading and English meaning await the curator.</strong> The tower form and “rise layer by layer” already work; the readings are curatorial content supplied by the curator, and no translation is invented here.</span>';
+    poemMeaning.appendChild(pend);
+  }
+}
+function renderSource(){
+  poemSource.innerHTML='<span class="lang-zh">'+activePoem.sourceZh+'</span><span class="lang-en">'+activePoem.sourceEn+'</span>';
+}
+function selectPoem(p,btn){
+  activePoem=p;
+  poemPicker.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderMeaning();
+  renderSource();
+  riseTower();
+}
+buildPicker();
+renderMeaning();
+renderSource();
+riseTower();
+document.getElementById('t-reveal').addEventListener('click',riseTower);
+</script>
+</body>
+</html>

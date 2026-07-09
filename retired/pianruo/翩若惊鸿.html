@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>翩若惊鸿</title>
+<style>
+  :root{
+    --paper:#f4efe3;
+    --paper2:#efe7d6;
+    --ink:#2b2622;
+    --ink-soft:#4a433b;
+    --seal:#9c4a3c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    background:
+      radial-gradient(120% 80% at 50% 0%, var(--paper) 0%, var(--paper2) 100%);
+    color:var(--ink);
+    font-family:"Songti SC","STSong","SimSun","Noto Serif CJK SC",serif;
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  #scene{position:fixed;inset:0;display:block;}
+  .ui{
+    position:fixed;left:0;right:0;bottom:0;
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+    padding:18px 16px 26px;
+    z-index:5;pointer-events:none;
+  }
+  .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;pointer-events:auto;}
+  button, .pill{
+    font-family:inherit;font-size:15px;letter-spacing:.18em;
+    color:var(--ink-soft);
+    background:rgba(255,255,255,.35);
+    border:1px solid rgba(43,38,34,.22);
+    border-radius:2px;
+    padding:8px 18px;
+    cursor:pointer;
+    transition:background .25s, color .25s, border-color .25s;
+    backdrop-filter:blur(2px);
+  }
+  button:hover{background:rgba(156,74,60,.10);border-color:rgba(156,74,60,.45);color:var(--seal);}
+  button.primary{color:var(--seal);border-color:rgba(156,74,60,.4);}
+  input{
+    font-family:inherit;font-size:15px;letter-spacing:.12em;
+    color:var(--ink);
+    background:rgba(255,255,255,.4);
+    border:none;border-bottom:1px solid rgba(43,38,34,.3);
+    padding:7px 10px;width:min(64vw,320px);text-align:center;
+    outline:none;
+  }
+  input::placeholder{color:rgba(74,67,59,.45);}
+  .hint{font-size:12px;letter-spacing:.25em;color:rgba(74,67,59,.55);user-select:none;}
+  .seal{
+    position:fixed;right:26px;top:26px;z-index:4;
+    width:46px;height:46px;border-radius:4px;
+    border:1.5px solid var(--seal);opacity:.5;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--seal);font-size:13px;line-height:1.05;
+    text-align:center;letter-spacing:0;
+    transform:rotate(.5deg);pointer-events:none;
+    font-family:inherit;
+  }
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div class="seal">翩<br>若</div>
+<div class="ui">
+  <div class="row">
+    <button id="fly" class="primary">放　飞</button>
+    <button id="next">换一句</button>
+  </div>
+  <div class="row">
+    <input id="custom" maxlength="16" placeholder="或写下你自己的句子，看它飞起来" />
+  </div>
+  <div class="hint">写什么，就怎么飞　·　轻触画面也可放飞</div>
+</div>
+<script>
+(function(){
+  "use strict";
+
+  var canvas = document.getElementById("scene");
+  var ctx = canvas.getContext("2d");
+  var DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+  var W = 0, H = 0;
+
+  function resize(){
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
+    canvas.style.width = W + "px";
+    canvas.style.height = H + "px";
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    if (chars.length) layout();
+  }
+  window.addEventListener("resize", resize);
+
+  // ---- built-in verse lines ----
+  var LINES = [
+    "翩若惊鴻　婉若游龍",   // 曹植《洛神赋》
+    "落霞與孤鶩齊飛",        // 王勃《滕王阁序》
+    "鴻雁長飛光不度",        // 张若虚《春江花月夜》
+    "天高任鳥飛"             // 民谚
+  ];
+  var lineIndex = 0;
+
+  // strip spaces for the flyable glyphs; spaces become gaps in layout
+  // We'll keep a layout that honours the space as a visual gap.
+
+  // ---- flight modes: the words decide how they fly ----
+  // Each segment of the verse is classified into one of six modes by counting
+  // how many of its characters fall into each mode's keyword set.
+  var MODE_KEYWORDS = {
+    startle:    "惊驚散急疾破亂乱振颤",
+    serpentine: "游遊龍龙蛇蜿蜒曲回繞绕婉蟠",
+    descend:    "落霞暮夕晚沉沈垂墜坠斜殘残沙",
+    migration:  "雁鴻鸿鶩鹜長长遠远征度關关塞行飛",
+    free:       "天高任闊阔空縱纵自翔翱凌雲云風风"
+  };
+  // tie-break priority (earlier wins)
+  var MODE_PRIORITY = ["startle","serpentine","descend","migration","free"];
+
+  // split a verse on whitespace + CJK/ASCII punctuation into non-empty segments
+  function splitSegments(text){
+    var seps = " 　，。、；！？,.;!?";
+    var segs = [];
+    var cur = "";
+    for (var i=0;i<text.length;i++){
+      var ch = text[i];
+      if (seps.indexOf(ch) !== -1){
+        if (cur.length) { segs.push(cur); cur = ""; }
+      } else {
+        cur += ch;
+      }
+    }
+    if (cur.length) segs.push(cur);
+    return segs;
+  }
+
+  function classifySegment(seg){
+    var counts = { startle:0, serpentine:0, descend:0, migration:0, free:0 };
+    for (var i=0;i<seg.length;i++){
+      var ch = seg[i];
+      for (var m in MODE_KEYWORDS){
+        if (MODE_KEYWORDS[m].indexOf(ch) !== -1) counts[m]++;
+      }
+    }
+    var best = null, bestCount = 0;
+    for (var p=0;p<MODE_PRIORITY.length;p++){
+      var mode = MODE_PRIORITY[p];
+      if (counts[mode] > bestCount){ bestCount = counts[mode]; best = mode; }
+    }
+    return bestCount > 0 ? best : "graceful";
+  }
+
+  // ---- character objects ----
+  var chars = [];      // active glyph/bird objects
+  var glyphSize = 56;  // base font px for printed glyph
+
+  // easing
+  function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+  function easeInOutSine(t){ return -(Math.cos(Math.PI * t) - 1) / 2; }
+  function lerp(a,b,t){ return a + (b - a) * t; }
+  function rand(a,b){ return a + Math.random()*(b-a); }
+
+  var segModes = [];   // mode per segment index, in order
+
+  function makeChars(text){
+    chars = [];
+
+    // segment the verse and classify each segment independently
+    var seps = " 　，。、；！？,.;!?";
+    var segments = splitSegments(text);
+    segModes = segments.map(classifySegment);
+
+    // walk the text again, tagging each non-separator char with its segment index
+    var glyphs = [];
+    var segIdx = -1;       // index into `segments`
+    var inSeg = false;     // are we currently inside a segment run?
+    for (var i=0;i<text.length;i++){
+      var ch = text[i];
+      var isSep = (seps.indexOf(ch) !== -1);
+      if (isSep){
+        inSeg = false;
+        // separators (space AND punctuation) become visual gaps, never birds
+        glyphs.push({ ch: ch, isGap: true, seg: -1 });
+      } else {
+        if (!inSeg){ segIdx++; inSeg = true; }
+        glyphs.push({ ch: ch, isGap: false, seg: segIdx });
+      }
+    }
+
+    for (var j=0;j<glyphs.length;j++){
+      chars.push({
+        ch: glyphs[j].ch,
+        isGap: glyphs[j].isGap,
+        seg: glyphs[j].seg,
+        mode: glyphs[j].seg >= 0 ? segModes[glyphs[j].seg] : "graceful",
+        // home (printed) position, set by layout()
+        hx:0, hy:0,
+        // current render position
+        x:0, y:0,
+        // bird flight state
+        state:"printed",        // printed | lifting | flying | gone
+        t:0,                    // progress timer for current state
+        // flight params (assigned at launch)
+        vx:0, vy:0,
+        angle:0,                // heading angle (radians), 0 = +x
+        flapPhase: Math.random()*Math.PI*2,
+        flapSpeed: rand(0.16,0.24),
+        wobble: Math.random()*Math.PI*2,
+        size: rand(0.85,1.25),
+        morph: 0,               // 0 = glyph, 1 = bird
+        opacity: 1,
+        order: j,
+        // target lane for loose V-formation
+        lane: 0,
+        delay: 0
+      });
+    }
+    layout();
+  }
+
+  function layout(){
+    // vertical 竖排, right-to-left columns. For a single line we use one column,
+    // but if the line is long we wrap into multiple columns going leftward.
+    var n = chars.length;
+    if (!n) return;
+    var lineGap = glyphSize * 1.18;
+    var maxPerCol = Math.max(3, Math.floor((H * 0.72) / lineGap));
+    var cols = Math.ceil(n / maxPerCol);
+    var colGap = glyphSize * 1.5;
+    // total block width
+    var blockW = (cols - 1) * colGap;
+    var startX = W/2 + blockW/2;   // rightmost column center
+    var idx = 0;
+    for (var c=0;c<cols;c++){
+      var inThis = Math.min(maxPerCol, n - c*maxPerCol);
+      var colH = (inThis - 1) * lineGap;
+      var startY = H*0.46 - colH/2;
+      var cx = startX - c*colGap;
+      for (var r=0;r<inThis;r++){
+        var ob = chars[idx++];
+        ob.hx = cx;
+        ob.hy = startY + r*lineGap;
+        if (ob.state === "printed"){
+          ob.x = ob.hx; ob.y = ob.hy;
+        }
+      }
+    }
+  }
+
+  // ---- launch the flock ----
+  var flying = false;
+  function launch(){
+    if (flying) return;
+    var real = chars.filter(function(o){ return !o.isGap; });
+    if (!real.length) return;
+    flying = true;
+
+    // overall sweep direction shared by formation modes (graceful/migration)
+    var goRight = Math.random() < 0.5;
+    var dir = goRight ? 1 : -1;
+    var headAngle = goRight ? -0.42 : (Math.PI + 0.42);
+
+    // group each segment's real chars so per-mode params are computed per segment
+    var groups = {};   // seg index -> array of chars in order
+    real.forEach(function(o){
+      var key = (o.seg >= 0) ? o.seg : "_";
+      (groups[key] = groups[key] || []).push(o);
+    });
+
+    Object.keys(groups).forEach(function(key){
+      var members = groups[key];
+      var mode = members[0].mode;
+      var count = members.length;
+
+      // each segment may pick its own travel direction for serpentine/migration/etc.
+      var segGoRight = goRight;          // keep the whole line coherent by default
+      var segDir = segGoRight ? 1 : -1;
+      var segHead = segGoRight ? -0.42 : (Math.PI + 0.42);
+
+      // startle: all birds in the segment will snap to ONE shared heading after the spike
+      var sharedSnap = segHead + rand(-0.5, 0.5);
+      // migration: a vanishing point near the far upper edge for this segment
+      var vanishX = segGoRight ? W*0.92 : W*0.08;
+      var vanishY = H*0.08;
+
+      members.forEach(function(o, k){
+        o.state = "lifting";
+        o.t = 0;
+        o.morph = 0;
+        o.opacity = 1;
+        o.mode = mode;
+        o.gCount = count;
+        o.gIndex = k;                              // index within segment
+        o.delay = k * 0.06 + Math.random()*0.05;   // staggered cascade
+        o.lane = (k - (count-1)/2);                // signed offset from centre
+        o.dir = segDir;
+        o.headAngle = segHead;
+        o.angle = segHead;
+        o.lift = rand(0.7,1.3);
+        o.tint = null;                             // optional warm tint (descend)
+        o.scaleK = 1;                              // perspective scale (migration)
+
+        // per-mode launch parameters
+        if (mode === "startle"){
+          // burst outward in a random radial heading with a high speed spike
+          o.scatterAng = rand(0, Math.PI*2);
+          o.speed = rand(3.6, 4.8);               // fright spike
+          o.sharedSnap = sharedSnap;
+          o.snapped = false;
+          o.hover = rand(0.55, 0.8);              // ~1 beat hover after spike
+        } else if (mode === "serpentine"){
+          // single-file: leave in a shared heading, follow an S-curve
+          o.scatterAng = segHead;
+          o.speed = rand(2.2, 2.8);
+          o.phase0 = k * 0.55;                    // staggers the wave along the file
+          o.serpFreq = 0.9;
+          o.baseAng = segHead;
+        } else if (mode === "descend"){
+          // slow downward diagonal toward the lower edge
+          var down = segGoRight ? 0.55 : (Math.PI - 0.55); // heading into lower-near
+          o.scatterAng = down + rand(-0.15,0.15);
+          o.speed = rand(1.4, 1.9);
+          o.baseAng = down;
+        } else if (mode === "migration"){
+          // assemble into a long V / echelon toward the vanishing point
+          o.scatterAng = segHead;
+          o.speed = rand(2.0, 2.6);
+          o.vanishX = vanishX;
+          o.vanishY = vanishY;
+          // echelon offset: stagger back and to one side forming a "<" or ">"
+          o.echOff = (k - (count-1)/2);
+        } else if (mode === "free"){
+          // no formation: each picks its own buoyant upward heading
+          var up = -Math.PI/2 + rand(-0.7, 0.7);  // upward, scattered wide
+          o.scatterAng = up;
+          o.speed = rand(2.0, 3.0);
+          o.baseAng = up;
+          o.wobAmp = rand(0.18, 0.34);
+        } else { // graceful (default) — original scatter-then-V behavior
+          o.dir = dir;
+          o.headAngle = headAngle;
+          o.angle = headAngle;
+          o.scatterAng = headAngle + rand(-0.9,0.9);
+          o.speed = rand(2.4, 3.4);
+        }
+      });
+    });
+  }
+
+  function reset(line){
+    flying = false;
+    if (line !== undefined){
+      makeChars(line);
+    } else {
+      // re-settle current chars
+      chars.forEach(function(o){
+        o.state="printed"; o.t=0; o.morph=0; o.opacity=1;
+        o.x=o.hx; o.y=o.hy;
+      });
+    }
+  }
+
+  // ---- drawing a bird as sumi-e brush strokes ----
+  // angle: heading direction. flap in [-1,1]. size scalar. alpha.
+  function drawBird(x, y, angle, flap, size, alpha, tint){
+    var s = glyphSize * 0.34 * size;
+    var col = tint || "#211d19";
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = col;
+    ctx.strokeStyle = col;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    // wing dihedral driven by flap: up-stroke wings high, down-stroke wings low
+    var wing = flap;                 // -1..1
+    var spread = s * 1.15;           // wing span half-length
+    var tipRise = -wing * s * 0.95;  // vertical tip displacement
+    var backSweep = s * (0.55 + 0.25*Math.abs(wing)); // wings sweep back near body
+
+    // A 惊鸿 silhouette: two tapered brush strokes meeting at a slim body,
+    // drawn as a filled path so it reads as ink, not as outlines.
+    ctx.beginPath();
+    // start at left wingtip
+    ctx.moveTo(-spread, tipRise - backSweep*0.15);
+    // upper edge sweeping into body
+    ctx.quadraticCurveTo(-spread*0.30, -s*0.16, 0, -s*0.06);
+    // to right wingtip (upper edge)
+    ctx.quadraticCurveTo(spread*0.30, -s*0.16, spread, tipRise - backSweep*0.15);
+    // right tip taper down
+    ctx.quadraticCurveTo(spread*0.42, tipRise + s*0.10, spread*0.34, backSweep*0.30);
+    // lower edge back to body (right)
+    ctx.quadraticCurveTo(spread*0.16, s*0.14, 0, s*0.12);
+    // body tail hint
+    ctx.quadraticCurveTo(-spread*0.16, s*0.14, -spread*0.34, backSweep*0.30);
+    // left tip taper
+    ctx.quadraticCurveTo(-spread*0.42, tipRise + s*0.10, -spread, tipRise - backSweep*0.15);
+    ctx.closePath();
+    ctx.fill();
+
+    // a faint head/neck accent forward of the body for a goose's reach
+    ctx.beginPath();
+    ctx.globalAlpha = alpha * 0.9;
+    ctx.arc(s*0.16, -s*0.02, s*0.10, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  // mix base ink toward a warm sunset ochre by progress 0..1 (descend mode)
+  function mixInk(p){
+    // from #211d19 (ink) toward #b5742c (ochre) then a touch toward #c98a3a
+    var a = [0x21,0x1d,0x19], b = [0xb5,0x74,0x2c];
+    var r = Math.round(lerp(a[0], b[0], p));
+    var g = Math.round(lerp(a[1], b[1], p));
+    var bl = Math.round(lerp(a[2], b[2], p));
+    return "rgb(" + r + "," + g + "," + bl + ")";
+  }
+
+  // shared edge-fade + draw for modes that exit through the upper/side sky
+  function fadeAndDraw(o, dt, margin, size, tint){
+    var off = (o.x < -margin) || (o.x > W+margin) || (o.y < -margin) || (o.y > H+margin);
+    if (off){
+      o.opacity -= 0.06 * dt;
+    } else if (o.y < H*0.18){
+      o.opacity -= 0.012 * dt;
+    }
+    if (o.opacity <= 0.02){
+      o.state = "gone";
+      o.opacity = 0;
+      return;
+    }
+    drawBird(o.x, o.y, o.angle, Math.sin(o.flapPhase), size, o.opacity, tint);
+  }
+
+  // draw a glyph at given alpha / slight scale
+  function drawGlyph(ch, x, y, alpha, scale){
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = "#2b2622";
+    ctx.font = (glyphSize*scale) + 'px "Songti SC","STSong","SimSun",serif';
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(ch, x, y);
+    ctx.restore();
+  }
+
+  // a printed glyph with a soft shadow as if pressed into paper
+  function drawPrinted(ch, x, y, alpha){
+    ctx.save();
+    ctx.globalAlpha = alpha*0.10;
+    ctx.fillStyle = "#000";
+    ctx.font = glyphSize + 'px "Songti SC","STSong","SimSun",serif';
+    ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillText(ch, x+0.8, y+1.2);
+    ctx.restore();
+    drawGlyph(ch, x, y, alpha, 1);
+  }
+
+  // ---- main loop ----
+  var lastT = performance.now();
+  function frame(now){
+    var dt = Math.min(40, now - lastT) / 16.6667;  // normalised to ~60fps units
+    lastT = now;
+
+    // subtle paper texture wash already from CSS; clear canvas
+    ctx.clearRect(0,0,W,H);
+
+    var allGone = flying;
+    for (var i=0;i<chars.length;i++){
+      var o = chars[i];
+      if (o.isGap) continue;
+
+      if (o.state === "printed"){
+        drawPrinted(o.ch, o.x, o.y, o.opacity);
+        allGone = false;
+        continue;
+      }
+
+      // animate flight phases
+      o.t += dt;
+      o.flapPhase += o.flapSpeed * dt;
+      o.wobble += 0.04 * dt;
+
+      if (o.state === "lifting"){
+        // wait out the stagger delay (counted in same t units, scaled)
+        var local = o.t/60 - o.delay; // delay in seconds-ish
+        if (local < 0){
+          drawPrinted(o.ch, o.x, o.y, o.opacity);
+          allGone = false;
+          continue;
+        }
+        var lt = Math.min(1, local / 0.7);   // 0.7s morph
+        var e = easeOutCubic(lt);
+        o.morph = e;
+        // small upward lift + drift toward scatter direction during morph
+        var liftDist = 26 * o.lift;
+        var driftAng = o.scatterAng;
+        var liftStep = e; // already eased
+        o.x = o.hx + Math.cos(driftAng) * liftStep * 30;
+        o.y = o.hy - liftDist * liftStep + Math.sin(driftAng) * liftStep * 14;
+        o.angle = o.scatterAng;
+        if (lt >= 1){
+          o.state = "flying";
+          o.t = 0;
+          // hand off velocity in scatter direction
+          o.vx = Math.cos(o.scatterAng) * o.speed;
+          o.vy = Math.sin(o.scatterAng) * o.speed;
+        }
+        // cross-fade glyph -> bird
+        var ga = (1 - o.morph);
+        if (ga > 0.01) drawGlyph(o.ch, o.x, o.y, ga*0.9, lerp(1,1.12,o.morph));
+        var ba = o.morph;
+        var flap = Math.sin(o.flapPhase);
+        if (ba > 0.01) drawBird(o.x, o.y, o.angle, flap, o.size*lerp(0.6,1,o.morph), ba);
+        allGone = false;
+        continue;
+      }
+
+      if (o.state === "flying"){
+        var ft = o.t / 60; // seconds-ish since flying began
+        var margin = 110;
+
+        // safety: no mode may linger forever — force a fade past a generous cap
+        // so the line always reassembles in bounded time even on odd headings.
+        if (ft > 9){
+          o.opacity -= 0.05 * dt;
+          if (o.opacity <= 0.02){ o.state = "gone"; o.opacity = 0; continue; }
+        }
+
+        if (o.mode === "startle"){
+          // spike outward, decelerate, hover ~1 beat, then snap to shared heading
+          var spikePhase = ft;
+          if (!o.snapped){
+            // decelerating burst in the random radial scatter direction
+            var decel = Math.exp(-spikePhase * 2.2);     // fast fall-off
+            var sp = 0.6 + o.speed * decel;              // high spike -> hover speed
+            // jitter the heading sharply during the fright
+            var jit = (Math.random()-0.5) * 0.18 * decel;
+            o.angle = o.scatterAng + jit;
+            o.vx = Math.cos(o.angle) * sp;
+            o.vy = Math.sin(o.angle) * sp;
+            o.x += o.vx * dt;
+            o.y += o.vy * dt;
+            if (spikePhase >= o.hover){
+              o.snapped = true;
+              o.t = 0;                                   // reset for the sweep
+              o.angle = o.sharedSnap;
+            }
+          } else {
+            // all birds sweep off fast along the one shared heading
+            var sweepSp = o.speed * 1.25;
+            o.angle += (Math.random()-0.5) * 0.04;       // residual jitter
+            o.vx = Math.cos(o.sharedSnap) * sweepSp;
+            o.vy = Math.sin(o.sharedSnap) * sweepSp;
+            o.x += o.vx * dt;
+            o.y += o.vy * dt;
+          }
+          fadeAndDraw(o, dt, margin, o.size, null);
+          if (o.state !== "flying") continue;
+          allGone = false;
+          continue;
+        }
+
+        if (o.mode === "serpentine"){
+          // single-file along baseAng; S-curve perpendicular, amplitude grows
+          var travel = ft;
+          var amp = Math.min(46, 6 + travel * 12);        // undulation grows
+          var wavePhase = travel * Math.PI * o.serpFreq * 2 - o.phase0;
+          var lateral = Math.cos(wavePhase) * amp;        // perpendicular offset rate
+          // heading bends with the derivative of the sine for a sinuous look
+          var bend = -Math.sin(wavePhase) * 0.5;
+          o.angle = o.baseAng + bend;
+          var fwd = o.speed;
+          var perpS = o.baseAng + Math.PI/2;
+          o.vx = Math.cos(o.angle) * fwd + Math.cos(perpS) * lateral * 0.04;
+          o.vy = Math.sin(o.angle) * fwd + Math.sin(perpS) * lateral * 0.04;
+          o.x += o.vx * dt;
+          o.y += o.vy * dt;
+          fadeAndDraw(o, dt, margin, o.size, null);
+          if (o.state !== "flying") continue;
+          allGone = false;
+          continue;
+        }
+
+        if (o.mode === "descend"){
+          // slow downward diagonal; ink warms toward sunset ochre as they fall
+          var glideD = o.speed;
+          o.angle = o.baseAng + Math.sin(o.wobble) * 0.06;
+          o.vx = Math.cos(o.angle) * glideD;
+          o.vy = Math.sin(o.angle) * glideD + 0.25;       // gentle gravity-ward
+          o.x += o.vx * dt;
+          o.y += o.vy * dt;
+          // warm the tint as it nears the lower edge
+          var prog = Math.max(0, Math.min(1, (o.y - H*0.46) / (H*0.5)));
+          o.tint = mixInk(prog);
+          // fade as it reaches the bottom band
+          if (o.y > H - margin){ o.opacity -= 0.05 * dt; }
+          else if (o.y > H*0.86){ o.opacity -= 0.02 * dt; }
+          var offD = (o.x < -margin) || (o.x > W+margin) || (o.y > H+margin);
+          if (offD) o.opacity -= 0.06 * dt;
+          if (o.opacity <= 0.02){ o.state="gone"; o.opacity=0; continue; }
+          drawBird(o.x, o.y, o.angle, Math.sin(o.flapPhase), o.size, o.opacity, o.tint);
+          allGone = false;
+          continue;
+        }
+
+        if (o.mode === "migration"){
+          // echelon toward a vanishing point; shrink + fade with distance
+          var steerM = easeInOutSine(Math.min(1, ft / 1.0));
+          // target: head toward vanishing point, offset into a V echelon
+          var tx = o.vanishX;
+          var ty = o.vanishY;
+          var toV = Math.atan2(ty - o.y, tx - o.x);
+          // echelon: lag birds sit back and to the side of the leader's heading
+          var perpM = toV + Math.PI/2;
+          var ex = Math.cos(perpM) * o.echOff * 16;
+          var targAng = Math.atan2((ty + 0) - o.y, (tx) - o.x);
+          var caM = o.angle;
+          var daM = Math.atan2(Math.sin(targAng - caM), Math.cos(targAng - caM));
+          o.angle = caM + daM * (0.05 + steerM*0.06) * dt;
+          var glideM = o.speed;
+          o.vx = Math.cos(o.angle) * glideM;
+          o.vy = Math.sin(o.angle) * glideM;
+          // echelon lateral hold
+          o.x += (o.vx + Math.cos(perpM) * o.echOff * 0.05) * dt;
+          o.y += o.vy * dt;
+          // perspective: distance to vanishing point -> scale + fade
+          var d0 = Math.hypot(o.vanishX - o.hx, o.vanishY - o.hy) || 1;
+          var dNow = Math.hypot(o.vanishX - o.x, o.vanishY - o.y);
+          var distRatio = Math.max(0, Math.min(1, dNow / d0));
+          o.scaleK = lerp(0.18, 1, distRatio);           // shrink as it recedes
+          if (distRatio < 0.16){ o.opacity -= 0.05 * dt; }
+          var offM = (o.x < -margin) || (o.x > W+margin) || (o.y < -margin);
+          if (offM) o.opacity -= 0.06 * dt;
+          if (o.opacity <= 0.02){ o.state="gone"; o.opacity=0; continue; }
+          drawBird(o.x, o.y, o.angle, Math.sin(o.flapPhase), o.size * o.scaleK, o.opacity * lerp(0.35,1,distRatio));
+          allGone = false;
+          continue;
+        }
+
+        if (o.mode === "free"){
+          // buoyant upward rise with a light wobble, scattering wide
+          var wob = Math.sin(o.wobble * 1.6 + o.flapPhase*0.3) * o.wobAmp;
+          o.angle = o.baseAng + wob;
+          var glideF = o.speed;
+          o.vx = Math.cos(o.angle) * glideF;
+          o.vy = Math.sin(o.angle) * glideF - 0.18;       // net buoyancy
+          o.x += o.vx * dt;
+          o.y += o.vy * dt;
+          fadeAndDraw(o, dt, margin, o.size, null);
+          if (o.state !== "flying") continue;
+          allGone = false;
+          continue;
+        }
+
+        // ---- graceful (default): original scatter-then-loose-V ----
+        var regroup = easeInOutSine(Math.min(1, ft / 1.4));
+        var targetAngle = o.headAngle;
+        var laneBend = (o.lane) * 0.018;
+        targetAngle += laneBend * o.dir;
+        var ca = o.angle;
+        var da = Math.atan2(Math.sin(targetAngle - ca), Math.cos(targetAngle - ca));
+        o.angle = ca + da * (0.04 * dt + regroup*0.02*dt);
+        var burst = 1 + (1 - regroup) * 0.9;
+        var glide = o.speed * burst;
+        var bob = Math.cos(o.wobble) * 0.35;
+        o.vx = Math.cos(o.angle) * glide;
+        o.vy = Math.sin(o.angle) * glide - 0.12 + bob*0.05;
+        var perp = o.angle + Math.PI/2;
+        var sep = (o.lane) * 0.06 * (1 - regroup);
+        o.x += (o.vx + Math.cos(perp)*sep) * dt;
+        o.y += (o.vy + Math.sin(perp)*sep) * dt;
+        fadeAndDraw(o, dt, margin, o.size, null);
+        if (o.state !== "flying") continue;
+        allGone = false;
+        continue;
+      }
+
+      if (o.state === "gone"){
+        // nothing
+      }
+    }
+
+    // when the whole flock has gone, gently reassemble after a pause
+    if (flying){
+      var anyAlive = chars.some(function(o){ return !o.isGap && o.state !== "gone"; });
+      if (!anyAlive){
+        flying = false;
+        reassembleTimer = 0.9; // seconds pause before the line returns
+      }
+    }
+    if (reassembleTimer > 0){
+      reassembleTimer -= dt/60;
+      if (reassembleTimer <= 0){
+        settleBack();
+      }
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  var reassembleTimer = 0;
+  function settleBack(){
+    // characters drift/fade back into their printed positions
+    chars.forEach(function(o){
+      o.state = "printed";
+      o.x = o.hx; o.y = o.hy;
+      o.morph = 0;
+      o.opacity = 0; // will fade in
+    });
+    fadingIn = true;
+  }
+  var fadingIn = false;
+
+  // hook fade-in into the loop via a tiny secondary updater
+  (function fadeInLoop(){
+    if (fadingIn){
+      var done = true;
+      chars.forEach(function(o){
+        if (o.isGap) return;
+        if (o.opacity < 1){ o.opacity = Math.min(1, o.opacity + 0.05); done = false; }
+      });
+      if (done) fadingIn = false;
+    }
+    requestAnimationFrame(fadeInLoop);
+  })();
+
+  // ---- controls ----
+  document.getElementById("fly").addEventListener("click", function(e){
+    e.preventDefault();
+    if (!flying && reassembleTimer<=0 && !fadingIn) launch();
+    else if (!flying) launch();
+  });
+  document.getElementById("next").addEventListener("click", function(e){
+    e.preventDefault();
+    lineIndex = (lineIndex + 1) % LINES.length;
+    reassembleTimer = 0; fadingIn = false;
+    reset(LINES[lineIndex]);
+    fadeFreshIn();
+  });
+  var customInput = document.getElementById("custom");
+  customInput.addEventListener("keydown", function(e){
+    if (e.key === "Enter"){
+      var v = customInput.value.trim();
+      if (v){
+        reassembleTimer=0; fadingIn=false;
+        reset(v);
+        fadeFreshIn();
+        customInput.blur();
+      }
+    }
+  });
+  // click anywhere on canvas to fly
+  canvas.addEventListener("pointerdown", function(){
+    if (!flying) launch();
+  });
+
+  function fadeFreshIn(){
+    chars.forEach(function(o){ o.opacity = 0; });
+    fadingIn = true;
+  }
+
+  // ---- init ----
+  makeChars(LINES[0]);
+  resize();
+  chars.forEach(function(o){ o.opacity = 0; });
+  fadingIn = true;
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

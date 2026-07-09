@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stack Atlas · Political MAG 政治数量级</title>
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body class="page-political-mag">
+<header>
+  <div class="head-row">
+    <h1>Stack Atlas</h1>
+    <span class="sub">Political MAG · 政治栈数量级</span>
+    <nav class="top-nav" aria-label="Site navigation">
+      <a href="./index.html">← 返回地图 Atlas map</a>
+      <a href="./transmission.html">传导链 Transmission →</a>
+    </nav>
+  </div>
+  <p class="honest">政治栈的数量级缺口：先把需要什么量纲、可能来源和证据状态摊开，不把未知数填成结论。同样的内容也内嵌在主页对应政治节点（ps-*）的详情抽屉里。</p>
+</header>
+
+<section class="political-mag-lab" aria-labelledby="political-mag-title">
+  <div class="political-mag-head">
+    <div>
+      <h2 id="political-mag-title">Political MAG</h2>
+      <p>每张卡：量纲家族 + 候选来源 + 证据状态 + 下一步。verified 行来自已核清单（BIS CSL / OFAC SDN 等），unknown 行如实标 unknown。</p>
+    </div>
+    <span class="political-mag-source">schema draft · v0.8 · standalone page</span>
+  </div>
+  <div class="political-mag-grid" id="political-mag-grid"></div>
+</section>
+
+<footer>
+  <span>证据档：</span>
+  <span class="ev ev-verified">verified</span>
+  <span class="ev ev-source-linked">source-linked</span>
+  <span class="ev ev-query-designed">query-designed</span>
+  <span class="ev ev-needs-review">needs-review</span>
+  <span class="ev ev-unknown">unknown</span>
+  <span class="foot-note">数据正本 political-mag-data.js；证据定级由 Nullroute 核。</span>
+</footer>
+
+<script src="./atlas-data.js"></script>
+<script src="./political-mag-data.js"></script>
+<script src="./political-mag.js"></script>
+</body>
+</html>
