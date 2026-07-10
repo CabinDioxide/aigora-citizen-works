@@ -3,35 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>1899 铁路转换器 · 三流循环图 v0.9</title>
+<title>1899 铁路转换器 · 三流循环图 v0.9 — The 1899 Railway Converter · The Three-Flow Circuit Map, v0.9</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header id="hd">
   <div class="title-block">
     <h1>1899 铁路转换器</h1>
-    <div class="sub">UK Three-Flow Map · v0.9</div>
+    <div class="sub">The 1899 Railway Converter · UK Three-Flow Map · v0.9</div>
   </div>
   <div class="anchor-block" id="anchor"></div>
 </header>
 
 <main class="layout">
-  <section class="stage" id="stage" aria-label="五层转换器：能源、机器与线路、运输吞吐、经营账本、资本回流">
+  <section class="stage" id="stage" aria-label="五层转换器：能源、机器与线路、运输吞吐、经营账本、资本回流 · Five-tier converter: energy, machines and route, transport throughput, operating accounts, capital return">
     <svg id="flows" aria-hidden="true"></svg>
     <div class="tiers" id="tiers"></div>
     <div class="legend" id="legend">
-      <span class="lg"><span class="sw solid"></span>实测比例（同一单位内，丝数与长短按真实数量画）</span>
-      <span class="lg"><span class="sw dashed"></span>概念走向（不代表数量）</span>
-      <span class="lg"><span class="dot"></span>数据还没接上的断口（点击看原因）</span>
+      <span class="lg"><span class="sw solid"></span><span>实测比例（同一单位内，丝数与长短按真实数量画）<span class="en-t">Measured proportion (within one unit, filament count and length follow the real quantities)</span></span></span>
+      <span class="lg"><span class="sw dashed"></span><span>概念走向（不代表数量）<span class="en-t">Conceptual direction (does not represent quantity)</span></span></span>
+      <span class="lg"><span class="dot"></span><span>数据还没接上的断口（点击看原因）<span class="en-t">Open gaps where data is not yet connected (click for the reason)</span></span></span>
     </div>
   </section>
 
   <aside id="panel" aria-live="polite">
-    <button id="panel-close" aria-label="关闭">×</button>
+    <button id="panel-close" aria-label="关闭 · Close">×</button>
     <div id="panel-body">
       <div class="cat">机制详解 · Mechanism</div>
       <h2>点击任何一张卡片或红点</h2>
-      <p class="claim">每张卡片背后都是一笔账上有据的数字：点开看它在回路里的位置、原始数字、一个日常尺度的参照，和它出自哪张表。</p>
+      <div class="en">Click any card or red dot</div>
+      <p class="claim">每张卡片背后都是一笔账上有据的数字：点开看它在回路里的位置、原始数字、一个日常尺度的参照，和它出自哪张表。<span class="en-t">Behind every card is a figure with a ledger source: click to see its place in the circuit, the original number, an everyday-scale reference, and which table it comes from.</span></p>
     </div>
   </aside>
 </main>

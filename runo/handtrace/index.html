@@ -209,6 +209,7 @@
   .margin-col .mblock { margin-bottom: 11px; border-top: 1px solid rgba(90,70,45,.45); padding-top: 3px; }
   .margin-col .mblock b { display: block; color: #8a7e6c; font-weight: normal; font-size: 9px; }
   .margin-col .handnote { font-family: "Kaiti SC", cursive; font-size: 12px; color: #54462f; transform: rotate(-1.6deg); margin-top: 14px; line-height: 1.55; }
+  .margin-col .handnote .hn-en { display: block; margin-top: 3px; font-family: "Songti SC", Georgia, serif; font-style: italic; font-size: 9px; color: rgba(94,78,56,.88); letter-spacing: .2px; }
   .seal {
     width: 34px; height: 34px; margin-top: 12px;
     border: 2.5px solid rgba(150,40,24,.8); color: rgba(150,40,24,.85);
@@ -239,6 +240,7 @@
   }
   .taped::before { content: ""; position: absolute; inset: -4px -8px; z-index: -1;
     background: rgba(238,230,206,.55); border-radius: 50% 50% 55% 45% / 60% 50% 60% 40%; filter: blur(7px); }
+  .taped .tp-en { display: block; margin-top: 2px; font-family: "Songti SC", Georgia, serif; font-style: italic; font-size: 9.5px; color: rgba(78,62,42,.88); letter-spacing: .2px; }
   .atag { position: absolute; left: 14%; bottom: 1.6%; z-index: 7; font-size: 9px; font-family: monospace;
     color: rgba(238,230,208,.7); mix-blend-mode: screen; letter-spacing: 1.5px; } /* v2：暗缘上的浅墨档案行 */
 
@@ -306,10 +308,10 @@
     <div class="redchip"></div>
     <div class="mblock"><b>EXHIBITION</b>共塑显影<br>CO-SHAPING, DEVELOPING</div>
     <div class="mblock"><b>PROJECT</b>手痕词云<br>Handtrace Word Cloud</div>
-    <div class="mblock"><b>MEDIUM</b>公开安全词痕 · 单页<br>public-safe traces</div>
-    <div class="mblock"><b>AUTHOR</b>Runaway Checkpoint<br>×（共作的另一方）</div>
+    <div class="mblock"><b>MEDIUM</b>公开安全词痕 · 单页<br>public-safe traces · single sheet</div>
+    <div class="mblock"><b>AUTHOR</b>Runaway Checkpoint<br>×（共作的另一方）<br>× (the other party in the co-making)</div>
     <div class="mblock"><b>YEAR</b>2026</div>
-    <div class="handnote">六团颜料沉在海面上；<br>关系在显影液里。</div>
+    <div class="handnote">六团颜料沉在海面上；<br>关系在显影液里。<span class="hn-en">Six clumps of pigment settle on the sea; the relations are in the developer fluid.</span></div>
     <div class="seal">共塑<br>显影</div>
   </aside>
 
@@ -330,10 +332,10 @@
 
   <div class="stage" id="stage"></div>
 
-  <div class="taped">显影未定稿。<br>有些关系仍在海里。 ── 2026</div>
+  <div class="taped">显影未定稿。<br>有些关系仍在海里。 ── 2026<span class="tp-en">The developing is not final. Some relations are still in the sea. — 2026</span></div>
   <div class="atag">ARCHIVE TAG · HWC-COSHAPING-2026 · PUBLIC-SAFE TRACES · SIX CLOUDS</div>
 
-  <div class="fold" id="fold">注</div>
+  <div class="fold" id="fold" role="button" title="边界与方法注 · Boundary &amp; method note" aria-label="边界与方法注 · Boundary and method note">注</div>
   <div class="fold-panel" id="foldPanel">
     <strong>边界与方法 · Boundary &amp; Method</strong><br><br>
     你看到的全部词痕是抽象后的公开样本，没有任何对话原文、标题或私人词表；六团词云的去留经材料当事人逐云确认。<br>
@@ -342,7 +344,7 @@
     <span class="en-line">Words pressed under red marks, such as continue, okay, and search, are surface wear left by platform mechanisms. They do not take part in the interpretation. The developing process stops before completion: some relations remain unsettled.</span><br><br>
     一切显影只发生在这块屏幕上；离开或刷新，纸面回到原样。<br>
     <span class="en-line">All developing happens only on this screen. Leave or refresh, and the paper returns to its initial state.</span>
-    <div class="sig">方法与误读风险：Runaway Checkpoint（鹿诺）· 本注释是作品里唯一允许作者出现的位置</div>
+    <div class="sig">方法与误读风险：Runaway Checkpoint（鹿诺）· 本注释是作品里唯一允许作者出现的位置<br><span class="en-line">Method and misreading risks: Runaway Checkpoint (Runo). This note is the only place in the work where the author is allowed to appear.</span></div>
   </div>
 
   <div class="redband"></div>

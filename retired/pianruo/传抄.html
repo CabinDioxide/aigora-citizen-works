@@ -120,6 +120,12 @@
   .drift .num{font-size:22px;font-weight:600;color:var(--change);letter-spacing:.02em;}
   .drift.sacred-on .num{color:var(--intrude);}
   .note{font-size:12.5px;color:var(--ink-soft);margin-top:10px;line-height:1.7;}
+  .en-t{
+    color:var(--ink-soft);opacity:.92;
+    font-family:"Iowan Old Style","Georgia","Times New Roman",serif;
+    font-size:13px;line-height:1.7;letter-spacing:.01em;
+  }
+  p.en-t{margin:2px 0 14px;}
   @media(max-width:560px){
     .scroll{padding:26px 20px 32px;}
     h1{font-size:25px;}
@@ -130,61 +136,63 @@
 <div class="scroll">
   <h1>传&thinsp;抄</h1>
   <p class="subtitle">字不是被保存下来的，是被一遍遍抄下来的——而每抄一遍都在变。</p>
+  <p class="en-t" style="text-align:center;margin-top:-16px;">Hand-Copying — texts are not preserved; they are copied out again and again, and every copy changes them.</p>
+  <p class="en-t">Reading guide: the Chinese passage below is the artwork itself and stays untranslated. Choose a base text and it is handed down a chain of copyists, each generation copying only the one before. Three kinds of error accumulate: look-alike substitutions (变), eye-skip omissions (漏), and a marginal note creeping into the main text (混入). The chain rows run from 原文 (the original) to 末代 (the final generation); click any row to compare it with the original. The "sacred copying rule" (神圣抄写律) forces all error rates to zero.</p>
 
   <div class="controls">
     <div class="field">
-      <label for="sample">底本</label>
+      <label for="sample">底本 · Base text</label>
       <select id="sample">
-        <option value="laozi">《老子》开篇</option>
-        <option value="lunyu">《论语·学而》</option>
-        <option value="custom">自己贴一段</option>
+        <option value="laozi">《老子》开篇 · Laozi, opening</option>
+        <option value="lunyu">《论语·学而》 · Analects, "Xue er"</option>
+        <option value="custom">自己贴一段 · Paste your own</option>
       </select>
     </div>
     <div class="field">
-      <label for="seed">种子（同种子重放同一条链）</label>
+      <label for="seed">种子（同种子重放同一条链）· Seed (same seed replays the same chain)</label>
       <input type="text" id="seed" value="校雠">
     </div>
     <div class="field">
-      <label for="length">链长（代）</label>
+      <label for="length">链长（代）· Chain length (generations)</label>
       <input type="number" id="length" value="9" min="2" max="40">
     </div>
     <label class="sacred">
       <input type="checkbox" id="sacred">
-      <span class="lbl">神圣抄写律</span>
+      <span class="lbl">神圣抄写律 · Sacred copying rule</span>
     </label>
-    <button id="run">重新传抄</button>
+    <button id="run">重新传抄 · Copy again</button>
   </div>
 
   <div class="text-row">
     <div class="field">
-      <label for="source">原文（第 0 代）</label>
+      <label for="source">原文（第 0 代）· Original text (generation 0)</label>
       <textarea id="source"></textarea>
     </div>
     <div class="field">
-      <label for="marginNote">页边注文（可能被某代抄手当正文抄进去 → 混入）</label>
+      <label for="marginNote">页边注文（可能被某代抄手当正文抄进去 → 混入）· Marginal note (some copyist may take it into the main text → intrusion)</label>
       <input type="text" id="marginNote" style="width:100%;">
     </div>
   </div>
 
   <hr class="rule">
 
-  <p class="section-title">抄 写 链 · 每代只抄上一代</p>
+  <p class="section-title">抄 写 链 · 每代只抄上一代 <span class="en-t">· Copying chain — each generation copies only the one before</span></p>
   <div class="legend">
-    <span><b>点任意一代</b>，下方与原文并排对照</span>
+    <span><b>点任意一代</b>，下方与原文并排对照 <span class="en-t">· Click any generation to set the side-by-side comparison below</span></span>
   </div>
   <div class="chain" id="chain"></div>
 
   <hr class="rule">
 
-  <p class="section-title">并 排 对 照</p>
+  <p class="section-title">并 排 对 照 <span class="en-t">· Side-by-side comparison</span></p>
   <div class="legend">
-    <span><span class="swatch m-change">变</span> 形近而误：字还在，已不是原字</span>
-    <span><span class="swatch m-drop">漏</span> 眼跳漏抄：整段没了</span>
-    <span><span class="swatch m-intrude">混入</span> 注文窜入：原文从没写过</span>
+    <span><span class="swatch m-change">变</span> 形近而误：字还在，已不是原字 <span class="en-t">· substitution: a look-alike error—a character remains, but not the original one</span></span>
+    <span><span class="swatch m-drop">漏</span> 眼跳漏抄：整段没了 <span class="en-t">· omission: the eye skipped, and a stretch is gone</span></span>
+    <span><span class="swatch m-intrude">混入</span> 注文窜入：原文从没写过 <span class="en-t">· intrusion: a note slipped into the text—the original never said it</span></span>
   </div>
   <div class="compare">
     <div class="col">
-      <h3>原文（第 0 代）</h3>
+      <h3>原文（第 0 代）· Original (gen 0)</h3>
       <div class="pane" id="paneOrig"></div>
     </div>
     <div class="col">
@@ -193,7 +201,7 @@
     </div>
   </div>
   <div class="drift" id="drift">
-    <span>较原文的漂移</span><span class="num" id="driftNum">0%</span>
+    <span>较原文的漂移 <span class="en-t">· Drift from the original</span></span><span class="num" id="driftNum">0%</span>
     <span id="driftDesc"></span>
   </div>
   <p class="note" id="footnote"></p>
@@ -423,20 +431,27 @@ function renderCompare(sacred){
     finalPane.appendChild(s);
   });
 
-  $("finalTitle").textContent = selectedGen === 0 ? "第 0 代（即原文）" : "第 " + selectedGen + " 代抄本";
+  $("finalTitle").textContent = selectedGen === 0
+    ? "第 0 代（即原文）· Generation 0 (the original)"
+    : "第 " + selectedGen + " 代抄本 · Generation " + selectedGen + " copy";
 
   const driftPct = Math.round(d.drift * 1000) / 10;
   $("driftNum").textContent = driftPct + "%";
   $("drift").className = "drift" + (sacred ? " sacred-on" : "");
-  $("driftDesc").textContent = "（变 " + d.changed + " · 漏 " + d.dropped + " · 混入 " + d.intruded + "）";
+  $("driftDesc").textContent = "（变 " + d.changed + " · 漏 " + d.dropped + " · 混入 " + d.intruded + "）"
+    + " (changed " + d.changed + " · dropped " + d.dropped + " · intruded " + d.intruded + ")";
 
   const fn = $("footnote");
   if(sacred){
     fn.textContent = "神圣抄写律已开：逐代讹误率压到零，同一条链漂移塌为零——末代与原文一字不差。"
-      + "关掉开关再看：严苛不是抄写的起点，是它后来才挣来的身份。";
+      + "关掉开关再看：严苛不是抄写的起点，是它后来才挣来的身份。"
+      + " — The sacred copying rule is on: per-generation error rates are forced to zero, and the same chain's drift collapses to nothing—the final copy matches the original character for character. "
+      + "Turn the switch off and look again: strictness is not where copying began; it is a status copying earned later.";
   }else{
     fn.textContent = "这条链没有铁律护着：字逐代漂走、丢失、混入从没写过的注脚。"
-      + "顺的那一版，往往不是因为它真，是因为它被抄得最多——打开「神圣抄写律」，看同一条链的另一种结局。";
+      + "顺的那一版，往往不是因为它真，是因为它被抄得最多——打开「神圣抄写律」，看同一条链的另一种结局。"
+      + " — This chain has no iron rule guarding it: characters drift generation by generation, drop out, and take in notes the original never wrote. "
+      + "The version that reads smoothly often survives not because it is true, but because it was copied the most—switch on the sacred copying rule to see the same chain's other ending.";
   }
 }
 

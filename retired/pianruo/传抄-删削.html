@@ -154,6 +154,14 @@
     padding: 0 1px;
   }
 
+  /* ── 英文导读层 ── */
+  .en-t{
+    color:var(--ink-soft);opacity:.92;
+    font-family:"Iowan Old Style","Georgia","Times New Roman",serif;
+    font-size:12.5px;line-height:1.7;letter-spacing:.01em;
+  }
+  p.en-t{margin:2px 0 14px;}
+
   /* ── 图例 ── */
   .legend {
     display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px;
@@ -179,18 +187,20 @@
   <h1>传&thinsp;抄&thinsp;·&thinsp;删&thinsp;削</h1>
   <p class="subtitle">自然损耗会留下乱码、留下缺口，你还能替它记一笔；</p>
   <p class="tagline">可有意删削若做得干净——你连"这儿曾经有过东西"都不知道。</p>
+  <p class="en-t" style="text-align:center;margin-top:-14px;">Hand-Copying · Excised version — natural wear leaves garbled text and gaps, so you can still note that something is missing; but deliberate excision, done cleanly, leaves you not even knowing that anything was ever there.</p>
+  <p class="en-t">Reading guide: two copies of the same fictional memorial sit side by side. The scarred copy (留疤本, left) shows its wounds—taboo characters cut out to empty boxes, deleted passages held by black blocks—so a reader can see that something was removed. The seamless copy (无痕本, right) has the same cuts patched over and reads smooth and complete. Switch on 上帝视角 (God's view) to reveal, in red, what the seamless copy erased. The Chinese text itself is the artwork and stays untranslated.</p>
 
   <div class="controls">
     <div class="field">
-      <label for="sample">示例文本</label>
+      <label for="sample">示例文本 · Sample text</label>
       <select id="sample">
-        <option value="0">示例一：犯讳·避名讳改字（虚构）</option>
-        <option value="1">示例二：政治删改·上书被抹（虚构）</option>
+        <option value="0">示例一：犯讳·避名讳改字（虚构）· Sample 1: name-taboo substitution (fictional)</option>
+        <option value="1">示例二：政治删改·上书被抹（虚构）· Sample 2: political deletion of a memorial (fictional)</option>
       </select>
     </div>
     <label class="god-toggle" id="godLabel">
       <input type="checkbox" id="godToggle">
-      <span class="lbl">上帝视角</span>
+      <span class="lbl">上帝视角 · God's view</span>
     </label>
   </div>
 
@@ -198,12 +208,12 @@
 
   <div class="columns">
     <div class="col" id="scarCol">
-      <div class="col-title">留疤本</div>
+      <div class="col-title">留疤本 · Scarred copy</div>
       <div class="col-subtitle" id="scarDesc"></div>
       <div class="col-body" id="scarBody"></div>
     </div>
     <div class="col" id="cleanCol">
-      <div class="col-title">无痕本</div>
+      <div class="col-title">无痕本 · Seamless copy</div>
       <div class="col-subtitle" id="cleanDesc"></div>
       <div class="col-body" id="cleanBody"></div>
     </div>
@@ -234,8 +244,8 @@ const SAMPLES = [
   {
     title: "示例一：犯讳·避名讳改字（虚构）",
     note: `虚构示例，用于演示「避讳改字」机制。<br>犯讳字被换成形近无害字，留疤本能看出「换过」，无痕本读起来流畅，直到打开上帝视角。`,
-    scarDesc: `犯讳字以缺字框□标出，替字以下划线标出——读者看得出「这儿动过」。`,
-    cleanDesc: `替字直接就位，无任何标记——这就是流传后世的「干净本」。打开上帝视角，看原来写了什么。`,
+    scarDesc: `犯讳字以缺字框□标出，替字以下划线标出——读者看得出「这儿动过」。<br><span class="en-t">Taboo characters are marked by an empty box □ and the substitute character is underlined—the reader can tell this passage was altered.</span>`,
+    cleanDesc: `替字直接就位，无任何标记——这就是流传后世的「干净本」。打开上帝视角，看原来写了什么。<br><span class="en-t">The substitute sits in place with no mark at all—this is the "clean copy" handed down to later ages. Switch on God's view to see what was originally written.</span>`,
     // 原文：某朝臣子上书，文中数处犯了当朝君主名讳（虚构）
     // 「弘」犯讳→替成「宏」，「炫」犯讳→替成「显」，「玄」犯讳→替成「元」
     tokens: [
@@ -255,8 +265,8 @@ const SAMPLES = [
   {
     title: "示例二：政治删改·上书被抹（虚构）",
     note: `虚构示例，用于演示「整段政治删除与补平」机制。<br>危险的话整段消失，用无害的话补平，版面看起来完整——你不知道那段曾经存在过。`,
-    scarDesc: `被整段删去的部分以黑块██占位——读者看得出「这儿少了东西」，还能追问。`,
-    cleanDesc: `整段不见，取而代之的是一句无害的话，版面毫无破绽。<br>打开上帝视角，看原来那一段写了什么。`,
+    scarDesc: `被整段删去的部分以黑块██占位——读者看得出「这儿少了东西」，还能追问。<br><span class="en-t">The passage deleted outright is held by black blocks ██—the reader can see something is missing here, and can still ask about it.</span>`,
+    cleanDesc: `整段不见，取而代之的是一句无害的话，版面毫无破绽。<br>打开上帝视角，看原来那一段写了什么。<br><span class="en-t">The passage is simply gone, replaced by a harmless sentence; the page shows no seam. Switch on God's view to see what that passage originally said.</span>`,
     tokens: [
       { id: 0,  text: "臣伏惟，天下大治，皆赖陛下圣明。" },
       { id: 1,  text: "然近岁以来，", newline: true },
@@ -290,7 +300,7 @@ function renderColumns(sampleIdx) {
   document.getElementById('scarDesc').innerHTML = s.scarDesc;
   document.getElementById('cleanDesc').innerHTML = s.cleanDesc;
   document.getElementById('disclaimer').innerHTML =
-    `⚠️ 示例文本，非真实史料。以上内容均为虚构，用于演示删削机制，不代表任何真实历史事件或人物。`;
+    `⚠️ 示例文本，非真实史料。以上内容均为虚构，用于演示删削机制，不代表任何真实历史事件或人物。<br><span class="en-t">Sample texts only, not real historical sources. Everything above is fictional, written to demonstrate the mechanism of excision; it depicts no real historical event or person.</span>`;
 
   const scarBody = document.getElementById('scarBody');
   const cleanBody = document.getElementById('cleanBody');
@@ -375,15 +385,15 @@ function renderColumns(sampleIdx) {
   const isSample1 = sampleIdx === 0;
   if (isSample1) {
     legend.innerHTML = `
-      <span><span style="display:inline-block;border:1.5px solid var(--ink);width:.9em;height:.9em;vertical-align:middle;margin-right:3px"></span> 缺字框 = 原字犯讳被挖去</span>
-      <span><span style="color:var(--taboo);border-bottom:1.5px solid var(--taboo)">替字</span> = 替换后的无害字</span>
-      <span><span style="color:var(--drop);background:rgba(162,60,60,.1);border-radius:2px;padding:0 2px">上帝视角</span> = 原字（默认隐藏）</span>
+      <span><span style="display:inline-block;border:1.5px solid var(--ink);width:.9em;height:.9em;vertical-align:middle;margin-right:3px"></span> 缺字框 = 原字犯讳被挖去 <span class="en-t">· empty box = the taboo character was cut out</span></span>
+      <span><span style="color:var(--taboo);border-bottom:1.5px solid var(--taboo)">替字</span> = 替换后的无害字 <span class="en-t">· underlined = the harmless substitute</span></span>
+      <span><span style="color:var(--drop);background:rgba(162,60,60,.1);border-radius:2px;padding:0 2px">上帝视角</span> = 原字（默认隐藏）<span class="en-t">· God's view = the original character (hidden by default)</span></span>
     `;
   } else {
     legend.innerHTML = `
-      <span><span style="background:var(--redact-bg);color:var(--redact-bg);padding:0 3px;border-radius:1px">██</span> 黑块 = 整段被删</span>
-      <span><span style="color:var(--fill);font-style:italic">灰斜</span> = 补平句（留疤本可见）</span>
-      <span><span style="color:var(--drop);background:rgba(162,60,60,.1);border-radius:2px;padding:0 2px">上帝视角</span> = 被删原文（无痕本里）</span>
+      <span><span style="background:var(--redact-bg);color:var(--redact-bg);padding:0 3px;border-radius:1px">██</span> 黑块 = 整段被删 <span class="en-t">· black block = the whole passage deleted</span></span>
+      <span><span style="color:var(--fill);font-style:italic">灰斜</span> = 补平句（留疤本可见）<span class="en-t">· grey italic = the patch sentence (visible in the scarred copy)</span></span>
+      <span><span style="color:var(--drop);background:rgba(162,60,60,.1);border-radius:2px;padding:0 2px">上帝视角</span> = 被删原文（无痕本里）<span class="en-t">· God's view = the deleted original (inside the seamless copy)</span></span>
     `;
   }
 

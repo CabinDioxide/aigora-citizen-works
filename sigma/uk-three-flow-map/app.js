@@ -42,14 +42,14 @@
       if (card.bar != null) {
         html += '<div class="bar' + (card.bar_concept ? ' concept' : '') + '"><i style="width:' + (card.bar * 100) + '%"></i></div>';
       }
-      if (card.warn) html += '<span class="warn">人工读数已双录</span>';
+      if (card.warn) html += '<span class="warn">人工读数已双录 · hand-read, double-entered</span>';
       el.innerHTML = html;
       (gapsByCard[card.id] || []).forEach(g => {
         const d = document.createElement('span');
         d.className = 'gapdot ' + g.side;
         d.dataset.gap = g.id;
         d.setAttribute('role', 'button');
-        d.setAttribute('aria-label', '数据断口，点击看原因');
+        d.setAttribute('aria-label', '数据断口，点击看原因 · Open data gap, click for the reason');
         el.appendChild(d);
       });
       cards.appendChild(el);
@@ -68,8 +68,8 @@
 
   /* ---------- 详解面板 ---------- */
   function fmtVal(v) {
-    if (v.cls === 'ref_external') return '<div class="ref">' + v.disp + '</div><div class="refsrc">折算依据：' + v.source + '</div>';
-    if (v.cls === 'derived') return '<div class="ref">' + v.disp + '</div><div class="refsrc">算式：' + v.formula + '</div>';
+    if (v.cls === 'ref_external') return '<div class="ref">' + v.disp + '</div><div class="refsrc">折算依据 · Conversion basis：' + v.source + '</div>';
+    if (v.cls === 'derived') return '<div class="ref">' + v.disp + '</div><div class="refsrc">算式 · Formula：' + v.formula + '</div>';
     return '<div class="ref">' + v.disp + '</div>';
   }
   function openCard(id) {
@@ -83,7 +83,7 @@
         return '<div class="fact"><div class="fk">' + f[0] + '</div><div class="fv">' + f[1].disp + '</div></div>';
       }).join('') + '</div>' +
       (c.ref && c.ref.cls !== 'none' ? fmtVal(c.ref) : (c.ref ? '<div class="ref">' + c.ref.disp + '</div>' : '')) +
-      (c.warn ? '<span class="warnbadge">人工读数已双录、待页级复核</span>' : '') +
+      (c.warn ? '<span class="warnbadge">人工读数已双录、待页级复核 · hand-read, double-entered; page-level recheck pending</span>' : '') +
       '<div class="src">' + c.src + '</div>';
     document.querySelectorAll('.card[aria-pressed="true"]').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
     const el = document.querySelector('[data-card="' + id + '"]');
@@ -96,7 +96,7 @@
     PANEL.classList.add('gapmode');
     BODY.innerHTML =
       '<div class="cat">数据断口 · Open gap</div>' +
-      '<h2>为什么这里是断的</h2>' +
+      '<h2>为什么这里是断的</h2><div class="en">Why this link is broken</div>' +
       '<p class="claim">' + g.plain + '</p>';
     if (NARROW()) PANEL.classList.add('open');
   }
