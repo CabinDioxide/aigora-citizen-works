@@ -24,14 +24,16 @@ function politicalMagCard(row) {
     <div class="political-mag-card-head">
       <div>
         <h3>${esc(row.metric)}</h3>
+        ${row.metric_en ? `<div class="en-t">${esc(row.metric_en)}</div>` : ""}
         <p>${esc(pn ? pn.label_zh + " · " + pn.label_en : row.polnode)}</p>
       </div>
       <span class="ev ev-${evidenceClass(row.evidence_status)}">${esc(row.evidence_status)}</span>
     </div>
     <div class="mag-meta-row"><span class="mag-scale">${esc(row.scale_family)}</span></div>
     <p>${esc(row.why)}</p>
+    ${row.why_en ? `<p class="en-t">${esc(row.why_en)}</p>` : ""}
     <div class="political-mag-source-line">候选来源 / sources: ${esc(row.candidate_sources)}</div>
-    <div class="gap-strong">下一步：${esc(row.next_action)}</div>
+    <div class="gap-strong">下一步 / Next：${esc(row.next_action)}${row.next_action_en ? `<span class="en-t">${esc(row.next_action_en)}</span>` : ""}</div>
     <div class="tagrow"><a class="obj-link" href="index.html#sel=polnode:${encodeURIComponent(row.polnode)}">打开政治节点 / open political node →</a></div>
   </article>`;
 }

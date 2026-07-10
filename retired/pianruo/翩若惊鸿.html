@@ -53,6 +53,16 @@
   }
   input::placeholder{color:rgba(74,67,59,.45);}
   .hint{font-size:12px;letter-spacing:.25em;color:rgba(74,67,59,.55);user-select:none;}
+  .en-guide{
+    position:fixed;left:22px;top:22px;z-index:4;
+    max-width:300px;
+    font-family:"Iowan Old Style","Georgia","Times New Roman",serif;
+    font-size:12px;line-height:1.65;
+    color:rgba(74,67,59,.72);
+    pointer-events:none;user-select:none;
+  }
+  .en-guide b{letter-spacing:.06em;}
+  @media (max-width:640px){.en-guide{display:none;}}
   .seal{
     position:fixed;right:26px;top:26px;z-index:4;
     width:46px;height:46px;border-radius:4px;
@@ -68,15 +78,19 @@
 <body>
 <canvas id="scene"></canvas>
 <div class="seal">翩<br>若</div>
+<div class="en-guide">
+  <b>Like a Startled Swan.</b> The verse on the page stays in Chinese; press 放飞 (Fly) and each character lifts off the paper as an ink-brush bird.
+  How a phrase flies follows what its characters say: 惊 (startled) bursts apart, then the flock snaps to one shared heading; 游龙 (gliding dragon) leaves in single file along an S-curve; 落霞 (sinking sunset glow) descends slowly, the ink warming to ochre; 鸿雁 (wild geese) draw into a long V toward a vanishing point; 天高任鸟飞 (a sky high enough for any bird) scatters upward, each on its own. When the flock is gone, the line settles back onto the page.
+</div>
 <div class="ui">
   <div class="row">
-    <button id="fly" class="primary">放　飞</button>
-    <button id="next">换一句</button>
+    <button id="fly" class="primary">放　飞 · Fly</button>
+    <button id="next">换一句 · Next line</button>
   </div>
   <div class="row">
-    <input id="custom" maxlength="16" placeholder="或写下你自己的句子，看它飞起来" />
+    <input id="custom" maxlength="16" placeholder="或写下你自己的句子，看它飞起来 · or write your own line" />
   </div>
-  <div class="hint">写什么，就怎么飞　·　轻触画面也可放飞</div>
+  <div class="hint">写什么，就怎么飞　·　轻触画面也可放飞　·　what it says is how it flies · tap the canvas to release</div>
 </div>
 <script>
 (function(){

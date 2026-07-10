@@ -506,14 +506,14 @@ function relatedAlerts(pred){ return D.candidateAlerts.filter(pred); }
 
 // 公司小卡：节点详情里公司不只给名字，带角色、核心产品和至多两条已核关键数字。
 // 数字来自 atlas-data.js companies[].keyFigures（每条含证据等级 ev 与来源 src），没有就如实说待补。
-function cgradeChip(ev){ return `<span class="cgrade" title="证据等级">${esc(ev)}</span>`; }
+function cgradeChip(ev){ return `<span class="cgrade" title="证据等级 evidence grade">${esc(ev)}</span>`; }
 function companyMiniCard(co){
   const figs = (co.keyFigures||[]).slice(0,2).map(f =>
     `<div class="kf-line" title="${esc(f.src||"")}"><span class="kf-k">${esc(f.k)}</span><strong>${esc(f.v)}</strong>${cgradeChip(f.ev)}</div>`).join("");
   return `<div class="co-mini">
     <div class="co-head"><button data-company="${esc(co.id)}">${esc(co.name)}</button><span class="co-role">${esc(co.role_zh)}</span></div>
     ${co.products_zh ? `<div class="co-prod">${esc(co.products_zh)}</div>` : ""}
-    ${figs || `<div class="gap-line">关键数字待补（无已核来源，不编）</div>`}
+    ${figs || `<div class="gap-line">关键数字待补（无已核来源，不编）/ Key figures pending — no verified source, nothing invented</div>`}
   </div>`;
 }
 
@@ -528,15 +528,17 @@ function politicalMagCard(row) {
     <div class="political-mag-card-head">
       <div>
         <h3>${esc(row.metric)}</h3>
+        ${row.metric_en ? `<div class="en-t">${esc(row.metric_en)}</div>` : ""}
         <p>${esc(pn ? pn.label_zh : row.polnode)}</p>
       </div>
       <span class="ev ev-${evidenceClass(row.evidence_status)}">${esc(row.evidence_status)}</span>
     </div>
     <div class="mag-meta-row"><span class="mag-scale">${esc(row.scale_family)}</span></div>
     <p>${esc(row.why)}</p>
+    ${row.why_en ? `<p class="en-t">${esc(row.why_en)}</p>` : ""}
     <div class="political-mag-source-line">候选来源 / sources: ${esc(row.candidate_sources)}</div>
-    <div class="gap-strong">下一步：${esc(row.next_action)}</div>
-    <div class="tagrow"><button data-polnode="${esc(row.polnode)}">打开政治节点</button></div>
+    <div class="gap-strong">下一步 / Next：${esc(row.next_action)}${row.next_action_en ? `<span class="en-t">${esc(row.next_action_en)}</span>` : ""}</div>
+    <div class="tagrow"><button data-polnode="${esc(row.polnode)}">打开政治节点 / Open political node</button></div>
   </article>`;
 }
 
@@ -544,7 +546,7 @@ function alertCard(a){
   return `<div class="alert-card">
     <div class="atitle">${esc(a.title_zh)} · ${esc(a.title_en)} <span class="ev ev-needs-review">${esc(a.status)}</span></div>
     <div class="asig">${esc(a.signal_zh)}</div>
-    <button data-alert="${esc(a.id)}">在地图上点亮 →</button>
+    <button data-alert="${esc(a.id)}">在地图上点亮 / Light up on map →</button>
   </div>`;
 }
 
@@ -555,11 +557,11 @@ function narrativeMetricLine(type, id, nodes = [], chokes = [], alerts = []) {
   const nodeNames = nodes.slice(0, 4).map(n => n.label_zh).join(" / ");
   const chokeNames = chokes.slice(0, 3).map(c => c.name_zh).join(" / ");
   const parts = [];
-  if (nodeNames) parts.push(`关联节点：${nodeNames}`);
-  if (chokeNames) parts.push(`关键通道：${chokeNames}`);
-  if (magCandidates.length) parts.push(`MAG：${magCandidates.length} 个数量级候选，${verifiedFacts} 条 verified 事实`);
-  if (scaleFamilies.length) parts.push(`量纲：${scaleFamilies.join("；")}`);
-  if (alerts.length) parts.push(`待复查线索：${alerts.length} 条`);
+  if (nodeNames) parts.push(`关联节点 related nodes：${nodeNames}`);
+  if (chokeNames) parts.push(`关键通道 key chokepoints：${chokeNames}`);
+  if (magCandidates.length) parts.push(`MAG：${magCandidates.length} 个数量级候选 magnitude candidates，${verifiedFacts} 条 verified 事实 facts`);
+  if (scaleFamilies.length) parts.push(`量纲 scale families：${scaleFamilies.join("；")}`);
+  if (alerts.length) parts.push(`待复查线索 pending-review leads：${alerts.length} 条`);
   return parts.join("。");
 }
 
@@ -571,33 +573,42 @@ function countryNarrative(code, nodes, chokes, alerts) {
   const hasEnergy = nodes.some(n => stackByNode.get(n.id)?.id === "energy");
   const hasReach = nodes.some(n => stackByNode.get(n.id)?.id === "reachability");
   let message = `${c.name_zh}在这张图里不是一个地理色块，而是一组技术依赖的落点。`;
+  let message_en = `On this map, ${c.name_en} is not a patch of geography but the landing point of a set of technical dependencies.`;
   if (code === "US") {
     message = "美国在这里主要表现为控制面：GPU、EDA、云、出口管制、金融/服务可达性都从这里向外施加权限。要看的不是“美国很强”这种空话，而是哪些调用必须经过美国公司、美国法域或美国名单。";
+    message_en = "The United States appears here mainly as a control plane: GPUs, EDA, cloud, export controls and financial/service reachability all project authority outward from here. What to look at is not the platitude that \"America is strong\", but which calls must pass through US companies, US jurisdiction or US lists.";
   } else if (code === "CN") {
     message = "中国在这里同时是超大需求端、制造端和被管制对象。它既被能源航道、先进芯片工具和云/网络可达性牵动，也在寻找替代路径；关键问题是替代路径有没有足够数量级。";
+    message_en = "China is at once a very large demand side, a manufacturing side and a target of controls. It is pulled by energy sea lanes, advanced chip tools and cloud/network reachability, while also seeking alternative paths; the key question is whether those alternatives have enough magnitude.";
   } else if (code === "JP" || code === "KR") {
     message = `${c.name_zh}在这张图里最像高工业化但被外部流量喂养的系统：能源进口、海运 chokepoint、关键制造节点同时出现。要看的是断点先落在油气成本、储备释放、工业配给，还是芯片/存储产能。`;
+    message_en = `${c.name_en} looks most like a highly industrialized system fed by external flows: energy imports, shipping chokepoints and key manufacturing nodes appear together. Watch whether a break lands first on oil-and-gas costs, reserve releases, industrial rationing, or chip/memory capacity.`;
   } else if (code === "TW") {
     message = "台湾在这里主要是先进芯片制造的物理落点。它不是普通供应商节点，而是 AI 算力栈里把设计、设备、材料和地缘安全同时压到一起的高密度节点。";
+    message_en = "Taiwan is here mainly the physical landing point of advanced chip manufacturing. It is not an ordinary supplier node but a high-density node in the AI compute stack where design, equipment, materials and geopolitical security are pressed together.";
   } else if (code === "NL") {
     message = "荷兰在这里被 ASML/EUV 放大。国家体量不是重点；重点是一个小法域里的设备公司掌握了先进制程的关键通过条件。";
+    message_en = "The Netherlands is magnified here by ASML/EUV. National size is not the point; the point is that an equipment company in a small jurisdiction holds the key passage condition for advanced process nodes.";
   } else if (["SA", "QA", "AE"].includes(code)) {
     message = `${c.name_zh}在这里是能源流的上游节点。它的重要性不只在产量，还在油气出海口、替代管道、LNG/原油流量和东亚买家的联动。`;
+    message_en = `${c.name_en} is an upstream node of energy flows. Its importance lies not only in output but in the interplay of oil-and-gas outlets, alternative pipelines, LNG/crude flows and East Asian buyers.`;
   } else if (code === "SG") {
     message = "新加坡在这里是小地理、大通道：海运、海缆、云与金融/物流节点叠在一起。它的可见面积小，但系统接点密度高。";
+    message_en = "Singapore is small geography, big conduit: shipping, submarine cables, cloud and financial/logistics nodes stack together. Its visible area is small, but its density of system junctions is high.";
   }
   const stacks = [
-    hasAi ? "AI 算力栈" : "",
-    hasEnergy ? "东亚能源栈" : "",
-    hasReach ? "互联网可达性栈" : ""
+    hasAi ? "AI 算力栈 AI compute" : "",
+    hasEnergy ? "东亚能源栈 East Asia energy" : "",
+    hasReach ? "互联网可达性栈 Internet reachability" : ""
   ].filter(Boolean).join("、");
   const metric = narrativeMetricLine("country", code, nodes, chokes, alerts);
   return `<section class="narrative-card">
     <h4>What this means · 观众导览</h4>
     <p>${esc(message)}</p>
-    ${stacks ? `<p><strong>跨栈位置：</strong>${esc(stacks)}。</p>` : ""}
-    ${metric ? `<p><strong>当前证据：</strong>${esc(metric)}。</p>` : ""}
-    ${magCandidates.length ? `<p><strong>我想让你看到：</strong>关系图只说明“连着谁”，Magnitude 才说明这条连接是小风险、局部闸门，还是低名气高控制节点。</p>` : ""}
+    <p class="en-t">${esc(message_en)}</p>
+    ${stacks ? `<p><strong>跨栈位置 Cross-stack position：</strong>${esc(stacks)}。</p>` : ""}
+    ${metric ? `<p><strong>当前证据 Current evidence：</strong>${esc(metric)}。</p>` : ""}
+    ${magCandidates.length ? `<p><strong>我想让你看到 What I want you to see：</strong>关系图只说明“连着谁”，Magnitude 才说明这条连接是小风险、局部闸门，还是低名气高控制节点。<span class="en-t">The relation map only says who is connected; Magnitude says whether a link is a minor risk, a local gate, or a low-fame high-control node.</span></p>` : ""}
   </section>`;
 }
 
@@ -605,89 +616,115 @@ function nodeNarrative(n, comps, chokes, alerts) {
   const stk = stackByNode.get(n.id);
   const magCandidates = MAG ? magCandidatesFor("node", n.id) : [];
   let message = `${n.label_zh}是 ${stk.name_zh} 里的 ${n.layer} 节点，当前状态标为 ${n.status}，证据层级是 ${n.evidence}。`;
+  let message_en = `${n.label_en} is a ${n.layer} node in the ${stk.name_en} stack, currently marked ${n.status}, with evidence grade ${n.evidence}.`;
   if (n.id === "ac-export") {
     message = "出口管制不是边境上的检查站，而是 AI 算力栈里的 permission chokepoint：产品、服务、人员支持和最终用途可能在法律状态变化后突然不可达。";
+    message_en = "Export control is not a checkpoint at the border but a permission chokepoint in the AI compute stack: products, services, personnel support and end uses can suddenly become unreachable after a change in legal status.";
   } else if (n.id === "ac-euv") {
     message = "EUV 是先进制程的设备闸门。它的重要性来自单一供应商、安装基础、服务能力和许可环境叠加，不是单纯“机器很贵”。";
+    message_en = "EUV is the equipment gate of advanced process nodes. Its importance comes from the combination of a single supplier, the installed base, service capacity and the licensing environment — not simply from \"expensive machines\".";
   } else if (n.id === "ac-hbm") {
     message = "HBM 是 AI 加速器的近身瓶颈。GPU 不是孤立运行，存储带宽、封装和供应商扩产节奏会把算力叙事拖回制造现实。";
+    message_en = "HBM is the close-in bottleneck of AI accelerators. GPUs do not run in isolation; memory bandwidth, packaging and suppliers' expansion pace drag the compute narrative back to manufacturing reality.";
   } else if (n.id === "cm-ree") {
     message = "稀土的卡点不在矿，在分离和磁体。中国矿产量占 71%，但精炼占 91%、NdFeB 磁体占 94%。MOFCOM 2025-04 开始对 7 种元素实施出口许可，无白名单，至今生效。";
+    message_en = "The rare-earth chokepoint is not in mining but in separation and magnets. China holds 71% of mine output, but 91% of refining and 94% of NdFeB magnets. MOFCOM began export licensing for 7 elements in 2025-04, with no whitelist, still in force.";
   } else if (n.id === "cm-gallium") {
     message = "镓的管制路径有三段：2023 年全球许可证制（23号）→ 2024 年对美不予许可（46号）→ 2025 年 72 号暂停 46 号第二款至 2026 年 11 月。每一段都改变了管制边界，不是一次性决定。";
+    message_en = "Gallium's control path has three stages: a global licensing regime in 2023 (No. 23) → denial of licenses to the US in 2024 (No. 46) → No. 72 in 2025 suspending Clause 2 of No. 46 until November 2026. Each stage changed the control boundary; it was not a one-off decision.";
   } else if (n.id === "en-tanker") {
     message = "油轮/LNG 航道是能源冲击的传导层。危机不一定先变成没油，常常先变成运费、保险、等待时间和国家背书的运输优先级。";
+    message_en = "Tanker/LNG lanes are the transmission layer of energy shocks. A crisis does not necessarily turn into \"no oil\" first; it often first turns into freight rates, insurance, waiting time and state-backed shipping priority.";
   } else if (n.id === "en-sanction") {
     message = "制裁和价格上限是服务可达性闸门。它不移动货物，却能改变谁能结算、保险、维修、采购或继续使用某个系统。";
+    message_en = "Sanctions and price caps are service-reachability gates. They move no cargo, yet they can change who can settle, insure, repair, procure or keep using a system.";
   } else if (n.id === "re-cable") {
     message = "海底光缆是互联网可达性的物理底盘。它看起来像通信问题，实际牵涉登陆点、路由、所有权、维修船和地缘安全。";
+    message_en = "Submarine cables are the physical chassis of internet reachability. It looks like a telecom issue, but it actually involves landing points, routing, ownership, repair ships and geopolitical security.";
   }
   const metric = narrativeMetricLine("node", n.id, [n], chokes, alerts);
   return `<section class="narrative-card">
     <h4>What this means · 观众导览</h4>
     <p>${esc(message)}</p>
-    ${comps.length ? `<p><strong>现实落点：</strong>${esc(comps.map(c => c.name).join("、"))}。</p>` : ""}
-    ${metric ? `<p><strong>当前证据：</strong>${esc(metric)}。</p>` : ""}
-    ${magCandidates.length ? `<p><strong>读图方式：</strong>先看它连到哪些国家/公司，再看 MAG 里有没有可审计数量级；没有数量级时，不要把箭头画得很粗。</p>` : ""}
+    <p class="en-t">${esc(message_en)}</p>
+    ${comps.length ? `<p><strong>现实落点 Real-world footprint：</strong>${esc(comps.map(c => c.name).join("、"))}。</p>` : ""}
+    ${metric ? `<p><strong>当前证据 Current evidence：</strong>${esc(metric)}。</p>` : ""}
+    ${magCandidates.length ? `<p><strong>读图方式 How to read this：</strong>先看它连到哪些国家/公司，再看 MAG 里有没有可审计数量级；没有数量级时，不要把箭头画得很粗。<span class="en-t">First see which countries/companies it connects to, then check whether MAG has auditable magnitudes; without a magnitude, do not draw the arrow thick.</span></p>` : ""}
   </section>`;
 }
 
 function politicalNodeNarrative(n, techNodes, chokes) {
   let message = `${n.label_zh} 是政治栈 ${n.layer} 节点。它不表示一件物理货物，而表示技术依赖如何被法域、联盟、强制能力、国内压力或叙事合法化机制接管。`;
+  let message_en = `${n.label_en} is a ${n.layer} node of the political stack. It denotes not a physical good but how technical dependencies are taken over by jurisdiction, alliances, coercive capacity, domestic pressure or narrative legitimation.`;
   if (n.id === "ps-export-control") {
     message = "出口管制/许可是政治栈里最接近技术栈的闸门：它把 GPU、EDA、EUV、先进制造这些技术节点转换成法律权限问题。";
+    message_en = "Export control/licensing is the gate in the political stack closest to the technology stack: it converts technical nodes such as GPU, EDA, EUV and advanced manufacturing into questions of legal permission.";
   } else if (n.id === "ps-naval-transit") {
     message = "海上通道强制/护航能力解释的是：能源和海缆不是只在市场里流动，它们也要经过安全承诺、护航能力和通道控制。";
+    message_en = "Maritime transit enforcement/escort capacity explains that energy and submarine cables do not flow only in markets; they also pass through security commitments, escort capacity and control of passages.";
   } else if (n.id === "ps-industrial-policy") {
     message = "产业政策/补贴/本土替代是政治系统试图改写技术依赖的工具。它不会立刻消除瓶颈，但会改变投资、许可、并网和替代路线。";
+    message_en = "Industrial policy / subsidies / domestic substitution are the tools by which political systems try to rewrite technical dependencies. They do not remove bottlenecks immediately, but they change investment, licensing, grid connection and alternative routes.";
   } else if (n.id === "ps-legitimacy-narratives") {
     message = "国家安全/技术主权/能源安全叙事是 P4 层：它本身不生产芯片或油气，但会给管制、补贴、制裁和反制提供合法性。";
+    message_en = "National security / tech sovereignty / energy security narratives are the P4 layer: they produce no chips or hydrocarbons themselves, but they supply legitimacy for controls, subsidies, sanctions and countermeasures.";
   }
   const techLine = techNodes.length ? `对应技术节点：${techNodes.map(t => t.label_zh).join(" / ")}` : "";
   const chokeLine = chokes.length ? `关联通道：${chokes.map(c => c.name_zh).join(" / ")}` : "";
   return `<section class="narrative-card political-narrative">
-    <h4>What this means · 政治栈导览</h4>
+    <h4>What this means · 政治栈导览 Political-stack guide</h4>
     <p>${esc(message)}</p>
-    ${techLine ? `<p><strong>技术接口：</strong>${esc(techLine)}。</p>` : ""}
-    ${chokeLine ? `<p><strong>现实通道：</strong>${esc(chokeLine)}。</p>` : ""}
-    <p><strong>读图方式：</strong>先看它接到哪些技术节点，再看它通过哪些国家、公司或 chokepoint 发生作用。政治栈不是背景噪音，是控制面。</p>
+    <p class="en-t">${esc(message_en)}</p>
+    ${techLine ? `<p><strong>技术接口 Tech interface：</strong>${esc(techLine)}。</p>` : ""}
+    ${chokeLine ? `<p><strong>现实通道 Real-world passage：</strong>${esc(chokeLine)}。</p>` : ""}
+    <p><strong>读图方式 How to read this：</strong>先看它接到哪些技术节点，再看它通过哪些国家、公司或 chokepoint 发生作用。政治栈不是背景噪音，是控制面。<span class="en-t">First see which technical nodes it plugs into, then through which countries, companies or chokepoints it takes effect. The political stack is not background noise; it is the control plane.</span></p>
   </section>`;
 }
 
 function chokepointNarrative(cp, nodes, alerts) {
   const magCandidates = MAG ? magCandidatesFor("chokepoint", cp.id) : [];
   let message = `${cp.name_zh}是物理通道，但它真正重要的是把一种流量的扰动转换成别的系统压力。`;
+  let message_en = `${cp.name_en} is a physical passage, but what really matters is that it converts a disturbance in one flow into pressure on other systems.`;
   if (cp.id === "hormuz") {
     message = "霍尔木兹不是地图上的红点，而是能源流量、保险价格、替代管道和东亚工业成本的转换器。这里一变，影响通常先表现为 expensive mode，而不一定立刻表现为空油罐。";
+    message_en = "Hormuz is not a red dot on the map but a converter between energy flows, insurance prices, alternative pipelines and East Asian industrial costs. When something changes here, the effect usually shows up first as expensive mode, not necessarily as empty tanks.";
   } else if (cp.id === "malacca") {
     message = "马六甲是跨栈 chokepoint：能源航道和海缆走廊在这里叠加。它同时让油气流和互联网可达性进入同一个地理瓶颈。";
+    message_en = "Malacca is a cross-stack chokepoint: energy lanes and submarine-cable corridors overlap here. It pushes both oil-and-gas flows and internet reachability into the same geographic bottleneck.";
   } else if (cp.id === "suez" || cp.id === "babelmandeb") {
     message = `${cp.name_zh}把欧亚航运、能源和海缆风险接在一起。它的意义不是“可能堵”，而是绕航成本、保险、维修和政治护航会怎样重新定价。`;
+    message_en = `${cp.name_en} ties Eurasian shipping, energy and cable risk together. Its significance is not "it might get blocked" but how detour costs, insurance, repair and political escorting get repriced.`;
   }
   const metric = narrativeMetricLine("chokepoint", cp.id, nodes, [cp], alerts);
   return `<section class="narrative-card">
     <h4>What this means · 观众导览</h4>
     <p>${esc(message)}</p>
-    ${metric ? `<p><strong>当前证据：</strong>${esc(metric)}。</p>` : ""}
-    ${magCandidates.length ? `<p><strong>我想传递的信息：</strong>chokepoint 不只是“通/不通”，还要看承载流量、可绕行能力和替代路径质量。</p>` : ""}
+    <p class="en-t">${esc(message_en)}</p>
+    ${metric ? `<p><strong>当前证据 Current evidence：</strong>${esc(metric)}。</p>` : ""}
+    ${magCandidates.length ? `<p><strong>我想传递的信息 The message：</strong>chokepoint 不只是“通/不通”，还要看承载流量、可绕行能力和替代路径质量。<span class="en-t">A chokepoint is not just open/closed; also look at carried flow, reroute capacity and the quality of alternative paths.</span></p>` : ""}
   </section>`;
 }
 
 function companyNarrative(co, nodes) {
   const magCandidates = MAG ? magCandidatesFor("company", co.id) : [];
   let message = `${co.name} 在图里不是股票代码，而是一个技术栈调用点：它的产品、服务或许可条件会影响哪些国家能继续运行。`;
+  let message_en = `${co.name} is not a stock ticker on this map but a call point in the technology stack: its products, services or license terms affect which countries can keep running.`;
   if (co.id === "asml") {
     message = "ASML 是 EUV 设备和服务依赖的现实落点。它把荷兰、先进制程、美国/盟友管制和晶圆厂扩产节奏接到同一个节点。";
+    message_en = "ASML is the real-world footprint of EUV equipment and service dependence. It joins the Netherlands, advanced process nodes, US/allied controls and fabs' expansion pace into a single node.";
   } else if (co.id === "skhynix" || co.id === "samsung") {
     message = `${co.name} 在这里代表 HBM/存储供应的制造现实。AI 算力不是只有 GPU，内存带宽和封装产能同样会限制可交付算力。`;
+    message_en = `${co.name} here represents the manufacturing reality of HBM/memory supply. AI compute is not only GPUs; memory bandwidth and packaging capacity equally limit deliverable compute.`;
   } else if (co.id === "synopsys" || co.id === "cadence") {
     message = `${co.name} 代表 EDA 工具层。先进芯片设计要调用这些工具，因此工具授权、出口管制和客户名单会变成 permission gate。`;
+    message_en = `${co.name} represents the EDA tool layer. Advanced chip design must call these tools, so tool licensing, export controls and customer lists become a permission gate.`;
   }
   return `<section class="narrative-card">
     <h4>What this means · 观众导览</h4>
     <p>${esc(message)}</p>
-    ${nodes.length ? `<p><strong>关联节点：</strong>${esc(nodes.map(n => n.label_zh).join("、"))}。</p>` : ""}
-    ${magCandidates.length ? `<p><strong>数量级提示：</strong>这里挂着 ${magCandidates.length} 个 MAG 候选；先看证据状态，再看它是否真有 verified 数字。</p>` : ""}
+    <p class="en-t">${esc(message_en)}</p>
+    ${nodes.length ? `<p><strong>关联节点 Related nodes：</strong>${esc(nodes.map(n => n.label_zh).join("、"))}。</p>` : ""}
+    ${magCandidates.length ? `<p><strong>数量级提示 Magnitude hint：</strong>这里挂着 ${magCandidates.length} 个 MAG 候选；先看证据状态，再看它是否真有 verified 数字。<span class="en-t">This object carries ${magCandidates.length} MAG candidates; check evidence status first, then whether it really has verified numbers.</span></p>` : ""}
   </section>`;
 }
 
@@ -705,14 +742,14 @@ function renderDetail(type, id){
     html = `<div class="detail-kind">国家 / Country</div><h3>${esc(c.name_zh)} · ${esc(c.name_en)} <span class="ev ev-verified">verified · geography</span></h3>
       ${countryNarrative(id, nodes, chokes, alerts)}
       <div class="detail-grid">
-        <div class="dcard"><h4>相关栈节点 Stack nodes</h4>${nodes.length?`<div class="tagrow">${nodes.map(n=>`<button data-node="${esc(n.id)}">${esc(n.label_zh)} · ${esc(n.status)}</button>`).join("")}</div>`:`<div class="gap-line">unknown / 本版未建立</div>`}</div>
-        <div class="dcard"><h4>政治栈节点 Political nodes</h4>${pnodes.length?`<div class="tagrow">${pnodes.map(n=>`<button data-polnode="${esc(n.id)}">${esc(n.label_zh)} · ${esc(n.status)}</button>`).join("")}</div>`:`<div class="gap-line">unknown / 本版未建立</div>`}</div>
+        <div class="dcard"><h4>相关栈节点 Stack nodes</h4>${nodes.length?`<div class="tagrow">${nodes.map(n=>`<button data-node="${esc(n.id)}">${esc(n.label_zh)} · ${esc(n.status)}</button>`).join("")}</div>`:`<div class="gap-line">unknown / 本版未建立 not built in this version</div>`}</div>
+        <div class="dcard"><h4>政治栈节点 Political nodes</h4>${pnodes.length?`<div class="tagrow">${pnodes.map(n=>`<button data-polnode="${esc(n.id)}">${esc(n.label_zh)} · ${esc(n.status)}</button>`).join("")}</div>`:`<div class="gap-line">unknown / 本版未建立 not built in this version</div>`}</div>
         <div class="dcard"><h4>公司/产业 Companies</h4>${comps.length?`<div class="tagrow">${comps.map(co=>`<button data-company="${esc(co.id)}">${esc(co.name)} · ${esc(co.role_zh)}</button>`).join("")}</div>`:`<div class="gap-line">unknown / needs source</div>`}</div>
         <div class="dcard"><h4>相关航道/Chokepoints</h4>${chokes.length?`<div class="tagrow">${chokes.map(cp=>`<button data-choke="${esc(cp.id)}">${esc(cp.name_zh)}</button>`).join("")}</div>`:`<div class="gap-line">unknown</div>`}</div>
         ${countryReportCard(id)}
         ${magnitudeSummaryCard("country", id)}
       </div>
-      ${alerts.length?`<div><h4 style="margin:12px 0 0;color:#c4ccd8">Candidate alerts（待复查）</h4>${alerts.map(alertCard).join("")}</div>`:""}
+      ${alerts.length?`<div><h4 style="margin:12px 0 0;color:#c4ccd8">Candidate alerts（待复查 pending review）</h4>${alerts.map(alertCard).join("")}</div>`:""}
       ${renderEastAsiaEnergyBlock("country", id)}
       ${renderMagnitudeLayerBlock("country", id)}`;
   } else if (type === "node"){
@@ -728,12 +765,12 @@ function renderDetail(type, id){
       <div class="detail-grid">
         <div class="dcard"><h4>相关国家 Countries</h4><div class="tagrow">${(n.countries||[]).map(c=>`<button data-code="${esc(c)}">${esc(countryName(c))}</button>`).join("")||'<span class="gap-line">unknown</span>'}</div></div>
         <div class="dcard"><h4>航道 Chokepoints</h4>${chokes.length?`<div class="tagrow">${chokes.map(cp=>`<button data-choke="${esc(cp.id)}">${esc(cp.name_zh)}</button>`).join("")}</div>`:`<div class="gap-line">无 / none</div>`}</div>
-        <div class="dcard"><h4>政治栈接口 Political interface</h4>${pnodes.length?`<div class="tagrow">${pnodes.map(pn=>`<button data-polnode="${esc(pn.id)}">${esc(pn.label_zh)}</button>`).join("")}</div>`:`<div class="gap-line">本版未建立</div>`}</div>
+        <div class="dcard"><h4>政治栈接口 Political interface</h4>${pnodes.length?`<div class="tagrow">${pnodes.map(pn=>`<button data-polnode="${esc(pn.id)}">${esc(pn.label_zh)}</button>`).join("")}</div>`:`<div class="gap-line">本版未建立 / not built in this version</div>`}</div>
         ${magnitudeSummaryCard("node", id)}
-        <div class="dcard dcard-wide"><h4>公司 Companies · 角色/产品/已核数字</h4>${comps.length?comps.map(companyMiniCard).join(""):`<div class="gap-line">unknown / needs source</div>`}</div>
+        <div class="dcard dcard-wide"><h4>公司 Companies · 角色/产品/已核数字 role / products / verified figures</h4>${comps.length?comps.map(companyMiniCard).join(""):`<div class="gap-line">unknown / needs source</div>`}</div>
       </div>
-      ${ (n.gap_zh||n.evidence==="unknown") ? `<div class="gap-strong">缺口 Gap：${esc(n.gap_zh||"该节点关系/数值证据不足，标 unknown，待补来源。")}</div>` : ""}
-      ${alerts.length?`<div><h4 style="margin:12px 0 0;color:#c4ccd8">Candidate alerts（待复查）</h4>${alerts.map(alertCard).join("")}</div>`:""}
+      ${ (n.gap_zh||n.evidence==="unknown") ? `<div class="gap-strong">缺口 Gap：${esc(n.gap_zh||"该节点关系/数值证据不足，标 unknown，待补来源。/ Relationship or quantitative evidence for this node is insufficient; marked unknown, sources pending.")}</div>` : ""}
+      ${alerts.length?`<div><h4 style="margin:12px 0 0;color:#c4ccd8">Candidate alerts（待复查 pending review）</h4>${alerts.map(alertCard).join("")}</div>`:""}
       ${renderEastAsiaEnergyBlock("node", id)}
       ${renderMagnitudeLayerBlock("node", id)}`;
   } else if (type === "polnode"){
@@ -752,8 +789,8 @@ function renderDetail(type, id){
         <div class="dcard"><h4>公司/机构落点 Companies</h4>${comps.length?`<div class="tagrow">${comps.map(co=>`<button data-company="${esc(co.id)}">${esc(co.name)}</button>`).join("")}</div>`:`<div class="gap-line">无 / none</div>`}</div>
         <div class="dcard"><h4>通道 Chokepoints</h4>${chokes.length?`<div class="tagrow">${chokes.map(cp=>`<button data-choke="${esc(cp.id)}">${esc(cp.name_zh)}</button>`).join("")}</div>`:`<div class="gap-line">无 / none</div>`}</div>
       </div>
-      ${(n.gap_zh||n.evidence==="unknown") ? `<div class="gap-strong">缺口 Gap：${esc(n.gap_zh||"政治栈节点关系/强度证据不足，标 unknown，待补来源。")}</div>` : ""}
-      ${pmag.length ? `<section class="political-mag-inline"><h4>Political MAG · 数量级缺口</h4>${pmag.map(politicalMagCard).join("")}</section>` : ""}
+      ${(n.gap_zh||n.evidence==="unknown") ? `<div class="gap-strong">缺口 Gap：${esc(n.gap_zh||"政治栈节点关系/强度证据不足，标 unknown，待补来源。/ Relationship or intensity evidence for this political node is insufficient; marked unknown, sources pending.")}</div>` : ""}
+      ${pmag.length ? `<section class="political-mag-inline"><h4>Political MAG · 数量级缺口 magnitude gaps</h4>${pmag.map(politicalMagCard).join("")}</section>` : ""}
       <div class="tagrow" style="margin-top:10px"><a class="obs-link" href="political-mag.html">Political MAG 独立页 / standalone page →</a></div>`;
   } else if (type === "chokepoint"){
     const cp = chokeById.get(id);
@@ -770,7 +807,7 @@ function renderDetail(type, id){
         ${magnitudeSummaryCard("chokepoint", id)}
       </div>
       <div class="gap-strong">${esc(cp.note_zh)}</div>
-      ${alerts.length?`<div><h4 style="margin:12px 0 0;color:#c4ccd8">Candidate alerts（待复查）</h4>${alerts.map(alertCard).join("")}</div>`:""}
+      ${alerts.length?`<div><h4 style="margin:12px 0 0;color:#c4ccd8">Candidate alerts（待复查 pending review）</h4>${alerts.map(alertCard).join("")}</div>`:""}
       ${renderEastAsiaEnergyBlock("chokepoint", id)}
       ${renderMagnitudeLayerBlock("chokepoint", id)}`;
   } else if (type === "company"){
@@ -783,11 +820,11 @@ function renderDetail(type, id){
       <div class="detail-grid">
         <div class="dcard"><h4>所在国 Country</h4><div class="tagrow"><button data-code="${esc(co.country)}">${esc(countryName(co.country))}</button></div></div>
         <div class="dcard"><h4>角色 Role</h4><div>${esc(co.role_zh)} · ${esc(co.role_en)}</div></div>
-        <div class="dcard"><h4>核心产品 Products</h4>${co.products_zh?`<div>${esc(co.products_zh)}</div>`:`<div class="gap-line">待补</div>`}</div>
+        <div class="dcard"><h4>核心产品 Products</h4>${co.products_zh?`<div>${esc(co.products_zh)}</div>`:`<div class="gap-line">待补 / pending</div>`}</div>
         <div class="dcard"><h4>相关栈节点 Stack nodes</h4>${nodes.length?`<div class="tagrow">${nodes.map(n=>`<button data-node="${esc(n.id)}">${esc(n.label_zh)}</button>`).join("")}</div>`:`<div class="gap-line">unknown</div>`}</div>
-        <div class="dcard"><h4>政治栈节点 Political nodes</h4>${pnodes.length?`<div class="tagrow">${pnodes.map(n=>`<button data-polnode="${esc(n.id)}">${esc(n.label_zh)}</button>`).join("")}</div>`:`<div class="gap-line">本版未建立</div>`}</div>
+        <div class="dcard"><h4>政治栈节点 Political nodes</h4>${pnodes.length?`<div class="tagrow">${pnodes.map(n=>`<button data-polnode="${esc(n.id)}">${esc(n.label_zh)}</button>`).join("")}</div>`:`<div class="gap-line">本版未建立 / not built in this version</div>`}</div>
         ${magnitudeSummaryCard("company", id)}
-        <div class="dcard dcard-wide"><h4>关键数字 Key figures（带证据等级与出处）</h4>${(co.keyFigures||[]).length?(co.keyFigures||[]).map(f=>`<div class="kf-line kf-full"><span class="kf-k">${esc(f.k)}</span><strong>${esc(f.v)}</strong>${cgradeChip(f.ev)}<span class="kf-src">${esc(f.src||"")}</span></div>`).join(""):`<div class="gap-line">尚无已核数字——不编造，待典藏工单补来源</div>`}</div>
+        <div class="dcard dcard-wide"><h4>关键数字 Key figures（带证据等级与出处 with evidence grade and source）</h4>${(co.keyFigures||[]).length?(co.keyFigures||[]).map(f=>`<div class="kf-line kf-full"><span class="kf-k">${esc(f.k)}</span><strong>${esc(f.v)}</strong>${cgradeChip(f.ev)}<span class="kf-src">${esc(f.src||"")}</span></div>`).join(""):`<div class="gap-line">尚无已核数字——不编造，待典藏工单补来源 / No verified figures yet — nothing invented; sources pending via an archive ticket</div>`}</div>
       </div>
       ${renderMagnitudeLayerBlock("company", id)}`;
   } else if (type === "alert"){
@@ -795,7 +832,7 @@ function renderDetail(type, id){
     html = `<div class="detail-kind">Candidate alert · 待复查线索</div>
       <h3>${esc(a.title_zh)} · ${esc(a.title_en)} <span class="ev ev-needs-review">${esc(a.status)}</span></h3>
       <p>${esc(a.signal_zh)}</p><p style="color:var(--muted)">${esc(a.signal_en)}</p>
-      <div class="gap-strong">这是 candidate alert，只是线索，<strong>不是结论</strong>。请回原始来源核证后再判断。</div>`;
+      <div class="gap-strong">这是 candidate alert，只是线索，<strong>不是结论</strong>。请回原始来源核证后再判断。<span class="en-t">This is a candidate alert — a lead, <strong>not a conclusion</strong>. Verify against the original sources before judging.</span></div>`;
   }
   detailBody.innerHTML = html;
   // wire cross-reference buttons inside detail
@@ -1094,7 +1131,7 @@ function magnitudeSummaryCard(type, id) {
     <div class="mag-summary-line"><strong>MAG</strong><span>${candidates.length} candidates</span></div>
     <div class="mag-summary-line"><span>${verifiedFacts} verified facts</span><span>${sourceLinkedFacts} source-linked</span></div>
     <div class="tagrow">${scaleFamilies.map(s => `<span class="mag-scale">${esc(s)}</span>`).join("")}</div>
-    <div class="gap-line">完整数量级卡在下方 Magnitude Layer 分区。</div>
+    <div class="gap-line">完整数量级卡在下方 Magnitude Layer 分区。/ Full magnitude cards are in the Magnitude Layer section below.</div>
   </div>`;
 }
 
@@ -1141,7 +1178,7 @@ function magCandidateCard(candidate) {
   const hiddenFacts = facts.slice(6);
   const factsHtml = facts.length
     ? `<div class="mag-sub"><h5>事实行 / Facts (${facts.length})</h5>${visibleFacts.map(magFactRow).join("")}
-        ${hiddenFacts.length ? `<details class="mag-more"><summary>展开其余 ${hiddenFacts.length} 条事实行</summary>${hiddenFacts.map(magFactRow).join("")}</details>` : ""}</div>`
+        ${hiddenFacts.length ? `<details class="mag-more"><summary>展开其余 ${hiddenFacts.length} 条事实行 / Show ${hiddenFacts.length} more fact rows</summary>${hiddenFacts.map(magFactRow).join("")}</details>` : ""}</div>`
     : `<div class="mag-empty">本候选暂无可展示事实行。No fact rows yet.</div>`;
   const gapsHtml = candidate.gaps?.length
     ? `<div class="mag-sub"><h5>缺口 / Blockers (${candidate.gaps.length})</h5>${candidate.gaps.map(magGapRow).join("")}</div>`
@@ -1205,7 +1242,14 @@ function renderEventMarkers(){
     g.appendChild(svg("circle", { class: "ev-pulse", cx: ev.pos[0], cy: ev.pos[1], r: 5 }));
     g.appendChild(svg("circle", { class: "ev-dot", cx: ev.pos[0], cy: ev.pos[1], r: 5 }));
     const t = svg("text", { class: "ev-label", x: ev.pos[0] + 8, y: ev.pos[1] - 7 });
-    t.textContent = ev.title_zh || ev.id;
+    const tzh = svg("tspan", { x: ev.pos[0] + 8, dy: "0" });
+    tzh.textContent = ev.title_zh || ev.id;
+    t.appendChild(tzh);
+    if (ev.title_en){ // 双语地图标签：英文行用 em 单位随字号缩放（缩放补偿只改 font-size）
+      const ten = svg("tspan", { class: "ev-label-en", x: ev.pos[0] + 8, dy: "1.15em" });
+      ten.textContent = ev.title_en;
+      t.appendChild(ten);
+    }
     g.appendChild(t);
     g.addEventListener("click", e => { e.stopPropagation(); openEvent(ev.id); });
     gEvents.appendChild(g);
@@ -1257,13 +1301,13 @@ function renderEventCard(ev){
   if (ev.link2 && ev.link2.href) actions.push(`<a class="evc-go evc-go2" href="${esc(ev.link2.href)}">${esc(ev.link2.label_zh || "附报告")} / ${esc(ev.link2.label_en || "report")} →</a>`);
   eventCardEl.innerHTML = `
     <button type="button" class="evc-close" aria-label="关闭 / Close">×</button>
-    <div class="evc-kicker">事件 Event ${ev.evidence ? `<span class="cgrade" title="证据等级">${esc(ev.evidence)}</span>` : ""}</div>
+    <div class="evc-kicker">事件 Event ${ev.evidence ? `<span class="cgrade" title="证据等级 evidence grade">${esc(ev.evidence)}</span>` : ""}</div>
     <h3>${esc(ev.title_zh)}</h3>
     <div class="evc-en">${esc(ev.title_en || "")}</div>
     <p class="evc-sum">${esc(ev.summary_zh || "")}</p>
     <p class="evc-sum-en">${esc(ev.summary_en || "")}</p>
     ${actions.length ? `<div class="evc-actions">${actions.join("")}</div>` : ""}
-    ${related.length ? `<div class="evc-related"><span>相关事件 Related</span>${related.map(r => `<button type="button" data-ev-jump="${esc(r.id)}">${esc(r.title_zh)}</button>`).join("")}</div>` : ""}`;
+    ${related.length ? `<div class="evc-related"><span>相关事件 Related</span>${related.map(r => `<button type="button" data-ev-jump="${esc(r.id)}">${esc(r.title_zh)}${r.title_en ? ` · ${esc(r.title_en)}` : ""}</button>`).join("")}</div>` : ""}`;
   eventCardEl.classList.remove("hidden");
   eventCardEl.addEventListener("click", e => e.stopPropagation());
   eventCardEl.querySelector(".evc-close")?.addEventListener("click", e => { e.stopPropagation(); clearSelection(); });
@@ -1332,9 +1376,9 @@ function archiveBlock(id){
   const a = ARCH[id];
   if (!a) return `<div class="arch-missing">档案未建 / Node archive not yet built — 以下为手写骨架数据 / hand-authored skeleton below.</div>`;
   const cBadge = a.cLevelOverall ? `<span class="cgrade" title="数据综合 C 等级 / overall evidence class">${esc(a.cLevelOverall)}</span>` : "";
-  const sketchBadge = a.sketch ? `<span class="sketch-badge" title="草图档案：证据未经现实检验、可信度较低，待正式拆解升级">草图 SKETCH</span>` : "";
-  const sketchNote = a.sketch ? `<p class="arch-sketch-note">这是一份草图档案：结构与主要玩家已列出，但证据停在较低等级、尚未经现实检验，之后会逐个升级为正式档案。</p>` : "";
-  const meta = [a.established ? `建立 ${esc(a.established)}` : "", a.updated ? `更新 ${esc(a.updated)}` : "",
+  const sketchBadge = a.sketch ? `<span class="sketch-badge" title="草图档案：证据未经现实检验、可信度较低，待正式拆解升级 / sketch archive: evidence untested against reality, lower confidence, pending formal upgrade">草图 SKETCH</span>` : "";
+  const sketchNote = a.sketch ? `<p class="arch-sketch-note">这是一份草图档案：结构与主要玩家已列出，但证据停在较低等级、尚未经现实检验，之后会逐个升级为正式档案。<span class="en-t">This is a sketch archive: the structure and main players are listed, but the evidence remains at a lower grade and untested against reality; it will be upgraded to formal archives item by item.</span></p>` : "";
+  const meta = [a.established ? `建立 est. ${esc(a.established)}` : "", a.updated ? `更新 upd. ${esc(a.updated)}` : "",
     a.sourceFile ? esc(a.sourceFile) : ""].filter(Boolean).join(" · ");
   const opening = a.opening ? `<p class="arch-opening">${archText(a.opening)}</p>` : "";
   const holders = archHoldersTable(a.holders);

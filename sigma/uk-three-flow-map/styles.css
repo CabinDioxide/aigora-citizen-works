@@ -62,6 +62,9 @@ h1{font-size:26px;color:var(--tx);font-weight:800;letter-spacing:1px;line-height
   .gapdot{animation:none;opacity:.85}
 }
 
+/* 双语副行：中文后的英文对照 */
+.en-t{display:block;font-size:.88em;font-style:italic;color:var(--tx3);margin-top:1px}
+
 /* 图例 */
 .legend{display:flex;gap:16px;margin-top:12px;font-size:11px;color:var(--tx3);flex-wrap:wrap;align-items:center}
 .lg{display:inline-flex;align-items:center;gap:6px}
