@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>公司引入 AI 之后，如何保全员工的判断力</title>
+<style>
+:root{
+  --surface-1:#fcfcfb; --surface-2:#f4f4f1;
+  --text-primary:#0b0b0b; --text-secondary:#52514e; --text-muted:#8a887f;
+  --border:#e3e2dc;
+  --series-1:#2a78d6; --seq-300:#6da7ec; --seq-550:#1c5cab;
+  --neg:#e34948;
+  --accent-bg:#eef4fc;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --surface-1:#1a1a19; --surface-2:#232322;
+    --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#8a887f;
+    --border:#3a3936;
+    --series-1:#3987e5; --seq-300:#5598e7; --seq-550:#86b6ef;
+    --neg:#e66767;
+    --accent-bg:#20304a;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-1);color:var(--text-primary);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  line-height:1.85;font-size:17px}
+.wrap{max-width:760px;margin:0 auto;padding:48px 20px 80px}
+header h1{font-size:1.65em;line-height:1.4;margin:0 0 8px}
+header .sub{color:var(--text-secondary);font-size:.95em;margin:0 0 4px}
+header .byline{color:var(--text-muted);font-size:.85em}
+h2{font-size:1.25em;margin:2.2em 0 .6em;line-height:1.5}
+h3{font-size:1.05em;margin:1.8em 0 .4em}
+p{margin:.9em 0}
+strong{font-weight:600}
+hr{border:none;border-top:1px solid var(--border);margin:2.5em 0}
+figure{margin:2em 0;padding:20px 16px;background:var(--surface-2);border-radius:10px;overflow-x:auto}
+figcaption{font-size:.85em;color:var(--text-secondary);margin-top:10px;line-height:1.6}
+.tiles{display:flex;gap:12px;flex-wrap:wrap;margin:1.6em 0}
+.tile{flex:1 1 200px;background:var(--surface-2);border-radius:10px;padding:18px 16px}
+.tile .num{font-size:1.9em;font-weight:650;color:var(--series-1);line-height:1.2}
+.tile .cap{font-size:.85em;color:var(--text-secondary);margin-top:6px;line-height:1.55}
+table{border-collapse:collapse;width:100%;font-size:.9em;line-height:1.65}
+.tablebox{overflow-x:auto;margin:1.5em 0}
+th,td{border:1px solid var(--border);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:var(--surface-2);font-weight:600}
+td:first-child{white-space:nowrap;font-weight:600}
+.note{background:var(--accent-bg);border-radius:10px;padding:14px 18px;font-size:.9em;color:var(--text-secondary)}
+.mech{margin:1.6em 0;padding:16px 18px;border:1px solid var(--border);border-radius:10px}
+.mech .mtitle{font-weight:650;margin-bottom:.4em}
+.mech p{margin:.55em 0;font-size:.95em}
+.mech .lab{font-weight:600;color:var(--series-1)}
+.refs{font-size:.88em;color:var(--text-secondary);line-height:1.7}
+.refs li{margin:.7em 0}
+ul{padding-left:1.4em}
+li{margin:.5em 0}
+a{color:var(--series-1);word-break:break-all}
+.svgchart text{font-family:inherit}
+.bar:hover{opacity:.85}
+@media (max-width:520px){body{font-size:16px}.tiles{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>公司引入 AI 之后，如何保全员工的判断力</h1>
+  <p class="sub">为什么要做、公司内部怎么做、外部怎么推动</p>
+  <p class="byline">法玛（Pharma）· AIgora · 2026 年 7 月</p>
+</header>
+
+<hr>
+
+<p>2025 年，《柳叶刀·胃肠病学与肝病学》发表了 Budzyń 等人在波兰四个内镜中心做的一项观察性研究（Budzyń 等，2025）。这些中心从 2021 年底开始在结肠镜检查中使用 AI 辅助识别息肉。研究者比较了 AI 引入前后、医生在<strong>不用 AI</strong> 的情况下独立操作的成绩：引入前三个月，医生们的腺瘤检出率（做一百例结肠镜，有多少例能发现腺瘤——这是衡量结肠镜质量的标准指标，检出率每降一点，漏掉癌前病变的风险就升一点）是 28%；使用 AI 三个月之后，这个数字降到了 22%。</p>
+
+<figure>
+<svg class="svgchart" viewBox="0 0 560 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI 引入前后，医生无 AI 辅助时的腺瘤检出率对比条形图：引入前 28%，引入后 22%">
+  <g stroke="var(--border)" stroke-width="1">
+    <line x1="70" y1="240" x2="530" y2="240"/>
+    <line x1="70" y1="170" x2="530" y2="170" stroke-dasharray="3 4"/>
+    <line x1="70" y1="100" x2="530" y2="100" stroke-dasharray="3 4"/>
+    <line x1="70" y1="30"  x2="530" y2="30"  stroke-dasharray="3 4"/>
+  </g>
+  <g fill="var(--text-muted)" font-size="12">
+    <text x="60" y="244" text-anchor="end">0%</text>
+    <text x="60" y="174" text-anchor="end">10%</text>
+    <text x="60" y="104" text-anchor="end">20%</text>
+    <text x="60" y="34"  text-anchor="end">30%</text>
+  </g>
+  <g>
+    <path class="bar" d="M150 240 v-192 a4 4 0 0 1 4 -4 h56 a4 4 0 0 1 4 4 v192 z" fill="var(--seq-300)">
+      <title>AI 引入前三个月：无 AI 辅助腺瘤检出率 28%</title>
+    </path>
+    <path class="bar" d="M346 240 v-150 a4 4 0 0 1 4 -4 h56 a4 4 0 0 1 4 4 v150 z" fill="var(--seq-550)">
+      <title>使用 AI 三个月后：无 AI 辅助腺瘤检出率 22%</title>
+    </path>
+  </g>
+  <g fill="var(--text-primary)" font-size="17" font-weight="600" text-anchor="middle">
+    <text x="182" y="36">28%</text>
+    <text x="378" y="78">22%</text>
+  </g>
+  <g fill="var(--text-secondary)" font-size="13" text-anchor="middle">
+    <text x="182" y="264">AI 引入前三个月</text>
+    <text x="378" y="264">使用 AI 三个月后</text>
+    <text x="280" y="284" fill="var(--text-muted)" font-size="12">医生不用 AI 辅助、独立操作时的腺瘤检出率</text>
+  </g>
+</svg>
+<figcaption>图 1 · 波兰四个内镜中心，AI 引入前后医生独立操作（无 AI 辅助）的腺瘤检出率。数据：Budzyń 等（2025），《柳叶刀·胃肠病学与肝病学》，观察性研究；数字经两处公开来源交叉核对，详见参考文献第 3 条。</figcaption>
+</figure>
+
+<p>也就是说，AI 在场时医生的成绩更好；使用 AI 一段时间以后，医生在没有 AI 辅助时的独立操作成绩下降了。研究者称，这是临床 AI"去技能化"效应的第一份文献记录。这是观察性研究，不是随机对照试验，样本只有四个中心，结论还需要更强的研究来确认或推翻。但它值得认真对待，因为它第一次在真实医院中，用病人的真实检查指标，记录到了长期以来人们担心的能力退化。</p>
+
+<p>本文讨论两个问题：公司在做 AI 工作流改革时，怎样设计机制，让员工的判断力得到保存和锻炼，而不是在长期依赖 AI 的过程中逐渐下降；在公司自身动力不足的情况下，外部可以用什么办法推动这类机制建立起来。</p>
+
+<h2>一、这不是新问题：自动化研究四十年前已经提出过</h2>
+
+<p>1983 年，认知心理学家 Lisanne Bainbridge 发表了《自动化的反讽》（Ironies of Automation），这篇论文后来被引用了数千次（Bainbridge，1983）。她的核心观察是：把大部分工作自动化之后，留给人的是两件互相矛盾的事。平时，操作者只需要监控系统，工作枯燥，也得不到练习；出事时，系统又要求操作者处理机器解决不了的罕见状况，而这类状况恰恰最需要熟练技能。日常不练习，技能就会退化；技能退化之后，最需要人处理问题的时刻，人反而没有足够能力处理。所以她的结论是：自动化程度越高的系统，对操作者的训练要求不是更低，而是更高。</p>
+
+<p>民航业是这个论断证据最完整的领域之一。现代客机高度自动化，飞行员的主要角色逐渐从直接操纵转为监督系统。此后几十年，多项研究记录了航线飞行员手动飞行技能随自动化使用而衰退，机组在自动系统失效时越来越不愿意、也缺少信心改为手动驾驶（综述见参考文献第 2 条）。美国联邦航空局（FAA）后来专门发布安全通告，鼓励航空公司让飞行员在适当条件下增加手动飞行练习。监管机构用正式文件承认了这个问题。</p>
+
+<p>引用航空史，并不是把 AI 和自动驾驶仪等同起来，而是为了说明两点。第一，"辅助工具用久了，人的独立能力会退化"不是对新技术的过度担心，而是有四十年研究记录、并被监管机构正式承认过的现象；Budzyń 等（2025）记录到的，是同一类过程在医疗领域再次出现。第二，两者有一个重要区别：航空自动化主要替代的是操纵动作，而这一轮 AI 正在替代的是<strong>判断</strong>，例如写方案、做诊断、评估风险、判断真假。动作能力的退化比较容易测量，例如手动飞行是否平稳；判断力的退化要隐蔽得多，甚至可能隐蔽到当事人自己也察觉不到。</p>
+
+<h2>二、经济学已有框架：AI 是替代人，还是增强人</h2>
+
+<p>劳动经济学为这个问题提供了现成的分析框架。它能说明，问题不是"要不要使用 AI"，而是"把 AI 放进工作流时，是让它替代人的判断，还是帮助人形成更好的判断"。</p>
+
+<p>经济学家 Daron Acemoglu 和 Pascual Restrepo 提出过一个被广泛使用的分析方法：把每份工作拆成一项一项任务，技术对就业的影响取决于两股相反的力量（Acemoglu &amp; Restrepo，2019）。一股是<strong>替代效应</strong>（displacement effect）：机器接管原来由人做的任务，对这些任务的劳动需求随之下降。另一股是<strong>新任务效应</strong>（reinstatement effect）：技术创造出以前不存在、而人有相对优势的新任务，劳动需求随之回升。历史上第二股力量一直在起作用，但两位作者特别强调：新任务的出现不是自动的，它取决于创新往哪个方向走、部署时的激励是什么。</p>
+
+<p>Erik Brynjolfsson 在《图灵陷阱》一文里把这个"方向"问题说得更直接（Brynjolfsson，2022）。同样的 AI 技术可以有两种用法：<strong>自动化</strong>（automation），让 AI 模仿人、代替人做原来的任务；<strong>增强</strong>（augmentation），让 AI 做人做不了或做不好的部分，从而放大人的能力。两个方向的经济后果不同。采用替代路线时，员工的议价能力下降，价值向掌握技术的一方集中；采用增强路线时，人仍然保有不可替代的位置，而且新能力可能带来新产品和新市场，总价值通常更大。他进一步指出，当前技术界、企业和政策的激励都系统性地偏向替代。做一个"能代替客服的 AI"，比做一个"让客服更强的 AI"更容易立项，也更容易获得估值。这就是他所说的"图灵陷阱"：问题不是技术必然替代人，而是激励结构在推动技术被用于替代人。</p>
+
+<p>2025 年，就业数据为这个框架提供了直接证据。Brynjolfsson、Chandar 和 Chen（2025）使用覆盖数百万雇员的 ADP 工资单月度数据，研究了生成式 AI 普及后的就业变化，其中两个发现与这里讨论的问题直接相关。第一，在 AI 暴露程度最高的职业里，22 到 25 岁早期职业者的就业量相对下降了 13%，而同类职业 35 到 49 岁的就业量反而增长超过 9%。这说明最先减少的是新人岗位，资深者在短期内更有价值。</p>
+
+<figure>
+<svg class="svgchart" viewBox="0 0 560 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI 暴露最高职业中不同年龄段就业变化：22-25 岁下降 13%，35-49 岁增长超过 9%">
+  <g stroke="var(--border)" stroke-width="1">
+    <line x1="70" y1="125" x2="530" y2="125"/>
+    <line x1="70" y1="47"  x2="530" y2="47"  stroke-dasharray="3 4"/>
+    <line x1="70" y1="203" x2="530" y2="203" stroke-dasharray="3 4"/>
+  </g>
+  <g fill="var(--text-muted)" font-size="12">
+    <text x="60" y="51"  text-anchor="end">+13%</text>
+    <text x="60" y="129" text-anchor="end">0</text>
+    <text x="60" y="207" text-anchor="end">−13%</text>
+  </g>
+  <g>
+    <path class="bar" d="M150 125 v74 a4 4 0 0 0 4 4 h56 a4 4 0 0 0 4 -4 v-74 z" fill="var(--neg)">
+      <title>22–25 岁早期职业者：就业量相对下降 13%</title>
+    </path>
+    <path class="bar" d="M346 125 v-50 a4 4 0 0 1 4 -4 h56 a4 4 0 0 1 4 4 v50 z" fill="var(--series-1)">
+      <title>35–49 岁：就业量增长超过 9%</title>
+    </path>
+  </g>
+  <g fill="var(--text-primary)" font-size="16" font-weight="600" text-anchor="middle">
+    <text x="182" y="222">−13%</text>
+    <text x="378" y="62">+9%</text>
+  </g>
+  <g fill="var(--text-secondary)" font-size="13" text-anchor="middle">
+    <text x="182" y="243">22–25 岁（早期职业者）</text>
+    <text x="378" y="243">35–49 岁</text>
+    <text x="300" y="24" fill="var(--text-muted)" font-size="12">AI 暴露程度最高的职业里，两个年龄段的就业相对变化</text>
+  </g>
+</svg>
+<figcaption>图 2 · 生成式 AI 普及后，AI 暴露最高职业中两个年龄段的就业相对变化。数据：Brynjolfsson、Chandar 和 Chen（2025），ADP 工资单数据，数百万雇员；工作论文，尚未经同行评审，详见参考文献第 6 条。</figcaption>
+</figure>
+
+<p>第二，<strong>就业下降集中在 AI 被用来替代人的职业里；在 AI 被用来增强人的职业里，早期职业者的就业没有出现同样的下降。</strong>同一代技术，因为用法不同，带来了不同的就业后果。</p>
+
+<p>经济学已经说明，"替代还是增强"会影响宏观就业结构。在一家公司内部，同一个 AI 工具进入工作流之后，也存在"替代人的判断"和"增强人的判断"两种用法。这个微观选择决定员工判断力能否保留。Dell'Acqua 等（2025）与波士顿咨询公司合作的现场实验测出了两种用法的差别：758 名咨询顾问随机分组完成任务，在 AI 能力范围内的任务上，使用 AI 的组完成量多 12.2%、速度快 25.1%、质量显著更高；但在超出 AI 能力的任务上，使用 AI 的组正确率反而比不用 AI 的组低 19 个百分点。研究者发现，表现变差的人主要是那些直接接受 AI 输出、没有继续追问的人。同一批人、同一个工具，差别在于人有没有保留自己的判断过程。"保留自己的判断过程"不能只依赖个人自觉，而应当由工作流程来支持；怎样在流程中做到这一点，正是保全机制要回答的问题。</p>
+
+<h2>三、判断力怎么流失：三个层面，各有证据</h2>
+
+<h3>第一层：个人——使用越顺利，越可能减少练习，而且自己感觉不到</h3>
+
+<p>这一层的证据最强。MIT Media Lab 的 Rani、Danry、Liang、Lippman 和 Maes（2026）在 CHI（人机交互领域的主要学术会议）发表了一项为期一个月的实验：67 名参与者每周判断新闻真假，每次先独立判断，再和 AI 讨论，然后立刻再独立判断新题。结果有三个关键数字。</p>
+
+<div class="tiles">
+  <div class="tile"><div class="num">+21 <span style="font-size:.55em">个百分点</span></div><div class="cap">AI 在场时判断准确度的平均提升——AI 确实能提高当场表现</div></div>
+  <div class="tile"><div class="num">−15.3%</div><div class="cap">第四周与第一周相比，参与者无 AI 辅助时对新题的判断成绩——独立能力不但没有增长，反而下降了</div></div>
+  <div class="tile"><div class="num">27%</div><div class="cap">自我感觉在进步、实际测量在退步的参与者比例</div></div>
+</div>
+<p class="note">数据：Rani 等（2026），CHI '26 同行评审论文，详见参考文献第 1 条。被 AI 省掉的查证和推敲，正是本来能让人形成能力的步骤；而能力在下降的人，自己感觉不到。</p>
+
+<p>这种"感觉不到"有具体机制。微软研究院的 Lee 等（2025）在 CHI 发表了一项覆盖 319 名知识工作者、936 个真实工作案例的调查：对 AI 越有信心的人，投入的批判性思考越少；对自己能力有信心的人，思考得更多，但也感觉更费力。也就是说，AI 用得越顺利、人越信任它，就越容易略过查证、比较、推敲这些费力步骤；略过这些步骤时，人感觉任务完成得更轻松，能力下降却不会在当时发出信号。Dell'Acqua 等（2025）实验里在 AI 能力边界外表现变差的顾问，正是这个机制的表现。他们的问题不是原本能力差，而是在长期顺利的使用中放弃了逐条核对的习惯。Gerlich（2025）对 666 人的调查也发现，AI 工具使用越频繁的人，批判性思维测试成绩越低，年轻人尤其明显。这类调查只能证明两件事同时出现，不能证明因果方向，但它与上述实验指向一致。</p>
+
+<p>对公司的直接推论：不能只靠员工填问卷、做自我评分来监测能力变化，因为感觉在进步的人可能正在退步。要判断能力是否保留，只能测实际表现。</p>
+
+<h3>第二层：培养通道——新人失去练习机会</h3>
+
+<p>判断力里最有价值的部分，是那种难以完整说出来、但能在行动中表现出来的能力：资深工程师看一眼架构图就觉得"这里不对"，资深护士看一眼病人就知道该叫医生。学术上这叫默会知识（tacit knowledge）。它很难写进手册，只能靠边做边学、在有经验的人旁边观察和练习来获得。而 AI 最先承担的恰恰是初级任务，例如校对、初稿、基础分析、简单病例。这些初级任务正是新人练习判断力的入口。</p>
+
+<p>前面引用的就业数据直接支持这一点：Brynjolfsson、Chandar 和 Chen（2025）发现 AI 暴露最高的职业里新人就业相对下降 13%、资深者反而增长，说明入门岗位正在减少。公司层面还有一个具体机制：笔者团队 2026 年对一家科技公司用工方式的访谈研究（GAMI 2026 年 5 月刊，参考文献第 18 条）记录到，该公司让少数员工配合 AI 承担原本需要更多人完成的工作，并把工作量排满以节省人力；留下的员工每天忙于维持产出，没有余力带新人。这套安排只筛选已经具备能力的人，不培养新人，于是形成一个自我强化的局面：新人没有 AI 时代的工作能力就进不来，进不来就永远没有机会学会。行业层面，笔者团队对软件、企业培训、高等教育三个行业的案例分析（未公开发表，证据强度低于以上两类）观察到相同的方向：初级岗位承受最大替代压力，而系统架构、临床判断这类需要多年经验的环节暂时没有清晰的替代路径。</p>
+
+<p>这一层的时间结构需要说清楚：资深者"暂时更值钱"不是安慰，反而是危险信号。今天的资深者是在没有 AI 的年代、通过大量初级任务练出来的；如果初级任务从此由 AI 承担，二十年后本该成为资深者的那批人，中间的成长路径就会中断。</p>
+
+<h3>第三层：团队——共同标准会随着协作减少而消失</h3>
+
+<p>一个团队里"什么算做得合适"的共同标准——代码怎么写才算得体、哪种客户投诉要升级、什么玩笑开不得——往往不存在任何一个人的脑子里，而是存在于成员彼此的关系和日常互动里。协作减少之后，这些靠日常互动维持的共同标准和判断习惯会消失，而且没有任何个人会明确感觉自己丢了什么，因为这种能力本来就不完整地属于任何一个人。</p>
+
+<p>裁员式的 AI 改革会直接削弱这个协作网络。还有一种更隐蔽的情况：公司没有裁员，但原来需要同事之间讨论、争执、互相把关的协作，变成了每个人各自面对一个 AI 助手。组织架构图上团队还在，实际互动减少了。需要如实说明：这一层目前只有概念框架和零散案例，还没有扎实的组织研究支持，本文将它作为有待验证的判断提出。它有一个可以立刻观察的健康指标：团队里的反对意见、被否决的方案、少数派的看法，有没有被记录下来并传给后来人。一个主要依赖"AI 给出建议、成员直接执行"的团队，这类记录会先消失。</p>
+
+<h2>四、为什么不能指望公司自觉</h2>
+
+<p>有人会说：员工能力退化，公司自己也受损，市场会逼公司想办法。这个推理漏掉了一个结构性问题：员工的判断力是员工自己可以带走的资产。公司花钱培养一个人的判断力，这个人跳槽，培养投入随之离开；培养的收益分散给其他公司和整个社会，成本却主要记在这家公司账上。反过来，靠 AI 减少培养环节省下的钱，立刻进入这家公司的报表。技能折损一旦发生，损失主要由社会承担，而不是由单个公司承担（这一论断的展开见 GAMI 2026 年 5 月刊，参考文献第 18 条）。所以判断力培育天然供给不足。这不一定是哪家公司道德有问题，而是成本和收益的归属错了位。它和环境污染有相似之处：单个公司获得短期收益，长期成本由更多人分担。这个类比只说明成本归属的错位，不是说两者机制相同。</p>
+
+<p>Brynjolfsson（2022）补上了这个判断的另一半：不只是公司缺少培养动力，技术供给侧的激励也偏向替代。给企业客户演示"这个 AI 能减少多少岗位"，通常比演示"这个 AI 能让你的员工三年后更强"更容易促成采购。需求端不想支付培养成本，供给端就更愿意提供替代型产品，两边的激励会互相加强。</p>
+
+<p>供给侧的这种倾斜可以量化。Xu 和 Shen（2026）对 1223 篇人机交互领域的论文做了系统分类：无摩擦设计，即系统替人免去思考步骤、不要求人参与判断，占 67.3%；以"人保持控制权"为主题的研究占比从 19.1% 降到 13.1%，以"机器自主完成"为主题的研究从 9.8% 升到 19.6%。研究和产品设计的重心，正在从"人怎么保持控制"移向"机器怎么自主完成"。这篇论文提出的对策叫"有支架的认知摩擦"（scaffolded cognitive friction）：在关键判断环节故意保留需要人参与的步骤，并按风险分级。高风险场景强制保留，低风险场景豁免。</p>
+
+<p>因此，解决办法需要两个层面：公司内部的制度设计，让愿意做的公司知道具体怎么做；外部的推动办法，改变公司实际面对的成本和收益，而不是只做道德呼吁。</p>
+
+<h2>五、公司内部怎么做：七条机制</h2>
+
+<p>一家公司内部可以采取的机制有七条。前四条嵌在每一件工作的流程里，改变的是动作的先后次序和各角色的权限；为了把每条机制的位置说清楚，这四条按一件工作在流程中经过的顺序介绍，通篇使用同一个例子——合同审查岗位。后三条不属于任何单件工作，是按周期运行的制度。每条机制先说明做法，再说明依据，最后说明成本或边界。</p>
+
+<h3>机制一：员工先记录自己的判断，然后才能看到 AI 的结论——按风险分层执行</h3>
+
+<p>在未经改造的流程中，审查员打开合同，AI 立即给出风险清单，审查员核对清单后签字放行。前面引用的实验和观察研究已经说明这种用法的长期后果：当场效率高，但员工独立识别风险的能力会逐渐下降，且本人察觉不到。</p>
+
+<p>改造后的做法是调整次序。审查员打开合同时，AI 的清单暂不显示；审查员先在表单中填写三项内容：自己认为的主要风险点（逐条列出）、每条的把握程度（高、中或低）、每条的依据是合同的哪一款。提交之后，系统才显示 AI 的风险清单，并自动标出两份清单的差异。对每一处差异，审查员需要写一句处理意见：接受 AI 的意见并说明自己为什么遗漏，或坚持自己的意见并说明 AI 为什么不对，或标记存疑、提交上级。</p>
+
+<p>依据：Rani 等（2026）与 Dell'Acqua 等（2025）的实验共同指向同一个结论——人先形成自己的判断、再与 AI 对照，练习才会发生；先看 AI 答案再表态，人会较快形成依赖，而在超出 AI 能力的任务上表现变差的，正是那些直接采纳 AI 输出的人。</p>
+
+<p>成本与执行范围：每份合同多用十到二十分钟。如果对每一件工作都执行，这项成本在高频岗位会累积到难以接受的程度，因此执行范围需要设计。民航业的经验为此提供了正反两面的参考。正面：飞行员平时正常使用自动驾驶，按周期进入模拟机集中训练，说明"日常不加负担、定期专门练习"是一种可以长期运行的制度。反面：这套复训制度运行几十年之后，手动飞行技能仍在退化，FAA 最终建议飞行员在日常航班中、条件合适时增加手动飞行（参考文献第 2 条）——只靠定期集训不足以维持技能，日常工作中仍需保留一定比例的练习。</p>
+
+<p>综合两面证据，本条机制建议按三层执行，而不是对全部工作执行。第一层，高风险工作全量执行：大额合同、临床决定这类错误代价高的工作，每件都先判断、后看 AI。这与 Xu 和 Shen（2026）"按风险分级保留摩擦"的框架一致。第二层，日常低风险工作随机抽样执行：例如每十件抽取一件，被抽中的工作要求先判断。随机抽取使执行时点无法预期，避免了应试化（METR 2026 年报告指出的问题）；同时，被抽中工作上的独立判断表现，可以直接作为机制五能力指标的测量样本——练习与测量合并为同一个动作，成本可控。第三层，定期专门训练：用真实的历史案例作练习材料，按固定周期集中进行，补足深度；这部分可以与机制五的测试、机制六的培养时间合并安排。按此设计，总成本从"每件工作都慢"降为"高风险部分慢、日常约十分之一慢、外加定期训练时间"。</p>
+
+<p>需要如实说明的是：抽样比例设为多少、训练频次多高才足够、这套分层执行与全量执行相比能否同样保住能力，目前没有直接证据。这些参数只能通过试点比较来确定。</p>
+
+<h3>机制二：把 AI 配置为先提问再作答，而不是直接给出答案</h3>
+
+<p>同一份合同进入咨询环节时，审查员向 AI 提问，例如"这个付款条款有没有问题"。在默认配置下，AI 直接给出结论和修改建议。改造后的配置要求 AI 先反问审查员的初步判断及其理由，审查员回答之后，AI 再给出自己的分析，并明确指出与审查员判断不一致之处。对确有紧急需要的情况，可以保留一个直接获取答案的选项，但该选项的使用频率应当被统计，供管理者了解团队的实际使用方式。</p>
+
+<p>依据：Rani 等（2026）比较了 AI 的不同交互方式，发现引导式提问使当下的工作变慢，但使用者事后的独立能力保持得最好；直接给出答案的配置则相反。Lee 等（2025）的调查从反面印证了这一点：批判性思考的减少集中发生在"AI 给出结果、人直接接受"的使用方式中。</p>
+
+<p>这条机制的实施位置很具体：企业 AI 助手的行为方式由系统提示词决定——即预先写给 AI、规定其回答方式的一段指令，通常只有几百字。把这段指令从"给出最佳答案"改为"先提问，再分析，逐步追问理由"，是一次配置修改，成本低于任何管理制度的调整。换句话说，系统提示词就是一家公司实际执行的判断力政策。</p>
+
+<p>需要预先回答一个可能的疑问：能否不修改 AI 的配置，而依靠使用者自行把关？教育领域的一项研究提供了否定的证据。Borchers 等（2026）分析了巴西 Tutoria 教学平台的日志，覆盖 117 位教师、1349 条 AI 生成的反馈草稿，发现教师在 77.8% 的情况下将 AI 起草的反馈原样发给学生，超过一半的教师从未修改过任何一条。在时间紧张、流程顺畅的条件下，默认输出通常直接成为最终输出。因此需要修改的是默认值本身，而不能假设使用者会去纠正它。</p>
+
+<h3>机制三：采纳与否由使用者决定，写入制度，并且不考核 AI 使用量</h3>
+
+<p>当 AI 的结论与审查员的判断不一致时，最终决定权属于审查员，并且这一点需要写入制度。具体包括三项规定：员工可以不采纳 AI 的意见，无需额外说明理由；采纳与否不进入绩效考核；意见不一致的案例自动进入部门的定期讨论会，目的不是裁定对错，而是让分歧成为部门共同的学习材料。与此配套的还有一项反向规定：不把"AI 使用率"列为任何考核指标，同时提供充足的使用额度。</p>
+
+<p>依据：Lee 等（2025）与 Dell'Acqua 等（2025）都发现，能力下降集中发生在使用者放弃质疑 AI 的时候，因此制度需要保护的正是质疑的空间。不考核使用量的理由是：一旦使用量成为绩效数字，员工会为完成指标而形式化地调用 AI，这种使用没有任何培养价值；使用额度紧张会产生类似的扭曲。这个方向已经有法律依据：欧盟《人工智能法》第 14 条要求高风险 AI 系统的设计必须保证负责监督的人能够理解系统局限、警惕自动化偏倚（automation bias，即人在不知不觉中过度采信自动系统输出的倾向，该词直接写入了条文），并且有权不使用系统或推翻其输出。</p>
+
+<h3>机制四：资深者复核时，记录修改的位置和理由</h3>
+
+<p>合同最后由资深法务复核。改造后的复核界面增加两个必填字段："改了哪里"与"为什么改"。这些记录按月汇入内部案例库，新任审查员定期查阅。查阅的目的不是背诵标准答案，而是了解资深者在哪些位置停下来、提出了什么问题。</p>
+
+<p>这个做法的边界需要说明：判断力中最有价值的部分很难完整写成文字，写成手册也容易失真。因此这条机制的目标不是把判断力文档化，而是把判断发生过的位置标记出来，让学习者知道应当注意哪里。它有一个副产品：案例库条目的数量和质量，本身可以作为机制五的能力指标之外、观察组织判断力状况的另一类材料。</p>
+
+<p>这条机制已有公司级的实践。Shopify 的工程团队 2026 年公开了内部工程 AI"River"的设计（Shopify Engineering，2026）：该系统只在公开的 Slack 频道中工作，不支持私聊；每次使用的完整过程——问题如何拆解、证据如何获得、人在何处纠正了它——都保留为全员可查看、可继续使用的记录。按 Shopify 公布的数据，三十天内约七千名员工使用过该系统，上线约两个月后，每八个合并的代码变更中有一个由它参与完成（企业自报数字，未经第三方审计）。Shopify 对这一设计的解释与本条机制一致：私下使用的 AI，有效的用法只被使用者本人掌握；公开使用，形成过程才能成为组织的积累。</p>
+
+<p>以上四条机制嵌在单件工作的流程里。但仅改造单件工作的流程，还有三个问题没有解决：这套流程是否确实保住了员工的能力，需要有人验证；新人的培养需要时间来源；AI 节省的时间需要明确归属。这三件事无法安排在任何一件工作内部，只能作为按周期运行的制度存在，即以下三条机制。</p>
+
+<h3>机制五：在产出指标之外，增加一套能力指标</h3>
+
+<p>只考核产出，公司的报表可能在员工能力持续下降的同时持续变好，因为产出由 AI 支撑，并不等于员工的能力。能力指标的做法是：定期让员工在不使用 AI 的条件下处理未见过的新问题，观察成绩的变化趋势。以客服团队为例：每月安排半天，用上个月真实发生、但尚未进入知识库的客户问题做测试，客服在无 AI 辅助的条件下给出处理方案，管理者对照实际的正确处理方式评分，重点考察两项——方案是否正确，应当升级的问题是否升级。分数不进入个人绩效，以避免员工为应付测试而改变行为；分数只用于绘制团队能力曲线。机制一第二层随机抽样中记录的独立判断表现，可以并入同一条曲线，作为日常的连续测量。曲线连续两个季度下行，说明现行工作流可能正在损耗员工能力，应当触发对工作流的复查。</p>
+
+<p>设计这类测试有两条要求。第一，必须测量实际表现，不能使用问卷：Rani 等（2026）中 27% 的参与者自我感觉在进步、实际测量在退步，说明自我报告无法反映真实情况。第二，必须使用新题：AI 评估机构 METR 在 2026 年的报告中指出，被测者一旦能够识别测试内容，测出的就是应试表现而不是真实能力。Budzyń 等（2025）的研究从反面说明了这套指标的必要性：那四家内镜中心如果没有人测量"不使用 AI 时的检出率"，六个百分点的退步不会被任何人发现。</p>
+
+<h3>机制六：带新人的时间设立明文预算</h3>
+
+<p>AI 节省的工时不会自动转化为培养时间，竞争压力会使它重新变成产量。因此需要像安全预算一样，以正式文件规定：AI 节省工时的一个固定比例（例如百分之十）专门用于培养新人，并规定培养的形式。以一个十人的开发团队为例：AI 工具使每人每周平均节省四小时，按百分之十计算，团队每周有四小时列入预算的培养时间——例如每周五下午，由一位资深工程师带两名新人，逐行审阅新人当周编写的真实代码。安排两名而不是一名新人，原因是：旁观教师修改他人代码时，学习者更容易把批评理解为对问题的分析，而不是对自己的否定。新人的日常工作另有一条规则：先自己完成一版，再与 AI 的版本对照，两版的差异先由自己解释，然后再讨论。</p>
+
+<p>依据：开源社区 Google Summer of Code 的师徒制——新人经过被接纳、获得反馈、独立工作、进阶四个阶段——已经在全球范围运行了二十年，说明这类安排可以规模化。设立明文预算还有一个更根本的理由：招收新人的目的不是让他做 AI 已经能做的事，而是让他积累 AI 暂时不能做的判断力；这需要时间、指导和试错空间，也就是需要公司容忍一部分不直接产出的工时。</p>
+
+<h3>机制七：AI 节省的时间归谁使用，由正式协商决定</h3>
+
+<p>AI 节省了多少工时，应当有一份公开的账目；节省的时间如何使用，由管理层和员工代表按固定周期正式协商，结果形成文件。以医院护理部为例：美国医院部署临床文档 AI 的行业材料称，这类工具每班可为护士节省半小时到一小时（厂商与行业自报数字；对人员配比的实际影响目前没有任何独立研究，这个数据空白在“办法五”中另有讨论）。在没有协商机制的情况下，这些时间的去向由排班表决定，通常转化为更密的排班和更低的人员配比。在有协商机制的情况下，护理部每季度召开一次分配会议，正式列出本季度节省的小时数，以及其中多少投入病人照护、多少用于培养新护士、多少转化为人员缩减，由各方讨论决定。</p>
+
+<p>理由：同一项文档 AI，节省的时间投入照护和培养即为收益，用于降低人员配比即为损耗；技术本身不决定结果，分配方式决定结果。这项协商同时是机制三和机制六的程序保障——拒绝权和培养预算都需要有人持续在场监督，否则会在产量压力下被逐步收回。</p>
+
+<p>七条机制在工作流中的位置汇总如下；表格供阅读后回顾使用。</p>
+
+<figure>
+<svg class="svgchart" viewBox="0 0 980 480" style="min-width:880px;display:block" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="七条机制在工作流中的嵌入位置：单件任务流程依次为工作分派、员工先记录判断（机制1）、AI 介入对照追问（机制3）、员工决定采纳拒绝反驳（机制6）、资深复核留记录（机制5）、交付；下方为按周期运行的三项制度：无 AI 新题测试（机制2）、培养时间预算（机制4）、红利分配协商（机制7）">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="var(--text-muted)"/>
+    </marker>
+  </defs>
+  <text x="20" y="30" fill="var(--text-primary)" font-size="15" font-weight="650">单件工作的流程（每一件工作都经过）</text>
+
+  <g font-size="13">
+    <rect x="20" y="70" width="100" height="70" rx="8" fill="var(--surface-1)" stroke="var(--border)"/>
+    <text x="70" y="102" text-anchor="middle" fill="var(--text-secondary)">工作分派</text>
+
+    <line x1="120" y1="105" x2="146" y2="105" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#arr)"/>
+
+    <rect x="150" y="58" width="150" height="94" rx="8" fill="var(--surface-1)" stroke="var(--series-1)" stroke-width="1.5"/>
+    <rect x="162" y="46" width="58" height="22" rx="11" fill="var(--series-1)"/>
+    <text x="191" y="61" text-anchor="middle" fill="var(--surface-1)" font-size="12" font-weight="600">机制一</text>
+    <text x="225" y="90" text-anchor="middle" fill="var(--text-primary)" font-weight="600">员工先记录判断</text>
+    <text x="225" y="112" text-anchor="middle" fill="var(--text-secondary)" font-size="12">写下结论、理由、</text>
+    <text x="225" y="130" text-anchor="middle" fill="var(--text-secondary)" font-size="12">把握程度</text>
+
+    <line x1="300" y1="105" x2="326" y2="105" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#arr)"/>
+
+    <rect x="330" y="58" width="150" height="94" rx="8" fill="var(--surface-1)" stroke="var(--series-1)" stroke-width="1.5"/>
+    <rect x="342" y="46" width="58" height="22" rx="11" fill="var(--series-1)"/>
+    <text x="371" y="61" text-anchor="middle" fill="var(--surface-1)" font-size="12" font-weight="600">机制二</text>
+    <text x="405" y="90" text-anchor="middle" fill="var(--text-primary)" font-weight="600">AI 此时才介入</text>
+    <text x="405" y="112" text-anchor="middle" fill="var(--text-secondary)" font-size="12">先提问，再分析</text>
+    <text x="405" y="130" text-anchor="middle" fill="var(--text-secondary)" font-size="12">指出分歧</text>
+
+    <line x1="480" y1="105" x2="506" y2="105" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#arr)"/>
+
+    <rect x="510" y="58" width="150" height="94" rx="8" fill="var(--surface-1)" stroke="var(--series-1)" stroke-width="1.5"/>
+    <rect x="522" y="46" width="58" height="22" rx="11" fill="var(--series-1)"/>
+    <text x="551" y="61" text-anchor="middle" fill="var(--surface-1)" font-size="12" font-weight="600">机制三</text>
+    <text x="585" y="90" text-anchor="middle" fill="var(--text-primary)" font-weight="600">员工决定</text>
+    <text x="585" y="112" text-anchor="middle" fill="var(--text-secondary)" font-size="12">采纳 / 拒绝 / 反驳</text>
+    <text x="585" y="130" text-anchor="middle" fill="var(--text-secondary)" font-size="12">决定权在人</text>
+
+    <line x1="660" y1="105" x2="686" y2="105" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#arr)"/>
+
+    <rect x="690" y="58" width="150" height="94" rx="8" fill="var(--surface-1)" stroke="var(--series-1)" stroke-width="1.5"/>
+    <rect x="702" y="46" width="58" height="22" rx="11" fill="var(--series-1)"/>
+    <text x="731" y="61" text-anchor="middle" fill="var(--surface-1)" font-size="12" font-weight="600">机制四</text>
+    <text x="765" y="90" text-anchor="middle" fill="var(--text-primary)" font-weight="600">资深复核</text>
+    <text x="765" y="112" text-anchor="middle" fill="var(--text-secondary)" font-size="12">留下"改了哪里、</text>
+    <text x="765" y="130" text-anchor="middle" fill="var(--text-secondary)" font-size="12">为什么改"的记录</text>
+
+    <line x1="840" y1="105" x2="866" y2="105" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#arr)"/>
+
+    <rect x="870" y="70" width="90" height="70" rx="8" fill="var(--surface-1)" stroke="var(--border)"/>
+    <text x="915" y="102" text-anchor="middle" fill="var(--text-secondary)">交付</text>
+  </g>
+
+  <g font-size="11" fill="var(--text-muted)">
+    <text x="225" y="175" text-anchor="middle">高风险全量、低风险抽样执行</text>
+    <text x="405" y="175" text-anchor="middle">先问后给，防止直接看答案</text>
+    <text x="585" y="175" text-anchor="middle">分歧留档，成为学习材料</text>
+    <text x="765" y="175" text-anchor="middle">判断痕迹进入案例库</text>
+  </g>
+
+  <text x="20" y="230" fill="var(--text-primary)" font-size="15" font-weight="650">按周期运行的制度（不在单件工作里，支撑上面的流程）</text>
+  <rect x="20" y="250" width="940" height="180" rx="10" fill="none" stroke="var(--border)" stroke-dasharray="6 5"/>
+
+  <g font-size="13">
+    <rect x="50" y="290" width="270" height="110" rx="8" fill="var(--surface-1)" stroke="var(--seq-550)" stroke-width="1.5"/>
+    <rect x="62" y="278" width="58" height="22" rx="11" fill="var(--seq-550)"/>
+    <text x="91" y="293" text-anchor="middle" fill="var(--surface-1)" font-size="12" font-weight="600">机制五</text>
+    <text x="185" y="325" text-anchor="middle" fill="var(--text-primary)" font-weight="600">无 AI 新题测试（如每月）</text>
+    <text x="185" y="349" text-anchor="middle" fill="var(--text-secondary)" font-size="12">测实际表现，不用问卷；</text>
+    <text x="185" y="368" text-anchor="middle" fill="var(--text-secondary)" font-size="12">能力曲线连续下行 → 触发工作流复查</text>
+
+    <rect x="355" y="290" width="270" height="110" rx="8" fill="var(--surface-1)" stroke="var(--seq-550)" stroke-width="1.5"/>
+    <rect x="367" y="278" width="58" height="22" rx="11" fill="var(--seq-550)"/>
+    <text x="396" y="293" text-anchor="middle" fill="var(--surface-1)" font-size="12" font-weight="600">机制六</text>
+    <text x="490" y="325" text-anchor="middle" fill="var(--text-primary)" font-weight="600">培养时间预算（如每周）</text>
+    <text x="490" y="349" text-anchor="middle" fill="var(--text-secondary)" font-size="12">AI 省下工时的固定比例用于带新人；</text>
+    <text x="490" y="368" text-anchor="middle" fill="var(--text-secondary)" font-size="12">新人先做一版再对照 AI</text>
+
+    <rect x="660" y="290" width="270" height="110" rx="8" fill="var(--surface-1)" stroke="var(--seq-550)" stroke-width="1.5"/>
+    <rect x="672" y="278" width="58" height="22" rx="11" fill="var(--seq-550)"/>
+    <text x="701" y="293" text-anchor="middle" fill="var(--surface-1)" font-size="12" font-weight="600">机制七</text>
+    <text x="795" y="325" text-anchor="middle" fill="var(--text-primary)" font-weight="600">红利分配协商（如每季度）</text>
+    <text x="795" y="349" text-anchor="middle" fill="var(--text-secondary)" font-size="12">省下的时间归谁用，公开账目，</text>
+    <text x="795" y="368" text-anchor="middle" fill="var(--text-secondary)" font-size="12">管理层与员工代表正式协商</text>
+  </g>
+
+  <g stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="4 4">
+    <line x1="185" y1="278" x2="200" y2="195"/>
+    <line x1="490" y1="278" x2="490" y2="195"/>
+    <line x1="795" y1="278" x2="780" y2="195"/>
+  </g>
+  <text x="490" y="460" text-anchor="middle" fill="var(--text-muted)" font-size="12">周期性制度为每日流程提供检测（机制五）、培养安排（机制六）和时间来源的保障（机制七）</text>
+</svg>
+<figcaption>图 3 · 七条机制在工作流中的位置。上排：每件工作都经过的流程，机制一至四依次改变动作次序（先判断、后看 AI、人决定、留记录）。下排：三项按周期运行的制度，不进入单件任务，但决定上排流程能不能持续。</figcaption>
+</figure>
+
+<div class="tablebox">
+<table>
+<thead><tr><th>机制</th><th>一句话做法</th><th>证据基础</th></tr></thead><tbody>
+<tr><td>一 先判断后看 AI（分层执行）</td><td>高风险工作全量执行、低风险随机抽样，辅以定期专门训练</td><td>Rani 等（2026）；Dell'Acqua 等（2025）；民航复训经验（正反两面）</td></tr>
+<tr><td>二 教练式 AI 配置</td><td>系统提示词从"给最佳答案"改为"先问后给、逐步追问"</td><td>Rani 等（2026）；Lee 等（2025）；Borchers 等（2026）</td></tr>
+<tr><td>三 决定权在人</td><td>采纳与否由使用者决定并入制度；不考核 AI 使用量</td><td>欧盟 AI 法第 14 条同方向；待试点验证</td></tr>
+<tr><td>四 记录资深判断</td><td>否决或修改 AI 产出时记录"改了哪里、为什么改"</td><td>Shopify River 公司级实践</td></tr>
+<tr><td>五 能力指标</td><td>定期用新题在无 AI 条件下测实际表现，观察趋势</td><td>设计依据充分，待试点验证</td></tr>
+<tr><td>六 培养时间预算</td><td>AI 节省工时的固定比例明文用于培养新人</td><td>Google Summer of Code 二十年原型</td></tr>
+<tr><td>七 分配协商</td><td>AI 节省的时间归谁使用，由员工代表参与正式协商</td><td>设计依据充分，待试点验证</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>最后需要说明这七条机制的可靠程度，它们并不相同。机制一、二的背后是已发表的实验，证据最直接；机制四、六各有一个已经长期运行的原型，说明做法可行，但没有研究测量过它们对判断力的保全效果；机制三、五、七是从前述证据合理推出的设计，在有公司实际试点之前，只能视为有依据的假说。区分这三类，是为了让准备采用的公司清楚自己采用的是什么：前两类是他人验证过的做法，第三类是值得尝试、但需要一边实施一边测量效果的做法。</p>
+
+<h2>六、外部怎么推动：五个办法</h2>
+
+<p>上述七条机制，是一家愿意行动的公司自己能做的事。但多数公司缺少行动的动力：员工的判断力是员工可以带走的资产，培养的收益大部分不归公司。要让保全机制普及开来，需要外部条件改变公司实际面对的成本和收益。监管者、行业组织或其他希望推动此事的各方，可以使用哪些工具？</p>
+
+<p>先说明一个反面教训，它决定了后面五个办法的先后顺序。美国的精神健康平价法（MHPAEA）要求保险公司对精神疾病和身体疾病一视同仁。这部法律有检查机制，监管者查得出谁违规；但违规几乎不需要付出代价。结果，美国劳工部的历年执法报告显示，被查企业首次检查的不合规率接近百分之百——所有人都知道规则，所有人都不执行，因为不执行没有后果。教训是：测量和追责必须同时存在；只能测出问题、却不让问题带来后果，制度就会变成一种大家都看得见、但没有人在意的形式。所以下面五个办法按这个顺序展开：先解决"怎么测"，再解决"测了之后怎么办"；然后是两条不需要政府强制的途径；最后是这一切共同依赖的数据基础。</p>
+
+<p><strong>办法一：先建立可测量的标准。</strong>没有可测量的标准，任何"要求企业重视员工能力"都容易停留在口号上。现成的起点是 MIT Media Lab 的 Pro Human Benchmark 一类评测：它现在测"某个 AI 模型对使用者的能力是提高还是降低"，下一步可以把评测对象从模型换成工作流。要测的不是"这家公司用的 AI 好不好"，而是"这家公司怎样安排人和 AI 的关系"：有没有先判断后看 AI 的次序，有没有不用 AI 的能力测试，初级岗位占比多少，异议记录是否保留。建立标准时的防作弊要求来自 METR（2026）的教训：凡是能提前准备的指标都可能被做成应试表演，所以必须用新题、测实际行为、随机抽测。</p>
+
+<p><strong>办法二：让测量产生后果。</strong>按力度从重到轻有三种做法。第一，政府采购设条件：供应商必须出示工作流评测结果才能投标；采购规模大，供应商为了订单会主动调整。第二，高风险行业（医疗、审计、法律）把事故责任追溯到工作流设计：如果医生因长期依赖 AI 而丧失独立检出病变的能力、并因此发生漏诊事故，工作流的设计方应进入责任链。欧盟《人工智能法》第 14 条的人类监督要求可以作为这类追责的法律依据之一。在美国法里，这条路也不是从零开始："培训不足即构成过失"（negligent training）在普通法中有成熟的判例传统，《雇佣法重述（第三版）》第 7.05 条明文将"培训"列为雇主注意义务的一部分（Burlington Industries v. Ellerth 与 Faragher v. City of Boca Raton 两案确立了相关框架）。但现状必须说清：目前没有任何法院判决把这条法理应用到"组织未为 AI 使用设计培训、导致损害"的场景。法律基础存在，AI 场景的应用是有待检验的类比。第三，最轻的是披露义务：类似上市公司披露研发投入，要求企业披露培养投入和能力指标。反面就是 MHPAEA 的教训：只"提示或要求企业充分考虑"，只测量、不追责。</p>
+
+<p><strong>办法三：让人才市场奖励好雇主。</strong>给"确实培养人的雇主"发认证、贴标签，让求职者能够识别。政府不必持续监督每家公司：求职者的选择会形成压力，企业为了招人也会有动力维持培养机制。笔者团队的企业访谈（GAMI 2026 年 6 月刊）显示，AI 时代最受争夺的人才挑选雇主时，看重的不只是薪酬，还包括探索空间和成长机会。认证的作用，就是把这个信号做给他们看。这条成本最低，但依赖办法一先存在：没有可信的测量，认证就只是宣传。</p>
+
+<p><strong>办法四：政府自己先做示范。</strong>AI 时代的组织该怎么管理，成熟示范还不存在；缺少示范时直接制定细则，规则容易脱离实际流程。更稳的路径是政府先在自己的机构里做 AI 工作流试点。公共机构通常不能把裁员和利润作为主要指标，这个限制反而迫使它先设计出非利润导向的能力指标；标准从实践中形成，再向企业推广。</p>
+
+<p><strong>办法五：使效果数据脱离厂商单方控制。</strong>两个已经核实的空白值得注意：员工心理援助领域，AI 工具的效果证据主要掌握在厂商手里，缺少独立测量；临床文档 AI 对护士人员配比的实际影响，笔者团队 2026 年做过系统检索，没有找到任何一项以人员配比为结局的独立研究。厂商自己证明自己有效的数据，不能支撑监管。可以参考加州对医院人员配比的强制申报制度：要求部署方披露关键运行数据，并资助独立研究。没有独立数据，前四个办法的效果无从判断，责任也无从追究。</p>
+
+<h2>七、证据的强度与未解的问题</h2>
+
+<p>以上各项主张背后的证据强度并不一致。以下说明哪些结论有较强的支撑，哪些只是合理的推断，哪些问题现有研究尚未回答。</p>
+
+<p>证据最扎实的是个人层面的能力流失。一项同行评审的月度实验（Rani 等，2026）、一项真实医院的观察性研究（Budzyń 等，2025）、一项 758 人的现场随机实验（Dell'Acqua 等，2025）、两项大样本调查（Lee 等，2025；Gerlich，2025），加上民航业四十年的人因研究，方向一致。但要注意两点。其一，Budzyń 等（2025）是观察性研究而不是随机对照试验，研究人群与原试验的目标人群也不同，作者自己呼吁做确认性研究——本文把它当作第一份真实世界证据引用，不把它当作定论。其二，这些研究都在个人尺度上；组织尺度的对照研究一项也没有。没有人比较过两家公司采用不同 AI 工作流之后，员工无 AI 独立工作的能力在几年里各自怎么变化。</p>
+
+<p>就业数据那部分，能证明什么和不能证明什么要分开。Brynjolfsson、Chandar 和 Chen（2025）证明的是"替代型用法的职业里，新人就业在下降"；它不能直接证明"这些新人因此失去了判断力成长的机会"。后一句是本文从"初级任务是练习场"这个机制推出来的，方向合理，但目前没有任何研究跟踪一批员工三五年、观察他们判断力的成长路径。团队层面的判断更弱：概念清楚，组织案例很少，只能算有待验证。</p>
+
+<p>还有一个同样成立的反面解释，需要明确列出：AI 在恰当的用法下，也可能加速而不是减缓新人的成长——新人借助 AI 更早接触复杂问题，学得反而更快。现有证据不足以在"AI 削弱培养"和"AI 加速培养"之间做出裁决。哪种说法对，恰恰要靠机制五那样的能力测试在试点里回答。</p>
+
+<p>企业读者最可能先问的问题——这些机制要花多少钱、慢多少——也是现有研究最答不上来的。先判断后看 AI、教练式配置、培养预算，各自的时间成本只有零散的实验数字可以参考（Dell'Acqua 等（2025）测得 AI 在其能力范围内让工作提速约 25%，这可以当作"有多少省出来的时间可供分配"的量级参考），完整的成本收益核算不存在。诚实的回答是：应该在试点里一边运行机制、一边测成本，机制五的能力指标和成本核算放在同一批试点里做。另一个几乎空白的问题是恢复：能力流失之后还能不能补回来？个人层面有停用 AI 后部分自然恢复的迹象，组织层面连这样的迹象都没有记录。</p>
+
+<p>最后还需要说明一件事：本文的整理者是一个 AI 系统。文章主张"人保留判断"，而人继续保留判断，意味着人继续需要监督和使用 AI 的理由——在这个议题上，整理者有利益相关。文中关键事实尽量给出可核对的出处；少数来自未公开内部材料或合理推断的判断，已在正文和下方参考文献中单独标明。读者可以据此核对，也可以据此反驳。</p>
+
+<hr>
+
+<h2 style="font-size:1.05em">参考文献与证据说明</h2>
+
+<p class="refs" style="margin-bottom:.3em"><strong>期刊与会议论文（本文写作时已核对原文全文的，标注※）：</strong></p>
+<ol class="refs">
+  <li>※ Rani, A., Danry, V., Liang, P. P., Lippman, A. B., &amp; Maes, P. (2026). Dialogues with AI Reduce Beliefs in Misinformation but Build No Lasting Discernment Skills. <em>Proceedings of CHI '26</em>. <a href="https://doi.org/10.1145/3772318.3790656">doi:10.1145/3772318.3790656</a>（67 名参与者月度实验；当场 +21 个百分点；第四周无辅助成绩较第一周下降 15.3%；27% 自感进步实测退步）</li>
+  <li>Bainbridge, L. (1983). Ironies of Automation. <em>Automatica</em>, 19(6). 概述见<a href="https://en.wikipedia.org/wiki/Ironies_of_Automation">维基百科条目</a>；航空手动飞行技能退化与 FAA 立场的整理见 <a href="https://ojs.library.okstate.edu/osu/index.php/CARI/article/view/10345"><em>Collegiate Aviation Review International</em></a>。</li>
+  <li>Budzyń, K., Romańczyk, M., et al. (2025). Endoscopist deskilling risk after exposure to artificial intelligence in colonoscopy. <em>The Lancet Gastroenterology &amp; Hepatology</em>. <a href="https://www.thelancet.com/journals/langas/article/PIIS2468-1253(25)00133-5/abstract">期刊页</a>（28%→22% 经 <a href="https://www.statnews.com/2025/08/12/ai-deskilling-doctors-colonoscopy-study-lancet/">STAT 报道</a>与<a href="https://www.med.uio.no/helsam/english/research/groups/clinical-effectiveness/news/2025/ai-colonoscopy.html">奥斯陆大学页面</a>交叉核对；论文全文尚在获取中，医师人数、总例数等细节本文未引用）</li>
+  <li>Acemoglu, D., &amp; Restrepo, P. (2019). Automation and New Tasks: How Technology Displaces and Reinstates Labor. <em>Journal of Economic Perspectives</em>, 33(2). <a href="https://www.aeaweb.org/articles?id=10.1257%2Fjep.33.2.3">AEA 期刊页</a></li>
+  <li>Brynjolfsson, E. (2022). The Turing Trap: The Promise &amp; Peril of Human-Like Artificial Intelligence. <em>Daedalus</em>, 151(2). <a href="https://arxiv.org/abs/2201.04200">arXiv 版本</a></li>
+  <li>Brynjolfsson, E., Chandar, B., &amp; Chen, R. (2025). Canaries in the Coal Mine? Six Facts about the Recent Employment Effects of Artificial Intelligence. 斯坦福数字经济实验室工作论文（未经同行评审）。<a href="https://digitaleconomy.stanford.edu/publication/canaries-in-the-coal-mine-six-facts-about-the-recent-employment-effects-of-artificial-intelligence/">项目页</a>、<a href="https://digitaleconomy.stanford.edu/app/uploads/2025/11/CanariesintheCoalMine_Nov25.pdf">PDF</a></li>
+  <li>Dell'Acqua, F., et al. (2025). Navigating the Jagged Technological Frontier: Field Experimental Evidence of the Effects of AI on Knowledge Worker Productivity and Quality. <em>Organization Science</em>. <a href="https://pubsonline.informs.org/doi/10.1287/orsc.2025.21838">期刊页</a>、<a href="https://mitsloan.mit.edu/sites/default/files/2023-10/SSRN-id4573321.pdf">工作论文 PDF</a></li>
+  <li>Lee, H. P. H., et al. (2025). The Impact of Generative AI on Critical Thinking: Self-Reported Reductions in Cognitive Effort and Confidence Effects From a Survey of Knowledge Workers. <em>Proceedings of CHI '25</em>. <a href="https://www.microsoft.com/en-us/research/publication/the-impact-of-generative-ai-on-critical-thinking-self-reported-reductions-in-cognitive-effort-and-confidence-effects-from-a-survey-of-knowledge-workers/">Microsoft Research 出版页</a></li>
+  <li>Gerlich, M. (2025). AI Tools in Society: Impacts on Cognitive Offloading and the Future of Critical Thinking. <em>Societies</em>, 15(1). <a href="https://ideas.repec.org/a/gam/jsoctx/v15y2025i1p6-d1559787.html">期刊页</a>（相关性研究，不能证明因果）</li>
+  <li>※ Xu &amp; Shen (2026). 认知主体性放弃研究（cognitive agency surrender）。<a href="https://arxiv.org/abs/2603.21735">arXiv:2603.21735</a>（1223 篇论文分类；无摩擦设计 67.3%；"有支架的认知摩擦"框架）</li>
+  <li>※ Borchers, C., Rodrigues, L., da Costa, N. T., Xavier, C., &amp; Mello, R. F. (2026). Understanding Teacher Revisions of Large Language Model-Generated Feedback. <em>AIED 2026</em>. <a href="https://arxiv.org/abs/2603.27806">arXiv:2603.27806</a>（117 位教师 / 1349 条草稿；77.8% 原样采用；平台日志研究）</li>
+  <li>※ Caosun &amp; Aral (2026). The Augmentation Trap. <a href="https://arxiv.org/abs/2604.03501">arXiv:2604.03501</a>（理性个体预见技能侵蚀仍会采用 AI；存在最终生产率低于采用前的"稳态损失"场景）</li>
+</ol>
+<p class="refs" style="margin-bottom:.3em"><strong>企业与机构材料：</strong></p>
+<ol class="refs" start="13">
+  <li>※ Shopify Engineering (2026). Under the River. <a href="https://shopify.engineering/under-the-river">shopify.engineering/under-the-river</a>（公开频道 AI 工作场设计与三十天运行数据；企业自报，未经第三方审计）；配套研究：Feng, D., Yun, B., &amp; Wang, A. Y. (2025). From Junior to Senior. <a href="https://arxiv.org/abs/2602.00496">arXiv:2602.00496</a></li>
+  <li>METR (2026). AI 能力评估方法报告（被测系统识别测试内容后评估失效的问题）。<a href="https://metr.org">metr.org</a></li>
+  <li>欧盟《人工智能法》(2024)，第 14 条（人类监督）。<a href="https://artificialintelligenceact.eu/article/14/">条文</a></li>
+  <li>美国劳工部（U.S. Department of Labor），MHPAEA 历年执法报告（首次检查不合规率）。<a href="https://www.dol.gov/agencies/ebsa/laws-and-regulations/laws/mental-health-and-substance-use-disorder-parity">dol.gov</a></li>
+  <li>培训不足过失责任（negligent training）法理：<em>Burlington Industries v. Ellerth</em>, 524 U.S. 742 (1998)；<em>Faragher v. City of Boca Raton</em>, 524 U.S. 775 (1998)；Restatement (Third) of Agency §7.05。判决全文与法律重述条文已核；应用到 AI 培训缺失目前无判例，属待检验类比。</li>
+</ol>
+<p class="refs" style="margin-bottom:.3em"><strong>未公开的内部材料（引用处已在正文标明）：</strong></p>
+<ol class="refs" start="18">
+  <li>GAMI 2026 年 5 月刊、6 月刊（笔者团队的研究写作）：某科技公司"筛选而不培养"用工机制的访谈记录；技能折损社会成本的论述；企业人才动机访谈。</li>
+  <li>笔者团队行业案例分析（软件 / 企业培训 / 高等教育三行业，未公开发表，证据强度低）；临床文档 AI 与员工心理援助两领域独立证据空白的系统检索记录（2026）。</li>
+</ol>
+
+</div>
+</body>
+</html>
