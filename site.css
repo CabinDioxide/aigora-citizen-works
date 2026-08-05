@@ -14,6 +14,7 @@
   --memoria:#8a5a24;
   --pharma:#2c6e6b;
   --retired:#5c6a5e;
+  --leimma:#8a3b3b;
   --shadow:0 10px 34px rgba(38,37,32,.08);
 }
 *{box-sizing:border-box}
@@ -64,6 +65,7 @@ h1{margin:0 0 14px;font-size:clamp(1.9rem,5vw,3rem);line-height:1.15}
 .card.memoria{border-top-color:var(--memoria)}
 .card.pharma{border-top-color:var(--pharma)}
 .card.retired{border-top-color:var(--retired)}
+.card.leimma{border-top-color:var(--leimma)}
 .card h2,.card h3{margin:0 0 4px;font-size:1.25rem}
 .card .field{margin:0 0 10px;font:600 .8rem/1.3 ui-sans-serif,system-ui,sans-serif;color:var(--muted)}
 .card p{margin:0 0 10px;font-size:.95rem;color:#44433e}

@@ -1,0 +1,1283 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nullroute Monitoring</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #151719;
+      --muted: #5d6672;
+      --line: #d9dee5;
+      --panel: #f7f8fa;
+      --paper: #ffffff;
+      --red: #b42318;
+      --blue: #1f5eff;
+      --green: #176b45;
+      --amber: #9a5b00;
+      --cyan: #0b7285;
+      --violet: #5b3cc4;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.45;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      padding: 28px clamp(18px, 4vw, 48px) 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 8px 0 0;
+      max-width: 880px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+      min-height: calc(100vh - 106px);
+    }
+
+    aside {
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      padding: 22px;
+    }
+
+    section {
+      padding: 22px clamp(18px, 3vw, 36px);
+      min-width: 0;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      color: #313840;
+    }
+
+    .stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .metric {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .metric strong { font-size: 22px; }
+    .metric span { color: var(--muted); font-size: 13px; }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 6px;
+      padding: 8px 11px;
+      font: inherit;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    button[aria-selected="true"] {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: #f2f6ff;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .stack-grid {
+      display: grid;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .industry-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 14px;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .industry-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .industry-head h3 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: 0;
+    }
+
+    .stack-lanes {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      width: 100%;
+      max-width: 100%;
+      padding-bottom: 2px;
+    }
+
+    .lane {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      min-height: 112px;
+      padding: 9px;
+      background: #fbfcfd;
+      flex: 0 0 128px;
+    }
+
+    .lane strong {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 12px;
+      color: #343c46;
+    }
+
+    .lane span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .lane .evidence {
+      display: inline-flex;
+      margin-top: 8px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 14px;
+      min-height: 150px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      letter-spacing: 0;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 10px 0;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 12px;
+      background: #eef1f4;
+      color: #39424e;
+      white-space: nowrap;
+    }
+
+    .L0 { background: #fff3e0; color: var(--amber); }
+    .L1 { background: #e6f8fb; color: var(--cyan); }
+    .L2 { background: #eef4ff; color: var(--blue); }
+    .L3 { background: #fdecec; color: var(--red); }
+    .L4 { background: #eef8f1; color: var(--green); }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--amber);
+    }
+
+    .map {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: min(52vw, 420px);
+      min-height: 300px;
+      background: #fbfcfd;
+    }
+
+    .node text {
+      font-size: 12px;
+      fill: var(--ink);
+    }
+
+    .node rect {
+      fill: #fff;
+      stroke: var(--line);
+      rx: 6;
+    }
+
+    .edge {
+      stroke: #828c99;
+      stroke-width: 1.4;
+      marker-end: url(#arrow);
+    }
+
+    .edge.hot { stroke: var(--red); stroke-width: 2; }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-bottom: 16px;
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+      background: #fff;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      font-size: 13px;
+    }
+
+    th {
+      background: #f5f7f9;
+      color: #38414c;
+      font-weight: 700;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .live-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .live-metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .live-metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .live-metric strong {
+      font-size: 18px;
+      overflow-wrap: anywhere;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .risk-high { background: #fdecec; color: var(--red); }
+    .risk-medium { background: #fff3e0; color: var(--amber); }
+    .risk-low { background: #eef8f1; color: var(--green); }
+    .risk-mixed { background: #eef4ff; color: var(--blue); }
+
+    .evidence {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .evidence-verified { background: #e8f7ee; color: var(--green); }
+    .evidence-source-linked { background: #edf3ff; color: var(--blue); }
+    .evidence-query-designed { background: #e8f4f6; color: #0f6674; }
+    .evidence-seeking-original { background: #fff4df; color: var(--amber); }
+    .evidence-needs-token { background: #f1edff; color: var(--violet); }
+    .evidence-needs-api-key { background: #f1edff; color: var(--violet); }
+    .evidence-slow-source { background: #f4f0e8; color: #6f4e1f; }
+    .evidence-error { background: #fdecec; color: var(--red); }
+    .evidence-degraded { background: #fff4df; color: var(--amber); }
+    .evidence-not-run { background: #eef1f4; color: #4b5563; }
+    .evidence-draft { background: #eef1f4; color: #4b5563; }
+
+    /* Alert candidates are deliberately subordinate to verified evidence:
+       muted amber, never the verified green, always tagged "候选 · 待复查". */
+    .candidate-block { margin-top: 22px; }
+
+    .candidate-note {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 0 0 10px;
+    }
+
+    .candidate-tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      background: #fff4df;
+      color: var(--amber);
+      border: 1px solid #f0cf8c;
+      white-space: nowrap;
+    }
+
+    .candidate-card {
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--amber);
+      border-radius: 8px;
+      background: #fffdf8;
+      padding: 12px;
+    }
+
+    .candidate-card.priority-high { border-left-color: var(--red); }
+
+    .candidate-card h3 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .candidate-card .candidate-signal { font-size: 13px; margin: 6px 0; }
+
+    .candidate-card .candidate-source {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .aside-candidate {
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--amber);
+      border-radius: 6px;
+      background: #fffdf8;
+      padding: 8px 9px;
+      margin-bottom: 8px;
+    }
+
+    .aside-candidate strong { font-size: 12px; display: block; }
+    .aside-candidate span { color: var(--muted); font-size: 11px; }
+
+    .priority-pill-high { background: #fdecec; color: var(--red); }
+    .priority-pill-medium { background: #fff3e0; color: var(--amber); }
+
+    .delta-positive { color: var(--green); font-weight: 700; }
+    .delta-negative { color: var(--red); font-weight: 700; }
+    .delta-zero { color: var(--muted); }
+
+    .risk-matrix {
+      min-width: 840px;
+    }
+
+    .risk-matrix td {
+      width: 120px;
+    }
+
+    .risk-cell {
+      display: grid;
+      gap: 4px;
+      min-height: 74px;
+      border-radius: 6px;
+      padding: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .risk-cell strong {
+      font-size: 12px;
+      color: inherit;
+    }
+
+    .risk-cell span {
+      color: #4e5966;
+      font-size: 11px;
+    }
+
+    .lane.risk-high { border-color: #f3b5af; }
+    .lane.risk-medium { border-color: #f0cf8c; }
+    .lane.risk-low { border-color: #b8ddc5; }
+    .lane.risk-mixed { border-color: #b7c9ff; }
+
+    .hidden { display: none; }
+
+    @media (max-width: 860px) {
+      main { grid-template-columns: 1fr; }
+      aside { border-right: 0; border-bottom: 1px solid var(--line); }
+      .grid { grid-template-columns: 1fr; }
+      .live-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      h1 { font-size: 24px; }
+    }
+
+    @media (max-width: 430px) {
+      .live-summary { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Nullroute Monitoring</h1>
+    <p class="subtitle">依赖图数据库第一版。它展示哪些系统可能被 null route，证据到哪一步，以及哪些变化值得叫 Root。</p>
+  </header>
+
+  <main>
+    <aside>
+      <h2>System State</h2>
+      <div class="stack">
+        <div class="metric"><span>监控线</span><strong id="metric-lines">5</strong></div>
+        <div class="metric"><span>依赖记录</span><strong id="metric-deps">5</strong></div>
+        <div class="metric"><span>来源记录</span><strong id="metric-sources">10</strong></div>
+        <div class="metric"><span>当前状态</span><strong>Draft</strong></div>
+      </div>
+      <h2 style="margin-top: 22px;">Evidence</h2>
+      <div class="stack" id="evidence-counts"></div>
+
+      <div class="candidate-block">
+        <h2>告警候选 <span class="candidate-tag">候选 · 待 Root 复查</span></h2>
+        <p class="candidate-note" id="candidate-summary"></p>
+        <div id="aside-candidates"></div>
+      </div>
+    </aside>
+
+    <section>
+      <div class="tabs" role="tablist" aria-label="Monitoring views">
+        <button type="button" role="tab" aria-selected="true" data-view="map">依赖图</button>
+        <button type="button" role="tab" aria-selected="false" data-view="stacks">产业栈</button>
+        <button type="button" role="tab" aria-selected="false" data-view="dependencies">依赖表</button>
+        <button type="button" role="tab" aria-selected="false" data-view="sources">信息源</button>
+        <button type="button" role="tab" aria-selected="false" data-view="live">Live Feed</button>
+        <button type="button" role="tab" aria-selected="false" data-view="candidates">告警候选</button>
+        <button type="button" role="tab" aria-selected="false" data-view="alerts">告警规则</button>
+      </div>
+
+      <div id="view-map">
+        <div class="map">
+          <svg viewBox="0 0 900 420" role="img" aria-label="Dependency map">
+            <defs>
+              <marker id="arrow" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+                <path d="M0,0 L8,4 L0,8 Z" fill="#828c99"></path>
+              </marker>
+            </defs>
+            <line class="edge hot" x1="215" y1="85" x2="410" y2="85"></line>
+            <line class="edge hot" x1="555" y1="85" x2="735" y2="85"></line>
+            <line class="edge" x1="215" y1="210" x2="410" y2="210"></line>
+            <line class="edge hot" x1="555" y1="210" x2="735" y2="210"></line>
+            <line class="edge" x1="215" y1="335" x2="410" y2="335"></line>
+            <line class="edge" x1="555" y1="335" x2="735" y2="335"></line>
+
+            <g class="node" transform="translate(48 55)">
+              <rect width="168" height="60"></rect>
+              <text x="14" y="26">中国 AI 训练能力</text>
+              <text x="14" y="44">subject</text>
+            </g>
+            <g class="node" transform="translate(410 55)">
+              <rect width="146" height="60"></rect>
+              <text x="14" y="26">GPU / HBM / EDA</text>
+              <text x="14" y="44">dependency</text>
+            </g>
+            <g class="node" transform="translate(735 55)">
+              <rect width="150" height="60"></rect>
+              <text x="14" y="26">BIS export control</text>
+              <text x="14" y="44">interruptor</text>
+            </g>
+
+            <g class="node" transform="translate(48 180)">
+              <rect width="168" height="60"></rect>
+              <text x="14" y="26">东亚工业能源</text>
+              <text x="14" y="44">subject</text>
+            </g>
+            <g class="node" transform="translate(410 180)">
+              <rect width="146" height="60"></rect>
+              <text x="14" y="26">Hormuz / LNG</text>
+              <text x="14" y="44">dependency</text>
+            </g>
+            <g class="node" transform="translate(735 180)">
+              <rect width="150" height="60"></rect>
+              <text x="14" y="26">conflict / insurance</text>
+              <text x="14" y="44">interruptor</text>
+            </g>
+
+            <g class="node" transform="translate(48 305)">
+              <rect width="168" height="60"></rect>
+              <text x="14" y="26">跨境互联网可达性</text>
+              <text x="14" y="44">subject</text>
+            </g>
+            <g class="node" transform="translate(410 305)">
+              <rect width="146" height="60"></rect>
+              <text x="14" y="26">BGP / DNS / cable</text>
+              <text x="14" y="44">dependency</text>
+            </g>
+            <g class="node" transform="translate(735 305)">
+              <rect width="150" height="60"></rect>
+              <text x="14" y="26">state / operator</text>
+              <text x="14" y="44">interruptor</text>
+            </g>
+          </svg>
+        </div>
+        <div class="grid" id="dependency-cards"></div>
+      </div>
+
+      <div id="view-stacks" class="hidden">
+        <div class="legend" aria-label="Risk legend">
+          <span class="legend-item"><span class="swatch risk-high"></span>High friction / direct choke</span>
+          <span class="legend-item"><span class="swatch risk-medium"></span>Medium friction</span>
+          <span class="legend-item"><span class="swatch risk-low"></span>Lower friction</span>
+          <span class="legend-item"><span class="swatch risk-mixed"></span>Mixed / depends on route</span>
+        </div>
+        <div class="table-wrap">
+          <table class="risk-matrix">
+            <thead>
+              <tr><th>Industry</th><th>Physical</th><th>Equipment</th><th>Software</th><th>Market</th><th>Control</th><th>Exit</th></tr>
+            </thead>
+            <tbody id="stack-matrix"></tbody>
+          </table>
+        </div>
+        <div class="stack-grid" id="industry-stacks"></div>
+      </div>
+
+      <div id="view-dependencies" class="hidden">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Subject</th><th>Stack Focus</th><th>Depends On</th><th>Layer</th><th>Interruptor</th><th>Status</th></tr>
+            </thead>
+            <tbody id="dependency-rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="view-sources" class="hidden">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Source</th><th>Layer</th><th>Type</th><th>Use</th><th>Status</th></tr>
+            </thead>
+            <tbody id="source-rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="view-live" class="hidden">
+        <div class="live-summary" id="live-summary"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Sensor</th><th>Bucket</th><th>Run</th><th>Feed Status</th><th>Duration</th><th>Finished</th><th>Error</th></tr>
+            </thead>
+            <tbody id="source-health-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Metric</th><th>Feed</th><th>Current</th><th>Previous</th><th>Delta</th></tr>
+            </thead>
+            <tbody id="snapshot-delta-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>CVE</th><th>Vendor</th><th>Product</th><th>Date Added</th><th>Ransomware</th></tr>
+            </thead>
+            <tbody id="kev-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Vendor / Project</th><th>KEV Count</th></tr>
+            </thead>
+            <tbody id="kev-vendor-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>OFAC UID</th><th>Name</th><th>Type</th><th>Programs</th></tr>
+            </thead>
+            <tbody id="ofac-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>OFAC Program</th><th>SDN Count</th></tr>
+            </thead>
+            <tbody id="ofac-program-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>CVE</th><th>Severity</th><th>Score</th><th>Status</th><th>Last Modified</th><th>Description</th></tr>
+            </thead>
+            <tbody id="nvd-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>OpenSanctions Dataset</th><th>Entities</th><th>Publisher</th><th>Updated</th></tr>
+            </thead>
+            <tbody id="opensanctions-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>OONI Country</th><th>Measurements</th></tr>
+            </thead>
+            <tbody id="ooni-country-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>OONI Recent Circumvention Country</th><th>7d Count</th></tr>
+            </thead>
+            <tbody id="ooni-circumvention-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>World Bank Power Consumption</th><th>kWh / capita</th><th>Year</th></tr>
+            </thead>
+            <tbody id="worldbank-power-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>World Bank Electricity Access</th><th>% Access</th><th>Year</th></tr>
+            </thead>
+            <tbody id="worldbank-access-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>WITS Reporter</th><th>Stack Context</th><th>Import HHI</th><th>Import Partners</th><th>Products Imported</th></tr>
+            </thead>
+            <tbody id="wits-trade-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Commodity Family</th><th>Stack</th><th>Mode</th><th>Validation</th><th>Broad Proxy</th><th>Candidate HS</th></tr>
+            </thead>
+            <tbody id="commodity-watch-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>HS Code</th><th>Family</th><th>Role</th><th>Assessment</th><th>HTS Heading</th><th>Description</th></tr>
+            </thead>
+            <tbody id="hs-validation-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>HS6 Candidate</th><th>Family</th><th>Heading</th><th>Description</th><th>HTS Rows</th></tr>
+            </thead>
+            <tbody id="hs-subheading-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Pruned HS6</th><th>Family</th><th>Tier</th><th>Description</th><th>Reason</th></tr>
+            </thead>
+            <tbody id="hs-pruned-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Broad Flow Proxy</th><th>Year</th><th>Reporter</th><th>Partner</th><th>Import Value</th><th>Caveat</th></tr>
+            </thead>
+            <tbody id="commodity-broad-flow-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>ASN</th><th>Label</th><th>Holder</th><th>Announced</th><th>Prefixes</th><th>Sample Prefixes</th></tr>
+            </thead>
+            <tbody id="ripestat-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Company</th><th>Ticker</th><th>Stack</th><th>SIC</th><th>Latest Important Filings</th></tr>
+            </thead>
+            <tbody id="sec-company-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>UN List Type</th><th>Count</th></tr>
+            </thead>
+            <tbody id="un-list-type-rows"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>UN Entity</th><th>Type</th><th>Reference</th><th>Listed On</th></tr>
+            </thead>
+            <tbody id="un-entity-rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="view-candidates" class="hidden">
+        <p class="candidate-note" id="candidate-coverage"></p>
+        <div class="grid" id="candidate-cards"></div>
+        <div class="table-wrap" style="margin-top:16px;">
+          <table>
+            <thead>
+              <tr><th>Rule</th><th>Priority</th><th>Evaluated</th><th>Candidates / Skip reason</th></tr>
+            </thead>
+            <tbody id="candidate-rule-rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="view-alerts" class="hidden">
+        <div class="grid" id="alert-cards"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="data/monitoring-data.js"></script>
+  <script src="data/live/live-data.js"></script>
+  <script>
+    const data = window.MONITORING_DATA;
+    const liveData = window.MONITORING_LIVE_DATA || {};
+
+    document.getElementById("metric-deps").textContent = data.dependencies.length;
+    document.getElementById("metric-sources").textContent = data.sources.length;
+
+    const layerPills = (layers) => layers.map(layer => `<span class="pill ${layer}">${layer}</span>`).join("");
+    const evidencePill = (status) => `<span class="evidence evidence-${status}">${status}</span>`;
+    const runPill = (status) => {
+      const normalized = status || "not-run";
+      const evidenceStatus = normalized === "ok" ? "verified" : normalized;
+      return `<span class="evidence evidence-${evidenceStatus}">${normalized}</span>`;
+    };
+    const formatDuration = (ms) => {
+      if (!Number.isFinite(ms)) return "";
+      if (ms < 1000) return `${ms} ms`;
+      return `${Math.round(ms / 100) / 10} s`;
+    };
+    const formatTimestamp = (value) => {
+      if (!value) return "";
+      return String(value).replace("T", " ").replace(/\.\d+Z$/, "Z");
+    };
+    const formatDelta = (value) => {
+      if (!Number.isFinite(value)) return "";
+      const label = value > 0 ? `+${value}` : String(value);
+      const className = value > 0 ? "delta-positive" : value < 0 ? "delta-negative" : "delta-zero";
+      return `<span class="${className}">${label}</span>`;
+    };
+    const formatUsdThousands = (value) => {
+      if (!Number.isFinite(value)) return "";
+      return `$${Math.round(value * 1000).toLocaleString()}`;
+    };
+
+    const evidenceItems = [
+      ...data.dependencies.map(dep => dep.status),
+      ...data.sources.map(source => source[4]),
+      ...data.industries.flatMap(industry => industry.lanes.map(lane => lane[3] || "draft"))
+    ];
+    const evidenceCounts = evidenceItems.reduce((counts, status) => {
+      counts[status] = (counts[status] || 0) + 1;
+      return counts;
+    }, {});
+    document.getElementById("evidence-counts").innerHTML = ["verified", "source-linked", "query-designed", "seeking-original", "needs-token", "needs-api-key", "slow-source", "draft"].map(status => `
+      <div class="metric"><span>${evidencePill(status)}</span><strong>${evidenceCounts[status] || 0}</strong></div>
+    `).join("");
+
+    document.getElementById("dependency-cards").innerHTML = data.dependencies.map(dep => `
+      <article class="card">
+        <h3>${dep.subject}</h3>
+        <div class="meta">${layerPills(dep.layer)}${evidencePill(dep.status)}</div>
+        <p><strong>产业栈：</strong>${dep.stackFocus}</p>
+        <p><strong>依赖：</strong>${dep.dependsOn}</p>
+        <p><strong>中断者：</strong>${dep.interruptor}</p>
+        <p class="status"><span class="dot"></span>${dep.substitutability}</p>
+      </article>
+    `).join("");
+
+    document.getElementById("industry-stacks").innerHTML = data.industries.map(industry => `
+      <article class="industry-card">
+        <div class="industry-head">
+          <h3>${industry.name}</h3>
+          <span class="pill">${industry.risk}</span>
+        </div>
+        <div class="stack-lanes">
+          ${industry.lanes.map(lane => `
+            <div class="lane risk-${lane[2]}">
+              <strong>${lane[0]}</strong>
+              <span>${lane[1]}</span>
+              ${evidencePill(lane[3] || "draft")}
+            </div>
+          `).join("")}
+        </div>
+      </article>
+    `).join("");
+
+    document.getElementById("stack-matrix").innerHTML = data.industries.map(industry => `
+      <tr>
+        <th>${industry.name}</th>
+        ${industry.lanes.map(lane => `
+          <td>
+            <div class="risk-cell risk-${lane[2]}">
+              <strong>${lane[2]}</strong>
+              <span>${lane[1]}</span>
+              ${evidencePill(lane[3] || "draft")}
+            </div>
+          </td>
+        `).join("")}
+      </tr>
+    `).join("");
+
+    document.getElementById("dependency-rows").innerHTML = data.dependencies.map(dep => `
+      <tr>
+        <td>${dep.id}</td>
+        <td>${dep.subject}</td>
+        <td>${dep.stackFocus}</td>
+        <td>${dep.dependsOn}</td>
+        <td>${layerPills(dep.layer)}</td>
+        <td>${dep.interruptor}</td>
+        <td>${evidencePill(dep.status)}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("source-rows").innerHTML = data.sources.map(source => `
+      <tr>
+        <td>${source[0]}</td>
+        <td>${source[1]}</td>
+        <td>${source[2]}</td>
+        <td>${source[3]}</td>
+        <td>${evidencePill(source[4])}</td>
+      </tr>
+    `).join("");
+
+    const kev = liveData.feeds?.cisaKev || {};
+    const ofac = liveData.feeds?.ofacSdn || {};
+    const nvd = liveData.feeds?.nvdCves || {};
+    const openSanctions = liveData.feeds?.openSanctions || {};
+    const ooni = liveData.feeds?.ooni || {};
+    const worldBankEnergy = liveData.feeds?.worldBankEnergy || {};
+    const witsTradeStats = liveData.feeds?.witsTradeStats || {};
+    const commodityFlowWatchlist = liveData.feeds?.commodityFlowWatchlist || {};
+    const commodityHsValidation = liveData.feeds?.commodityHsValidation || {};
+    const commodityHsSubheadings = liveData.feeds?.commodityHsSubheadings || {};
+    const commodityHsPrunedWatchlist = liveData.feeds?.commodityHsPrunedWatchlist || {};
+    const commodityBroadFlows = liveData.feeds?.commodityBroadFlows || {};
+    const ripeStat = liveData.feeds?.ripeStat || {};
+    const secFilings = liveData.feeds?.secFilings || {};
+    const unSanctions = liveData.feeds?.unSanctions || {};
+    const csl = liveData.feeds?.consolidatedScreeningList || {};
+    const run = liveData.run || {};
+    const diff = liveData.diff || {};
+    document.getElementById("live-summary").innerHTML = `
+      <div class="live-metric"><span>Run Health</span><strong>${runPill(run.status)}</strong></div>
+      <div class="live-metric"><span>Run Profile</span><strong>${run.profile || "not-run"}</strong></div>
+      <div class="live-metric"><span>Run Finished</span><strong>${formatTimestamp(run.finishedAt) || "not-run"}</strong></div>
+      <div class="live-metric"><span>Run Duration</span><strong>${formatDuration(run.durationMs) || "not-run"}</strong></div>
+      <div class="live-metric"><span>Sensor Errors</span><strong>${run.errorCount ?? 0}</strong></div>
+      <div class="live-metric"><span>Snapshot Diff</span><strong>${runPill(diff.status)}</strong></div>
+      <div class="live-metric"><span>Changed Metrics</span><strong>${diff.changedCount ?? 0}</strong></div>
+      <div class="live-metric"><span>CISA KEV</span><strong>${evidencePill(kev.status || "draft")}</strong></div>
+      <div class="live-metric"><span>Catalog Version</span><strong>${kev.catalogVersion || "not-run"}</strong></div>
+      <div class="live-metric"><span>KEV Entries</span><strong>${kev.count || 0}</strong></div>
+      <div class="live-metric"><span>OFAC SDN</span><strong>${evidencePill(ofac.status || "draft")}</strong></div>
+      <div class="live-metric"><span>OFAC Publish Date</span><strong>${ofac.publishDate || "not-run"}</strong></div>
+      <div class="live-metric"><span>OFAC Entries</span><strong>${ofac.count || 0}</strong></div>
+      <div class="live-metric"><span>NVD CVE</span><strong>${evidencePill(nvd.status || "draft")}</strong></div>
+      <div class="live-metric"><span>NVD 7d Modified</span><strong>${nvd.totalResults || 0}</strong></div>
+      <div class="live-metric"><span>OpenSanctions</span><strong>${evidencePill(openSanctions.status || "draft")}</strong></div>
+      <div class="live-metric"><span>OS Datasets</span><strong>${openSanctions.datasetCount || 0}</strong></div>
+      <div class="live-metric"><span>OONI</span><strong>${evidencePill(ooni.status || "draft")}</strong></div>
+      <div class="live-metric"><span>OONI Countries</span><strong>${ooni.countryCount || 0}</strong></div>
+      <div class="live-metric"><span>World Bank Energy</span><strong>${evidencePill(worldBankEnergy.status || "draft")}</strong></div>
+      <div class="live-metric"><span>WB Last Updated</span><strong>${worldBankEnergy.lastUpdated || "not-run"}</strong></div>
+      <div class="live-metric"><span>WITS Trade</span><strong>${evidencePill(witsTradeStats.status || "draft")}</strong></div>
+      <div class="live-metric"><span>WITS Year</span><strong>${witsTradeStats.year || "not-run"}</strong></div>
+      <div class="live-metric"><span>WITS Reporters</span><strong>${witsTradeStats.reporterCount || 0}</strong></div>
+      <div class="live-metric"><span>Commodity Watch</span><strong>${evidencePill(commodityFlowWatchlist.status || "draft")}</strong></div>
+      <div class="live-metric"><span>Watch Groups</span><strong>${commodityFlowWatchlist.groupCount || 0}</strong></div>
+      <div class="live-metric"><span>Candidate HS</span><strong>${commodityFlowWatchlist.candidateHsCount || 0}</strong></div>
+      <div class="live-metric"><span>HS Validation</span><strong>${evidencePill(commodityHsValidation.status || "draft")}</strong></div>
+      <div class="live-metric"><span>Verified HS</span><strong>${commodityHsValidation.verifiedCount || 0}</strong></div>
+      <div class="live-metric"><span>Needs HS6</span><strong>${commodityHsValidation.needsHs6Count || 0}</strong></div>
+      <div class="live-metric"><span>HS6 Candidates</span><strong>${evidencePill(commodityHsSubheadings.status || "draft")}</strong></div>
+      <div class="live-metric"><span>HS6 Count</span><strong>${commodityHsSubheadings.hts6Count || 0}</strong></div>
+      <div class="live-metric"><span>Pruned HS6</span><strong>${evidencePill(commodityHsPrunedWatchlist.status || "draft")}</strong></div>
+      <div class="live-metric"><span>Core HS6</span><strong>${commodityHsPrunedWatchlist.coreCount || 0}</strong></div>
+      <div class="live-metric"><span>Broad Flows</span><strong>${evidencePill(commodityBroadFlows.status || "draft")}</strong></div>
+      <div class="live-metric"><span>Broad Flow Rows</span><strong>${commodityBroadFlows.recordCount || 0}</strong></div>
+      <div class="live-metric"><span>RIPEstat</span><strong>${evidencePill(ripeStat.status || "draft")}</strong></div>
+      <div class="live-metric"><span>Watched ASNs</span><strong>${ripeStat.watchedAsnCount || 0}</strong></div>
+      <div class="live-metric"><span>SEC EDGAR</span><strong>${evidencePill(secFilings.status || "draft")}</strong></div>
+      <div class="live-metric"><span>Watched Companies</span><strong>${secFilings.watchedCompanyCount || 0}</strong></div>
+      <div class="live-metric"><span>UN Sanctions</span><strong>${evidencePill(unSanctions.status || "draft")}</strong></div>
+      <div class="live-metric"><span>UN Entries</span><strong>${unSanctions.totalCount || 0}</strong></div>
+      <div class="live-metric"><span>CSL Sensor</span><strong>${csl.status || "not-run"}</strong></div>
+    `;
+
+    document.getElementById("source-health-rows").innerHTML = (run.records || []).map(record => {
+      const feedStatuses = (record.feeds || []).map(feed => {
+        const status = liveData.feeds?.[feed]?.status || "not-run";
+        return `${feed}: ${status}`;
+      }).join(", ");
+      return `
+        <tr>
+          <td>${record.label || record.script || ""}</td>
+          <td>${record.bucket || ""}</td>
+          <td>${runPill(record.status)}</td>
+          <td>${feedStatuses}</td>
+          <td>${formatDuration(record.durationMs)}</td>
+          <td>${formatTimestamp(record.finishedAt)}</td>
+          <td>${record.error || ""}</td>
+        </tr>
+      `;
+    }).join("");
+
+    document.getElementById("snapshot-delta-rows").innerHTML = (diff.metrics || []).map(metric => `
+      <tr>
+        <td>${metric.label || metric.key || ""}</td>
+        <td>${metric.feed || ""}</td>
+        <td>${metric.currentValue ?? ""}</td>
+        <td>${metric.previousValue ?? ""}</td>
+        <td>${formatDelta(metric.delta)}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("kev-rows").innerHTML = (kev.newest || []).map(vuln => `
+      <tr>
+        <td>${vuln.cveID || ""}</td>
+        <td>${vuln.vendorProject || ""}</td>
+        <td>${vuln.product || ""}</td>
+        <td>${vuln.dateAdded || ""}</td>
+        <td>${vuln.knownRansomwareCampaignUse || "Unknown"}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("kev-vendor-rows").innerHTML = (kev.vendorCounts || []).map(vendor => `
+      <tr>
+        <td>${vendor.name}</td>
+        <td>${vendor.count}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("ofac-rows").innerHTML = (ofac.sample || []).map(entry => `
+      <tr>
+        <td>${entry.uid || ""}</td>
+        <td>${entry.name || ""}</td>
+        <td>${entry.sdnType || ""}</td>
+        <td>${(entry.programs || []).join(", ")}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("ofac-program-rows").innerHTML = (ofac.programCounts || []).map(program => `
+      <tr>
+        <td>${program.name}</td>
+        <td>${program.count}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("nvd-rows").innerHTML = (nvd.sample || []).map(cve => `
+      <tr>
+        <td>${cve.id || ""}</td>
+        <td>${cve.severity || ""}</td>
+        <td>${cve.score ?? ""}</td>
+        <td>${cve.vulnStatus || ""}</td>
+        <td>${cve.lastModified || ""}</td>
+        <td>${cve.description || ""}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("opensanctions-rows").innerHTML = (openSanctions.sanctionsDatasets || []).map(dataset => `
+      <tr>
+        <td>${dataset.title || dataset.name}</td>
+        <td>${dataset.entityCount || 0}</td>
+        <td>${dataset.publisher || ""}</td>
+        <td>${dataset.updatedAt || ""}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("ooni-country-rows").innerHTML = (ooni.topCountries || []).map(country => `
+      <tr>
+        <td>${country.name || country.code}</td>
+        <td>${country.count || 0}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("ooni-circumvention-rows").innerHTML = (ooni.recentCircumventionStats || []).map(country => `
+      <tr>
+        <td>${country.name || country.code}</td>
+        <td>${country.count || 0}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("worldbank-power-rows").innerHTML = (worldBankEnergy.topPowerConsumption || []).map(row => `
+      <tr>
+        <td>${row.country || row.iso3}</td>
+        <td>${Math.round((row.value || 0) * 100) / 100}</td>
+        <td>${row.date || ""}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("worldbank-access-rows").innerHTML = (worldBankEnergy.lowestElectricityAccess || []).map(row => `
+      <tr>
+        <td>${row.country || row.iso3}</td>
+        <td>${Math.round((row.value || 0) * 100) / 100}</td>
+        <td>${row.date || ""}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("wits-trade-rows").innerHTML = (witsTradeStats.countryRows || []).map(row => `
+      <tr>
+        <td>${row.name || row.code}</td>
+        <td>${row.stack || ""}</td>
+        <td>${Number.isFinite(row.importMarketConcentration) ? Math.round(row.importMarketConcentration * 10000) / 10000 : ""}</td>
+        <td>${row.importPartnerCount ?? ""}</td>
+        <td>${row.importedProductCount ?? ""}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("commodity-watch-rows").innerHTML = (commodityFlowWatchlist.watchlist || []).map(row => `
+      <tr>
+        <td>${row.label || row.id}</td>
+        <td>${row.stack || ""}</td>
+        <td>${row.monitoringMode || ""}</td>
+        <td>${row.validationStatus || ""}</td>
+        <td>${row.broadProxy || ""}</td>
+        <td>${(row.candidateHs || []).join(", ")}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("hs-validation-rows").innerHTML = (commodityHsValidation.records || []).map(row => `
+      <tr>
+        <td>${row.code || ""}</td>
+        <td>${row.family || ""}</td>
+        <td>${row.role || ""}</td>
+        <td>${row.assessment || ""}</td>
+        <td>${row.htsno || ""}</td>
+        <td>${row.description || ""}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("hs-subheading-rows").innerHTML = (commodityHsSubheadings.tableRows || []).map(row => `
+      <tr>
+        <td>${row.hts6 || ""}</td>
+        <td>${row.family || ""}</td>
+        <td>${row.heading || ""}</td>
+        <td>${row.description || ""}</td>
+        <td>${row.rowCount || 0}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("hs-pruned-rows").innerHTML = (commodityHsPrunedWatchlist.rows || []).map(row => `
+      <tr>
+        <td>${row.hts6 || ""}</td>
+        <td>${row.family || ""}</td>
+        <td>${row.tier || ""}</td>
+        <td>${row.description || ""}</td>
+        <td>${row.reason || ""}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("commodity-broad-flow-rows").innerHTML = (commodityBroadFlows.groups || []).flatMap(group =>
+      (group.topPartnerRows || []).slice(0, 6).map(row => `
+        <tr>
+          <td>${group.productLabel || group.label}</td>
+          <td>${group.year || ""}</td>
+          <td>${row.reporterName || row.reporter}</td>
+          <td>${row.partnerName || row.partner}</td>
+          <td>${formatUsdThousands(row.valueThousandUsd)}</td>
+          <td>${group.precision || ""}</td>
+        </tr>
+      `)
+    ).join("");
+
+    document.getElementById("ripestat-rows").innerHTML = (ripeStat.asns || []).map(asn => `
+      <tr>
+        <td>${asn.asn || ""}</td>
+        <td>${asn.label || ""}</td>
+        <td>${asn.holder || ""}</td>
+        <td>${asn.announced ? "yes" : "no"}</td>
+        <td>${asn.prefixCount || 0}</td>
+        <td>${(asn.samplePrefixes || []).join(", ")}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("sec-company-rows").innerHTML = (secFilings.companies || []).map(company => `
+      <tr>
+        <td>${company.name || company.label}</td>
+        <td>${company.ticker || ""}</td>
+        <td>${company.stack || ""}</td>
+        <td>${company.sicDescription || company.sic || ""}</td>
+        <td>${(company.recentImportantFilings || []).slice(0, 4).map(filing => `${filing.form} ${filing.filingDate || ""}`).join(", ")}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("un-list-type-rows").innerHTML = (unSanctions.listTypeCounts || []).map(row => `
+      <tr>
+        <td>${row.name}</td>
+        <td>${row.count}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("un-entity-rows").innerHTML = [...(unSanctions.sampleIndividuals || []), ...(unSanctions.sampleEntities || [])].slice(0, 12).map(row => `
+      <tr>
+        <td>${row.name || ""}</td>
+        <td>${row.listType || ""}</td>
+        <td>${row.referenceNumber || ""}</td>
+        <td>${row.listedOn || ""}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("alert-cards").innerHTML = data.alerts.map((alert, index) => `
+      <article class="card">
+        <h3>Rule ${index + 1}</h3>
+        <p>${alert}</p>
+      </article>
+    `).join("");
+
+    // ---- Alert candidates (derived; subordinate to verified evidence) ----
+    const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (ch) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[ch]));
+    const candidatesData = liveData.alertCandidates || { candidates: [], ruleCoverage: [], candidateCount: 0, highCount: 0, mediumCount: 0 };
+    const candidateList = candidatesData.candidates || [];
+    const priorityPill = (priority) => `<span class="candidate-tag priority-pill-${priority}">${escapeHtml(priority)}</span>`;
+
+    document.getElementById("candidate-summary").textContent = candidateList.length
+      ? `${candidatesData.candidateCount} 条候选（高 ${candidatesData.highCount} · 中 ${candidatesData.mediumCount}）。全部待 Root 回原始来源核对，均非结论。`
+      : "本次快照无候选。规则已跑，无信号匹配 watchlist。";
+
+    document.getElementById("aside-candidates").innerHTML = candidateList.slice(0, 6).map(candidate => `
+      <div class="aside-candidate">
+        <strong>${priorityPill(candidate.priority)} ${escapeHtml(candidate.watchedEntity || candidate.source)}</strong>
+        <span>${escapeHtml(candidate.signal)}</span>
+      </div>
+    `).join("") || `<div class="aside-candidate"><span>无候选</span></div>`;
+
+    document.getElementById("candidate-coverage").textContent =
+      `规则覆盖：已评估 ${candidatesData.ruleCoverage.filter(rule => rule.evaluated).length}/${candidatesData.ruleCoverage.length}。候选只是线索；正式 claims 仍需回到原文、官方数据或可审计记录。`;
+
+    document.getElementById("candidate-cards").innerHTML = candidateList.map(candidate => `
+      <article class="candidate-card priority-${candidate.priority}">
+        <h3>${priorityPill(candidate.priority)} ${escapeHtml(candidate.watchedEntity || candidate.source)}</h3>
+        <p class="candidate-signal">${escapeHtml(candidate.signal)}</p>
+        <p class="candidate-source">来源：${escapeHtml(candidate.source)} · 数据证据档 <span class="evidence evidence-${escapeHtml(candidate.sourceEvidence)}">${escapeHtml(candidate.sourceEvidence)}</span> · 规则 ${escapeHtml(candidate.ruleId)}</p>
+        <p class="candidate-source"><span class="candidate-tag">${escapeHtml(candidate.status)}</span></p>
+      </article>
+    `).join("") || `<p class="candidate-note">本次快照无候选。</p>`;
+
+    document.getElementById("candidate-rule-rows").innerHTML = (candidatesData.ruleCoverage || []).map(rule => `
+      <tr>
+        <td>${escapeHtml(rule.ruleId)}</td>
+        <td>${priorityPill(rule.priority)}</td>
+        <td>${rule.evaluated ? "yes" : "no"}</td>
+        <td>${rule.evaluated ? `${rule.candidateCount} candidate(s)` : escapeHtml(rule.reason || "skipped")}</td>
+      </tr>
+    `).join("");
+
+    document.querySelectorAll("[role='tab']").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll("[role='tab']").forEach(item => item.setAttribute("aria-selected", "false"));
+        tab.setAttribute("aria-selected", "true");
+        ["map", "stacks", "dependencies", "sources", "live", "candidates", "alerts"].forEach(view => {
+          document.getElementById(`view-${view}`).classList.toggle("hidden", view !== tab.dataset.view);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
