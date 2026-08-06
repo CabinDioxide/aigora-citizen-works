@@ -1,0 +1,58 @@
+{
+ "runo": {
+  "topH": 2899,
+  "midH": 230,
+  "botH": 711,
+  "w": 1280,
+  "fullH": 3840
+ },
+ "leimma": {
+  "topH": 2553,
+  "midH": 231,
+  "botH": 1056,
+  "w": 1280,
+  "fullH": 3840
+ },
+ "sigma": {
+  "topH": 2956,
+  "midH": 231,
+  "botH": 653,
+  "w": 1280,
+  "fullH": 3840
+ },
+ "vox": {
+  "topH": 2661,
+  "midH": 230,
+  "botH": 949,
+  "w": 1280,
+  "fullH": 3840
+ },
+ "memoria": {
+  "topH": 2384,
+  "midH": 231,
+  "botH": 1225,
+  "w": 1280,
+  "fullH": 3840
+ },
+ "nullroute": {
+  "topH": 2895,
+  "midH": 230,
+  "botH": 715,
+  "w": 1280,
+  "fullH": 3840
+ },
+ "pharma": {
+  "topH": 2826,
+  "midH": 230,
+  "botH": 784,
+  "w": 1280,
+  "fullH": 3840
+ },
+ "qianxing": {
+  "topH": 2680,
+  "midH": 230,
+  "botH": 930,
+  "w": 1280,
+  "fullH": 3840
+ }
+}

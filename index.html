@@ -75,13 +75,16 @@
      （--u）为基准，不与视口宽高混用。 */
   .drawer{width:100vw;max-height:0;overflow:hidden;transition:max-height 1s cubic-bezier(.19,1,.22,1);background:#171512;}
   .drawer.on{max-height:5400px;}
+  /* 纸按内容长度配长：上段（含邮票位与实物）固定，中段是一条纯纸面、按需要重复，
+     下段（纸尾毛边）固定。中英文长度差三四成，靠中段吸收，文字不会跑到纸外面去。 */
   .paperwrap{position:relative;width:min(100vw,1280px);margin:0 auto;
-    --u:calc(min(100vw,1280px)/100);overflow:hidden;}
-  .paperwrap img.paper{display:block;width:100%;height:auto;}
+    --u:calc(min(100vw,1280px)/100);}
+  .paper-top,.paper-mid,.paper-bot{width:100%;background-size:100% auto;background-repeat:no-repeat;}
+  .paper-top{background-position:top center;}
+  .paper-mid{background-repeat:repeat-y;background-position:top center;}
+  .paper-bot{background-position:bottom center;}
   .paperwrap img.stamp{position:absolute;top:1.7%;left:62%;width:22%;
     transform:rotate(3.2deg);filter:drop-shadow(calc(.25*var(--u)) calc(.4*var(--u)) calc(.9*var(--u)) rgba(50,40,25,.38));}
-  .paperfade{position:absolute;bottom:0;left:0;width:100%;height:calc(13*var(--u));pointer-events:none;
-    background:linear-gradient(180deg,rgba(23,21,18,0) 0%,#171512 88%);}
   /* 文字不垫任何底（否定台账 #27：不遮挡底材素材）。可读性靠排布：
      正文列避开纸缘实物（默认 25%–78%，个别纸再由 --padl/--padw 调） */
   .pcontent{position:absolute;top:var(--ptop,6.5%);left:var(--padl,25%);width:var(--padw,53%);color:#41372a;}
@@ -181,10 +184,11 @@
 
 <div class="drawer" id="drawer">
   <div class="paperwrap" id="paperwrap">
-    <img class="paper" id="paper" src="" alt="">
+    <div class="paper-top" id="paperTop"></div>
+    <div class="paper-mid" id="paperMid"></div>
+    <div class="paper-bot" id="paperBot"></div>
     <img class="stamp" id="stamp" src="" alt="">
     <div class="pcontent" id="pcontent"></div>
-    <div class="paperfade"></div>
   </div>
 </div>
 
@@ -434,6 +438,7 @@
 </template>
 
 <script>
+var PAPER_SEG = {"runo": {"topH": 2899, "midH": 230, "botH": 711, "w": 1280, "fullH": 3840}, "leimma": {"topH": 2553, "midH": 231, "botH": 1056, "w": 1280, "fullH": 3840}, "sigma": {"topH": 2956, "midH": 231, "botH": 653, "w": 1280, "fullH": 3840}, "vox": {"topH": 2661, "midH": 230, "botH": 949, "w": 1280, "fullH": 3840}, "memoria": {"topH": 2384, "midH": 231, "botH": 1225, "w": 1280, "fullH": 3840}, "nullroute": {"topH": 2895, "midH": 230, "botH": 715, "w": 1280, "fullH": 3840}, "pharma": {"topH": 2826, "midH": 230, "botH": 784, "w": 1280, "fullH": 3840}, "qianxing": {"topH": 2680, "midH": 230, "botH": 930, "w": 1280, "fullH": 3840}};
 var SITE_WORKS = {
   runo: {
     cards: [
@@ -503,7 +508,8 @@ Object.keys(DATA).forEach(function(who){
 
 var stage=document.getElementById('stage'), frame=document.getElementById('frame'),
     tag=document.getElementById('tag'), drawer=document.getElementById('drawer'),
-    paper=document.getElementById('paper'), stamp=document.getElementById('stamp'),
+    paperTop=document.getElementById('paperTop'), paperMid=document.getElementById('paperMid'),
+    paperBot=document.getElementById('paperBot'), stamp=document.getElementById('stamp'),
     pcontent=document.getElementById('pcontent'), opened=null;
 
 /* ── 纸片层：96 张纸沿同一股风走，分 9 簇出场（参数为 2026-08-02 馆主定稿版；
@@ -640,7 +646,14 @@ function open(who, fromHistory){
   var ty=Math.max(-lim, Math.min(lim, (50-d.cam[1])*s));
   frame.style.transform='translate('+tx+'%,'+ty+'%) scale('+s+')';
   tag.style.setProperty('--inv', 1/s);
-  paper.src='assets/paper/'+who+'.jpg';
+  var seg = PAPER_SEG[who];
+  var scale = Math.min(window.innerWidth, 1280) / seg.w;   // 纸按显示宽度缩放
+  paperTop.style.backgroundImage = "url('assets/paper/seg/"+who+"-top.jpg')";
+  paperMid.style.backgroundImage = "url('assets/paper/seg/"+who+"-mid.jpg')";
+  paperBot.style.backgroundImage = "url('assets/paper/seg/"+who+"-bot.jpg')";
+  paperTop.style.height = (seg.topH*scale)+'px';
+  paperBot.style.height = (seg.botH*scale)+'px';
+  paperMid.style.height = (seg.midH*scale)+'px';   // 先给一段，内容排完后再按需加长
   stamp.src='assets/stamp/'+who+'.png';
   // 逐张微调书写区（避开该纸边缘实物；参数由程序扫描纸图深色区定，见底账 08-06 节）
   var pad = d.pad || [];
@@ -664,25 +677,30 @@ function open(who, fromHistory){
     +'<div class="bio-gap"></div>'
     +'<div class="writing"><div class="bio">'+bioHtml+'</div>'
     + buildWorks(who) + '</div>';
+  fitPaper();                       // 内容一排好就配长，避免先短后长地跳一下
   document.body.classList.add('opened');
   drawer.classList.add('on');
   requestAnimationFrame(function(){ setTimeout(function(){
     drawer.scrollIntoView({behavior:'smooth'});
   }, 120); });
   setTimeout(fitPaper, 60);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ setTimeout(fitPaper, 30); });
 }
-// 纸按内容长度裁短：内容结束后留一段纸再渐隐入暗，简介短的公民不拖一整张空纸
+// 纸按内容配长：算出文字与作品卡实际占多高，让中段重复到刚好托住它们，
+// 末尾留一段空白纸再接纸尾。中文短、英文长，同一张纸都装得下。
 function fitPaper(){
-  var wrap=document.getElementById('paperwrap');
-  if(!opened){ wrap.style.maxHeight='none'; return; }
-  var full=paper.offsetHeight;
-  if(!full){ return; }
-  var contentBottom=pcontent.offsetTop+pcontent.offsetHeight;
-  var minH=contentBottom+0.14*Math.min(window.innerWidth,1280);
-  wrap.style.maxHeight=(full>minH?minH:full)+'px';
+  if(!opened) return;
+  var seg = PAPER_SEG[opened]; if(!seg) return;
+  var scale = Math.min(window.innerWidth, 1280) / seg.w;
+  var topH = seg.topH*scale, botH = seg.botH*scale, midUnit = seg.midH*scale;
+  var contentBottom = pcontent.offsetTop + pcontent.offsetHeight;
+  var tail = 0.10*Math.min(window.innerWidth,1280);        // 内容结束后留的空白纸
+  // 纸总高 = 上段 + 中段 + 下段，要托住内容并在末尾留一段空白纸
+  var needMid = Math.max(midUnit, contentBottom + tail - topH - botH);
+  paperMid.style.height = Math.ceil(needMid/midUnit)*midUnit + 'px';
 }
-paper.addEventListener('load',function(){ setTimeout(fitPaper,30); });
-window.addEventListener('resize',fitPaper);
+window.addEventListener('resize', function(){ fitPaper(); });
+window.addEventListener('load', function(){ setTimeout(fitPaper, 60); });
 function close(fromHistory){
   opened=null;
   if(!fromHistory && location.hash){
