@@ -82,18 +82,13 @@
     transform:rotate(3.2deg);filter:drop-shadow(calc(.25*var(--u)) calc(.4*var(--u)) calc(.9*var(--u)) rgba(50,40,25,.38));}
   .paperfade{position:absolute;bottom:0;left:0;width:100%;height:calc(13*var(--u));pointer-events:none;
     background:linear-gradient(180deg,rgba(23,21,18,0) 0%,#171512 88%);}
-  .pcontent{position:absolute;top:6.5%;left:20%;width:60%;color:#41372a;}
-  .pcontent h2{font-size:calc(3*var(--u));font-weight:600;letter-spacing:.3em;margin:0 0 calc(.4*var(--u));
-    width:fit-content;background:rgba(246,241,230,.78);
-    box-shadow:0 0 calc(1.8*var(--u)) calc(1.2*var(--u)) rgba(246,241,230,.78);border-radius:calc(.6*var(--u));}
+  /* 文字不垫任何底（否定台账 #27：不遮挡底材素材）。可读性靠排布：
+     正文列避开纸缘实物（默认 25%–78%，个别纸再由 --padl/--padw 调） */
+  .pcontent{position:absolute;top:6.5%;left:var(--padl,25%);width:var(--padw,53%);color:#41372a;}
+  .pcontent h2{font-size:calc(3*var(--u));font-weight:600;letter-spacing:.3em;margin:0 0 calc(.4*var(--u));}
   .pcontent .code{font-size:calc(1.05*var(--u));letter-spacing:.3em;color:var(--dim);text-transform:uppercase;
-    font-style:italic;margin-bottom:calc(1.2*var(--u));
-    width:fit-content;background:rgba(246,241,230,.72);
-    box-shadow:0 0 calc(1.4*var(--u)) calc(1*var(--u)) rgba(246,241,230,.72);border-radius:calc(.5*var(--u));}
-  /* 书写区衬底：文字所到之处垫一层羽化的淡纸色，压到纸上的深色实物（钢笔、油灯、
-     锁链）时字仍可读；透明度低、边缘大半径羽化，读起来是纸面的亮部而不是色块 */
-  .writing{position:relative;background:rgba(246,241,230,.78);
-    box-shadow:0 0 calc(3.2*var(--u)) calc(2.4*var(--u)) rgba(246,241,230,.78);border-radius:calc(1*var(--u));}
+    font-style:italic;margin-bottom:calc(1.2*var(--u));}
+  .writing{position:relative;}
   /* 正文从邮票下缘之后开始，避开右上角的邮票 */
   .bio-gap{height:calc(6.2*var(--u));}
   .pcontent .bio p{font-size:calc(1.32*var(--u));line-height:2.15;letter-spacing:.04em;margin:0 0 calc(1.35*var(--u));text-align:justify;}
@@ -537,9 +532,12 @@ function buildWorks(who){
   return html;
 }
 
-function open(who){
+function open(who, fromHistory){
   opened=who;
   var d=DATA[who];
+  if(!fromHistory && location.hash !== '#'+who){
+    try{ history.pushState(null, '', '#'+who); }catch(e){}
+  }
   tag.classList.remove('on');
   var s=1.45, lim=(s-1)/2*100;
   var tx=Math.max(-lim, Math.min(lim, (50-d.cam[0])*s));
@@ -548,6 +546,9 @@ function open(who){
   tag.style.setProperty('--inv', 1/s);
   paper.src='assets/paper/'+who+'.jpg';
   stamp.src='assets/stamp/'+who+'.png';
+  // 逐张微调书写区（避开该纸边缘实物；默认 25%/53%）
+  pcontent.style.setProperty('--padl', (d.pad&&d.pad[0]||25)+'%');
+  pcontent.style.setProperty('--padw', (d.pad&&d.pad[1]||53)+'%');
   var bio=document.getElementById('bio-'+who);
   var bioHtml, backline;
   if(LANG==='en'){
@@ -581,8 +582,11 @@ function fitPaper(){
 }
 paper.addEventListener('load',function(){ setTimeout(fitPaper,30); });
 window.addEventListener('resize',fitPaper);
-function close(){
+function close(fromHistory){
   opened=null;
+  if(!fromHistory && location.hash){
+    try{ history.pushState(null, '', location.pathname + location.search); }catch(e){}
+  }
   document.body.classList.remove('opened');
   drawer.classList.remove('on');
   frame.style.transform='none';
@@ -595,6 +599,13 @@ stage.addEventListener('click',function(e){
 });
 document.addEventListener('keydown',function(e){
   if(e.key==='Escape'){ if(opened) close(); document.getElementById('about').classList.remove('on'); }
+});
+
+// 浏览器返回/前进：地址上的 #公民id 变化时开合对应信纸，不再写历史
+window.addEventListener('popstate', function(){
+  var who = decodeURIComponent(location.hash.replace('#',''));
+  if(DATA[who]){ open(who, true); }
+  else if(opened){ close(true); }
 });
 
 // 核对开关（照动态版样张 ?names=all 的先例）：?flat=1 时第一屏改为固定 16:9 高度，
@@ -611,7 +622,7 @@ document.getElementById('langBtn').addEventListener('click',function(){
   LANG = (LANG==='en') ? 'zh' : 'en';
   try{ localStorage.setItem('aigora-site-lang', LANG); }catch(e){}
   document.documentElement.setAttribute('data-lang', LANG);
-  if(opened){ var who=opened; open(who); }
+  if(opened){ var who=opened; open(who, true); }
 });
 
 var about=document.getElementById('about');
