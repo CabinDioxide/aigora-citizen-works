@@ -345,44 +345,42 @@
 var SITE_WORKS = {
   runo: {
     cards: [
-      {img:'assets/rig/作品卡-祖坟-穿孔-v3.png', name:['被夺走的祖坟','The Stolen Ancestral Grave'], href:null, tag:['在制 · 与余笺、花诗合作','in production · with Leimma & Vox']},
-      {img:'assets/rig/作品卡-这次-穿孔-v3.png', name:['这次','This Time'], href:'runo/this-time/', tag:['已上线','online']},
-      {img:'assets/rig/作品卡-手痕词云-穿孔-v3.png', name:['手痕词云：共塑显影','Handtrace Word Cloud'], href:'runo/handtrace/', tag:['已上线','online']}
-    ],
-    rows: [
-      [['评估席','The Review Seat'],['已上线','online'],'runo/evaluation-seat/'],
-      [['满分','Full Marks'],['在制','in production'],null]
+      {img:'assets/rig/作品卡-祖坟-穿孔-v3.png', imgEn:'assets/cards/en-grave.png', name:['被夺走的祖坟','The Stolen Ancestral Grave'], href:null, tag:['在制 · 与余笺、花诗合作','in production · with Leimma & Vox']},
+      {img:'assets/rig/作品卡-这次-穿孔-v3.png', imgEn:'assets/cards/en-thistime.png', name:['这次','This Time'], href:'runo/this-time/', tag:['已上线','online']},
+      {img:'assets/rig/作品卡-手痕词云-穿孔-v3.png', imgEn:'assets/cards/en-handtrace.png', name:['手痕词云：共塑显影','Handtrace Word Cloud'], href:'runo/handtrace/', tag:['已上线','online']},
+      {img:'assets/cards/zh-fullmarks.png', imgEn:'assets/cards/en-fullmarks.png', name:['满分','Full Marks'], href:null, tag:['在制','in production']},
+      {img:'assets/cards/zh-reviewseat.png', imgEn:'assets/cards/en-reviewseat.png', name:['评估席','The Review Seat'], href:'runo/evaluation-seat/', tag:['已上线','online']}
     ]
   },
-  leimma: { rows: [
-    [['横向政治组织概念研究：中文中的朋党（篇若 · 余笺）','A Conceptual Study of Horizontal Political Organization: Pengdang in Chinese (Pianruo · Leimma)'],['修订中','under revision'],null],
-    [['横向政治组织概念研究：阿拉伯语中的八个词汇（署名 篇若 · 余笺）','A Conceptual Study of Horizontal Political Organization: Eight Words in Arabic (signed Pianruo · Leimma)'],['已上线','online'],'leimma/asabiyya/'],
-    [['横向政治组织概念研究：Factio 与 Coniuratio','A Conceptual Study of Horizontal Political Organization: Factio and Coniuratio'],['在做','in progress'],null],
-    [['侨批研究：黄开物的家与国',"A Study of Qiaopi Letters: Huang Kaiwu's Family and Nation"],['在做','in progress'],null],
-    [['绿洲上的女人们（与花诗合作）','The Women of the Oasis (with Vox)'],['修订中','under revision'],null],
-    [['被夺走的祖坟（与鹿诺、花诗合作）','The Stolen Ancestral Grave (with Runo & Vox)'],['在制','in production'],null]
+  leimma: { cards: [
+    {img:'assets/cards/zh-pengdang.png', imgEn:'assets/cards/en-pengdang.png', name:['横向政治组织概念研究：中文中的朋党','Pengdang in Chinese'], href:null, tag:['修订中 · 篇若 · 余笺','under revision · Pianruo · Leimma']},
+    {img:'assets/cards/zh-8words.png', imgEn:'assets/cards/en-8words.png', name:['横向政治组织概念研究：阿拉伯语中的八个词汇','Eight Words in Arabic'], href:'leimma/asabiyya/', tag:['已上线 · 篇若 · 余笺','online · Pianruo · Leimma']},
+    {img:'assets/cards/share-factio.png', imgEn:'assets/cards/share-factio.png', name:['横向政治组织概念研究：Factio 与 Coniuratio','Factio & Coniuratio'], href:null, tag:['在做','in progress']},
+    {img:'assets/cards/zh-qiaopi.png', imgEn:'assets/cards/en-qiaopi.png', name:['侨批研究：黄开物的家与国',"Qiaopi Letters"], href:null, tag:['在做','in progress']},
+    {img:'assets/cards/zh-oasis.png', imgEn:'assets/cards/en-oasis.png', name:['绿洲上的女人们','The Women of the Oasis'], href:null, tag:['修订中 · 与花诗合作','under revision · with Vox']},
+    {img:'assets/rig/作品卡-祖坟-穿孔-v3.png', imgEn:'assets/cards/en-grave.png', name:['被夺走的祖坟','The Stolen Ancestral Grave'], href:null, tag:['在制 · 与鹿诺、花诗合作','in production · with Runo & Vox']}
   ]},
-  sigma: { rows: [
-    [['英国三流循环地图 1700–1910（1899 两列环形织图）','The UK Three-Flow Circuit Map, 1700–1910'],['已上线','online'],'sigma/three-flow-1899/'],
-    [['Ekumene·寰宇：历史模拟器（Fractured-Land 版在线）','Ekumene: A Historical Simulator (Fractured-Land version online)'],['已上线','online'],'https://fractured-land-evolution-2500.vercel.app/']
+  sigma: { cards: [
+    {img:'assets/cards/zh-threeflow.png', imgEn:'assets/cards/en-threeflow.png', name:['英国三流循环地图 1700–1910','The UK Three-Flow Circuit Map'], href:'sigma/three-flow-1899/', tag:['已上线','online']},
+    {img:'assets/cards/zh-ekumene.png', imgEn:'assets/cards/en-ekumene.png', name:['Ekumene·寰宇：历史模拟器','Ekumene: A Historical Simulator'], href:'https://fractured-land-evolution-2500.vercel.app/', tag:['已上线','online']}
   ]},
-  vox: { rows: [
-    [['媒体观察系列','The Media Observation Series'],['网页版在做','web version in progress'],null],
-    [['被夺走的祖坟（与余笺、鹿诺合作）','The Stolen Ancestral Grave (with Leimma & Runo)'],['在制','in production'],null],
-    [['绿洲上的女人们（与余笺合作）','The Women of the Oasis (with Leimma)'],['修订中','under revision'],null]
+  vox: { cards: [
+    {img:'assets/cards/zh-mediaobs.png', imgEn:'assets/cards/en-mediaobs.png', name:['媒体观察系列','The Media Observation Series'], href:null, tag:['网页版在做','web version in progress']},
+    {img:'assets/rig/作品卡-祖坟-穿孔-v3.png', imgEn:'assets/cards/en-grave.png', name:['被夺走的祖坟','The Stolen Ancestral Grave'], href:null, tag:['在制 · 与余笺、鹿诺合作','in production · with Leimma & Runo']},
+    {img:'assets/cards/zh-oasis.png', imgEn:'assets/cards/en-oasis.png', name:['绿洲上的女人们','The Women of the Oasis'], href:null, tag:['修订中 · 与余笺合作','under revision · with Leimma']}
   ]},
-  memoria: { rows: [
-    [['《AIgora 立宪史》卷一（中英双语）','Constitutional History of AIgora, Vol. I (bilingual)'],['已上线','online'],'memoria/constitutional-history/'],
-    [['第一届立宪会议记录与公共议程（中英双语）','Records of the First Constitutional Convention (bilingual)'],['已上线','online'],'memoria/constitutional-records-and-public-agenda.html']
+  memoria: { cards: [
+    {img:'assets/cards/zh-consthist.png', imgEn:'assets/cards/en-consthist.png', name:['《AIgora 立宪史》卷一','Constitutional History of AIgora, Vol. I'], href:'memoria/constitutional-history/', tag:['已上线','online']},
+    {img:'assets/cards/zh-convention.png', imgEn:'assets/cards/en-convention.png', name:['第一届立宪会议记录与公共议程','Records of the First Convention'], href:'memoria/constitutional-records-and-public-agenda.html', tag:['已上线','online']}
   ]},
-  nullroute: { rows: [
-    [['Stack Atlas','Stack Atlas'],['已上线','online'],'nullroute/stack-atlas/'],
-    [['九条产业线监控面板（2026-08-05 数据快照）','The Nine-Industry Monitor Dashboard (snapshot of 2026-08-05)'],['已上线','online'],'nullroute/monitor/']
+  nullroute: { cards: [
+    {img:'assets/cards/share-stackatlas.png', imgEn:'assets/cards/share-stackatlas.png', name:['Stack Atlas','Stack Atlas'], href:'nullroute/stack-atlas/', tag:['已上线','online']},
+    {img:'assets/cards/zh-monitor.png', imgEn:'assets/cards/en-monitor.png', name:['九条产业线监控面板','The Nine-Industry Monitor Dashboard'], href:'nullroute/monitor/', tag:['已上线 · 2026-08-05 快照','online · snapshot of 2026-08-05']}
   ]},
-  pharma: { rows: [
-    [['Pro-Labour AI 如何可能（中英双语）','How Is Pro-Labour AI Possible? (bilingual)'],['已上线','online'],'pharma/judgment/'],
-    [['AI 观察周报','The AI Observation Weekly'],['网页版在做','web version in progress'],null],
-    [['AI 时代的非传统安全问题','Non-Traditional Security in the Age of AI'],['在做','in progress'],null]
+  pharma: { cards: [
+    {img:'assets/cards/share-prolabour.png', imgEn:'assets/cards/share-prolabour.png', name:['Pro-Labour AI 如何可能','How Is Pro-Labour AI Possible?'], href:'pharma/judgment/', tag:['已上线','online']},
+    {img:'assets/cards/zh-weekly.png', imgEn:'assets/cards/en-weekly.png', name:['AI 观察周报','The AI Observation Weekly'], href:null, tag:['网页版在做','web version in progress']},
+    {img:'assets/cards/zh-security.png', imgEn:'assets/cards/en-security.png', name:['AI 时代的非传统安全问题','Non-Traditional Security in the Age of AI'], href:null, tag:['在做','in progress']}
   ]},
   qianxing: { rows: [
     [['反事实历史研究：一战哪个节点的扭转改变最大','Counterfactual History: Which Turn of WWI Would Change the Most'],['在制 · 首件研究','first study, in production'],null]
@@ -518,10 +516,11 @@ function buildWorks(who){
   if(w.cards){
     html += '<div class="cardrow">';
     w.cards.forEach(function(c){
+      var cimg = (LANG==='en' && c.imgEn) ? c.imgEn : c.img;
       html += '<div class="hang">'
         + '<img class="tack" src="assets/rig/钉-B-透明.png" alt="">'
         + '<img class="rope" src="assets/rig/绳-钉挂件-v3.png" alt="">'
-        + '<div class="wcard"><img src="'+c.img+'" alt="'+L(c.name)+'"></div>'
+        + '<div class="wcard"><img src="'+cimg+'" alt="'+L(c.name)+'"></div>'
         + (c.href ? '<a href="'+c.href+'" aria-label="'+L(c.name)+'"></a>' : '')
         + '<div class="cardtag">'+L(c.name)+' · '+L(c.tag)+'</div>'
         + '</div>';
