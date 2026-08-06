@@ -88,8 +88,10 @@
   /* 文字不垫任何底（否定台账 #27：不遮挡底材素材）。可读性靠排布：
      正文列避开纸缘实物（默认 25%–78%，个别纸再由 --padl/--padw 调） */
   .pcontent{position:absolute;top:var(--ptop,6.5%);left:var(--padl,25%);width:var(--padw,53%);color:#41372a;}
+  /* 标题限宽到邮票左边界之内：中文名短、英文名长（Runaway Checkpoint、Memoria Libra），
+     不限宽就会伸到邮票底下。超出的换行，标题占两行也比压着邮票好。 */
   .pcontent h2{font-size:calc(3*var(--u));font-weight:600;letter-spacing:.3em;margin:0 0 calc(.4*var(--u));
-    margin-left:var(--tpad,0px);}
+    margin-left:var(--tpad,0px);max-width:var(--titlew,100%);line-height:1.25;}
   .pcontent .code{font-size:calc(1.05*var(--u));letter-spacing:.3em;color:var(--dim);text-transform:uppercase;
     font-style:italic;margin-bottom:calc(1.2*var(--u));margin-left:var(--tpad,0px);}
   .writing{position:relative;}
@@ -662,6 +664,10 @@ function open(who, fromHistory){
   pcontent.style.setProperty('--ptop', (pad[2]||6.5)+'%');
   pcontent.style.setProperty('--tpad', pad[3] ? 'calc('+pad[3]+'*var(--u))' : '0px');
   pcontent.style.setProperty('--bgap', (pad[4]!==undefined) ? 'calc('+pad[4]+'*var(--u))' : 'calc(6.2*var(--u))');
+  // 标题可用宽度 = 邮票左边界(59%) − 文字列左边界 − 标题缩进，换算成内容列的百分比
+  var padl = pad[0]||25, padw = pad[1]||53, tpad = pad[3]||0;
+  var titleW = Math.max(30, (59 - padl - tpad) / padw * 100);
+  pcontent.style.setProperty('--titlew', titleW + '%');
   var bio=document.getElementById('bio-'+who);
   var bioHtml;
   if(LANG==='en'){
