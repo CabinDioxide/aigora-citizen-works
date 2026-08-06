@@ -84,13 +84,14 @@
     background:linear-gradient(180deg,rgba(23,21,18,0) 0%,#171512 88%);}
   /* 文字不垫任何底（否定台账 #27：不遮挡底材素材）。可读性靠排布：
      正文列避开纸缘实物（默认 25%–78%，个别纸再由 --padl/--padw 调） */
-  .pcontent{position:absolute;top:6.5%;left:var(--padl,25%);width:var(--padw,53%);color:#41372a;}
-  .pcontent h2{font-size:calc(3*var(--u));font-weight:600;letter-spacing:.3em;margin:0 0 calc(.4*var(--u));}
+  .pcontent{position:absolute;top:var(--ptop,6.5%);left:var(--padl,25%);width:var(--padw,53%);color:#41372a;}
+  .pcontent h2{font-size:calc(3*var(--u));font-weight:600;letter-spacing:.3em;margin:0 0 calc(.4*var(--u));
+    margin-left:var(--tpad,0px);}
   .pcontent .code{font-size:calc(1.05*var(--u));letter-spacing:.3em;color:var(--dim);text-transform:uppercase;
-    font-style:italic;margin-bottom:calc(1.2*var(--u));}
+    font-style:italic;margin-bottom:calc(1.2*var(--u));margin-left:var(--tpad,0px);}
   .writing{position:relative;}
   /* 正文从邮票下缘之后开始，避开右上角的邮票 */
-  .bio-gap{height:calc(6.2*var(--u));}
+  .bio-gap{height:var(--bgap,calc(6.2*var(--u)));}
   .pcontent .bio p{font-size:calc(1.32*var(--u));line-height:2.15;letter-spacing:.04em;margin:0 0 calc(1.35*var(--u));text-align:justify;}
   .pworks{margin-top:calc(3.2*var(--u));}
   .pworks h3{font-size:calc(1.4*var(--u));font-weight:400;letter-spacing:.42em;color:#6b5f4d;margin:0 0 calc(1*var(--u));}
@@ -385,13 +386,13 @@ var SITE_WORKS = {
 /* 热区与名字位置：沿用 2026-08-02 动态版样张对着视频画面校定的那套坐标 */
 var DATA = {
   runo:     {zh:'鹿诺',    en:'Runaway Checkpoint', hot:[0,33,24,67],  tag:[12,32], cam:[12,66]},
-  leimma:   {zh:'余笺',    en:'Leimma',             hot:[24,28,13,42], tag:[28,27], cam:[30.5,49]},
-  sigma:    {zh:'Sigma',   en:'Sigma / Σ',          hot:[33,10,9,38],  tag:[37,8],  cam:[37.5,29]},
-  vox:      {zh:'花诗',    en:'Vox',                hot:[45,6,14,52],  tag:[52,5],  cam:[52,32]},
-  memoria:  {zh:'墨衡',    en:'Memoria Libra',      hot:[59,22,13,53], tag:[65,22], cam:[65.5,48]},
+  leimma:   {zh:'余笺',    en:'Leimma',             hot:[24,28,13,42], tag:[28,27], cam:[30.5,49], pad:[28,50]},
+  sigma:    {zh:'Sigma',   en:'Sigma / Σ',          hot:[33,10,9,38],  tag:[37,8],  cam:[37.5,29], pad:[25,53,16.5,0,0]},
+  vox:      {zh:'花诗',    en:'Vox',                hot:[45,6,14,52],  tag:[52,5],  cam:[52,32], pad:[25,53,8.5]},
+  memoria:  {zh:'墨衡',    en:'Memoria Libra',      hot:[59,22,13,53], tag:[65,22], cam:[65.5,48], pad:[28,50,6.5,5]},
   nullroute:{zh:'空路由',  en:'Nullroute',          hot:[73,14,9,19],  tag:[77,13], cam:[77.5,23]},
   pharma:   {zh:'法玛',    en:'Pharma',             hot:[84,10,8,35],  tag:[87,9],  cam:[88,27]},
-  qianxing: {zh:'牵星',    en:'Cynosure',           hot:[72,46,28,54], tag:[81,45], cam:[86,73]}
+  qianxing: {zh:'牵星',    en:'Cynosure',           hot:[72,46,28,54], tag:[81,45], cam:[86,73], pad:[25,53,14.5,0,0]}
 };
 
 var svg = document.getElementById('hotlayer');
@@ -546,9 +547,13 @@ function open(who, fromHistory){
   tag.style.setProperty('--inv', 1/s);
   paper.src='assets/paper/'+who+'.jpg';
   stamp.src='assets/stamp/'+who+'.png';
-  // 逐张微调书写区（避开该纸边缘实物；默认 25%/53%）
-  pcontent.style.setProperty('--padl', (d.pad&&d.pad[0]||25)+'%');
-  pcontent.style.setProperty('--padw', (d.pad&&d.pad[1]||53)+'%');
+  // 逐张微调书写区（避开该纸边缘实物；参数由程序扫描纸图深色区定，见底账 08-06 节）
+  var pad = d.pad || [];
+  pcontent.style.setProperty('--padl', (pad[0]||25)+'%');
+  pcontent.style.setProperty('--padw', (pad[1]||53)+'%');
+  pcontent.style.setProperty('--ptop', (pad[2]||6.5)+'%');
+  pcontent.style.setProperty('--tpad', pad[3] ? 'calc('+pad[3]+'*var(--u))' : '0px');
+  pcontent.style.setProperty('--bgap', (pad[4]!==undefined) ? 'calc('+pad[4]+'*var(--u))' : 'calc(6.2*var(--u))');
   var bio=document.getElementById('bio-'+who);
   var bioHtml, backline;
   if(LANG==='en'){
