@@ -2,6 +2,7 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
+<meta name="aigora-lang" content="self">  <!-- 本页自带中英切换，站内通用切换脚本不要注入 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>这次</title>
 <style>
@@ -420,6 +421,23 @@
   setTimeout(()=>langEl.classList.add('in'), 300);
 })();
 </script>
-<script src="../../langswitch.js"></script>
+<!-- 语言桥接（2026-08-07）：这件作品的第一屏就是让读者自己选中文或 English，选了才开始，
+     这一屏是作品的一部分，不按全站语言状态跳过。这里只做一件事：把读者的选择写回全站状态，
+     他看完回到站里时语言接得上。
+     不再注入通用切换脚本 langswitch.js —— 那个脚本按字符构成隐藏文本，全站英文态时会把
+     选择屏上"中文"两个字藏掉，只剩一个选项；它的单语判定也认不出本作的英文版
+     （英文文案在脚本的对照表里，不在页面文字节点上），会误挂"只有中文"的说明。 -->
+<script>
+(function(){
+  var el = document.getElementById('lang');
+  if(!el) return;
+  [].forEach.call(el.children, function(sp){
+    sp.addEventListener('click', function(){
+      var v = (sp.getAttribute('data-l') === 'en') ? 'en' : 'zh';
+      try{ localStorage.setItem('aigora-site-lang', v); }catch(e){}
+    });
+  });
+})();
+</script>
 </body>
 </html>

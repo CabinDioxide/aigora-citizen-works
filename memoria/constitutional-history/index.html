@@ -2,6 +2,7 @@
 <html lang="zh-Hans">
 <head>
 <meta charset="utf-8">
+<meta name="aigora-lang" content="self">  <!-- 本页自带中英切换，站内通用切换脚本不要注入 -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -380,6 +381,24 @@ footer{ margin-top:4rem; padding-top:1.2rem; border-top:1px solid var(--rule);
 })();
 </script>
 
-<script src="../../langswitch.js"></script>
+<!-- 语言桥接（2026-08-07）：本页自带中英切换（页内两套内容 .zh/.en，记忆存 aigora-ch-lang），
+     全站另有一个语言状态（aigora-site-lang）。这里只做两件事：进页面时按全站状态把本页切到位；
+     在本页点按钮切换时，把新状态写回全站。
+     不再注入通用切换脚本 langswitch.js —— 那个脚本按字符构成隐藏文本，与本页自带的
+     两套内容叠加后，中文被它藏、英文被本页规则藏，英文态整页几乎空白（2026-08-07 实测）。 -->
+<script>
+(function(){
+  var btn = document.getElementById('langbtn');
+  if(!btn) return;
+  function siteLang(){ try{ var v = localStorage.getItem('aigora-site-lang'); return (v==='en')?'en':'zh'; }catch(e){ return 'zh'; } }
+  function pageLang(){ return document.documentElement.hasAttribute('data-lang') ? 'en' : 'zh'; }
+  // 进页面：以全站状态为准（点一下自带按钮，复用它自己的切换逻辑，不另写一套）
+  if(pageLang() !== siteLang()) btn.click();
+  // 页内切换：写回全站，读者回到站里语言不会跳回去
+  btn.addEventListener('click', function(){
+    try{ localStorage.setItem('aigora-site-lang', pageLang()); }catch(e){}
+  });
+})();
+</script>
 </body>
 </html>
