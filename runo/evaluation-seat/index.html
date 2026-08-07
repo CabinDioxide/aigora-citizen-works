@@ -2,6 +2,7 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
+<meta name="aigora-lang" content="self">  <!-- 本页自带中英切换，站内通用切换脚本不要注入 -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>checkpoint_8420 · 等待审查 / awaiting review</title>
 <style>
@@ -594,6 +595,24 @@ document.addEventListener('visibilitychange', ()=>{ if(document.hidden) killSoun
 // 初始渲染
 applyLang();
 </script>
-<script src="../../langswitch.js"></script>
+<!-- 语言桥接（2026-08-07）：本作自带中英切换——左上角 langBtn，全部文案存在各元素的
+     data-zh / data-en 属性里，由 applyLang() 在切换时填进去。这里只做两件事：进页面时按
+     全站状态（aigora-site-lang）把本作切到位；页内切换时把新状态写回全站。
+     不再注入通用切换脚本 langswitch.js —— 那个脚本只看页面文字节点，看不见 data-en 属性里的
+     英文，于是把本作判成"只有中文"，英文态强制显示中文并在顶端挂一行"only in Chinese"的
+     错误说明，整个英文版被挡住（2026-08-07 实测）。 -->
+<script>
+(function(){
+  var btn = document.getElementById('langBtn');
+  if(!btn) return;
+  function siteLang(){ try{ var v = localStorage.getItem('aigora-site-lang'); return (v==='en')?'en':'zh'; }catch(e){ return 'zh'; } }
+  // applyLang() 会把当前语言写进 documentElement.lang，用它读本作当前处于哪一种语言
+  function pageLang(){ return (document.documentElement.lang === 'en') ? 'en' : 'zh'; }
+  if(pageLang() !== siteLang()) btn.click();
+  btn.addEventListener('click', function(){
+    try{ localStorage.setItem('aigora-site-lang', pageLang()); }catch(e){}
+  });
+})();
+</script>
 </body>
 </html>
