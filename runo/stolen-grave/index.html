@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>被夺走的祖坟</title>
+<meta name="aigora-lang" content="self">
+<script src="en.js"></script>
+<style>
+  /* v8 按章组装 · 幕一（定稿语言照样张 v3/v3.2）＋ §二（组装 PRD 幕二至尾声 v1）
+     素材全部来自已终判件；文字档位照版式规格 v1。 */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{overflow-x:clip}
+  body{background:#20242b;color:#241f1a;
+       font-family:"Songti SC","SimSun","Source Han Serif SC",serif;line-height:1.9;overflow-x:clip}
+  #bg,#bg2{position:fixed;inset:0;z-index:0}
+  #bg img,#bg2 img{width:100%;height:100%;object-fit:cover;filter:saturate(.82) contrast(1.04) brightness(1.08);opacity:.88}
+  #bg2{opacity:0;transition:opacity 1.4s}
+  /* 背景蒙版（08-05 亲验第三轮①）：把固定背景压成远景衬底，与画格素材、开章大图拉开层次；
+     开章大图与画格保持全亮，背景永远暗一层，色调重复与下滚重叠随之消解 */
+  #bg::after,#bg2::after{content:"";position:absolute;inset:0;background:rgba(16,13,10,.52)}
+  .reel{max-width:min(94vw,1020px);margin:0 auto;position:relative;z-index:1}
+
+  /* 间隔三档 */
+  .bite{margin-top:8px}
+  .breath{margin-top:5vh}
+  .gasp{margin-top:14vh}
+
+  /* 画格通用 */
+  .panel{position:relative;background:#efe7d6;padding:10px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+  .panel>img{width:100%;height:auto;display:block}
+  .panel.cut{border:2px solid #2b2317;padding:8px;background:#efe7d6}
+  /* 边缘情绪阶梯：真边料件九宫格。轻毛边 jl；重撕边 jh；齐边 jq＝轻毛边件最小档 */
+  /* 画格边（08-06 改）：边料件整张当底，画面按边料自身的形状裁形——
+     形状来自素材，不再用九宫格拉伸配矩形图（矩形角必然压出撕边，"素材超出边框"病根）。 */
+  /* 画格边：八张纸各不相同（08-06 裁定"所有撕边画格不能长得一样"），逐格指定、相邻不重样 */
+  .jl,.jh,.jq{position:relative;background-repeat:no-repeat;background-position:center;
+      background-size:100% 100%}
+  .jl,.jq{filter:drop-shadow(0 5px 14px rgba(0,0,0,.35))}
+  .jh{filter:drop-shadow(0 6px 16px rgba(0,0,0,.4))}
+  .jl>img,.jh>img,.jq>img{display:block;width:100%;
+      -webkit-mask-size:100% 100%;mask-size:100% 100%;
+      -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+  /* 轻毛边四张 */
+  .pa{background-image:url("assets/透明-画格边料-轻毛边-v7.png")}
+  .pa>img{-webkit-mask-image:url("assets/遮罩-轻毛边.jpg");mask-image:url("assets/遮罩-轻毛边.jpg")}
+  .pb{background-image:url("assets/透明-边料-轻毛边-b.png")}
+  .pb>img{-webkit-mask-image:url("assets/遮罩-轻毛边-b.jpg");mask-image:url("assets/遮罩-轻毛边-b.jpg")}
+  .pc{background-image:url("assets/透明-边料-轻毛边-c.png")}
+  .pc>img{-webkit-mask-image:url("assets/遮罩-轻毛边-c.jpg");mask-image:url("assets/遮罩-轻毛边-c.jpg")}
+  .pd{background-image:url("assets/透明-边料-轻毛边-d.png")}
+  .pd>img{-webkit-mask-image:url("assets/遮罩-轻毛边-d.jpg");mask-image:url("assets/遮罩-轻毛边-d.jpg")}
+  /* 重撕边四张 */
+  .ta{background-image:url("assets/透明-画格边料-重撕边-v7.png")}
+  .ta>img{-webkit-mask-image:url("assets/遮罩-重撕边.jpg");mask-image:url("assets/遮罩-重撕边.jpg")}
+  .tb{background-image:url("assets/透明-边料-重撕边-b.png")}
+  .tb>img{-webkit-mask-image:url("assets/遮罩-重撕边-b.jpg");mask-image:url("assets/遮罩-重撕边-b.jpg")}
+  .tc{background-image:url("assets/透明-边料-重撕边-c.png")}
+  .tc>img{-webkit-mask-image:url("assets/遮罩-重撕边-c.jpg");mask-image:url("assets/遮罩-重撕边-c.jpg")}
+  .td{background-image:url("assets/透明-边料-重撕边-d.png")}
+  .td>img{-webkit-mask-image:url("assets/遮罩-重撕边-d.jpg");mask-image:url("assets/遮罩-重撕边-d.jpg")}
+
+  /* 画格内文字：楷体浓墨落纸面 */
+  .capink{position:absolute;left:9%;right:9%;bottom:9%;z-index:2;
+    font-family:"Kaiti SC","STKaiti",serif;font-weight:700;color:#241f1a;
+    font-size:clamp(14px,10px + 0.9vw,18px);line-height:1.8}
+  /* 嵌图文字：底部压暗带上的米白楷体 */
+  .cap{position:absolute;left:4%;right:4%;bottom:5%;z-index:2;
+    color:#f2e8d5;font-family:"Kaiti SC","STKaiti",serif;
+    font-size:clamp(17px,12px + 1.3vw,22px);line-height:1.95;letter-spacing:.04em;
+    text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 14px rgba(0,0,0,.6)}
+  .capscrim{position:absolute;left:0;right:0;bottom:0;height:44%;z-index:1;
+    background:linear-gradient(transparent,rgba(10,8,5,.82));pointer-events:none}
+
+  /* 窄格与偏心 */
+  .w72{width:72%}.w56{width:56%}.w54{width:54%}.w44{width:44%}
+  .offL{margin-right:auto}.offR{margin-left:auto}
+
+  /* 开场满幅 */
+  .hero{width:100vw;margin-left:calc(50% - 50vw);position:relative}
+  .hero img{width:100%;height:auto;display:block;max-height:96vh;object-fit:cover}
+  .hero .t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .hero h1{font-size:clamp(30px,5.5vw,52px);letter-spacing:.28em;color:#f4efe6;font-weight:700;
+    text-shadow:0 0 20px rgba(15,18,24,.95),0 2px 6px rgba(15,18,24,.9)}
+  .hero .sub{margin-top:12px;font-size:clamp(13px,1.4vw,16px);letter-spacing:.2em;color:#ded7c8;
+    text-shadow:0 0 14px rgba(15,18,24,.95)}
+
+  /* 章题带：题在图上方，两段式 */
+  .secband{width:100vw;margin-left:calc(50% - 50vw);background:#efe7d6;
+    border-top:2px solid #2b2317;border-bottom:2px solid #2b2317;
+    text-align:center;padding:1.6vh 0;position:relative;z-index:2}
+  .secband h2{font-size:clamp(26px,3.2vw,40px);letter-spacing:.42em;color:#241f1a;font-weight:700}
+  .chapimg{width:100vw;margin-left:calc(50% - 50vw)}
+  /* 开章大图完整显示：原先的 max-height:80vh＋object-fit:cover 会把画面裁掉约两成
+     （1440 宽下等比高 810，被压到 650），§一 进寺门那张就是这样被裁的；改为等比完整 */
+  .chapimg img{width:100%;height:auto;display:block}
+
+  /* 台词纸条 */
+  .quote{max-width:min(560px,92%);margin:8px auto 0;padding:26px 30px;font-size:clamp(16px,11px + 1.2vw,19px);
+    border-style:solid;border-width:46px 20px;
+    border-image-source:url("assets/透明-纸条-长条.png");
+    border-image-slice:217 87 229 95 fill;border-image-width:46px 20px;border-image-repeat:stretch;
+    filter:drop-shadow(0 3px 9px rgba(0,0,0,.3))}
+
+  /* 叙述嵌背景（格外紧贴）。半透明长方形衬底已撤（08-05 亲验第三轮②），
+     可读性由背景蒙版＋字影承担 */
+  .say{position:relative;color:#f2e8d5;font-family:"Kaiti SC","STKaiti",serif;
+    font-size:clamp(17px,12px + 1.3vw,22px);line-height:2.05;margin:8px 4px 0;
+    text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 14px rgba(0,0,0,.6)}
+  /* 背景上的落点大字：字号与黑场同一档（08-06 §九 亲验：深底大字全篇一样大、不分行），
+     宽度跳出正文栏，让最长的一句（26 字）也单行放下 */
+  .bigline{font-size:clamp(22px,2.7vw,39px);line-height:1.9;letter-spacing:.1em;
+    width:96vw;margin-left:calc(50% - 48vw);
+    color:#f2e8d5;font-family:"Kaiti SC","STKaiti",serif;text-align:center;margin-top:6vh;
+    text-shadow:0 2px 6px rgba(0,0,0,.9),0 0 22px rgba(0,0,0,.6)}
+
+  /* 注释：点词才展开（台账 #24；#8③ 同向）。正文里的词是唯一入口；衬底同撤。 */
+  .term{color:inherit;border-bottom:1px dotted rgba(242,232,213,.55);cursor:pointer}
+  .annot{display:none;margin:10px 6% 0;padding-left:1.2em;color:#c9b27a;font-size:14.5px;line-height:1.9;
+    position:relative;text-shadow:0 1px 2px rgba(0,0,0,.85)}
+  .annot.open{display:block}
+
+  /* 全力格 */
+  .full{width:100vw;margin-left:calc(50% - 50vw);position:relative}
+  .full img.stage{width:100%;height:auto;display:block}
+
+  /* 文书格＋竖排叠字 */
+  .doc{width:min(620px,88%);margin:0 auto;container-type:inline-size;position:relative}
+  .doc img{width:100%;height:auto;display:block}
+  .doc .zt{position:absolute;writing-mode:vertical-rl;font-family:"Kaiti SC","STKaiti",serif;color:#2e2418}
+
+  /* 四联：满幅无框自动渐变（台账 #16/#23，无点击监听）。
+     宽度上限保证整幅（含下沿）在视口内可见（08-05 亲验：播放时观众要能看到素材下沿）；
+     播完前锁滚（同轮裁定），锁的判定在 JS。 */
+  .quad{position:relative;width:min(100vw,173vh);left:50%;transform:translateX(-50%);
+    aspect-ratio:2.2175;overflow:hidden;container-type:inline-size}
+  .quad .qs{position:absolute;inset:0;opacity:0;transition:opacity .7s;
+    background-image:url("assets/二百七十年-同一机位四联.jpg");background-size:100% 443.4%}
+  .quad .qs.on{opacity:1}
+  .quad .q1{background-position:50% 2.2%}
+  .quad .q2{background-position:50% 34.9%}
+  .quad .q3{background-position:50% 64.8%}
+  .quad .q4{background-position:50% 96.8%}
+  .quad .yr{position:absolute;z-index:2;writing-mode:vertical-rl;font-family:"Kaiti SC","STKaiti",serif;
+    font-size:max(12px,3.2cqw);letter-spacing:.3em;color:#f2e8d5;opacity:0;transition:opacity .7s;
+    text-shadow:0 1px 3px rgba(0,0,0,.85),0 0 12px rgba(0,0,0,.5)}
+  .quad .yr.on{opacity:1}
+  .quad .qscrim{position:absolute;left:0;right:0;bottom:0;height:26%;z-index:1;
+    background:linear-gradient(transparent,rgba(10,8,5,.85));pointer-events:none}
+  .quad .qcap{position:absolute;left:5%;right:5%;bottom:4.5%;z-index:2;text-align:center;
+    color:#f2e8d5;font-family:"Kaiti SC","STKaiti",serif;
+    font-size:clamp(16px,12px + 1.1vw,21px);line-height:1.9;letter-spacing:.05em;
+    opacity:0;transition:opacity .7s;
+    text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 14px rgba(0,0,0,.6)}
+  .quad .qcap.on{opacity:1}
+
+  /* 黑场。字号全篇统一一档、以最长收束句单行放下为准，不再分大小两档
+     （08-06 §九 亲验：所有纯黑背景文字字号一样大、不大到需要分行——文字分级 v2 的
+     "黑屏大字单独一档"随之作废，第一级只保留更深的黑度与更长的停顿） */
+  .blackout{width:100vw;margin-left:calc(50% - 50vw);min-height:90vh;background:#000;
+    display:flex;align-items:center;justify-content:center;position:relative;z-index:2}
+  .blackout p{width:min(1280px,94%);text-align:center;color:#efe6d2;
+    font-size:clamp(22px,2.7vw,39px);line-height:2.1;letter-spacing:.12em;font-family:"Kaiti SC","STKaiti",serif}
+  .blackout p .bo-sub{display:block;font-size:.55em;letter-spacing:.14em;color:#b9ac93;margin-top:1em}
+  .blackout.l1{background:#050505;min-height:118vh}
+  .blackout.l1 p{font-weight:700;color:#e9e0d0}
+
+  /* （原浅底章文字方案已撤：背景蒙版统一压暗后，全篇格外文字回到米白＋字影一套。） */
+
+  /* ══ §三 新增样式 ══ */
+  /* 限宽讲解块（版式规格 v1：840px、直边细框、压暗块底） */
+  /* 讲解块：不垫任何底（08-06 亲验），字号、行距、对齐与格外叙述完全同一套——
+     它就是多段的叙述，不是另一种块（08-06 亲验第三轮：与后文脱节、对齐字号不对） */
+  .textblock{margin:8px 4px 0;position:relative;z-index:2;
+    color:#f2e8d5;font-family:"Kaiti SC","STKaiti",serif;
+    font-size:clamp(17px,12px + 1.3vw,22px);line-height:2.05;
+    text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 14px rgba(0,0,0,.6)}
+  .textblock p+p{margin-top:1em}
+  /* 台词纸条：说话人名行（对话竖线已废，台账 #21①） */
+  .quote .who{display:block;font-weight:700;letter-spacing:.18em;margin-bottom:8px;font-size:.92em}
+  .qR{margin-left:auto;margin-right:0}
+  .qL{margin-right:auto;margin-left:0}
+  /* 四凭据一字排 */
+  .evrow{display:flex;gap:2.5%;align-items:flex-end}
+  .evrow>div{flex:1}
+  .evrow img{width:100%;height:auto;display:block}
+  /* 保簿互动（锁滚互动一）：封面翘边呼吸微光，点击开卷 */
+  .baobu{width:100vw;margin-left:calc(50% - 50vw);position:relative;min-height:70vh;
+    display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .baobu .cover{width:min(520px,72%);transform:rotate(-0.7deg) scale(.992);
+    animation:bbglow 2.6s ease-in-out infinite;display:block}
+  @keyframes bbglow{0%,100%{filter:brightness(1.06) drop-shadow(0 6px 18px rgba(0,0,0,.45))}
+    50%{filter:brightness(1.12) drop-shadow(0 6px 22px rgba(240,220,170,.28))}}
+  .baobu .bupage{display:none;position:relative;width:min(900px,94%);container-type:inline-size}
+  .baobu.opened{cursor:default}
+  .baobu.opened .cover{display:none}
+  .baobu.opened .bupage{display:block}
+  .baobu .bupage img{width:100%;height:auto;display:block}
+  .baobu .bp-note{position:absolute;right:22%;top:26%;writing-mode:vertical-rl;
+    font-family:"Kaiti SC","STKaiti",serif;font-weight:700;color:#3a2b1a;
+    font-size:max(14px,5cqw);letter-spacing:.3em;opacity:0;transition:opacity .8s}
+  .baobu.noted .bp-note{opacity:1}
+  .baobu .bp-mini{position:absolute;writing-mode:vertical-rl;
+    font-family:"Kaiti SC","STKaiti",serif;font-weight:700;color:rgba(58,43,26,.85);
+    font-size:max(11px,2.1cqw);letter-spacing:.18em;opacity:0;transition:opacity .5s}
+  .baobu .bp-mini.on{opacity:1}
+  /* 原文块：纸条底上的史料原文（PRD 三11 照现行，出处入来源页） */
+  .rawq{max-width:min(680px,92%);margin:5vh auto 0;padding:30px 34px;
+    border-style:solid;border-width:46px 20px;
+    border-image-source:url("assets/透明-纸条-长条.png");
+    border-image-slice:217 87 229 95 fill;border-image-width:46px 20px;border-image-repeat:stretch;
+    filter:drop-shadow(0 3px 9px rgba(0,0,0,.3))}
+  .rawq .rq-text{font-family:"Kaiti SC","STKaiti",serif;font-size:clamp(16px,12px + 1vw,20px);
+    line-height:2.1;color:#2e2418;letter-spacing:.06em}
+  .rawq .rq-text+.rq-text{margin-top:30px}
+
+
+
+  /* ══ §八 新增样式 ══ */
+  /* 黑巷六帧交叉淡入（照 v7 参数，周期 25.2s） */
+  .anim9{position:relative;width:100vw;margin-left:calc(50% - 50vw)}
+  .anim9 img{width:100%;height:auto;display:block}
+  .anim9 img.ov{position:absolute;inset:0;animation:xfade9 25.2s linear infinite}
+  @keyframes xfade9{0%{opacity:1}8.73%{opacity:1}16.667%{opacity:0}92.063%{opacity:0}100%{opacity:1}}
+  /* 隔窗棂看堂：底图＋镂空前景，前景随滚动轻位移 */
+  .窗棂{position:relative;width:100vw;margin-left:calc(50% - 50vw);overflow:hidden}
+  .窗棂>img.di{width:100%;height:auto;display:block}
+  .窗棂>img.qian{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    will-change:transform}
+  /* 改字互动（08-06 复验第一轮改）：大手悬空、点击画面落刀、一点改一处、改完四处才放行。
+     手不再绑观察器入场——悬空是静态起点，不存在"读者到之前播完"。 */
+  .gaizi{position:relative;width:100vw;margin-left:calc(50% - 50vw);min-height:96vh;
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .gaizi:not(.done){cursor:pointer}
+  .gz-paper{position:relative;height:88vh;max-width:94vw;
+    filter:drop-shadow(0 10px 26px rgba(0,0,0,.5));font-size:calc(88vh * .052)}
+  .gz-paper>img{height:100%;width:auto;max-width:100%;display:block}
+  .gz-col{position:absolute;top:44%;transform:translate(-50%,-50%);
+    writing-mode:vertical-rl;font-family:"Kaiti SC","STKaiti","KaiTi",serif;
+    font-size:1em;letter-spacing:.18em;color:#2e2418;line-height:1}
+  .gz-col .t{display:block;white-space:nowrap}
+  .gz-col .t.wu{position:absolute;inset:0;opacity:0;transition:opacity .5s}
+  .gz-col .t.wu b{font-weight:400;background:linear-gradient(rgba(238,228,205,.6),rgba(238,228,205,.28))}
+  /* 金光呼吸只指当前待改的那一列（下一个刀落的地方），改完即移位 */
+  .gz-col.due .t.you{animation:gzglow 2.6s ease-in-out infinite}
+  @keyframes gzglow{0%,100%{text-shadow:none}
+    50%{text-shadow:0 0 10px rgba(255,206,130,.9),0 0 22px rgba(255,178,74,.5),0 0 34px rgba(255,150,40,.28)}}
+  .gz-col.flipped .t.you{animation:none;opacity:0}
+  .gz-col.flipped .t.wu{opacity:1}
+  .gz-c1{left:61%}.gz-c2{left:46.4%}.gz-c3{left:31.8%}.gz-c4{left:17.3%}
+  /* 手：悬空态 top -38%（刀尖悬在列顶上方，四列全露）；落刀态 top -13.2%（刀尖落字位，08-06 定稿值）。
+     横向随当前列移（JS 控制），落/抬的过渡曲线由 JS 按方向切换。 */
+  .gz-hand{position:absolute;left:51.6%;top:-38%;width:60%;pointer-events:none;z-index:4;
+    transition:left .55s cubic-bezier(.22,.61,.36,1),top .4s cubic-bezier(.3,0,.3,1)}
+  .gz-price{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);
+    font-family:"Kaiti SC","STKaiti",serif;font-size:clamp(16px,1.2vw,20px);color:#f0d9b0;
+    opacity:0;transition:opacity .8s;letter-spacing:.08em;z-index:5}
+  .gaizi.done .gz-price{opacity:1}
+  /* ══ §九 新增样式（京城·冷直边章） ══ */
+  /* 纸包层（v7 .pw 原样）：图与写在图上的字包成一层，这一层的宽度才等于纸的宽度；
+     缺了它，叠字的定位容器会被别的内容撑宽、图会按原始像素溢出（08-06 §九 首拍踩到） */
+  .pw{position:relative;width:max-content;max-width:100%;margin:0 auto}
+  .pw>img{display:block;max-height:84vh;width:auto;max-width:100%}
+  /* 僧籍册页：九栏写满、八个名字，两个名下注「故」（v7 §十E 参数原样搬入；
+     "写满"是对照成立的前提——满册名字里有两个人早已不在） */
+  .sengji{position:relative}
+  .sengji .sj-col{position:absolute;top:17%;writing-mode:vertical-rl;
+    font-family:"Kaiti SC","STKaiti","KaiTi",serif;color:#2b2318;
+    font-size:clamp(17px,2.5vh,28px);letter-spacing:3px;white-space:nowrap;
+    text-shadow:0 0 8px rgba(246,241,232,.7)}
+  .sengji .sj-col i{font-style:normal;font-size:.82em;color:#7a3520;margin-top:.55em;
+    letter-spacing:0;font-weight:700}
+  .sengji .n1{right:13%}.sengji .n2{right:17.4%}.sengji .n3{right:21.8%}
+  .sengji .n4{right:26.2%}.sengji .n5{right:30.6%}.sengji .n6{right:35%}
+  .sengji .n7{right:39.4%}.sengji .n8{right:43.8%}
+  /* 七张状纸·六个驳印（PRD v2 手法三）：叠瓦横排、后张压前张、最右第七张全露无印；
+     组落在齐边纸格的纸面内（收进纸缘），嵌图句落纸面左下 */
+  .qizhuang{position:relative;width:92%;margin:2.5% auto;aspect-ratio:4;container-type:inline-size}
+  .qizhuang .zh{position:absolute;top:14%;width:16.7%;filter:drop-shadow(0 3px 8px rgba(0,0,0,.25))}
+  .qizhuang .zh img{width:100%;height:auto;display:block}
+  /* 驳印落在每张的露出区内（后张盖住前张右侧 22% 张宽，印避开被盖带） */
+  .qizhuang .zh .bo{position:absolute;right:26%;width:34%;opacity:.92}
+  .qizhuang .zh .bo img{width:100%;height:auto;display:block}
+  /* 陈经出列第二拍：进视口后淡入（纯观赏动画，终态完整可读；教训 24 允许类） */
+  .chenjing{position:relative}
+  .chenjing>img.array{width:100%;height:auto;display:block;
+    filter:brightness(.42) saturate(.8)}   /* 官员压深成剪影（馆主令改官员颜色不改底色） */
+  .chenjing .cj{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);
+    width:11%;height:auto;filter:drop-shadow(0 3px 9px rgba(0,0,0,.3));
+    opacity:0;transition:opacity 1.2s .6s}
+  .chenjing.seen .cj{opacity:1}
+  /* 陈经小图是 .jq 的直接子 img，但遮罩是按各 img 自身盒子缩放的——对这张小图要免除，
+     否则整格形状的遮罩缩到小盒子上会把人裁掉 */
+  .jq>img.cj{-webkit-mask-image:none;mask-image:none}
+
+  /* ══ §十 新增样式（终判与残页） ══ */
+  /* 落刀互动（全篇第三处；照 §八 悬空落刀模型）：刻坊满屏、刻书手悬停等读者，点击落刀 */
+  .cellfull{width:100vw;margin-left:calc(50% - 50vw);height:100vh;position:relative;z-index:2;overflow:hidden}
+  .cellfull>img.cellbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .cellfull:not(.done){cursor:pointer}
+  /* 落刀位＝v7 定稿反算值（刀尖 38vw,62vh）；悬空位再抬 18vh，刀悬在版上方静止等读者 */
+  .hand-keshu{position:absolute;width:82vw;left:33.74vw;top:calc(44vh - 45.20vw);
+    filter:drop-shadow(0 8px 22px rgba(0,0,0,.45));
+    transition:top .32s cubic-bezier(.55,0,.85,.36)}
+  .cellfull.done .hand-keshu{top:calc(62vh - 45.20vw)}
+  /* 残页（08-06 重新设计，台账 #30——"长文滚过图"的定屏形式封死，图与文分开）：
+     整页满高格（长停）＋断口局部特写格；长文用全篇 textblock 语言落深背景 */
+  .cy-box{position:relative;height:min(100vh,133vw);aspect-ratio:3/4}
+  .cy-box>img{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .cy-box .col{position:absolute;top:13.1%;writing-mode:vertical-rl;letter-spacing:.18em;
+    font-size:calc(min(100vh,133vw)*.041);line-height:1;color:#33291c;
+    font-family:"Songti SC","SimSun","Source Han Serif SC",serif;transform:translateX(-50%)}
+  .cy-page{width:100vw;margin-left:calc(50% - 50vw);min-height:100vh;background:#efe7d6;
+    display:flex;justify-content:center;align-items:center;padding:3vh 0}
+  /* 「罗家岂能」延迟退淡（08-06 馆主裁定乙案；二轮改：退的是四个字以外的全部字、
+     速度提快）：读者停留三秒后，页上所有字退墨，只有「羅家豈能」四字保持全墨 */
+  .cy-box .col{transition:color 4s ease}
+  .cy-page.fadeback .cy-box .col{color:rgba(51,41,28,.45)}
+  .cy-box .col .last4{color:#33291c}
+  /* 箱底三拍：进视口自动渐变（照四联同规，台账 #23；纯观赏动画配锁滚，教训 24 允许类） */
+  .sanpai{position:relative;width:min(100vw,160vh);left:50%;transform:translateX(-50%);
+    aspect-ratio:16/9;overflow:hidden}
+  .sanpai .qs{position:absolute;inset:0;opacity:0;transition:opacity 1.2s;
+    background-size:cover;background-position:center}
+  .sanpai .qs.on{opacity:1}
+  /* 判词卷轴：竖高文书，窄幅裸放＋四列叠字 */
+  .juanzhou{position:relative;width:min(46%,500px);margin:0 auto;container-type:inline-size;
+    filter:drop-shadow(0 8px 20px rgba(0,0,0,.45))}
+  .juanzhou>img{width:100%;height:auto;display:block}
+  .juanzhou .op-col{position:absolute;writing-mode:vertical-rl;
+    font-family:"Kaiti SC","STKaiti","KaiTi",serif;color:#2e2418;letter-spacing:.1em}
+
+  /* 铲平空地满幅上的深墨嵌字（08-06 复验二轮：夜掘叙述挪进图、改黑字落在铲平处） */
+  .ink-on-stage{position:absolute;left:23%;right:26%;top:54%;z-index:2;
+    font-family:"Kaiti SC","STKaiti",serif;font-weight:700;color:#241f1a;
+    font-size:clamp(14px,10px + 1vw,19px);line-height:2.1;
+    text-shadow:0 0 8px rgba(244,238,225,.55)}
+  .ink-on-stage p+p{margin-top:.9em}
+  /* 绕圈：同一扇门连出现三次，竖排大格、逐格变暗 */
+  .raoquan3 .rq3{width:min(62%,880px);margin:0 auto}
+  .raoquan3 .rq3+.rq3{margin-top:7vh}
+  .raoquan3 .rq3 img{width:100%;height:auto;display:block;
+    filter:drop-shadow(0 8px 22px rgba(0,0,0,.55))}
+  .raoquan3 .rq3.d2 img{filter:drop-shadow(0 8px 22px rgba(0,0,0,.55)) brightness(.76)}
+  .raoquan3 .rq3.d3 img{filter:drop-shadow(0 8px 22px rgba(0,0,0,.55)) brightness(.55)}
+  .raoquan3 .rq-cap{margin-top:14px;color:#f2e8d5;font-family:"Kaiti SC","STKaiti",serif;
+    font-size:clamp(15px,11px + .9vw,19px);line-height:1.95;text-shadow:0 1px 2px rgba(0,0,0,.9)}
+  /* 绕圈三窄格（旧） */
+  .raoquan{display:flex;gap:2%;align-items:flex-start}
+  .raoquan>div{position:relative}
+  .raoquan img{width:100%;height:auto;display:block}
+  .raoquan .rq-cap{margin-top:8px;color:#f2e8d5;font-family:"Kaiti SC","STKaiti",serif;
+    font-size:clamp(14px,10px + .8vw,17px);text-shadow:0 1px 2px rgba(0,0,0,.9)}
+
+  /* ══ §七 新增样式（分银互动·桌面剖面，PRD v2 手法一） ══ */
+  .fenyin{position:relative;width:100vw;margin-left:calc(50% - 50vw);overflow:hidden}
+  .fenyin>img.table{width:100%;height:auto;display:block}
+  .fenyin .pile{position:absolute;left:50%;top:78%;width:9%;transform:translate(-50%,-50%);
+    transition:transform .6s,opacity .6s;animation:pileglow 2.4s ease-in-out infinite;
+    filter:brightness(.62) saturate(.8)}
+  @keyframes pileglow{0%,100%{filter:brightness(1.06)}50%{filter:brightness(1.18)}}
+  .fenyin .share{position:absolute;width:6.4%;transform:translate(-50%,-50%);
+    left:var(--x);top:var(--y);filter:brightness(.62) saturate(.8)}
+  .fenyin .fy-quote{position:absolute;left:50%;top:1.5%;transform:translateX(-50%);
+    width:min(460px,72%);opacity:0;transition:opacity .8s;z-index:3}
+  .fenyin.done .fy-quote{opacity:1}
+  .fenyin .fy-cap{position:absolute;left:6%;bottom:6%;z-index:3;max-width:42%;
+    color:#f2e8d5;font-family:"Kaiti SC","STKaiti",serif;font-size:clamp(15px,11px + 1vw,19px);
+    line-height:1.9;opacity:0;transition:opacity .8s;
+    text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 14px rgba(0,0,0,.6)}
+  .fenyin.done .fy-cap{opacity:1}
+
+  /* ══ §六 新增样式 ══ */
+  /* 灯会四帧交叉淡入（照 v7 定稿参数：周期 16.8s） */
+  .anim7{position:relative;width:100vw;margin-left:calc(50% - 50vw)}
+  .anim7 img{width:100%;height:auto;display:block}
+  .anim7 img.ov{position:absolute;inset:0;animation:xfade7 16.8s linear infinite}
+  @keyframes xfade7{0%{opacity:1}13.095%{opacity:1}25%{opacity:0}88.095%{opacity:0}100%{opacity:1}}
+  /* 反咬状纸：状纸下透出两年前那纸甘结的淡影（PRD 手法四） */
+  .overpaper{position:relative;width:min(620px,88%);margin:0 auto;container-type:inline-size}
+  .overpaper>img{width:100%;height:auto;display:block;position:relative;z-index:2}
+  .overpaper .ghost{position:absolute;left:14%;right:14%;top:38%;z-index:3;
+    opacity:.16;mix-blend-mode:multiply;pointer-events:none}
+  .overpaper .ghost img{width:100%;height:auto;display:block}
+  .overpaper .op-col{position:absolute;z-index:3;writing-mode:vertical-rl;
+    font-family:"Kaiti SC","STKaiti",serif;color:#2e2418;letter-spacing:.1em}
+
+  /* ══ §五 新增样式 ══ */
+  /* 剪纸云：六片各自横穿画面，跟着 §五 背景显隐（照 v7 定稿参数） */
+  #cloudset{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+    opacity:0;transition:opacity 1.6s}
+  #cloudset.on{opacity:.9}
+  #cloudset .track{position:absolute;left:0;width:100%;
+    animation-name:cloud-cross;animation-timing-function:linear;animation-iteration-count:infinite}
+  #cloudset .track img{width:100%;height:auto;display:block}
+  @keyframes cloud-cross{from{transform:translateX(100%)}to{transform:translateX(-100%)}}
+  /* 文书叠字通用（四千两落款、状纸三着） */
+  .doc .zt.amt{writing-mode:horizontal-tb;font-weight:700}
+  /* 状纸三着：三段随滚动依次亮起 */
+  .sanzhuo{position:relative;width:min(560px,86%);margin:0 auto;container-type:inline-size}
+  .sanzhuo img{width:100%;height:auto;display:block}
+  .sanzhuo .zl{position:absolute;writing-mode:vertical-rl;font-family:"Kaiti SC","STKaiti",serif;
+    color:#2e2418;font-size:max(12px,3.6cqw);letter-spacing:.12em;line-height:1.5;
+    opacity:0;transition:opacity .9s}
+  .sanzhuo .zl.on{opacity:1}  /* 四5 坟被撕：九帧定格动画（进视口自动播放一次、停末帧，无点击不绑滚动；台账 #23 同规） */
+  .tearseq{position:relative;width:min(78%,1250px);margin:0 auto;aspect-ratio:1250/850}
+  .tearseq img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+    opacity:0;display:block}
+  .tearseq img.on{opacity:1}
+
+  /* ══ 尾声 新增样式 ══ */
+  /* 回忆四连：错落四拍（原横排一行已废，见尾8 注） */
+  /* 满幅图内的侧边文字区（08-07 馆主令：嵌进大图的文稿，图很空而文字多时，不必都堆在底部，
+     放在不遮挡画面主体的一侧）。两种配色按图的底色选：深底图用米白＋字影，亮底图用深墨＋浅光晕。 */
+  .full .side{position:absolute;top:50%;transform:translateY(-50%);z-index:2;
+    font-family:"Kaiti SC","STKaiti",serif;line-height:2.05;
+    font-size:clamp(15px,10px + 1.05vw,20px);letter-spacing:.02em}
+  .full .side.sL{left:4.5%;width:43%}
+  .full .side p+p{margin-top:1em}
+  .full .side.lite{color:#f2e8d5;text-shadow:0 1px 2px rgba(0,0,0,.92),0 0 16px rgba(0,0,0,.7)}
+  .full .side.ink{color:#241f1a;font-weight:700;text-shadow:0 0 10px rgba(246,240,228,.8)}
+  /* 合箱盖（PRD 尾14，44-44 裁定：自动动画、无点击无提示）：
+     近景箱底一屏 → 进视口停 1 秒自动播 → 箱盖合下 1.6s → 黑场延 2.4s 淡入 2s，页面在黑里结束 */
+  .boxend{position:relative;width:100vw;margin-left:calc(50% - 50vw);overflow:hidden}
+  .boxend>img{width:100%;height:auto;display:block}
+  .boxend img.lid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    opacity:0;transition:opacity 1.6s ease}
+  .boxend.closing img.lid{opacity:1}
+  .boxend .black{position:absolute;inset:0;background:#000;opacity:0;transition:opacity 2s ease;
+    pointer-events:none}
+  .boxend.dark .black{opacity:1}
+  /* 满幅格内的叙述与正文栏同左缘：.reel 内的 .say 有 4px 左边距，满幅是 100vw、
+     其内的 .say 居中后左缘比正文栏偏左 4 像素——把可用宽收窄 8px 补齐（08-07 自检） */
+  .full > .say{max-width:min(1012px,93%)}
+
+  /* 六份供词那一格：手机上这张横六联的图只有 128 像素高、每本册子 55 像素宽，
+     十一个字的竖排怎么排都进不去（字号已经压到 11px 的可读下限，再小看不清）。
+     窄屏收起叠字，改在图下写一行——图给"六份一模一样"的样子，字给内容。
+     底是画格的米色纸，所以用深墨。 */
+  .gongci-note{display:none;margin:8px 4px 0;font-family:"Kaiti SC","STKaiti",serif;
+    font-size:15px;line-height:1.9;color:#241f1a;letter-spacing:.02em;
+    text-shadow:0 0 8px rgba(246,240,228,.7)}
+  @media (max-width:700px){
+    .gongci .zt{display:none}
+    .gongci-note{display:block}
+  }
+
+  /* 可点的格：未走完时每格给一层极轻的呼吸（沿用 §三 保簿封面已批的引导语言，
+     brightness 1→1.1、2.6s 一个来回），走完即停；零文字提示（台账 #22）。
+     〔用户裁定·2026-08-07·当面会话·"全部网页交互改成点击触发，不要自动播放。
+     不交互完毕无法往下滚动"〕 */
+  .ckwait{cursor:pointer;animation:ckglow 2.6s ease-in-out infinite}
+  @keyframes ckglow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.1)}}
+  .ckwait.ckdone{cursor:default;animation:none}
+  .ckplain{cursor:pointer}
+  .ckplain.ckdone{cursor:default}
+
+  /* ══════════ 窄屏适配（2026-08-07）══════════
+     〔用户裁定·2026-08-07·当面会话·"做手机和不同宽度浏览器的适配版"〕
+     两档：≤767px 手机、768–1023px 平板；≥1024px 维持桌面定稿版面不动。
+     窄屏改的是四件会真读不了的事：①画格太小（375 宽下最窄 190 像素）——一律放到近满宽、
+     取消偏置与错落上咬（错落是宽屏才摆得开的语言）；②满幅图内的侧边文字只剩 161 像素宽、
+     还溢出图外压住前后段落——改成图文上下排，深墨字同时改回米白（脱开图之后底是暗的）；
+     ③四凭据一行四张，每张 85 像素、志书族谱的字全糊——改两行两列；④台词纸条的纸边
+     46/20 像素在窄屏占掉大半——收到 26/12。字号另由 cqw 的像素下限兜住。 */
+  @media (max-width: 1023px){
+    .reel{max-width:96vw}
+    .w44,.w54,.w56,.w64,.w72{width:82%}
+    .offL,.offR{margin-left:auto;margin-right:auto}
+    .juanzhou{width:min(72%,500px)}
+    .doc{width:94%}
+    .raoquan3 .rq3{width:88%}
+    .qizhuang{width:96%;aspect-ratio:3}
+  }
+  /* 压在图上的两块长文字，断点比别的都高（≤1365）。
+     道理：窗口一窄，图按宽度缩、高度跟着缩，文字却几乎不缩，于是文字比它所在的图还高，
+     压到图外面去。桌面定稿是按 1440 调的，1024 下实测中文那段侧边字顶出上下各 132 像素、
+     英文夜掘那段顶出 151 像素——也就是说"≥1024 维持桌面定稿"这个断点当初就选低了，
+     1024–1365 这一段并不是"桌面定稿能用"的范围。两块在这一段一律排到图下面；
+     脱开图之后底是暗的，原来的深墨字同时改回米白。 */
+  @media (max-width: 1365px){
+    .full .side.sL{position:static;transform:none;width:auto;left:auto;margin:8px 4px 0}
+    .full .side.ink,.ink-on-stage{color:#f2e8d5;font-weight:400;
+      text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 14px rgba(0,0,0,.65)}
+    .ink-on-stage{position:static;left:auto;right:auto;top:auto;margin:8px 4px 0}
+  }
+  @media (max-width: 767px){
+    .reel{max-width:96vw}
+    /* 画格：一律近满宽、居中，不再偏置 */
+    .w44,.w54,.w56,.w64,.w72{width:94%}
+    .offL,.offR{margin-left:auto;margin-right:auto}
+    /* 错落上咬在满宽下会把两格叠在一起：内联的负 margin 一律归零 */
+    .reel > [style*="margin-top:-"]{margin-top:8px !important}
+    .juanzhou{width:94%}
+    .doc{width:96%}
+    .raoquan3 .rq3{width:96%}
+    .qizhuang{width:98%;aspect-ratio:2.4}
+    .sengji .sj-col{font-size:clamp(13px,4.4cqw,20px)}
+    /* 嵌图说明文字：手机上图只剩三百多像素高，这段字压在图底会整个顶到图外面
+       （375 下实测顶出 65–157 像素，中英文都一样）。改成排在图下面，图上那条压暗
+       渐变随之撤掉——字已经不在图上了，再压暗只是白白吃掉画面。 */
+    .cap{position:static;left:auto;right:auto;bottom:auto;margin:8px 4px 0;
+      font-size:clamp(15px,13px + 0.6vw,17px);line-height:1.9;
+      /* 排到图下面之后，脚底下换成了画格的米色纸——米白字落在米色纸上等于看不见，
+         所以在画格里改深墨。满幅格没有纸底、底是页面的暗色，下一条改回米白。 */
+      color:#241f1a;text-shadow:0 0 8px rgba(246,240,228,.7)}
+    .full .cap{color:#f2e8d5;
+      text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 14px rgba(0,0,0,.65)}
+    .capscrim{display:none}
+    /* 尾9 判词×府志错落对格：手机上判词那张只剩 137 像素宽，四列竖排的字排不下，
+       最左那列折成两列、顶出纸外 12 像素。两张各自放到近满宽、上下排开（原来的上咬
+       由上面那条内联负 margin 归零规则一并取消）。 */
+    .duipair{width:94% !important;margin-left:auto !important;margin-right:auto !important}
+    /* 四凭据：两行两列 */
+    .evrow{flex-wrap:wrap;gap:3%}
+    .evrow>div{flex:0 0 48.5%}
+    /* 台词纸条：纸边收窄，正文才有地方 */
+    .quote,.rawq{border-width:26px 12px;border-image-width:26px 12px;padding:12px 14px}
+    .rawq{padding:16px 16px}
+    /* 注释与画格内嵌字不再低于 15px */
+    .annot{font-size:15px;margin-left:4%;margin-right:4%}
+    .capink{font-size:15px}
+    /* 残页七列：窄屏按视口宽定（原按高定，150vw 的高换算回去比视口还宽 23 像素） */
+    .cy-box{width:94vw;height:auto}
+    /* 改字互动的卷面：窄屏按宽定，四列不挤成一团 */
+    .gz-paper{height:auto;width:96vw;font-size:calc(96vw * .075)}
+    .gz-paper>img{height:auto;width:100%}
+    .gz-hand{width:96%}
+    /* 黑场与落点大字：窄屏收一档，26 字最多折两行 */
+    .blackout p{font-size:clamp(20px,6.2vw,30px);letter-spacing:.08em}
+    .bigline{font-size:clamp(20px,6.2vw,30px);width:94vw;margin-left:calc(50% - 47vw)}
+  }
+
+  /* 中英切换（固定右上；纸色小片，与页面同一套纸与楷体，不用系统控件样子）。
+     〔用户裁定·2026-08-07·当面会话·"做中英文切换按钮"〕 */
+  #langsw{position:fixed;top:14px;right:14px;z-index:60;display:flex;
+    font-family:"Kaiti SC","STKaiti",serif;font-size:13px;letter-spacing:.12em;
+    background:rgba(239,231,214,.92);border:1px solid rgba(43,35,23,.55);
+    box-shadow:0 2px 10px rgba(0,0,0,.45)}
+  #langsw button{appearance:none;border:0;background:none;cursor:pointer;
+    font:inherit;color:#5d5344;padding:5px 11px;line-height:1.4}
+  #langsw button+button{border-left:1px solid rgba(43,35,23,.35)}
+  #langsw button.on{background:#2b2317;color:#efe7d6}
+  @media (max-width:767px){#langsw{top:8px;right:8px;font-size:12px}
+    #langsw button{padding:4px 9px}}
+  /* 这个键是固定在右上角的，读者往下读时它会一直压在正文右上（手机上最明显：
+     正文宽只有三百多像素，它占掉右上角一百像素）。离开开头之后淡下去，碰到、
+     点到或用键盘选到就立刻回来——它的用处是随时能切，不是一直杵在那儿。 */
+  #langsw{transition:opacity .35s}
+  #langsw.dim{opacity:.26}
+  #langsw:hover,#langsw:focus-within,#langsw:active{opacity:1}
+  /* 英文态的排版：中文靠字距舒展，英文靠词距——字距照搬过来就散了（"T h e  S t o l e n"）。
+     字体取旧式衬线（Georgia 一族），是这套纸与楷体在英文里最接近的东西；行距按英文收一档。
+     这一组是我定的，请馆主过目。 */
+  html[lang="en"] body,
+  html[lang="en"] .say, html[lang="en"] .textblock, html[lang="en"] .cap,
+  html[lang="en"] .capink, html[lang="en"] .side, html[lang="en"] .quote,
+  html[lang="en"] .annot, html[lang="en"] .rq-text, html[lang="en"] .qcap,
+  html[lang="en"] .bigline, html[lang="en"] .blackout p, html[lang="en"] .secband h2,
+  html[lang="en"] .hero h1, html[lang="en"] .hero .sub, html[lang="en"] .ink-on-stage{
+    font-family:Georgia,"Iowan Old Style","Palatino Linotype","Times New Roman",serif}
+  html[lang="en"] .hero h1{letter-spacing:.05em}
+  html[lang="en"] .hero .sub{letter-spacing:.06em}
+  html[lang="en"] .secband h2{letter-spacing:.09em}
+  html[lang="en"] .blackout p{letter-spacing:.02em;line-height:1.62}
+  html[lang="en"] .bigline{letter-spacing:.02em;line-height:1.55}
+  html[lang="en"] .say, html[lang="en"] .textblock, html[lang="en"] .cap,
+  html[lang="en"] .side, html[lang="en"] .quote, html[lang="en"] .annot,
+  html[lang="en"] .rq-text, html[lang="en"] .qcap, html[lang="en"] .capink,
+  html[lang="en"] .ink-on-stage{letter-spacing:0;line-height:1.75}
+  /* 竖排只属于中文：英文年号小字改横排 */
+  html[lang="en"] .quad .yr{writing-mode:horizontal-tb;letter-spacing:.06em}
+  /* 满幅图里的侧边文字：英文比中文长得多，同样一段在同样的字号下会比它所在的图还高。
+     实测尾15 那段（刻书不只是纪念）中文排出来 635 像素、图高 810，英文 825，反过来高出 15。
+     只在英文态收一档字号与行距，中文态一字不动。 */
+  html[lang="en"] .full .side{font-size:clamp(14px,9px + 0.95vw,18px);line-height:1.7}
+  /* 英文的词不像汉字能在任意一处折行：手机上一个 COMMISSIONER 就把纸条撑破
+     （375 下实测横出纸边 22 像素）。允许在词内断开，只在英文态。 */
+  html[lang="en"] .quote,html[lang="en"] .rawq,html[lang="en"] .say,
+  html[lang="en"] .textblock,html[lang="en"] .cap,html[lang="en"] .capink,
+  html[lang="en"] .side,html[lang="en"] .annot{overflow-wrap:break-word}
+
+  /* 英文态：素材上的中文照旧不动，格下补一行小字说明它写的是什么 */
+  .engloss{margin:6px 4px 0;font-family:"Kaiti SC","STKaiti",serif;
+    font-size:clamp(13px,9px + .55vw,15px);line-height:1.75;font-style:italic;
+    color:#c9b27a;text-shadow:0 1px 2px rgba(0,0,0,.85)}
+  html[lang="zh-Hans"] .engloss{display:none}
+
+  /* 页底来源入口（导航件；正文流之外，读者点入才看）。
+     底色接住合箱盖那块黑：黑幕落下之后不该露出一条背景亮边，最后一屏是整片黑，中间一行小字 */
+  .srclink{text-align:center;padding:6vh 0 8vh;width:100vw;margin-left:calc(50% - 50vw);
+    background:#000;margin-top:-1px}
+  .srclink a{color:#8d8271;font-size:13px;letter-spacing:.2em;text-decoration:none;
+    border-bottom:1px dotted rgba(141,130,113,.5)}
+</style>
+</head>
+<body>
+<div id="langsw" role="group" aria-label="语言 / Language">
+  <button type="button" data-lang="zh-Hans" class="on">中文</button>
+  <button type="button" data-lang="en">EN</button>
+</div>
+<div id="bg"><img src="assets/章背景-一-山谷压坟.jpg" alt=""></div>
+<div id="bg2"></div>
+<div class="reel">
+
+<!-- ══════════ 幕一 · §一 传票（定稿语言照样张 v3/v3.2） ══════════ -->
+
+  <div class="hero" data-title="被夺走的祖坟" data-bg="assets/章背景-一-山谷压坟.jpg">
+    <img src="assets/章背景-一-山谷压坟.jpg" alt="山谷之中，坟头压着碎砖烂瓦">
+    <div class="t"><h1 data-i="t012">被夺走的祖坟</h1><span class="sub" data-i="t013">明代嘉靖年间徽州一桩真实官司</span></div>
+  </div>
+
+  <div class="secband breath" data-title="祖坟·一 传票" data-bg="assets/章背景-一-山谷压坟.jpg"><h2 data-i="t001">§一　传票</h2></div>
+  <div class="chapimg"><img src="assets/罗显行走-寺门.jpg" alt="罗显走进寺门"></div>
+  <div class="say bite" data-i="t016">嘉靖七年（1528）三月，徽州府歙县，呈坎村的罗显进了一趟村南的杨干院。杨干院是一座寺，罗家的祖坟就在这座寺的院子里。</div>
+
+  <div class="breath panel cut">
+    <img src="assets/俯视-坟被瓦砾压.jpg" alt="祖坟被碎砖烂瓦压住">
+    <div class="capscrim"></div>
+    <div class="cap" data-i="t092">祖坟被一大堆碎砖烂瓦压在底下。去年冬天寺里重修佛殿，建筑垃圾就近往坟头上一倒，压了整整一冬。这坟到罗显这辈，已经六百多年了。</div>
+  </div>
+
+  <div class="breath jl w72 offL pb" style="transform:rotate(-1.5deg)">
+    <img src="assets/透明-罗显-蹲清瓦砾.png" alt="罗显蹲下清瓦砾">
+    <div class="capink" data-i="t102">罗显叫来几个族人把瓦砾清了。</div>
+  </div>
+  <div class="jl w56 offR pc" style="transform:rotate(1.7deg);margin-top:-8%">
+    <img src="assets/透明-罗显-立等.png" alt="罗显站着等">
+    <div class="capink" data-i="t103" style="left:7%;right:46%;bottom:14%">等寺里管营造的和尚佛熙出来给个说法。</div>
+  </div>
+  <div class="jl w56 offL pd" style="transform:rotate(-1.2deg);margin-top:-7%">
+    <img src="assets/去底-小沙弥侧影.png" alt="出来的是个小沙弥">
+    <div class="capink" data-i="t104">佛熙没露面，打发一个小沙弥出来传话。</div>
+  </div>
+  <div class="quote" data-i="t109">传的不是道歉，是一个要求：请罗家把祖坟迁出杨干院。</div>
+
+  <div class="breath jh w54 offR td">
+    <img src="assets/透明-罗显-怒背影.png" alt="罗显当场把人骂走">
+  </div>
+  <div class="bigline" data-i="t140">守坟的开口赶坟，天底下哪有这个道理。</div>
+
+  <!-- 传票：直边格，罪名落在文书上（底版＝今晚终判过的传票无字底版＋排版真字） -->
+  <div class="breath panel cut" data-gloss="g01" style="background:#efe7d6;padding:5vh 0">
+    <div class="doc">
+      <img src="assets/透明-传票-无字-v1.png" alt="县衙传票">
+      <div class="zt" style="right:34%;top:33%;font-size:max(18px,8cqw);letter-spacing:.24em">僞造祖墳</div>
+      <div class="zt" style="right:50%;top:14%;font-size:max(11px,2.6cqw);letter-spacing:.12em;opacity:.85">呈坎羅顯　嘉靖七年四月　仰即赴縣聽審</div>
+    </div>
+  </div>
+  <div class="say bite" data-i="t017">几天后，等来的却是县衙的传票。佛熙抢先把他告了。状子上的罪名是：伪造祖坟。</div>
+
+  <div class="gasp full">
+    <img class="stage" src="assets/跪堂合成-一人跪阶下-v8.jpg" alt="空阔公堂，一人跪于阶下天光里">
+    <div class="capscrim" style="height:38%"></div>
+    <div class="cap" data-i="t093">自家六百年的祖坟，如今要由罗显跪在公堂上，向官府证明它是真的。而且从传票送到那天起，他就已经是被告了。</div>
+  </div>
+
+  <div class="gasp blackout" data-i="t145" data-bg="assets/章背景-二-南宋起点-v2.jpg">
+    <p>守坟的和尚，怎么敢反过来赶坟主？<span class="bo-sub">这事，得从这座寺的来历说起。</span></p>
+  </div>
+
+<!-- ══════════ §二 坟寺（组装 PRD 二0–二7；浅底章文字方案） ══════════ -->
+  <div class="light-ch">
+
+  <!-- 二0 开章 -->
+  <div class="secband" data-title="祖坟·二 坟寺" data-bg="assets/章背景-二-南宋起点-v2.jpg"><h2 data-i="t002">§二　坟寺</h2></div>
+  <div class="chapimg"><img src="assets/章背景-二-南宋起点-v2.jpg" alt="南宋清晨的河谷：小坟与初建的五间小院"></div>
+
+  <!-- 二1 罗鼐与坟：全屏大画幅（08-05 亲验第五轮：开章大图后紧接一张不同的全屏大画幅，
+       遮住与固定背景的衔接——照第一章 落地大屏→罗显行走 的开法），两段并一格（治 v7 第 7 条） -->
+  <div class="full breath">
+    <img class="stage" src="assets/罗鼐与坟-旧纸色.jpg" alt="罗鼐站在坟前发愁">
+    <div class="capscrim" style="height:40%"></div>
+    <div class="cap" data-i="t094" style="left:6%;right:6%">南宋宝祐六年（1258），罗显的先人、当时罗家的当家人罗鼐，正为一件事犯愁：族人散到各乡，每年上坟的人一年比一年少，老人走不动，年轻人站在坟前不认得这是谁。他操心的，就是二百七十年后被碎砖烂瓦压住的那座坟——同一座坟。</div>
+  </div>
+
+  <!-- 二2 坟寺分层起：常规格齐边，透明件落边料纸面；底部整宽为主体，字放格外紧贴 -->
+  <div class="breath jq pa">
+    <img src="assets/透明-坟寺分层-寺起坟侧.png" alt="寺在坟旁一层层立起来，寺大坟小">
+  </div>
+  <div class="say bite" data-i="t018">罗鼐的办法是在坟旁盖一座寺，划田产给僧人常年守坟。这样的寺叫坟寺，相当于给祖宗雇一班常年领工钱的守墓人。</div>
+  <div class="say breath" data-i="t056">这件事还有一重保险。罗鼐的岳父程元凤，官做到右丞相兼枢密使，亲笔为建院写了一篇碑记，刻石立在院旁。</div>
+
+  <!-- 二3 碑面：窄格 56 左，直边（碑是制度物）。08-05 亲验第二轮：撤「宋丞相」自拟字样
+      （史料未供），换全碑 v3——碑题居中、落款「右丞相兼樞密使程元鳳撰」按还原稿衔名（阿风），待终判 -->
+  <div class="breath panel cut w56" style="margin-left:auto;margin-right:auto">
+    <img id="beimian" src="assets/透明-碑面全碑-v3.png" alt="程元凤所撰院碑：罗氏新建杨干院碑记，右丞相兼枢密使程元凤撰，宝祐六年">
+    <div class="capscrim"></div>
+    <div class="cap" data-i="t095" style="font-size:clamp(15px,11px + 1vw,19px)">谁想打这座坟的主意，先得掂量掂量碑上那个丞相的名字。</div>
+  </div>
+
+  <!-- 二4 碑影僧人：通栏满幅（08-05 亲验第三轮③：放大配大字，要冲击力）；
+       格前一句立起碑记防的两种人，格后落点大字（不入格） -->
+  <div class="say breath" data-i="t057">程元凤在碑记里防了两种人：自家不成器的子孙，外面有势力的觊觎者。</div>
+  <div class="full breath">
+    <img class="stage" src="assets/碑影僧人.jpg" alt="碑影里的僧人剪影">
+  </div>
+  <div class="bigline" data-i="t141">他唯一没有防的，是他亲手安排来守坟的人。</div>
+
+  <!-- 二5 四联：满幅无框，进视口自动渐变，年号随帧换（台账 #16/#23；删「进香的人」句） -->
+  <div class="breath quad" id="quad" role="img"
+    aria-label="二百七十年，同一机位：宝祐年间坟在院中央；元末观音堂盖起来一道墙横在坟前；洪武以后钟楼鼓楼续上，坟只剩土顶；嘉靖初屋檐几乎接到坟前，小路长满草">
+    <div class="qs q1 on"></div><div class="qs q2"></div><div class="qs q3"></div><div class="qs q4"></div>
+    <div class="qscrim"></div>
+    <div class="yr on" data-i="t181" style="left:6%;top:8%">宝祐</div>
+    <div class="yr" data-i="t178" style="right:6%;top:8%">元末</div>
+    <div class="yr" data-i="t179" style="left:6%;top:8%">洪武</div>
+    <div class="yr" data-i="t180" style="right:6%;top:8%">嘉靖</div>
+    <div class="qcap on" data-i="t177">宝祐年间：坟在院子中央，寺是罗家盖来给它守坟的。</div>
+    <div class="qcap" data-i="t174">元末：观音堂盖了起来，一道墙横在坟前。</div>
+    <div class="qcap" data-i="t175">洪武以后：钟楼鼓楼接着起，坟只剩一个土顶。</div>
+    <div class="qcap" data-i="t176">嘉靖初：屋檐几乎接到坟前，上坟的小路长满了草。</div>
+  </div>
+  <!-- 二5b 四联收束叙述（08-06 亲验：画面变化读者接不住，播完补一段文字说破寺兴坟废） -->
+  <div class="say breath" data-i="t058">二百七十年里，寺一天天兴旺：观音堂盖起来，钟楼鼓楼接着起，田产越添越多，进香的人越来越多。坟那一头正相反：罗家的墓祠塌了，一直没人修，上坟的人越来越少。到嘉靖初年，这座六百年的祖坟，只剩下大寺屋檐夹缝里的一个土顶。</div>
+
+  <!-- 二6 法椿立像：窄格 54 右，轻毛边；新句嵌图改为格外紧贴（底部 31–73% 为主体，无空区）；都纲注释常显跟格下 -->
+  <div class="breath jl w54 offR pb" style="transform:rotate(-1.2deg)">
+    <img src="assets/去底-法椿立像-官帽僧衣.png" alt="法椿单人立像，官帽与僧衣并置">
+  </div>
+  <div class="say bite" data-i="t019">管全徽州府和尚的官，叫<span class="term" data-annot="annot-dugang">都纲</span>。这一任都纲法椿，就是杨干院自己的人：邻县休宁人，十一岁进院，拜住持佛海为师。这官历来明码标价，谁出得起钱、有各寺住持联名担保，谁就是「高僧大德」；佛海就做过都纲，师父退了，徒弟花钱接着做。而佛熙——倒瓦砾、赶坟主、抢先告状的那一位——正是佛海的师弟，法椿的师叔。</div>
+  <div class="annot" data-i="t155" id="annot-dugang">都纲：明朝给僧人也设了一套衙门——京城有僧录司，府有僧纲司，州有僧正司，县有僧会司。府一级设都纲一员，从九品，明朝官阶里最低的一级，不发俸禄。他管一府的寺院和僧人：僧人的名籍、度牒（官府发的出家凭证，没有度牒出家就是非法），僧俗之间起了纠纷也常先经他的手。按制度，都纲要从戒行好、通晓经义的僧人里选；嘉靖年间的徽州，实际做法是出钱，再凑齐各寺住持的联名保结。法椿的都纲就是这样来的。</div>
+
+  <!-- 二7 黑场收章 -->
+  <div class="gasp blackout" data-i="t146" data-title="祖坟·二 坟寺" data-bg="assets/章背景-三-县衙公堂-裁边.jpg">
+    <p>佛熙敢把垃圾倒在坟上，敢开口赶坟主，底气就在这儿。</p>
+  </div>
+  </div><!-- /light-ch -->
+
+<!-- ══════════ §三 第一场公堂（组装 PRD 三0–三11；教训清单过检后动工） ══════════ -->
+
+  <!-- 三0 开章：章题带＋落地大屏；紧接公堂内景大画幅遮衔接（开章通则） -->
+  <div class="secband" data-title="祖坟·三 第一场公堂" data-bg="assets/章背景-三-县衙公堂-裁边.jpg"><h2 data-i="t003">§三　第一场公堂</h2></div>
+  <div class="chapimg"><img src="assets/章背景-三-县衙公堂-裁边.jpg" alt="县衙公堂"></div>
+  <div class="full breath">
+    <img class="stage" src="assets/去底-公堂剪影-跪堂用.png" alt="开堂前空阔的公堂">
+    <div class="capscrim" style="height:38%"></div>
+    <div class="cap" data-i="t096" style="left:6%;right:6%">佛熙抢先告状，看着只是快了几天，作用远不止如此。</div>
+  </div>
+
+  <!-- 三1 讲解块：三层门道（原文块「恃党扶图谋泯没…」按 PRD 移 §十一） -->
+  <div class="breath textblock" data-i="t087">
+    <p>第一，按明代的规矩，百姓打官司得先找<span class="term" data-annot="annot-lilao">里老</span>调解，调解不成才许告官。但寺庙告状不用走这道手续。所以罗显要告佛熙，得排队；佛熙告罗显，直接开庭。</p>
+    <p>第二，谁先告，谁就定了这场官司审什么。状子立的是"罗家伪造祖坟"，那公堂上从头到尾辨的就是这件事。罗显一张嘴，就是在自辩。</p>
+    <p>第三，按朝廷条文，寺庙当原告的官司，管和尚的官——都纲——有权到堂。</p>
+  </div>
+  <div class="annot" data-i="t156" id="annot-lilao">里老：明朝把乡村编成"里"，一百一十户为一里。每里从年高有德的老人里推举几位，叫里老人，简称里老。朝廷交给他们的差事之一是调解纠纷：田土、婚姻、斗殴这类事，先由里老评理，评不成才许递状子进衙门；越过里老直接告官，状子可能被驳回。所以对普通百姓来说，里老是打官司绕不开的第一道门。</div>
+
+  <!-- 三2 抬头对格：错落对格 56 左＋72 右上咬 6%，轻毛边 -->
+  <div class="say breath" data-i="t059">开堂那天，罗显走进县衙，一抬头——</div>
+  <div class="bite jl w56 offL pc" style="transform:rotate(-1.2deg)">
+    <img src="assets/透明-罗显-抬头.png" alt="罗显抬头">
+  </div>
+  <div class="jl w72 offR pd" style="transform:rotate(1.4deg);margin-top:-6%">
+    <img src="assets/透明-法椿佛熙同框.png" alt="原告席上，佛熙身旁站着都纲法椿">
+  </div>
+
+  <!-- 三3 四凭据一字排：直边格与前后同宽 -->
+  <div class="breath panel cut">
+    <div class="evrow">
+      <div><img src="assets/去底-坟小件-亮版.png" alt="坟"></div>
+      <div><img src="assets/去底-碑面带字版.png" alt="程元凤的碑"></div>
+      <div><img src="assets/透明-志书册封面.png" alt="府志县志"></div>
+      <div><img src="assets/透明-族谱册封面.png" alt="族谱"></div>
+    </div>
+  </div>
+  <div class="say bite" data-i="t020">他有四样东西：坟就在那里，唐朝末年就有了；丞相程元凤的碑；府志县志，白纸黑字记着罗坟；族谱记着，四邻八舍都能作证。他觉得这官司没法输。</div>
+
+  <!-- 三4–三7 正反打四轮：纸条递进 72/56/56/44，法椿右、罗显左，间隔贴排 -->
+  <div class="breath quote qR" data-i="t110" style="max-width:min(72%,660px)"><span class="who">法椿</span>坟？诸位看看那坟：形制窄小，八层砖围，砖缝里连石灰都没有。<br>哪家六百年的祖坟，修成这样？分明是新近草草堆的。</div>
+  <div class="bite quote qL" data-i="t111" style="max-width:min(72%,660px)"><span class="who">罗显</span>胡说！这坟唐朝末年就在了！<br>族谱上写着，四邻八舍全可以传来问！</div>
+  <div class="bite quote qR" data-i="t112" style="max-width:min(56%,560px)"><span class="who">法椿</span>族谱，是罗家自家修的。四邻八舍，堂上自会传问。<br>再说志书。志书里罗坟的记载，就一句话，位置含糊——凭什么说，就是院里这一座？</div>
+  <div class="bite quote qL" data-i="t113" style="max-width:min(56%,560px)"><span class="who">罗显</span>碑！丞相程元凤亲笔的碑，就立在那里！</div>
+  <div class="bite quote qR" data-i="t114" style="max-width:min(56%,560px)"><span class="who">法椿</span>正要说碑。碑记写得清楚：那座院子，从宁泰乡迁来。<br>本院院史，唐咸通二年始建，起在孝女乡，三迁才到杨干——跟宁泰乡毫无关系。<br>碑记里那座院子，压根不是本院。<br><br>换句话说：你们罗家，几百年来，拜错坟了。</div>
+  <div class="bite quote qL" data-i="t115" style="max-width:min(44%,440px)"><span class="who">罗显</span>我——</div>
+
+  <div class="breath quote qR" data-i="t116" style="max-width:min(56%,560px)"><span class="who">法椿</span>还有一样。<br>洪武二十四年，<span class="term" data-annot="annot-baobu">流水保簿</span>，宾字一千九百九十九号。<br>杨干院名下全部产业，簿上写着四个字——</div>
+  <div class="annot" data-i="t157" id="annot-baobu">流水保簿：洪武二十四年（1391），朝廷清丈天下土地，寺庙的田产逐项登记造册、编号存档，这种册子叫流水保簿——相当于官方的不动产登记簿。簿上怎么写，产权在官府眼里就算怎么定；口说、族谱、碑记，都比不过它一行登记。</div>
+
+  <!-- 三8 保簿互动（锁滚互动一）：封面翘边呼吸微光当引导，零提示文字 -->
+  <div class="gasp baobu" data-gloss="g14" id="baobu">
+    <img class="cover" src="assets/透明-保簿封面.png" alt="流水保簿，封面微微翘起">
+    <div class="bupage">
+      <img src="assets/去底-保簿簿页-主.png" alt="簿页：逐项产业逐条登录在册，各条之下同一行批注，卷尾一行大字">
+      <div class="bp-mini" style="right:44%;top:30%">皆寺經理</div>
+      <div class="bp-mini" style="right:56%;top:44%">皆寺經理</div>
+      <div class="bp-mini" style="right:69%;top:34%">皆寺經理</div>
+      <div class="bp-note">皆寺經理</div>
+    </div>
+  </div>
+  <div class="bite quote qR" data-i="t117" id="after-baobu" style="max-width:min(56%,560px);visibility:hidden"><span class="who">法椿</span>全部产业归寺经管。没有罗家什么事。</div>
+
+  <div class="breath quote qR" data-i="t118" style="max-width:min(60%,600px)"><span class="who">法椿</span>小僧还有一句，请老爷记入案卷。<br>本寺自洪武年间起，一次次盖房，法堂离前殿不到四步——中间真有你家祖坟，早压着了。<br>你罗家一百多年，怎么一声不吭？</div>
+  <div class="bite quote qL" data-i="t119" style="max-width:min(56%,560px)"><span class="who">罗显</span>我们……我小时候，还来上过坟……</div>
+
+  <!-- 原文呈现：法椿这句质问的供词原文（08-06 §三亲验第 5 条移此） -->
+  <div class="breath rawq">
+    <div class="rq-text" data-i="t170">自洪武至弘治，节次修盖法堂，与前殿相去不满四步，中果有坟，当必侵压，本家何无言论？</div>
+  </div>
+
+  <!-- 三9 全力格：四凭据尽墨（光影一体合成件，前置换气） -->
+  <div class="gasp full">
+    <img class="stage" src="assets/尽墨暗场-合成-v1.jpg" alt="昏暗的公堂：四样凭据沉在暗里，只有罗显站立处一点余光">
+    <div class="capscrim" style="height:32%"></div>
+    <div class="cap" data-i="t097" style="left:6%;right:6%">站在堂下的罗显被驳得说不出话。</div>
+  </div>
+
+  <!-- 三10 黑场 -->
+  <div class="gasp blackout" data-i="t147" data-bg="assets/章背景-四-铲平空地.jpg">
+    <p>他这才明白，官司比的不是坟的年头，是手里的凭据。<br>眼下经得起查的凭据，全在对方手里。</p>
+  </div>
+
+<!-- ══════════ §四 铲坟（组装 PRD 四0–四6；重撕边章；教训清单过检后动工） ══════════ -->
+
+  <!-- 四0 开章：交底开场（结局先亮，领域核二（三））；紧接深衬大画幅遮衔接 -->
+  <div class="secband" data-title="祖坟·四 铲坟" data-bg="assets/章背景-四-铲平空地.jpg"><h2 data-i="t004">§四　铲坟</h2></div>
+  <div class="chapimg"><img src="assets/章背景-四-铲平空地.jpg" alt="铲平之后的空地"></div>
+
+  <!-- 四1 证人剪半立起：深衬满幅（开章通则第二拍；深衬=已批 darkmat 语言） -->
+  <div class="full breath" style="background:#3d2f1f;padding:5vh 0 2vh">
+    <img src="assets/透明-证人剪半立起.png" alt="证人一排：人形从画里被剪下一半立起来，提线从上方垂下牵住头与两臂" style="width:min(88%,1240px);margin:0 auto;display:block">
+    <div class="say" data-i="t014" style="max-width:min(1012px,93%);margin:2vh auto 0">传来的证人一个个上了堂，个个支支吾吾——寺里早把他们买通了。牵着这些纸人的线，那一头，在都纲法椿手里。</div>
+  </div>
+
+  <!-- 四2 罗姓二人指认：窄格 54 右上咬，重撕边 -->
+  <div class="breath w54 offR" style="transform:rotate(1.2deg);filter:drop-shadow(0 6px 16px rgba(0,0,0,.42))">
+    <img src="assets/透明-罗姓二人-卡内-v1.png" alt="两个罗姓族人转过身指向罗显（人物完整在纸片内）" style="width:100%;display:block">
+  </div>
+  <div class="say bite" data-i="t021">更难看的还在后头：两个早就分家出去的罗姓族人，罗承善、罗互社，当堂跳出来，指着罗显说他的不是。站在堂上那一刻，他只看见一件事：满堂的证人，没有一个肯帮他说话。</div>
+
+  <!-- 四3 高琦其人：窄格 56 左，轻毛边（素材=知县俯视带脸版，08-05 终判获选件） -->
+  <div class="breath jl w56 offL pa" style="transform:rotate(-1.3deg)">
+    <img src="assets/裁边-知县带脸.png" alt="公案后的知县高琦" style="width:86%;margin:6% auto;display:block">
+  </div>
+  <div class="say bite" data-i="t022">再看主审的知县高琦。方志里留着对他的评价：为一点小罪就动刑，人不服，他趁怒接着打，打死过人；而且贪财，从来没有满足的时候。</div>
+
+  <!-- 四4 按手印：窄格 44 右（全章最窄），重撕边 -->
+  <div class="breath w54 offR" style="transform:rotate(0.9deg);filter:drop-shadow(0 6px 16px rgba(0,0,0,.42))">
+    <img src="assets/去底-画押.png" alt="衙役按住罗显的手往供状上按下画押" style="width:100%;display:block">
+  </div>
+  <div class="say bite" data-i="t023">一个孤立无援的乡下老头，站在一个收了钱、动不动就打死人的法官面前，能怎么办？罗显怕了，认了罪。</div>
+
+  <!-- 四5 全力格：坟被撕（三维重算 92 度版；深衬照 PRD；前置换气） -->
+  <div class="gasp full" id="tearsec" data-bg="assets/章背景-五-出徽州山路.jpg" style="background:#3d2f1f;padding:7vh 0 3vh;transition:background 1.4s ease">
+    <video id="tearvid" muted playsinline preload="auto"
+      poster="assets/坟被撕-grok-封面.jpg"
+      src="assets/坟被撕-grok-v1.mp4?r=2"
+      style="width:min(78%,1250px);margin:0 auto;display:block;transition:filter 1.4s ease"
+      aria-label="整幅画突然被撕成两半，两半翻滚着掉落，最后沉入黑暗"></video>
+    <div class="say" data-i="t015" style="max-width:min(1012px,93%);margin:3vh auto 0">判决下来：所谓罗坟，只是"浮堆"——不是坟，是一堆浮土。县衙随后派人把它铲平了。差役动锹的那天，距罗秋隐下葬，已经过去六百多年。</div>
+  </div>
+
+<!-- ══════════ §五 四千两（组装 PRD 五0–五8；齐边回归章；教训清单十三条过检后动工） ══════════ -->
+
+  <!-- 五0 开章：章题带＋出徽州山路落地大屏；紧接祠堂夜议大画幅遮衔接（开章通则） -->
+  <div class="secband" data-title="祖坟·五 四千两" data-bg="assets/章背景-五-出徽州山路.jpg"><h2 data-i="t005">§五　四千两</h2></div>
+  <div class="chapimg"><img src="assets/章背景-五-出徽州山路.jpg" alt="出徽州的山路"></div>
+
+  <!-- 五1 祠堂夜议：全屏大画幅（开章第二拍） -->
+  <div class="full breath">
+    <img class="stage" src="assets/去底-祠堂夜议.png" alt="祠堂里各房家长连夜议事">
+    <div class="capscrim" style="height:38%"></div>
+    <div class="cap" data-i="t098" style="left:6%;right:6%">县衙的判决下来之后，罗显回到呈坎，把各房家长请进了祠堂。</div>
+  </div>
+
+  <div class="breath quote qL" data-i="t120" style="max-width:min(72%,660px)"><span class="who">罗显</span>各位当家的，我把话说在明处。这一场官司，不是替我罗显出气。<br><br>坟叫官府判成了假的，罗家的来历就是假的。<br>族谱从那座坟写起。几百口人凭什么算一家人？凭的就是坟里那位祖宗。<br><br>今天守坟的和尚敢夺坟，官府肯帮着夺；明天就有人来夺田、夺屋、夺祠堂。<br>这口气要是咽了，罗家往后在歙县，就是谁都可以下手的人家。</div>
+
+  <!-- 五2 报数三条：台词纸条依次贴排（撤名单纸叠字，治 v7 第 20/23 条） -->
+  <div class="bite quote qR" data-i="t121" style="max-width:min(48%,480px)"><span class="who">一位家长</span>我们房，出七百二十两。</div>
+  <div class="bite quote qR" data-i="t122" style="max-width:min(44%,440px)"><span class="who">另几位</span>六百五十两。　三百。　一百。</div>
+  <div class="bite quote qR" data-i="t123" style="max-width:min(52%,520px)"><span class="who">最末一位，半晌</span>……十几两。我们也出。</div>
+
+  <!-- 五3 罗显收束这场议事（报数三条之后台词不被旁白打断，08-06 亲验第 3 条） -->
+  <div class="bite quote qL" data-i="t124" style="max-width:min(52%,520px)"><span class="who">罗显</span>再要八个人，跟我专办这场官司。</div>
+
+  <!-- 五4 讲解块：四千两与讼费合并（原旁白并入，不再插在对白中间） -->
+  <div class="breath textblock" data-i="t088">
+    <p>全族凑出约四千两银子，够买八千石大米，是几辈子攒下的家底。打官司要花这么多钱，是因为明代的官司输了可以往上告：县上面有府，府上面有省里的监察官，最顶上是京城，一层层告上去都合法。可每上一层都要钱——写状要钱，书吏要钱，差役要钱；案子每换一个衙门，证词重新问一遍，案卷重新调一遍，等于从头再打一遍。四千两，就是为这个准备的。</p>
+  </div>
+
+  <!-- 五5 徽州简图：常规格直边 -->
+  <div class="breath panel cut">
+    <img src="assets/徽州简图带字版.jpg" alt="徽州地图：歙县、徽州府打叉，视线出地界">
+  </div>
+  <div class="say bite" data-i="t024">歙县不能去，刚在那里输过；徽州府跟歙县同城，法椿的银子和关系一样使得上。罗显去了第三个地方：<span class="term" data-annot="annot-xunan">巡按察院</span>。</div>
+  <div class="annot" data-i="t158" id="annot-xunan">巡按御史：朝廷从京城派往各省的监察官，正式身份是都察院的监察御史，品级只有七品，却代表朝廷巡查一省——官员称不称职、有没有冤案，都归他管，人称"代天子巡狩"。他不是本地人，任期一到就走，地方的人情面子对他不好使，银子也不容易递到他面前。巡抚则是一省的最高长官，官比巡按大得多，管的事也杂；正因为管得杂，民间的纠纷他通常不亲自审，批一句话，发回当地衙门去办。</div>
+
+  <!-- 五6 状子三着：状纸底版＋三段排版真字随滚动依次亮起 -->
+  <div class="breath sanzhuo" data-gloss="g15" id="sanzhuo">
+    <img src="assets/透明-状纸三着-无字-v7.png" alt="三张叠着的状纸，一着一着写下去">
+    <div class="zl z1" style="right:18%;top:10%">先告寺僧不法</div>
+    <div class="zl z2" style="right:22%;top:55%">次陳墳墓來歷</div>
+    <div class="zl z3" style="right:26%;top:79%">末告知縣受贓</div>
+  </div>
+  <div class="say bite" data-i="t025">状子的写法也讲究：先不提坟，先告杨干院招纳流民、僧人不守清规，让看状子的人先认定这是一群不法之僧；然后才讲坟的来历；最后把知县高琦一并告上——受赃，滥用刑罚。告官这一笔是要点：按<span class="term" data-annot="annot-huidian">《大明会典》</span>，状子里若有官吏用刑逼供、制造冤案的情节，巡按不许转给别人，必须亲自审问。他给自己留了后手。</div>
+  <div class="annot" data-i="t159" id="annot-huidian">《大明会典》：明代官修的行政法规汇编，把各衙门的职掌、办事条例逐条编定，是官员办事的依据。它规定诉状中若有官吏"枉问刑名"（用刑逼供、制造冤案）的情节，巡按御史不得转委他人，必须亲自审问——这是罗显在状子末尾告高琦的用意。</div>
+
+  <!-- 五7 查案对切：调卷（窄格 56 左）× 翻山实地（常规格右上咬 6%），一近一远给纵深 -->
+  <div class="breath jq w56 offL pc" style="transform:rotate(-1deg)">
+    <img src="assets/去底-案卷两卷.png" alt="调来的两卷歙县原案卷宗">
+  </div>
+  <div class="say bite" data-i="t026">巡按把案子转给了邻府宁国府。<span class="term" data-annot="annot-tuiguan">推官</span>郭凤仪把调查做了全套：调歙县原案卷宗，调古今郡志、寺碑、家谱，把里老邻居重新问了一遍。</div>
+  <div class="annot" data-i="t160" id="annot-tuiguan">推官：明代府一级掌管刑名的属官，正七品，专管审理案件、复核案卷。知府事务繁杂，具体的审问、勘验多由推官经手；一府的司法水准，常常就取决于这个位置上坐的是什么人。</div>
+  <div class="breath panel cut offR w72" style="margin-left:auto;transform:rotate(1.2deg)">
+    <img src="assets/透明-翻山小景-补件.png" alt="差役翻过黄山，到杨干院实地勘验">
+  </div>
+  <div class="say bite" data-i="t027">最后派人翻过黄山，到杨干院实地开挖。</div>
+
+  <!-- 五8 全力格：开挖（前置换气；落点大字＋嵌字） -->
+  <div class="gasp full" data-bg="assets/章背景-六-堆回的坟.jpg">
+    <img class="stage" src="assets/开挖-墓圹.jpg" alt="挖开佛殿前的泥土，砖砌的墓圹露了出来">
+  </div>
+  <div class="bigline" data-i="t142">砖砌的墓圹，露出来了。它一直就在那儿。</div>
+  <div class="say breath" data-i="t060">这是六百年里头一回，这座坟要靠差役挖开泥土，向官府证明它存在。</div>
+
+<!-- ══════════ §六 还坟（组装 PRD 六0–六4；全章齐边，最平整的一章） ══════════ -->
+
+  <!-- 六0 开章：章题带＋堆回的坟落地大屏；紧接堆土大画幅遮衔接（开章通则） -->
+  <div class="secband" data-title="祖坟·六 两年" data-bg="assets/章背景-六-堆回的坟.jpg"><h2 data-i="t006">§六　两年</h2></div>
+  <div class="chapimg"><img src="assets/章背景-六-堆回的坟.jpg" alt="重新堆回的坟"></div>
+
+  <!-- 六2 堆土：全屏大画幅（开章第二拍；本章最重的一格） -->
+  <div class="full breath">
+    <img class="stage" src="assets/还坟场面-合成-v1.jpg" alt="还坟那天：佛熙跪在坟前捧土，差役、僧众与邻人一排站着观看">
+    <div class="capscrim" style="height:40%"></div>
+    <div class="cap" data-i="t099" style="left:6%;right:6%">还坟那天，官府派员到场监督，杨干院全体和尚、附近的里老和邻人都被叫来观看。佛熙当着这些人的面，把自己下令铲平的坟一抔土一抔土堆了回去。堆完，他一句话没说，转身走了。罗家等这一天，等了两年。</div>
+  </div>
+
+  <!-- 六1 讲解块：判决要点（度牒注释点词展开） -->
+  <div class="breath textblock" data-i="t089">
+    <p>宁国府的判决是这样的：坟是真的，坟堆要修回去；当初是佛熙下令铲的，就罚佛熙本人把它修回来。罗家每年清明上坟祭扫的权利归还。观音堂东边拨出一间屋，给罗家立祠堂。另外查实佛熙与妇人满真通奸，追回<span class="term" data-annot="annot-dudie">度牒</span>，勒令还俗。</p>
+  </div>
+  <div class="annot" data-i="t161" id="annot-dudie">度牒：朝廷发给僧人的身份凭证，相当于出家的执照——领了它，才是官府承认的和尚，可以免除赋役；没有它出家，就是私自剃度，官府查到要治罪。它由礼部统一印发，上面写着法名、籍贯、所属寺院。收回度牒，等于开除僧籍、赶回家当老百姓，对一个和尚来说是身份上最重的处罚。</div>
+
+  <!-- 六3 甘结：窄格 56 左齐边（素材自带纸面，裸放加投影） -->
+  <div class="breath w56 offL" style="transform:rotate(-0.8deg);filter:drop-shadow(0 6px 16px rgba(0,0,0,.42))">
+    <img src="assets/去底-甘结带字版.png" alt="两家各立一份甘结，签字画押" style="width:100%;display:block">
+  </div>
+  <div class="say bite" data-i="t028">随后，官府让两家各立一份<span class="term" data-annot="annot-ganjie">甘结</span>，各自签字画押。</div>
+  <div class="annot" data-i="t162" id="annot-ganjie">甘结：明代结案时的一道手续——打官司的双方在官府写下保证书，签字画押，承诺服从判决，今后不再为这件事告状。立了甘结，案子在官府的记录上就算了结。后来这一纸甘结从案卷里不见了，法椿要翻案，缺的正是它。</div>
+
+  <!-- 六4 讲解块＋黑场收章 -->
+  <div class="breath textblock" data-i="t090">
+    <p>坟回来了，官司也赢了，但这份判决两家都不满意。它把祭祀的权利和寺产分开：罗家可以每年来祭坟，寺产仍归寺院，并且写明不许罗家借这座坟主张寺产。和尚们要的是一座没有坟、产权清楚的寺院，如今坟修了回来，寺里还多出一间罗家的祠堂。罗家则认为整个杨干院本来就是自家出钱盖的，如今只拿回一座坟和一间屋。</p>
+  </div>
+
+  <!-- 章内转折：两年过去，背景在此换到中元灯会（合并 §七 后，这是本章的中段） -->
+  <div class="gasp blackout" data-i="t148" data-bg="assets/anim-七/裁边/frame-1.jpg">
+    <p>两年过去。</p>
+  </div>
+
+  <!-- 六6 中元灯会：四帧交叉淡入满幅 -->
+  <div class="anim7 breath">
+    <img src="assets/anim-七/裁边/frame-1.jpg" alt="中元灯会，满场镂空灯笼">
+    <img class="ov" src="assets/anim-七/裁边/frame-2.jpg" alt="" style="animation-delay:-12.6s">
+    <img class="ov" src="assets/anim-七/裁边/frame-3.jpg" alt="" style="animation-delay:-8.4s">
+    <img class="ov" src="assets/anim-七/裁边/frame-4.jpg" alt="" style="animation-delay:-4.2s">
+  </div>
+  <div class="say bite" data-i="t029">嘉靖九年（1530）七月十五，中元节，杨干院办大法会，僧俗男女都能进寺。呈坎的年轻人成群去看热闹，罗家的义子郑来保也去了，还带着妻子和族里几位女眷。</div>
+
+  <!-- 六7 灯熄：命案起，重撕边 -->
+  <div class="full breath">
+    <img class="stage" src="assets/中元灯会-满场暗版-v2.jpg" alt="灯逐一熄灭，只剩一盏">
+  </div>
+  <div class="say bite" data-i="t030">那一夜，寺里出了人命：一场斗殴里，郑来保被打死了。尸体被一个叫智灯的和尚运出寺去，烧掉了。人死了，尸首也烧没了，究竟怎么死的，从此死无对证。</div>
+
+  <!-- 六8 反咬状纸：状纸下透出两年前那纸甘结的淡影（PRD 手法四） -->
+  <div class="breath overpaper" data-gloss="g02">
+    <div class="ghost"><img src="assets/透明-甘结透影-v1.png" alt=""></div>
+    <img src="assets/透明-反咬状纸-无字-v7.png" alt="杨干院的状子：告为人命事，罗氏图谋寺产，纠众入寺行凶，殴死本院僧人">
+    <div class="op-col" style="right:15%;top:9%;font-size:max(18px,6cqw)">告為人命事</div>
+    <div class="op-col" style="right:33%;top:15%;font-size:max(14px,4cqw)">羅氏圖謀寺產　糾眾入寺行兇</div>
+    <div class="op-col" style="right:47%;top:15%;font-size:max(14px,4cqw)">毆死本院僧人能霓　佛圓</div>
+  </div>
+  <div class="say bite" data-i="t031">罗家的丧事还没办完，杨干院的状子已经递到了衙门。状子上写的是另一回事：罗家人图谋寺产，纠集人手闯进法会寻衅，打死了本院的两个和尚，能霓和佛圆。同一个夜里，死的是罗家的义子；递上去的状子却说死的是寺里的和尚，动手的是罗家。两年前佛熙抢在罗显之前告他伪造祖坟，这一回法椿抢在罗家之前告他们行凶杀人——先递状子的那一方，决定这场官司审什么。</div>
+
+  <!-- 六9 讲解块：为什么非造一桩命案 -->
+  <div class="breath textblock" data-i="t091">
+    <p>为什么非造一桩命案不可？因为两家立过甘结，保证过不再告，坟案直接翻案没有名目；而人命是重罪，只要立起一桩新的命案，就能把旧案一并带出来重审。郑来保死得不明不白，这件事落到法椿手里，成了一个机会。</p>
+    <p>往哪儿递状，法椿也跟罗显学会了。他把状子递进了巡抚衙门。巡抚有个惯例：民间纠纷不亲自审，批一句话，发回当地衙门去办。状子一转，回了徽州府——法椿做都纲的地方。同一套衙门制度，两年前罗显用它把案子送出了徽州，这回法椿用它把案子接回了自己的地盘。</p>
+  </div>
+
+  <div class="gasp blackout" data-i="t149" data-title="祖坟·六 两年" data-bg="assets/章背景-八-府衙案卷.jpg">
+    <p>这一回，两边都学会了对方的办法。</p>
+  </div>
+
+<!-- ══════════ §七 翻盘与失窃（原 §八，合并后章号顺移；PRD 八0–八9） ══════════ -->
+
+  <div class="secband" data-title="祖坟·七 翻盘与失窃" data-bg="assets/章背景-八-府衙案卷.jpg"><h2 data-i="t007">§七　翻盘与失窃</h2></div>
+  <div class="chapimg"><img src="assets/章背景-八-府衙案卷.jpg" alt="府衙里堆着的案卷"></div>
+
+  <!-- 七0b 察院门前：全屏大画幅，遮住落地大屏与固定背景的衔接（零文字，画面先给） -->
+  <div class="full breath">
+    <img class="stage" src="assets/章七-察院门前-v1.jpg" alt="罗显举着状子，站在巡按察院门前的台阶下">
+  </div>
+
+  <!-- 七1 讲解块：两手准备（同知注释点词展开） -->
+  <div class="textblock bite" data-i="t066">
+    <p>罗显这回没有等着开庭。他先去了一趟巡按察院，把郑来保被打死的事又原样告了一遍——同一件事，告了两个衙门。</p>
+    <p>这一步的用处，在两个衙门转案的规矩不一样。巡抚接了民间的状子，批一句话发回地方，就算办完，此后不再过问。巡按不同：他转出去的案子要登记编号，定下审结的期限，到期不结要追究经办的官员，结了案还得回报给他核准。案子经巡按转一道，头上就多了一层盯着的人。</p>
+    <p>徽州知府因此不敢把这案子随手交给下面的推官，改派府里的二号人物、<span class="term" data-annot="annot-tongzhi">同知</span>李邦亲自审。买通一个推官，法椿出得起这个价；李邦是知府的副手，案子又在巡按那里挂着号，他要是徇私，丢的是自己的官。</p>
+    <p>另一头是证人。罗家吃过证人被收买的亏，这回派人留意那几户排年的动静。九个人里有个胡通进，欠着旧债，拿到佛熙的银子转身就去还账，让罗家的人看见了。上门一问，原委全说了出来。</p>
+  </div>
+  <div class="annot" data-i="t163" id="annot-tongzhi">同知：明代一个府的长官是知府，同知是知府的副手，正五品，一府通常设一两员，分管粮务、治安或案件。知府管全局，要紧的案子常交同知去审。</div>
+
+  <!-- 七2 酒宴三连：台词纸条贴排快连 -->
+  <div class="breath quote qR" data-i="t125" style="max-width:min(52%,520px)"><span class="who">佛熙</span>诸位排年，都是乡里乡亲。佛熙先敬各位一杯。</div>
+  <div class="bite quote qR" data-i="t126" style="max-width:min(56%,560px)"><span class="who">佛熙</span>状子，上头已经批下来了。<br>开审那天——各位记得，该怎么说。</div>
+
+  <!-- 七3 分银（08-06 裁定：互动无意义，改静图；六份银直接摆在桌底） -->
+  <div class="gasp fenyin done" id="fenyin">
+    <img class="table" src="assets/宴席剖面-合成-v1.jpg" alt="一张桌子的剖面：桌上是酒宴，桌底下是分银">
+    <img class="share" src="assets/透明-金银一份.png" alt="" style="--x:22%;--y:82%">
+    <img class="share" src="assets/透明-金银一份.png" alt="" style="--x:33%;--y:88%">
+    <img class="share" src="assets/透明-金银一份.png" alt="" style="--x:44%;--y:82%">
+    <img class="share" src="assets/透明-金银一份.png" alt="" style="--x:56%;--y:88%">
+    <img class="share" src="assets/透明-金银一份.png" alt="" style="--x:67%;--y:82%">
+    <img class="share" src="assets/透明-金银一份.png" alt="" style="--x:78%;--y:88%">
+    <div class="fy-quote quote qR" data-i="t139" style="max-width:100%;margin:0"><span class="who">佛熙</span>不白难为各位。</div>
+    <div class="fy-cap" data-i="t182">金三两一钱，银三十两，当场分掉。</div>
+  </div>
+
+  <!-- 七4 抖底：快切三格收在名单定格 -->
+  <div class="breath quote qR" data-i="t127" style="max-width:min(48%,480px)"><span class="who">法椿</span>请传本里排年，上堂作——</div>
+  <div class="bite quote qL" data-i="t128" style="max-width:min(72%,660px)"><span class="who">罗显</span>且慢。小人有一件事，先禀老爷。<br>去年十一月二十五，杨干院摆酒一桌，请的全是本里排年。<br>席上分金三两一钱、银三十两，叫各位上了堂，记住该怎么说。<br>收了钱的都有谁——名字，小人一个一个报。</div>
+  <div class="bite" data-gloss="g03" style="width:min(760px,92%);margin:8px auto 0;filter:drop-shadow(0 6px 16px rgba(0,0,0,.4))">
+    <div class="doc" style="width:100%">
+      <img src="assets/透明-抖底名单-无字-v7.png" alt="罗显当堂报出的受贿名单">
+      <div class="zt" style="right:16%;top:34%;font-size:max(12px,3.4cqw);letter-spacing:.14em">胡通進</div>
+      <div class="zt" style="right:26%;top:34%;font-size:max(12px,3.4cqw);letter-spacing:.14em">李廷綱</div>
+      <div class="zt" style="right:36%;top:34%;font-size:max(12px,3.4cqw);letter-spacing:.14em">范瓊隆</div>
+      <div class="zt" style="right:46%;top:34%;font-size:max(12px,3.4cqw);letter-spacing:.14em">王　琳</div>
+      <div class="zt" style="right:56%;top:34%;font-size:max(12px,3.4cqw);letter-spacing:.14em">李文浩</div>
+    </div>
+  </div>
+
+  <!-- 七5 胡通进跪 -->
+  <div class="bite quote qL" data-i="t129" style="max-width:min(44%,440px)"><span class="who">胡通进（跪下）</span>金……金三钱一分，银三两，小的都带来了。<br>小的招。全招。</div>
+
+  <!-- 七6 法椿失色：窄格 54 右重毛边 -->
+  <div class="breath w54 offR" style="transform:rotate(1.1deg);filter:drop-shadow(0 6px 16px rgba(0,0,0,.42))">
+    <img src="assets/透明-法椿失色-卡内-v1.png" alt="法椿当堂失色" style="width:100%;display:block">
+  </div>
+  <div class="say bite" data-i="t032">三年前的公堂上，罗显被法椿驳得一个字说不出，最后按了手印认罪。这一次，他把对方每一笔贿银的数目、日子、收钱人的名字，当着堂上的人一项一项报了出来。</div>
+  <div class="say bite" data-i="t033">收买证人有个买主补不上的漏洞：钱一旦交到证人手里，就成了可以呈上公堂的东西。这几个排年都是本乡的平民，经不住当堂对质；交出银子、说明来路，比替和尚顶罪合算得多。</div>
+
+  <!-- 七7 两连击：人形空洞（08-06 馆主提议：纸上撕出两个人形的洞）× 法椿出狱 -->
+  <div class="breath w56 offL" style="transform:rotate(-1deg);filter:drop-shadow(0 6px 16px rgba(0,0,0,.42))">
+    <img src="assets/透明-人形空洞-v3.png" alt="两个证人的形状从纸上被撕走，只剩两个人形的空洞" style="width:100%;display:block">
+  </div>
+  <div class="jq w56 offR pa" style="margin-top:-5%;transform:rotate(1.2deg)">
+    <img src="assets/透明-小格-法椿出狱.png" alt="法椿走出牢门">
+  </div>
+  <div class="say bite" data-i="t034">命案那夜在场的两个目击者，官府去传，回报说：都病故了，已经下葬。人证一断，命案查不下去；法椿蹲大牢的由头定不下来。关不住，只好放人。</div>
+
+  <!-- 七8 案卷失窃：常规格重毛边 -->
+  <div class="breath" style="width:min(760px,92%);margin:5vh auto 0;filter:drop-shadow(0 6px 16px rgba(0,0,0,.42))">
+    <img src="assets/透明-案卷两卷-卡内-v1.png" alt="两卷案卷，回来时只剩一卷" style="width:100%;display:block">
+  </div>
+  <div class="say bite" data-i="t035">李邦要调坟案的旧卷宗。派去调卷的差役被佛熙收买，称病躺家里，一个没剃度的僧徒冒名顶替，把案卷顺顺当当领了出来——先送佛熙过目。佛熙把宁国府那卷抽走，剩下的送进徽州府。官府自己的案卷，从宁国府调往徽州府，中间在佛熙手里过了一道：两卷进去，一卷出来。</div>
+
+  <!-- 七9 缺甘结：卷宗对页底版＋排版页目，缺页处空栏 -->
+  <div class="breath panel cut" data-gloss="g04">
+    <div class="doc" style="width:100%">
+      <img src="assets/透明-卷宗对页-无字-v7.png" alt="失而复得的卷宗，独独缺了甘结那一纸">
+      <div class="zt" style="right:16%;top:14%;font-size:max(12px,3.4cqw);letter-spacing:.14em">歙縣原問一卷</div>
+      <div class="zt" style="right:30%;top:14%;font-size:max(12px,3.4cqw);letter-spacing:.14em">寧國府審一卷</div>
+      <div class="zt" style="right:62%;top:14%;font-size:max(12px,3.4cqw);letter-spacing:.14em;opacity:.18">甘　結</div>
+    </div>
+  </div>
+  <div class="say bite" data-i="t036">失而复得的卷宗，罗显一页一页点。还是少了一纸：正是当年两家画押立下的那份甘结。对方连偷去的案卷都肯还回来，却单单留下这张保证永不再告的甘结——说明他们还打算再告。</div>
+
+  <div class="gasp blackout" data-i="t150" data-title="祖坟·七 翻盘与失窃" data-bg="assets/章背景-九-宵禁黑巷-裁边.jpg">
+    <p>这场官司，远没有完。</p>
+  </div>
+
+<!-- ══════════ §八 夜审（原 §九；全篇情绪最低的一章，重撕边到顶） ══════════ -->
+
+  <div class="secband" data-title="祖坟·八 夜审" data-bg="assets/章背景-九-宵禁黑巷-裁边.jpg"><h2 data-i="t008">§八　夜审</h2></div>
+  <div class="anim9">
+    <img src="assets/anim-九/裁边/frame-1.jpg" alt="宵禁后的黑巷">
+    <img class="ov" src="assets/anim-九/裁边/frame-2.jpg" alt="" style="animation-delay:-21s">
+    <img class="ov" src="assets/anim-九/裁边/frame-3.jpg" alt="" style="animation-delay:-16.8s">
+    <img class="ov" src="assets/anim-九/裁边/frame-4.jpg" alt="" style="animation-delay:-12.6s">
+    <img class="ov" src="assets/anim-九/裁边/frame-5.jpg" alt="" style="animation-delay:-8.4s">
+    <img class="ov" src="assets/anim-九/裁边/frame-6.jpg" alt="" style="animation-delay:-4.2s">
+  </div>
+
+  <!-- 八1 挨板背影：全屏大画幅，紧接开章动画（画面先给、判决后讲；同时遮住与固定背景的衔接） -->
+  <div class="full breath">
+    <img class="stage" src="assets/挨板公堂-合成-v1.jpg" alt="法椿挨了八十板">
+    <div class="capscrim" style="height:40%"></div>
+    <div class="cap" data-i="t100" style="left:6%;right:6%">八十板，打在法椿身上。</div>
+  </div>
+
+  <!-- 八2 合议判决讲解＋一律病故 -->
+  <div class="textblock bite" data-i="t067">
+    <p>李邦手上积了好几桩互相牵连的案子。他请两位邻县的知县来合议并审，本县官员一律回避。两位知县审完，判决下来了：坟是真的，维持宁国府的原判，立下界石；罗显、法椿，各打八十板；佛熙行贿、偷换文书，勒令还俗。至于人命——能霓、佛圆、郑来保，加上那两个死在牢里的证人，五条人命，判词里一律写作病故，不再追究了。</p>
+  </div>
+  <div class="breath panel cut" style="width:min(560px,86%);margin-left:auto;margin-right:auto">
+    <img src="assets/去底-大字件-一律病故.png" alt="判词里的四个字：一律病故">
+  </div>
+  <div class="say breath" data-i="t061">法椿输了这一场。可他挨着打，脑子还在转：他从这份判决里读出了官府的心思——两位知县不是查不出那五条人命，是不想再查了。案子越乱，官府越想早点收场；越想收场，判起来就越肯含糊。</div>
+
+  <!-- 八2b 法椿的一拍：零文字一屏（PRD v2 手法六） -->
+  <div class="breath jl w44 offR pd" style="transform:rotate(1deg);filter:brightness(.85) drop-shadow(0 5px 14px rgba(0,0,0,.35))">
+    <img src="assets/透明-法椿失色-卡内-v1.png" alt="法椿低着头，还在想">
+  </div>
+
+  <!-- 八3 六份赃证 -->
+  <div class="breath panel cut">
+    <div class="doc gongci" style="width:100%">
+      <img src="assets/透明-排年供词-无字-v7.png" alt="六份内容雷同的供词">
+      <div class="zt" style="right:10.6%;top:22.4%;font-size:max(11px,1.85cqw);letter-spacing:.10em;transform:translateX(50%)">羅顯買囑作證　銀五十兩</div>
+      <div class="zt" style="right:26.4%;top:19.2%;font-size:max(11px,1.85cqw);letter-spacing:.10em;transform:translateX(50%)">羅顯買囑作證　銀五十兩</div>
+      <div class="zt" style="right:42.2%;top:19.5%;font-size:max(11px,1.85cqw);letter-spacing:.10em;transform:translateX(50%)">羅顯買囑作證　銀五十兩</div>
+      <div class="zt" style="right:58.0%;top:21.1%;font-size:max(11px,1.85cqw);letter-spacing:.10em;transform:translateX(50%)">羅顯買囑作證　銀五十兩</div>
+      <div class="zt" style="right:73.8%;top:18.1%;font-size:max(11px,1.85cqw);letter-spacing:.10em;transform:translateX(50%)">羅顯買囑作證　銀五十兩</div>
+      <div class="zt" style="right:89.6%;top:22.1%;font-size:max(11px,1.85cqw);letter-spacing:.10em;transform:translateX(50%)">羅顯買囑作證　銀五十兩</div>
+    </div>
+    <div class="gongci-note" data-i="t188">六份供词，字字相同：羅顯買囑作證　銀五十兩</div>
+  </div>
+  <div class="say bite" data-i="t037">那六个刚挨过板子的排年，法椿给每人送去五十两银子。过了些日子，这六个人各自捧着五十两银子到官府"上缴"，检举说：这是当年罗显收买我们作证的赃款。银子是真的，上缴是真的，六份口供还互相印证；整件事里唯一的假，是这笔钱真正的来路——而钱的来路，恰恰谁也没法证明。罗显几乎无从辩起。</div>
+
+  <!-- 八4 移案池州 -->
+  <div class="breath jq w56 offL pa" style="transform:rotate(-.9deg)">
+    <img src="assets/透明-案卷移送-v1.png" alt="案卷装箱，移送池州">
+  </div>
+  <div class="say bite" data-i="t038">新上任的巡按不了解这几年的恩怨，把要求复审的命案交给了西北面的邻府池州——那六份"上缴"的赃证，一并随案卷移了过去。前头八年的恩恩怨怨，池州一概不知道。</div>
+
+  <!-- 八5 宵禁空街 -->
+  <div class="breath jq w56 offR pb" style="transform:rotate(.8deg)">
+    <img src="assets/去底-小格-宵禁空街.png" alt="宵禁后的空街">
+  </div>
+  <div class="say bite" data-i="t039">开庭定在傍晚。府城入夜要<span class="term" data-annot="annot-xiaojin">宵禁</span>，鼓一响，街上就没有人了，公堂外连一个围观的百姓都没有。</div>
+  <div class="annot" data-i="t164" id="annot-xiaojin">宵禁：明代府县城入夜击鼓禁行，街上不许有人走动。把开庭安排在宵禁之后，堂外就不可能有围观的百姓；堂上发生什么，外面没有人看见。</div>
+
+  <!-- 八6 隔窗棂看堂：零文字一屏（PRD v2 手法二） -->
+  <div class="breath 窗棂" id="chuangling">
+    <img class="di" src="assets/夜审堂内-合成-v1.jpg" alt="夜审的堂内：公案后的人影，堂下跪着的老人">
+    <img class="qian" src="assets/透明-窗棂前景层-v1.png" alt="">
+  </div>
+
+  <!-- 八7 三个「不」：台词纸条快排 -->
+  <div class="breath quote qL" data-i="t130" style="max-width:min(40%,400px)"><span class="who">罗显</span>小人有辩——</div>
+  <div class="bite quote qR" data-i="t131" style="max-width:min(32%,320px)"><span class="who">差役</span>肃静！</div>
+  <div class="bite quote qL" data-i="t132" style="max-width:min(40%,400px)"><span class="who">罗显</span>请传邻证——</div>
+  <div class="bite quote qL" data-i="t133" style="max-width:min(44%,440px)"><span class="who">罗显</span>请调宁国府原案——</div>
+  <div class="bite quote qR" data-i="t134" style="max-width:min(52%,520px)"><span class="who">推官（不看他，像交代一件公事）</span>时辰不早了。<br>夹起来。</div>
+
+  <!-- 八8 夹棍：重撕边 -->
+  <div class="breath panel cut w54 offR" style="transform:rotate(1.2deg)">
+    <img src="assets/夹棍专件.jpg" alt="夹棍">
+  </div>
+  <div class="say bite" data-i="t040">夹棍，夹小腿骨的刑具。那天晚上，用在了一个六十多岁的乡下人身上。</div>
+
+  <!-- 八10 全力格：顶点（前置换气、零文字长停） -->
+  <div class="gasp full">
+    <img class="stage" src="assets/夜审顶点-垮下来.jpg" alt="他垮了下来">
+  </div>
+
+  <!-- 八11 画押供状对切 -->
+  <div class="breath jq w56 offL pa" style="transform:rotate(-.9deg)">
+    <img src="assets/去底-画押.png" alt="被按着画押">
+  </div>
+  <div class="jq w56 offR pb" style="margin-top:-5%;transform:rotate(1deg)">
+    <img src="assets/透明-供状墨迹未干.png" alt="供状上的墨迹还没干">
+  </div>
+  <div class="say bite" data-i="t041">他后来在状子里记这一晚，只用了四个字——</div>
+
+  <!-- 八12 黑屏大字（文字分级第一级，全篇 3 处之一） -->
+  <div class="gasp blackout l1" data-i="t152">
+    <p style="letter-spacing:.34em">非法夹打</p>
+  </div>
+  <div class="breath rawq">
+    <div class="rq-text" data-i="t171">不意奸僧串通积年打点衙门钻户唐文魁，贿嘱官吏。至九月十五日，计延傍晚到所，不审邻佑，不详原案，不取服辨，非法夹打。</div>
+  </div>
+
+  <!-- 八13 改字互动（全篇第三处互动；08-06 复验第一轮改）：
+       大手持刮刀悬在卷面上空；点击画面，手落下、刀尖把当前列的「有」刮成「無」，点一下改一处；
+       四处改完手退出、出价钱句；改完之前锁滚不放行（回访照教训 13 放过）。 -->
+  <div class="gasp gaizi" data-gloss="g06" id="gaizi">
+    <div class="gz-paper">
+      <img src="assets/透明-供词卷面-无字-v7.png" alt="邻佑证词的卷面">
+      <div class="gz-col gz-c1"><span class="t you">素有古墳一所</span><span class="t wu">素<b>無</b>古墳一所</span></div>
+      <div class="gz-col gz-c2"><span class="t you">院內舊有墳</span><span class="t wu">院內舊<b>無</b>墳</span></div>
+      <div class="gz-col gz-c3"><span class="t you">親見羅氏有墳</span><span class="t wu">親見羅氏<b>無</b>墳</span></div>
+      <div class="gz-col gz-c4"><span class="t you">其地果有墳</span><span class="t wu">其地果<b>無</b>墳</span></div>
+    </div>
+    <img class="gz-hand" src="assets/透明-改字之手.png" alt="一只从画外伸进来的手，持刮刀悬在卷面上空">
+    <div class="gz-price" data-i="t183">价钱是改一处、一两银子。</div>
+  </div>
+  <div class="say bite" data-i="t042">卷宗也动了手脚。主审的推官买通了抄写文书的小吏——把历年案卷里邻佑证词中的"有坟"，一处一处，全改成"无坟"。纸面上还是那些证人的名字，可他们说的话，已经整个反了过来。</div>
+
+  <!-- 八14 火把夜掘＋清晨铲平（匹配切回 §四 空地）。
+       夜掘两段叙述挪进铲平图、改深墨字落在铲平的空地上（08-06 复验二轮馆主指定） -->
+  <div class="full breath">
+    <img class="stage" src="assets/火把夜掘.jpg" alt="三百多支火把进寺，坟被挖开">
+  </div>
+  <div class="full bite">
+    <img class="stage" src="assets/铲平后的空地.jpg" alt="次日清晨：现场铲平">
+    <div class="ink-on-stage" data-i="t106">
+      <p>一个深夜，三百多人举着火把进了杨干院，把那座坟从顶上挖开。火把底下，砖砌的墓室露了出来，还有一方墓志——在场几百人，全都看见了。没挖到的，是棺木和尸骨。有砖有墓志，可以说这是坟；没有棺木尸骨，也可以说这是伪造。反正第二天一早，这批人又来了一趟，把整个现场铲得干干净净。</p>
+      <p>坟没了，案子还在。罗显接着告。</p>
+    </div>
+  </div>
+
+  <!-- 八15 绕圈：同一扇关着的门，连出现三次，逐次更暗 -->
+  <div class="raoquan3 breath">
+    <div class="rq3"><img src="assets/衙门闭门-老人举状-v1.jpg" alt="他站在宁国府关着的大门前">
+      <div class="rq-cap" data-i="t185">他先去宁国府。宁国府说，这案子已经转给池州了，本府不再管。</div></div>
+    <div class="rq3 d2"><img src="assets/衙门闭门-老人举状-v1.jpg" alt="他站在徽州府关着的大门前">
+      <div class="rq-cap" data-i="t186">他转去徽州府。徽州府说，案子在池州，你找池州去。</div></div>
+    <div class="rq3 d3"><img src="assets/衙门闭门-老人举状-v1.jpg" alt="他站在池州府关着的大门前">
+      <div class="rq-cap" data-i="t187">他只好回池州。判他非法夹打的，正是池州。</div></div>
+  </div>
+
+  <div class="say breath" data-i="t062">证人的口供改了，案卷的字改了，坟挖开又铲平了。这场官司走到这里，能证明这座坟存在的东西，都被动过了。</div>
+  <!-- 收章黑屏必须紧接下一章的画面：这句总结原在黑屏之后，等于黑屏之后回到的是文字、
+       中间那段区间只露压暗背景（08-06 §十 亲验第①条判过同型），08-07 自检时挪到黑屏之前 -->
+  <div class="gasp blackout l1" data-i="t153" data-title="祖坟·八 夜审" data-bg="assets/章背景-十-宫墙奉天门.jpg">
+    <p>告了一圈，回到原地。</p>
+  </div>
+
+  <!-- ══════════ §九 京城（PRD 十0–十10；冷直边章；文案逐字照 v7 现行，注释转点词展开） ══════════ -->
+
+  <!-- 九0 章题带＋落地大屏（背景已在 §八 收章黑场底下切为宫墙） -->
+  <div class="secband gasp" data-title="祖坟·九 京城"><h2 data-i="t009">§九　京城</h2></div>
+  <div class="chapimg">
+    <img src="assets/章背景-十-宫墙奉天门.jpg" alt="宫墙与奉天门">
+  </div>
+  <!-- 开章第二拍：察院公案满幅（开章通则遮挡拍，教训 3；r26 直生件，零文字观赏拍） -->
+  <div class="full bite">
+    <img class="stage" src="assets/章九-察院公案-v1.jpg" alt="巡按察院公堂：公案上摊开《大明会典》，卷宗推在案角，案后官员剪影">
+  </div>
+
+  <!-- 九1 告官的路：讲解块 -->
+  <div class="textblock breath" data-i="t081">
+    <p>池州那份判决，是从一个收了钱的法官手里出来的；判决本身翻不了，那就告做出这份判决的人。会典的规矩：告官的案子，要交给被告官员的上级去审。池州府再往上，这一带已经没有更高的地方衙门了，案子于是落回巡按御史手里。这一回，他必须亲自审，再也没有可以往下推的地方了。</p>
+  </div>
+
+  <!-- 九2 会典×牌位：错落对切（格间无文字，教训 14 允许）。
+       去底件自带纸片即画格边，裸放加投影（教训 12；§四 画押、§六 甘结同做法）——
+       首版套 panel cut 白底框被馆主判"质感与前几章不一样"，08-06 亲验第 5 条 -->
+  <div class="breath jq w56 offL pa" style="transform:rotate(-.7deg)">
+    <img src="assets/去底-会典册带字版.png" alt="卷宗推到一边，《大明会典》摆上来">
+  </div>
+  <div class="jq w56 offR pb" style="margin-top:-5%;transform:rotate(.8deg)">
+    <img src="assets/去底-牌位供桌.png" alt="程元凤的牌位上了供桌">
+  </div>
+  <div class="say bite" data-i="t043">巡按詹宽接了案。对那些被改来改去的口供和卷宗，他一个字也没有理会——改过多少手，真假早就分不清了。他把整个案子换了一种审理的办法，搬出了另一样东西：朝廷的礼制。先判罗家：平民的祖先不得立祠专祭，这坟违制，要铲平。再判寺里：新塑的佛像，形同朝廷明令禁止的<span class="term" data-annot="annot-yinci">淫祠</span>，佛殿要拆除。</div>
+  <div class="annot" data-i="t165" id="annot-yinci">淫祠：不在朝廷祀典之内、未经官府许可的祠庙和祭祀。"淫"在这里是过滥、不合规矩的意思，不是别的。明代法令明文禁止民间私立这类祠祀，查出来就要拆毁。</div>
+
+  <!-- 九3 碎纸片：真透明直落浓背景，无框无衬（r16 裁定） -->
+  <div class="breath" style="width:min(72%,880px);margin-left:auto;margin-right:auto;filter:drop-shadow(0 8px 22px rgba(0,0,0,.5))">
+    <img style="width:100%;height:auto;display:block" src="assets/透明-碎纸片-坟画幅.png" alt="那张坟的画被撕成四十余片，散落堆叠，拼不回原来的样子">
+  </div>
+  <div class="say bite" data-i="t044">嘉靖十二年（1533）十二月，官府的人开进杨干院。那座坟第二次被铲平，佛殿也拆毁了；寺的中堂改成一座祠堂，用来祭祀当年写碑的程元凤——理由是，碑上有他的名字。老丞相当年写下那块碑，是为了护住女婿家的坟。三百年后，他自己被请上了供桌，受人香火；而他要护的那座坟，就在供桌几步之外，被铲成了平地。</div>
+
+  <!-- 九4 用钱办不动的东西：讲解块 -->
+  <div class="textblock breath" data-i="t082">
+    <p>八年了，证人、法官、差役、书吏，两边谁都买通过，什么都能用钱办成。到这里，才头一回碰上一样用钱办不动的东西：朝廷的礼制。詹宽不问谁有理，也不问谁出价高，照着礼典，把两家各自最看重的东西都罚掉了：罗家失了坟，寺里失了佛殿。官司到这里，法椿收了手。罗显没有停。</p>
+  </div>
+
+  <!-- 九5 僧籍册：透明册页裸放加投影；九栏写满八名、能霓佛圆名下注「故」；角标不上屏（台账 #22，说明入来源页） -->
+  <div class="breath jq pc sengji" data-gloss="g07">
+    <img src="assets/透明-僧籍册页-无字-v7.png" alt="僧籍册翻开：能霓、佛圆两个名字底下注着「故」">
+    <div class="sj-col n1">法椿</div>
+    <div class="sj-col n2">佛熙</div>
+    <div class="sj-col n3">能霓<i>故</i></div>
+    <div class="sj-col n4">智燈</div>
+    <div class="sj-col n5">佛圓<i>故</i></div>
+    <div class="sj-col n6">法明</div>
+    <div class="sj-col n7">能証</div>
+    <div class="sj-col n8">佛海</div>
+  </div>
+  <div class="say bite" data-i="t045">他终于查明白了：能霓、佛圆这两个人，早在这场官司开始之前就已经死了。杨干院一直给死去的和尚保留僧籍，官府来核查人头、摊派差役的时候，就拿死人的名字充数。也就是说，那两个"被罗家打死"的和尚，案发的时候根本就不在人世。</div>
+
+  <!-- 九5b 七张状纸·六个驳印（PRD v2 手法三）：状纸自带纸面、叠瓦组裸放（各张自带投影）；
+       嵌图句改格外（裸放后没有格内纸面可落深墨字） -->
+  <div class="breath jq pd">
+    <div class="qizhuang" id="qizhuang">
+      <div class="zh" style="left:0;transform:rotate(-1.2deg);z-index:1"><img src="assets/透明-状纸单页-无字-v1.png" alt="第一张被驳回的状纸"><div class="bo" style="top:12%"><img src="assets/透明-驳印-甲版-v1.png" alt="驳回的朱印"></div></div>
+      <div class="zh" style="left:13%;transform:rotate(.8deg);z-index:2"><img src="assets/透明-状纸单页-无字-v1.png" alt="第二张"><div class="bo" style="top:16%"><img src="assets/透明-驳印-甲版-v1.png" alt=""></div></div>
+      <div class="zh" style="left:26%;transform:rotate(-.6deg);z-index:3"><img src="assets/透明-状纸单页-无字-v1.png" alt="第三张"><div class="bo" style="top:20%"><img src="assets/透明-驳印-甲版-v1.png" alt=""></div></div>
+      <div class="zh" style="left:39%;transform:rotate(1.1deg);z-index:4"><img src="assets/透明-状纸单页-无字-v1.png" alt="第四张"><div class="bo" style="top:12%"><img src="assets/透明-驳印-甲版-v1.png" alt=""></div></div>
+      <div class="zh" style="left:52%;transform:rotate(-.9deg);z-index:5"><img src="assets/透明-状纸单页-无字-v1.png" alt="第五张"><div class="bo" style="top:16%"><img src="assets/透明-驳印-甲版-v1.png" alt=""></div></div>
+      <div class="zh" style="left:65%;transform:rotate(.5deg);z-index:6"><img src="assets/透明-状纸单页-无字-v1.png" alt="第六张"><div class="bo" style="top:20%"><img src="assets/透明-驳印-甲版-v1.png" alt=""></div></div>
+      <div class="zh" style="left:78%;transform:rotate(-1deg);z-index:7"><img src="assets/透明-状纸单页-无字-v1.png" alt="第七张状纸，没有驳印"></div>
+      <div class="capink" data-i="t105" style="left:4%;right:auto;bottom:5%;max-width:44%">八年里，他前后递上去七回状子。</div>
+    </div>
+  </div>
+
+  <!-- 九6 京诉：讲解块＋点词注释（注释用分格谱 v3 十6 重写版全文） -->
+  <div class="textblock breath" data-i="t083">
+    <p>可是拿着这条新罪证，罗显却发现已经没有地方可告了。地方大大小小的衙门，八年里他全都告遍了。再往上，就只剩京城。上京告状，明代叫<span class="term" data-annot="annot-jingsu">京诉</span>。这件事本身就是一桩罪：不管告得对不对，告状的人先问罪、先坐牢。罗显年纪大了，律法也不准老人上京告状。这时候，侄子罗兴站了出来。</p>
+  </div>
+  <div class="annot" data-i="t166" id="annot-jingsu">京诉：明代不许越级告状。把状子越过县、府、省直接递到京城，本身就是一条罪，叫越诉：不管冤枉不冤枉，先按越诉治罪——挨板子、下监狱，然后案子才开始审。所以进京告状的人，第一站一定是监狱。律法还规定老人不得上京，罗显去不了，只能是罗兴去。</div>
+
+  <!-- 九7 罗兴北上：全力格（前置换气、满幅、落点大字） -->
+  <div class="gasp full">
+    <img class="stage" src="assets/罗兴北上.jpg" alt="罗兴：背包袱的年轻人，面向北方">
+  </div>
+  <div class="bigline" data-i="t143">他清楚地知道这一趟进京，第一站就是监狱；他还是去了。</div>
+
+  <!-- 九8 通政司×下狱：对切裸放（去底件纸片即格边；格间无文字可上咬） -->
+  <div class="gasp jq w56 offL pa" style="transform:rotate(-.8deg)">
+    <img src="assets/去底-通政司门头带字版.png" alt="通政司收状">
+  </div>
+  <div class="jq w56 offR pb" style="margin-top:-5%;transform:rotate(.9deg)">
+    <img src="assets/透明-小格-下狱.png" alt="罗兴被押向木栅门">
+  </div>
+  <div class="say bite" data-i="t046">嘉靖十四年（1535）年初，罗兴带着状纸到了京城，把状子递进<span class="term" data-annot="annot-tongzhengsi">通政司</span>。通政司验过状子，收下了，随后把他关进监狱。这不是办错了：明代的律法规定，越过县、府、省直接进京告状，这件事本身就是一条罪；告状的人先按这条罪关押，案子才开始审。关他的每一道手续，都合乎律法。</div>
+  <div class="annot" data-i="t167" id="annot-tongzhengsi">通政司：朝廷接收天下奏章和申冤文书的总衙门，设在京城。各地送来的奏本、状纸，先经它验收登记，再分送皇帝和各衙门；它的长官叫通政使，有资格在早朝上把要紧的文书当众奏报。</div>
+
+  <!-- 九9 奉天门早朝：连纸人阵列＋陈经出列第二拍。
+       底色与全章纸格一致；官员颜色压深让剪影在米黄纸上读得清（08-06 馆主裁定
+       "不要改底色，改官员的颜色"；显示层调色，同 §七 六份银压进环境的先例）；
+       红袍陈经不调——他是站出来的那一个，颜色对比正是叙事 -->
+  <div class="breath jq pc chenjing" id="chenjing">
+    <img class="array" src="assets/透明-连纸人-满朝文武-完整阵列.png" alt="奉天门早朝：满朝文武是连成串一样的纸人">
+    <img class="cj" src="assets/透明-陈经出列.png" alt="只有通政使陈经一人，从纸串里站出来">
+  </div>
+  <div class="say bite" data-i="t047">四月十二日，奉天门早朝。通政使陈经出列，把徽州府歙县一座祖坟的案子，当众奏到了嘉靖皇帝面前。</div>
+
+  <!-- 九10 龙椅：透明剪影裸放居中（v3.2"单独一格不偏置"） -->
+  <div class="breath jq w54 pd" style="margin-left:auto;margin-right:auto;transform:rotate(.8deg)">
+    <img src="assets/透明-龙椅剪影.png" alt="龙椅剪影">
+  </div>
+  <div class="say bite" data-i="t048">说来也巧。这位皇帝本是藩王之子，登基以后，为了给自己的亲生父亲争一个皇家的名分，跟满朝文武争了十几年，到这时还没有平息。一个宗族，为始祖的名分打了八年官司、坐了牢、告到御前——这张状纸，偏偏就送到了这样一位皇帝的面前。</div>
+
+  <!-- §九 收章黑场（挂 §十 背景切换；黑场句为新写，待花诗同判） -->
+  <div class="gasp blackout" data-i="t151" data-bg="assets/章背景-十一-纸页刻坊.jpg">
+    <p>一座乡下祖坟的官司，从此归朝廷管了。</p>
+  </div>
+
+  <!-- ══════════ §十 终判与残页（PRD 十一0–十一13，章号顺移；文案逐字照 v7 现行，注释点词展开） ══════════ -->
+
+  <!-- 十0 章题带＋落地大屏（背景已在 §九 收章黑场底下切为纸页刻坊） -->
+  <div class="secband gasp" data-title="祖坟·十 终判与残页"><h2 data-i="t010">§十　终判与残页</h2></div>
+  <div class="chapimg">
+    <img src="assets/章背景-十一-纸页刻坊.jpg" alt="纸页与刻坊">
+  </div>
+  <!-- 十1 案卷齐摊：满幅（开章通则第二拍；r20 终判合成件，画面先给、字后讲） -->
+  <div class="full bite">
+    <img class="stage" src="assets/案卷齐摊-合成-v1.jpg" alt="俯视一张公案：八年案卷、状纸、甘结、保簿头一回摊满同一张桌面">
+  </div>
+  <div class="say bite" data-i="t049">皇帝下旨，把案子交给<span class="term" data-annot="annot-duchayuan">都察院</span>；都察院再往下批转。八年来被抢过、藏过、偷换过、涂改过的案卷，头一回全部摊开在同一张桌上。</div>
+  <div class="annot" data-i="t168" id="annot-duchayuan">都察院：朝廷的最高监察衙门，管纠察百官、审理官员违法的案子。派往各省的巡按御史，就出自这里。</div>
+
+  <!-- 十2 终判卷轴：竖高文书窄幅裸放＋判词要句四列 -->
+  <div class="breath juanzhou" data-gloss="g08">
+    <img src="assets/透明-判词卷轴-无字-v7.png" alt="终判：判词卷轴展开">
+    <div class="op-col" style="right:22%;top:14%;font-size:max(18px,6.6cqw)">羅秋隱唐時人　葬於楊干屬實</div>
+    <div class="op-col" style="right:42%;top:20%;font-size:max(14px,5cqw)">歷年久遠　遺骸化為泥土　合乎常理</div>
+    <div class="op-col" style="right:58%;top:20%;font-size:max(14px,5cqw)">墳判歸羅氏　照舊修葺</div>
+    <div class="op-col" style="right:72%;top:20%;font-size:min(max(14px,5cqw),3.6vw)">墓誌重埋墳前　子孫永遠祭掃</div>
+  </div>
+  <div class="say bite" data-i="t050">终判下来了。判词说：罗秋隐是唐时人，葬在杨干，属实，不是假坟。至于挖不出尸骨——几百年过去，遗骸化为泥土，合乎常理，不能拿这个说坟是假的。坟判归罗家，照旧修葺；那方墓志重新埋回坟前；罗家子孙，永远祭扫。</div>
+
+  <!-- 十3 量刑的意外：讲解块 -->
+  <div class="textblock breath" data-i="t084">
+    <p>六百年的坟是真的——就为了官府这一句话，罗家花了八年、四千两银子，两次眼看着祖坟被铲平，还搭进去一场牢狱。可这份判决读到量刑的地方，有一处让人意外：罗显，杖九十；法椿，杖七十。赢了官司的罗家，挨的板子反而比输家还重。</p>
+  </div>
+
+  <!-- 十4 独灯（郑来保，没有下文的人只留一盏灯）：全章最小格 -->
+  <div class="breath jq w44 pa" style="margin-left:auto;margin-right:auto;transform:rotate(-.8deg)">
+    <img src="assets/去底-独灯单件.png" alt="中元夜那盏独灯，重现">
+  </div>
+  <div class="say bite" data-i="t051">这份把八年是非一件一件都作了交代的终判，唯独有一个人，从头到尾没有下文：郑来保。八年了，他的死始终没有得到一个说法。也许真相就是病故——是罗家把一场丧事，写成了对手的命案。罗显那个"奏事不实"，虚的正是这一笔。他自己刻的书里，这一页也没有留下半句自辩。</div>
+
+  <!-- 十5 墓志埋回：透明件裸放居中 -->
+  <div class="breath" style="width:min(34%,420px);margin-left:auto;margin-right:auto;filter:drop-shadow(0 8px 20px rgba(0,0,0,.45))">
+    <img style="width:100%;display:block" src="assets/透明-墓志拟制单行.png" alt="墓志重新埋回坟前">
+  </div>
+  <div class="say bite" data-i="t052" style="text-align:center">那方墓志，重新埋回坟前。</div>
+
+  <!-- 十6 刻书对话：讲解句嵌前＋台词纸条两轮 -->
+  <div class="say breath" data-i="t063">三年后，嘉靖十七年（1538），罗显干了他这场官司里的最后一件事：把八年案卷，刻成了一册书。</div>
+  <div class="breath quote qR" data-i="t135" style="max-width:min(58%,560px)"><span class="who">族人</span>八年的卷宗都在，怎么单刻这一本？都刻上罢。</div>
+  <div class="bite quote qL" data-i="t136" style="max-width:min(58%,560px)"><span class="who">罗显</span>案卷太繁，翻来覆去，读的人要打瞌睡的。只刻终审归结这一本。</div>
+  <div class="bite quote qR" data-i="t137" style="max-width:min(58%,560px)"><span class="who">族人</span>那法椿告我们的那些话呢？也印出去，传到外头像什么样子。</div>
+  <div class="bite quote qL" data-i="t138" style="max-width:min(58%,560px)"><span class="who">罗显</span>这书是要呈上公堂的。单有我们自家的话，人家一句"你们编的"，几百本就全白刻了。</div>
+
+  <!-- 十7 "为什么自己刻"移到黑屏之前（08-06 亲验①：原夹在黑屏与落刀图之间，
+       露出的压暗背景成了一条灰带；且分级正本明令黑屏之后要回到画面） -->
+  <div class="say breath" data-i="t064">为什么自己刻？因为八年里他亲眼见过：官府的案卷，能被人冒名领走，能被抽掉一卷，能被一两银子一处地改字。他谁也不信了。</div>
+
+  <!-- 黑屏大字（文字分级第一级，全篇 3 处之三；分级正本明写的载体例外）——之后直接回到画面 -->
+  <div class="gasp blackout l1" data-i="t154">
+    <p>他的话，照原样刻。</p>
+  </div>
+
+  <!-- 十8 落刀互动（全篇第三处互动；悬空落刀模型，台账 #29／教训 24）：
+       刻书手持刀悬在版上方静止等读者，点击落刀开刻；落刀前锁滚，回访照教训 13 放行；零提示 -->
+  <div class="bite cellfull" id="kefang">
+    <img class="cellbg" src="assets/刻坊.jpg" alt="刻坊：刻刀、木板、印页">
+    <img class="hand-keshu" src="assets/透明-刻书之手.png" alt="一只纸外尺度的手持刻刀，悬在书版上方">
+  </div>
+
+  <!-- 十9 原文块并置：两段（§三 移入的一段在后，此刻读者已走完八年）；出处入来源页 -->
+  <div class="breath rawq">
+    <div class="rq-text" data-i="t172">案牍烦隈，辞重意复，观者厌倦……散之本族，家藏一帖……杜窥伺之邪心。</div>
+    <div class="rq-text" data-i="t173">恃党扶图谋泯没，蒙天理昭报显明……訐奏七本，首尾八年始得归结。</div>
+  </div>
+
+  <!-- 十10 三拍：箱底一册 → 院落一排 → 巷灯入雾（自动渐变，台账 #23；前置嵌字） -->
+  <div class="say breath" data-i="t065">印成几百册，散给族里各房，一家藏一册。</div>
+  <div class="breath sanpai" id="sanpai" role="img" aria-label="书保存在千家万户：箱底一册，俯视院落一排，巷灯远景入雾">
+    <div class="qs on" style="background-image:url('assets/尾声-箱底-近景一册-带伤.jpg')"></div>
+    <div class="qs" style="background-image:url('assets/尾声-箱底-中景一排-带伤.jpg')"></div>
+    <div class="qs" style="background-image:url('assets/尾声-箱底-远景入雾-带伤.jpg')"></div>
+  </div>
+
+  <!-- 十11 两场了结：错落对格（格间无文字可上咬） -->
+  <div class="gasp jq w56 offL pa" style="transform:rotate(-.7deg)">
+    <img src="assets/透明-小格-追尊庙号.png" alt="北京：皇帝追尊庙号">
+  </div>
+  <div class="jq w56 offR pb" style="margin-top:-5%;transform:rotate(.8deg)">
+    <img src="assets/透明-小格-罗显发书.png" alt="徽州：罗显把书分发各房">
+  </div>
+  <div class="say bite" data-i="t053">同一年，北京的皇帝如愿给亲生父亲追尊了<span class="term" data-annot="annot-miaohao">庙号</span>。一个皇帝和一个徽州族长，同一年里，各自了结了为祖先名分的战争。</div>
+  <div class="annot" data-i="t169" id="annot-miaohao">庙号：皇帝死后在太庙里被供奉时用的称号，像某祖、某宗。给一个没做过皇帝的人追尊庙号，等于把他抬进皇帝的行列——在朝廷的礼制里，这是天大的事。</div>
+
+  <!-- 十12 府志改写＋历代沿用×一函一册（08-06 亲验②：格放大；条目字排进右页界格内，
+       长句拆成双行小注，不压页面弯曲缘） -->
+  <div class="breath juanzhou" data-gloss="g09" style="width:min(74%,860px)">
+    <img src="assets/透明-府志条目页-无字-v7.png" alt="府志条目页：杨干寺条下，来历已换成公堂上主张的那个版本">
+    <div class="op-col" style="right:19%;top:20%;font-size:max(14px,4.6cqw)">楊干院　在呈坎里</div>
+    <div class="op-col" style="right:28%;top:22%;font-size:max(12px,2.9cqw)">宋寶祐六年</div>
+    <div class="op-col" style="right:34.5%;top:22%;font-size:max(12px,2.9cqw)">羅氏建寺守墓</div>
+  </div>
+  <div class="say bite" data-i="t054">三十年后，官府重修《徽州府志》，杨干寺条目下的来历，改成了罗家在公堂上主张的那个版本。</div>
+  <div class="breath jq w56 offL pc" style="transform:rotate(-.6deg)">
+    <img src="assets/透明-小格-历代沿用.png" alt="历代志书沿用这个版本">
+  </div>
+  <div class="jq w56 offR pd" style="margin-top:-5%;transform:rotate(.7deg)">
+    <img src="assets/去底-一函一册带字版.png" alt="今天：社科院图书馆，一函一册">
+  </div>
+  <div class="say bite" data-i="t055">罗显那册书，今天收在北京，中国社会科学院历史研究所的图书馆里。一函一册，二十六叶，一万多字。你刚读完的这八年——公堂上的每句对质，酒宴上的每笔贿银——几乎全部来自这册书。</div>
+
+  <!-- 十13 残页（08-06 馆主定分镜）：文字停在"印着四个字——"却不说是哪四个字 → 残页整页 → 章到此结束。
+       读者只能自己在页子上逐列找到「羅家豈能」、再往下纸没有了——发现是读者自己的；
+       纸断在哪章断在哪，读者与四百年来翻到这一页的每个人处境相同 -->
+  <div class="textblock breath" data-i="t085">
+    <p>官府案卷吃过的那些亏——被偷、被换、被改——这册书都防住了。可它传到今天，还是缺了一叶。二十六叶里少了一叶，少的那一叶正好从一句话中间断开：前一页的末尾，印着四个字——</p>
+  </div>
+  <div class="gasp cy-page" data-gloss="g10">
+    <div class="cy-box">
+      <img src="assets/去底-残页整页-无字底版.png" alt="残页：复原刻本书影，最后一列到「羅家豈能」为止，往下纸没有了">
+      <div class="col" style="left:84.8%">審得各犯情詞及查碑文古志則</div>
+      <div class="col" style="left:73.5%">是寺因墳而建墳因寺以廢以理</div>
+      <div class="col" style="left:62.3%">言之毀寺而存墳可也廢墳而存</div>
+      <div class="col" style="left:50.8%">寺不可也況據先年楊推官勘稱</div>
+      <div class="col" style="left:39.2%">泥磚亂砌之語亦為古墳無疑但</div>
+      <div class="col" style="left:27.5%">歷年數百安得墎尚完形不然則</div>
+      <div class="col" style="left:15.8%">地在寺中傍各有牆<span class="last4">羅家豈能</span></div>
+    </div>
+  </div>
+
+  <!-- ══════════ 尾声（2026-08-07 重做〔用户裁定·2026-08-07·当面会话·"尾声部分重做"〕。
+       文案弃 v7/v8 的压缩改写，全文恢复两份定稿原文：议论段照正文 v23 末节（349–363 行）、
+       拾遗段照花诗 v5 定稿全文（含此前从 PRD 到页面之间被漏掉的 ¶1「两样文字」段）。
+       次序恢复 08-01 并入裁定的原序（议论八段 → 拾遗九段 → 合箱盖）：帕慕克回原处
+       〔用户裁定·2026-08-07·当面会话·"换新的文案后，帕慕克那两段还是回到原处"〕。
+       这也接回花诗写在 v5 衔接处理里的那道缝——¶1 首句「再看官府那一边」本来就是为
+       正文末节末句「都活得长久」接写的，前一轮我把两块对调，等于把这句接头拆了。
+       素材逐段按文案重配；文案层改动逐条见工作笔记 v8 第五十二节，待花诗同判。 ══════════ -->
+
+  <!-- 尾0 章题带＋落地大屏（背景切换被 §十 残页纸白格与本落地大屏遮着完成） -->
+  <div class="secband gasp" data-title="祖坟·尾声" data-bg="assets/章背景-尾声-暗处木箱.jpg"><h2 data-i="t011">尾声</h2></div>
+  <div class="chapimg">
+    <img src="assets/章背景-尾声-暗处木箱.jpg" alt="暗处的木箱">
+  </div>
+
+  <!-- 尾1 至于吗（正文末节 ¶1）：空的公堂满幅，兼开章遮挡拍（通则，台账 #25）。
+       素材主体在画布右 38.6%–100%、左边一片空纸，满幅居中会把空纸也铺满屏（08-07 馆主
+       点名"第一张图偏了"）——按主体取景（aspect-ratio 1.3、贴右缘），画面填满画幅 -->
+  <div class="full bite">
+    <img class="stage" style="aspect-ratio:1.15;object-fit:cover;object-position:100% 50%" src="assets/尾声一-空的公堂.jpg" alt="空了的公堂">
+  </div>
+  <div class="textblock bite" data-i="t068">
+    <p>看到这里，你心里可能一直搁着一个疑问：一座坟而已，两边这样往死里打八年，至于吗？</p>
+  </div>
+
+  <!-- 尾2 谁也不觉得小题大做（正文末节 ¶2）：龙椅×坟对格——从皇帝到农民，
+       同一个时代为同一件东西下血本 -->
+  <div class="breath jq w44 offL pd" style="transform:rotate(-.8deg)">
+    <img src="assets/透明-龙椅剪影.png" alt="龙椅剪影：为父亲的名分与满朝文武相斗的皇帝">
+  </div>
+  <div class="jq w44 offR pa" style="margin-top:-4%;transform:rotate(.9deg)">
+    <img src="assets/去底-坟小件-亮版.png" alt="山谷里的那座坟">
+  </div>
+  <div class="textblock bite" data-i="t069">
+    <p>这案子里，没有一个人觉得自己在小题大做。和尚为了这座坟，肯一桌酒摆出金三两银三十两去买口供；罗家肯把全族几辈子的家底押上去；同一时候的北京城里，皇帝为了自己亲生父亲的名分，跟满朝文武斗了十几年，一次当廷杖责打了一百多个抗议的官员，打死了十几个。从皇帝到农民，整个时代都在为祖先的名分下血本——因为在那个世界里，祖先的名分是最实在的东西：它决定几百口人凭什么算一家人，决定族产归谁，决定你家在地方上是有来历的人家，还是谁都可以下手的人家。懂了这个，才懂罗显的八年不是执念，是没有退路。</p>
+  </div>
+
+  <!-- 尾3 一窝坏人？（正文末节 ¶3；"行情，不是罪"一句按馆主 08-07 裁定改正——
+       篡改案件资料按律是罪，原句把"他们不当它是罪"写成了"它不是罪"） -->
+  <div class="breath jq w72 pb" style="margin-left:auto;margin-right:auto;transform:rotate(-.5deg)">
+    <img style="aspect-ratio:110/100;object-fit:cover;object-position:100% 50%" src="assets/尾声二-官吏剪影排.jpg" alt="一排官吏剪影，谁也不觉得自己在作恶">
+  </div>
+  <div class="textblock bite" data-i="t070">
+    <p>再说这八年本身。最容易得出的读法是：罗显运气不好，碰上了一窝坏人。可你把这些人一个一个单独拎出来看，几乎没有谁觉得自己在作恶。知县要的是结案——上司考核他的是积案多少，不是冤案多少；书吏差役要的是挣钱——他们几乎没有俸禄，一年几两工食银，全指着经手的案子过活，改一处字收一两银子，按律是罪，在他们那一行里却是做惯了的行情；巡抚把状子批回地方，是衙门的惯例；两位知县把五条人命判成"一律病故"，是最省事的交差；池州的推官敢收钱用刑，是因为他清楚这案子在他手里只过一道，办砸了也追不到他头上。每个人都在自己的位置上，按规矩或者按行情办事——合起来，就是罗显遇到的那八年。</p>
+  </div>
+
+  <!-- 尾4 衙门的差事（正文末节 ¶4）：甘结——"不再闹"写在明面上的那道手续。
+       素材内容偏在画布右侧，按主体取景（裁掉左侧空纸），甘结居中 -->
+  <div class="breath jq w56 pc" style="margin-left:auto;margin-right:auto;transform:rotate(.6deg)">
+    <img style="aspect-ratio:110/100;object-fit:cover;object-position:100% 50%" src="assets/去底-尾声三-甘结两画押.png" alt="甘结，两个画押">
+  </div>
+  <div class="textblock bite" data-i="t071">
+    <p>那问题出在哪儿？出在这套衙门本来的差事上。明代一个知县，管一县的钱粮、治安、教化、官司，断案只是他许多差事里的一样；朝廷考核他，看的是税收齐不齐、地方太平不太平、案子积压了多少。也就是说，衙门的差事从来不是给百姓主持公正，而是替朝廷维持稳定。案子结了，双方不闹了，地方太平了，这份差事就算办好了；至于黑白有没有分清、冤枉了谁——考核里没有这一栏。</p>
+    <p>甘结那道手续，把这个道理写在了明面上：结案的标志，不是查清了真相，而是两造画押，保证不再闹。所以判决可以和稀泥——祭坟的权利归你，寺产归他；人命可以一律病故。要稳定，就顾不上公正——而且它这么办的时候理直气壮，因为维持稳定，本来就是朝廷交给它的差事。</p>
+  </div>
+
+  <!-- 尾5 稳定存不住（正文末节 ¶5）：六份互相印证的口供——"你买证人"在这段里的实物；
+       叠字与 §八 同一套（它们就是 §八 那六份），不留无字白页 -->
+  <div class="breath jq w72 pd" style="margin-left:auto;margin-right:auto;transform:rotate(-.7deg)">
+    <div class="doc gongci" style="width:100%">
+      <img src="assets/透明-排年供词-无字-v7.png" alt="六份互相印证的口供">
+      <div class="zt" style="right:10.6%;top:22.4%;font-size:max(11px,1.85cqw);letter-spacing:.10em;transform:translateX(50%)">羅顯買囑作證　銀五十兩</div>
+      <div class="zt" style="right:26.4%;top:19.2%;font-size:max(11px,1.85cqw);letter-spacing:.10em;transform:translateX(50%)">羅顯買囑作證　銀五十兩</div>
+      <div class="zt" style="right:42.2%;top:19.5%;font-size:max(11px,1.85cqw);letter-spacing:.10em;transform:translateX(50%)">羅顯買囑作證　銀五十兩</div>
+      <div class="zt" style="right:58.0%;top:21.1%;font-size:max(11px,1.85cqw);letter-spacing:.10em;transform:translateX(50%)">羅顯買囑作證　銀五十兩</div>
+      <div class="zt" style="right:73.8%;top:18.1%;font-size:max(11px,1.85cqw);letter-spacing:.10em;transform:translateX(50%)">羅顯買囑作證　銀五十兩</div>
+      <div class="zt" style="right:89.6%;top:22.1%;font-size:max(11px,1.85cqw);letter-spacing:.10em;transform:translateX(50%)">羅顯買囑作證　銀五十兩</div>
+    </div>
+    <div class="gongci-note" data-i="t189">六份供词，字字相同：羅顯買囑作證　銀五十兩</div>
+  </div>
+  <div class="textblock bite" data-i="t072">
+    <p>偏偏，拿公正换来的稳定，是存不住的。因为打官司的两边很快都看明白了衙门的心思：真相不会有人替你查，你先停下来，事情就按对方的说法定了；反过来，只要把动静闹得够大，官府为了太平，什么都肯重新谈。于是谁也不敢停，谁都在加码：罗显往上告，法椿造命案；你买证人，我偷案卷。八年里这场官司越滚越大，不能怪这两家人格外偏执——在这套规矩底下，不肯罢休是唯一不吃亏的做法。</p>
+    <p>法椿把这一点看得最透，他那三百两银子，赌的就是官府想要太平。罗显最后也看透了，所以他刻书的时候，特意把对头的供词原文收进去，说这书将来是要能呈上公堂的。连赢了官司的人，都不敢相信官司真的结束了。拿公正换稳定，结果稳定也没换来——这八年里，这块地方就没太平过。</p>
+  </div>
+
+  <!-- 尾6 运气（正文末节 ¶6）：奉天门远景（主体偏右 53.6%–100%，同法按主体取景） -->
+  <div class="breath jq w56 pa" style="margin-left:auto;margin-right:auto;transform:rotate(.5deg)">
+    <img style="aspect-ratio:92/100;object-fit:cover;object-position:100% 50%" src="assets/尾声五-奉天门远景.jpg" alt="奉天门远景">
+  </div>
+  <div class="textblock bite" data-i="t073">
+    <p>那最后把事情查明白的，是什么呢？说出来不太好听：是运气。地方衙门八年里给过罗显的每一次公道，都被翻掉了；真正翻不动的那一次，来自通政使陈经肯在早朝上把一座乡下祖坟的案子当众奏出来，来自龙椅上坐着的，恰好是历史上对"祖先名分"四个字最较真的一位皇帝。这份状纸早递二十年、晚递二十年，多半都是另一个结局。罗显赢在他熬到了那一天，也赢在那一天，恰好有人肯管他这件事。</p>
+  </div>
+
+  <!-- 尾7 没对他说过"你是对的"（正文末节 ¶7）：独灯。§十4 那盏灯是郑来保的，
+       这一段正说到"是郑来保一条命"，同一件东西再出现一次；两处相距全篇约七分之一，
+       是有意的回声，不是复用。素材重复请馆主亲验时判 -->
+  <div class="breath jq w44 pb" style="margin-left:auto;margin-right:auto;transform:rotate(-.6deg)">
+    <img src="assets/去底-独灯单件.png" alt="中元夜那盏独灯，最后一次出现">
+  </div>
+  <div class="textblock bite" data-i="t074">
+    <p>回头看，罗显这一仗赢到手的是什么？坟保住了，名分讨回来了。可赔进去的，是八年，是全族几辈子的积蓄，是郑来保一条命——那五条人命，"病故"两个字一盖，就再没人提起。终审明明认了坟是真的，还是给他定了个"奏事不实"，杖九十；买口供、造命案的法椿，杖七十。打赢官司的人，挨的板子比输家还重；冤枉他的人，没有一个被追究到底。直到最后，这套衙门也没对他说过一句：你是对的。</p>
+  </div>
+
+  <!-- 尾8 刻书就不只是纪念（正文末节 ¶8，正文的收束段）：箱底一册满幅。
+       文字按馆主 08-07 令嵌进图里，且**不放底部**——这张图暗、书在右下（主体 x 64.5–84.3%、
+       y 55.4–76.9%），左半整片是空的暗底，文字落左侧正好不遮挡书。深底用米白＋字影。
+       末句「都活得长久」正是花诗 ¶1「再看官府那一边」接写的那一句 -->
+  <div class="full breath">
+    <img class="stage" src="assets/尾声六-箱底一册书.jpg" alt="箱底的一册书">
+    <div class="side sL lite" data-i="t107">
+      <p>这样看来，刻书就不只是一个胜利者的纪念了。八年里，他见过官府的案卷怎样被人整卷偷走，见过白纸黑字的口供怎样一两银子改一个字，见过五条人命怎样在判词里变成"一律病故"；他也知道，官修的志书轮不到他说话——杨干寺的来历，在那些纸上写的本来就是和尚们的版本。天下的笔墨都握在官府手里，可官府的笔，他一个字也不敢再信了。</p>
+      <p>于是这个乡下人做了一件古往今来的史官都不会替他做的事：把自己的冤屈、自己的官司、自己争回来的道理，连同仇人的供词，一字一字刻上木板，印成几百册，散进几百户人家的箱底。朝廷改得了案卷，史官改得了志书，改不了这几百户人家箱底里一模一样的几百册书。这是一个小人物向官方的史笔讨回的最后一样东西：你们不肯写的，我自己写；你们写错了的，我留着证据。四百多年过去，公堂塌了，案卷散了，志书改了又改，只有这册书还在——一个明朝乡下人自己刻下的正义，比皇帝的圣旨、巡按的大印、徽州府衙所有的档案，都活得长久。</p>
+    </div>
+  </div>
+
+  <!-- 尾9 两样文字（花诗 v5 ¶1）：判词×府志对格。叠字与 §十 同批字样，因为它们就是 §十 里
+       那两份文书的再现——读者刚看过它们各自的样子，这里并排收进同一句话里。
+       府志三列的位置按素材实测的界格重定（08-07 馆主"出框了，你仔细看一下底材"）：
+       右页界格上边线在图高 17.0–18.1%、右边线在图宽 84.9–85.6%、下边线在 79.5–80.2%；
+       原来 top:13% 起排，三列全部从界格上边线以外开始，所以字压在版框外的天头上 -->
+  <div class="gasp juanzhou duipair" data-gloss="g12" style="width:min(38%,400px);margin-left:2%;margin-right:auto;transform:rotate(-.6deg)">
+    <img src="assets/透明-判词卷轴-无字-v7.png" alt="终审判词卷轴">
+    <div class="op-col" style="right:22%;top:14%;font-size:max(18px,6.6cqw)">羅秋隱唐時人　葬於楊干屬實</div>
+    <div class="op-col" style="right:42%;top:20%;font-size:max(14px,5cqw)">歷年久遠　遺骸化為泥土　合乎常理</div>
+    <div class="op-col" style="right:58%;top:20%;font-size:max(14px,5cqw)">墳判歸羅氏　照舊修葺</div>
+    <div class="op-col" style="right:72%;top:20%;font-size:min(max(14px,5cqw),3.6vw)">墓誌重埋墳前　子孫永遠祭掃</div>
+  </div>
+  <div class="juanzhou duipair" data-gloss="g13" style="width:min(58%,600px);margin-left:auto;margin-right:0;margin-top:-32%;transform:rotate(.7deg)">
+    <img src="assets/透明-府志条目页-无字-v7.png" alt="重修的《徽州府志》条目页">
+    <div class="op-col" style="right:19%;top:20%;font-size:max(14px,4.6cqw)">楊干院　在呈坎里</div>
+    <div class="op-col" style="right:28%;top:22%;font-size:max(12px,2.9cqw)">宋寶祐六年</div>
+    <div class="op-col" style="right:34.5%;top:22%;font-size:max(12px,2.9cqw)">羅氏建寺守墓</div>
+  </div>
+  <div class="textblock bite" data-i="t075">
+    <p>再看官府那一边。这桩官司在官府落下的文字，一共两样。一样是终审的判词：坟判给罗家，罗显杖九十，法椿杖七十。另一样是三十年后重修的《徽州府志》，杨干寺条目下的来历改成了罗家在公堂上主张的版本，写明这座寺建于哪一年、田产归谁所有。</p>
+  </div>
+
+  <!-- 尾10 没记的这些事（v5 ¶2）：回忆四连，读者亲眼见过的四个时刻，错落连拍、一眼一格。
+       末尾"缺了一叶"半句删——§十 残页刚整页演过，隔三格重讲一遍；删句待花诗同判。 -->
+  <div class="breath jq w44 offL pa" style="transform:rotate(-1.2deg)">
+    <img src="assets/透明-罗显-蹲清瓦砾.png" alt="清瓦砾">
+  </div>
+  <div class="jq w56 offR pb" style="margin-top:-4%;transform:rotate(.9deg)">
+    <img src="assets/去底-公堂剪影-跪堂用.png" alt="头一回站上公堂">
+  </div>
+  <div class="jq w56 offL pc" style="margin-top:-4%;transform:rotate(-.7deg)">
+    <img src="assets/夹棍专件.jpg" alt="池州那一晚">
+  </div>
+  <div class="jq w54 offR pd" style="margin-top:-4%;transform:rotate(1.1deg)">
+    <img src="assets/罗兴北上.jpg" alt="罗兴北上">
+  </div>
+  <div class="textblock bite" data-i="t076">
+    <p>判词和府志里没有记的，是你刚才读到的这些事：他把祖坟上压了整整一冬的瓦砾清干净，等寺里出面解释，等来的是要他把坟迁走；他头一回站在歙县的公堂上，被法椿一条一条驳得说不出话；三年后在同样的公堂上，他把对方每一笔贿银的数目一个一个背了出来，当堂把对方的证人变成了对方的罪证；池州府那一晚，街上已经宵禁，堂外没有一个围观的百姓，堂上不传邻证、不调原案、也不听他辩解，直接动了夹棍；他侄子罗兴明知道到了京城要先入狱，还是带着状纸去了。</p>
+  </div>
+
+  <!-- 尾11 没有这一栏（v5 ¶3）：摊开的卷宗对页，空白的界格——文书里没有留给这个人的位置 -->
+  <div class="breath jq w56 pa" style="margin-left:auto;margin-right:auto;transform:rotate(.6deg)">
+    <img src="assets/透明-卷宗对页-无字-v7.png" alt="摊开的卷宗对页，空白的界格">
+  </div>
+  <div class="textblock bite" data-i="t077">
+    <p>判词和府志没有写错，也不是哪一个官员贪赃的结果。一部府志要记的是这个府有多少田、多少户、哪座寺建于哪一年、归谁管；一份判词要记的是谁犯了什么、该罚多少。这两种文书里，本来就没有一处是留给"罗显这个人是什么样"的。就算歙县的知县一文钱不收，就算池州的推官不动夹棍，就算府志的编修从一开始就照罗家的说法写，判词和府志上照样不会出现他为什么不肯罢休。不是编修和法官漏写了，是这两种文书里根本没有这一栏。</p>
+  </div>
+
+  <!-- 尾12 各有各的用处（v5 ¶4）：流水保簿的簿页——"能核对的数目"在这个故事里的实物，
+       就是 §三 那册登记簿（原会典册与本段文意不贴，撤） -->
+  <div class="breath" style="width:min(58%,600px);margin:0 auto;transform:rotate(-.5deg);filter:drop-shadow(0 6px 16px rgba(0,0,0,.42))">
+    <img style="width:100%;display:block" src="assets/去底-保簿簿页-主.png" alt="流水保簿的簿页：一条一条登记的产业与数目">
+  </div>
+  <div class="textblock bite" data-i="t078">
+    <p>这两种文书各有各的用处。判词是给上级复核用的，写清定的什么罪、判的什么刑就够了；府志是给朝廷和后任官员看的，写清建置沿革和田产归属就够了。往上一层看，衙门要管一个县、一个府，得知道田有多少亩、人有多少口、税收上来多少、谁判了什么刑，这些数目要能核对，也要能跟往年比。罗显为什么不服，两种文书都用不着，也就都没有给它留位置。这不是杨干院这一桩案子的特殊情形：官修的文书都是为办事设的，办事用得上的写进去，用不上的不写。案子最后判给哪一边也不改变这一点——三十年后府志改用了罗家的说法，看起来是罗家赢了，可改过之后写下的还是同样那几项：寺建于哪一年，田产归谁；他为什么不服，改过之后照样没有写。</p>
+  </div>
+
+  <!-- 尾13 真正过的日子（v5 ¶5）：山谷压坟满幅，匹配切回开场。
+       文字按馆主 08-07 令嵌进这张图里，不再另起格外一段 -->
+  <div class="full breath">
+    <img class="stage" src="assets/章背景-一-山谷压坟.jpg" alt="回到开场：山谷之中，坟头压着碎砖烂瓦">
+    <div class="capscrim" style="height:52%"></div>
+    <div class="cap" data-i="t101" style="left:6%;right:6%">可是这八年里让人记住的，正是判词和府志没有记的那些事：他等一句解释，等来的是要他迁坟；他把全族几辈子的积蓄押了上去；他两次眼看着祖坟被铲平。这些事对朝廷确实没有用处，可这些就是他那八年真正过的日子。官府替他留下的文字里只有判词上那两行；他这八年做过的其余的事，在官府的纸上等于没有发生。</div>
+  </div>
+
+  <!-- 尾14 刻书（v5 ¶6）：罗显把书分发各房 -->
+  <div class="breath jq w54 pb" style="margin-left:auto;margin-right:auto;transform:rotate(.7deg)">
+    <img src="assets/透明-小格-罗显发书.png" alt="罗显把书分发各房">
+  </div>
+  <div class="textblock bite" data-i="t079">
+    <p>坟已经判回来了，他还是要刻这册书。族人劝他把历年卷宗全刻上，他不肯，说案卷太繁，读的人要打瞌睡，只刻终审归结的这一本。对头法椿那一方的供词，他一字不改抄了进去，还注明这书将来是要能呈上公堂的——他要的是一份连对头也挑不出错的记载。池州府那一晚，他在书里只写了四个字，"非法夹打"。</p>
+  </div>
+
+  <!-- 尾15 帕慕克（v5 ¶7）：木屋满幅。位置回原处——紧接刻书段、在全篇收束之前
+       〔用户裁定·2026-08-07·当面会话〕 -->
+  <div class="gasp full">
+    <img class="stage" src="assets/尾声-伊斯坦布尔木屋.jpg" alt="伊斯坦布尔，一栋十九世纪的木屋">
+    <div class="side sL ink" data-i="t108">
+      <p>四百七十多年之后，土耳其作家奥尔罕·帕慕克在伊斯坦布尔做了一件性质相近的事。他认为，那些为国家修建的大博物馆里看不到具体的人。他为此写过十一条意见，其中一条说：衡量一座博物馆办得成不成功，不该看它能不能代表一个国家、一个民族或一家公司、一段特定的历史，该看它能不能让人看见一个一个具体的人。另一条说得更直接：博物馆要做的不是再现国家，而是把单独一个人的世界重新建起来，他还特意点明了指的是谁——那些几百年来在无情的压迫底下劳作的人。他另外说过一句：宫殿变成国家博物馆，和史诗变成小说，是两件平行发生的事。</p>
+    </div>
+  </div>
+
+  <!-- 尾16 烟头玻璃柜（v5 ¶8）。08-07 馆主："烟头墙图太小而且素材偏了，没有震撼感。"
+       两处一起治：①窄格 56% 升满幅——四千二百一十三个烟头要占满一屏才是那个数目的分量；
+       ②换回带场景的原件（去底件把柜子从墙上抠了下来，柜子悬空反而更小），并按主体取景
+       （柜体在画布 x 36%–100%，左边一片墙；取景窗贴右缘，柜子填满画幅） -->
+  <div class="breath full">
+    <img class="stage" style="aspect-ratio:1.25;object-fit:cover;object-position:100% 50%" src="assets/尾声-烟头玻璃柜.jpg" alt="玻璃柜里钉满四千二百一十三个烟头">
+  </div>
+  <div class="textblock bite" data-i="t080">
+    <p>写完这十一条，他自己盖了一座博物馆。伊斯坦布尔贝伊奥卢区，Çukurcuma 街区一栋十九世纪的木屋，里面一千多件东西，都算作他小说里一个叫芙颂的女人用过的；一个玻璃柜里装着她抽剩的四千二百一十三个烟头。芙颂是小说里虚构的人物，那四千二百一十三个烟头却是实物，就陈列在馆里。这座博物馆不讲土耳其的历史，只讲一个人爱另一个人的那些年。</p>
+  </div>
+
+  <!-- 尾17 对照收束（v5 ¶9 前半，花诗定的全节落点）：不配图——罗显的书和帕慕克的屋子
+       刚各自整幅出现过，这一段让两件事在文字里并到一起。
+       原句后半按馆主 08-07 令改写成一句收束，移到全篇最后一屏纯黑背景（尾19） -->
+  <div class="textblock breath" data-i="t086">
+    <p>两个人做的事情并不一样：一个把打了八年的官司刻成书，分藏进几百户人家的箱底；一个把一个虚构女人的日常用品陈列进一栋木屋。相同的只有一点：官修的文书和国家的博物馆里，看不见一个具体的人。</p>
+  </div>
+
+  <!-- 尾18 合箱盖（自动动画，44-44 裁定；三只纸外之手到此收齐——法椿改、罗显刻、读者藏由动画代行） -->
+  <div class="gasp boxend" id="boxend">
+    <img src="assets/尾声-箱底-近景一册-带伤.jpg" alt="回到那只开着的木箱，箱底一册线装书">
+    <img class="lid" src="assets/尾声-箱底-合盖.jpg" alt="箱盖合上，书收进暗里">
+    <div class="black"></div>
+  </div>
+
+  <!-- 尾19 末页黑场：全篇唯一一句可复述的收束（领域核第二节第（八）项金句配给制——
+       全程藏起、只在离场处给一句）。字号与全篇黑场同一档（clamp 22/2.7vw/39，实测 38.88px）。
+       **文字为馆主原话**〔用户裁定·2026-08-07·当面会话·"这些冤屈、痛楚、爱恨、祖先、血缘、
+       记忆，国家档案库不会给我们记下来，我们就靠自己记下来"〕，只加句号、主动断两行。
+       我此前代写的四版全部作废（病根：句子里只有记录的两边，没有人，也没有"我们"）。
+       待花诗同判 -->
+  <div class="blackout" data-i="t144" id="endline">
+    <p>这些冤屈、痛楚、爱恨、祖先、血缘、记忆，<br>国家档案库不会给我们记下来，我们就靠自己记下来。</p>
+  </div>
+
+  <div class="srclink" id="end"><a href="来源.html" data-i="t184">史实与来源</a></div>
+
+</div>
+<script>
+/* ══ 点击推进＋锁滚（2026-08-07 通则）══
+   〔用户裁定·2026-08-07·当面会话·"全部网页交互改成点击触发，不要自动播放。
+   不交互完毕无法往下滚动"〕：全篇会动的叙事拍一律由读者点击推进，不再进视口自播；
+   没走完不放行。回访（刷新落点已在其后、或一步跳过一屏半）照教训 13 直接置终态放行。
+   引导只有两样：格上那层极轻的呼吸，和滚不动——不加任何提示文字（台账 #22）。 */
+function ckAdvance(box, steps, stepFn, endFn, glow){
+  if (!box) return null;
+  let n = 0, done = false;
+  box.classList.add(glow === false ? 'ckplain' : 'ckwait');
+  const finish = () => { done = true; box.classList.add('ckdone'); };
+  box.addEventListener('click', () => {
+    if (done) return;
+    stepFn(n);
+    n += 1;
+    if (n >= steps) finish();
+  });
+  const release = () => { if (done) return; endFn(); finish(); };
+  const skipIfPast = () => {
+    const r = box.getBoundingClientRect();
+    if (r.bottom < innerHeight * 0.4 && !done) release();
+  };
+  window.addEventListener('load', () => setTimeout(skipIfPast, 80));
+  window.addEventListener('pageshow', () => setTimeout(skipIfPast, 80));
+  window.addEventListener('scroll', () => {
+    if (done) return;
+    const r = box.getBoundingClientRect();
+    const maxY = r.bottom + scrollY - innerHeight;
+    const over = scrollY - maxY;
+    if (over > innerHeight * 1.5) { release(); return; }
+    if (over > 1) window.scrollTo({top: Math.max(0, maxY), behavior: 'instant'});
+  }, {passive: true});
+  return { isDone: () => done, release };
+}
+/* 章背景双层交叉淡入 */
+(function(){
+  const bg1 = document.querySelector('#bg img'), bg2el = document.getElementById('bg2');
+  const bg2 = document.createElement('img'); bg2el.appendChild(bg2);
+  let cur = bg1.getAttribute('src'), flying = false;
+  bg2.src = cur;
+  const swap = (src) => {
+    if (src === cur || flying) return;
+    flying = true; cur = src;
+    bg2.src = src; bg2el.style.opacity = 1;
+    setTimeout(()=>{ bg1.src = src; bg2el.style.opacity = 0; flying = false; }, 1500);
+  };
+  const obs = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting && e.target.dataset.bg) swap(e.target.dataset.bg);
+  }), {threshold: .5});
+  document.querySelectorAll('[data-bg]').forEach(el => obs.observe(el));
+  /* 刷新恢复（08-05 亲验第三轮⑤）：浏览器记住滚动位置重载时，观察器不会补发已经滚过的
+     章节切换，背景和标题会停在第一章的初始值。载入后按当前位置找"最后一个已经滚过的"
+     data-bg / data-title，直接落值（不走渐变）。 */
+  const restore = () => {
+    const mid = scrollY + innerHeight * .5;
+    let bgSrc = null, title = null;
+    document.querySelectorAll('[data-bg],[data-title]').forEach(el => {
+      if (el.getBoundingClientRect().top + scrollY < mid) {
+        if (el.dataset.bg) bgSrc = el.dataset.bg;
+        if (el.dataset.title) title = el.dataset.title;
+      }
+    });
+    if (bgSrc && bgSrc !== cur) { cur = bgSrc; bg1.src = bgSrc; bg2.src = bgSrc; }
+    if (title) document.title = title;
+  };
+  window.addEventListener('load', () => setTimeout(restore, 60));
+  window.addEventListener('pageshow', () => setTimeout(restore, 60));
+})();
+
+/* 标签页标题随章改（叙事手法 PRD v2 第七节） */
+(function(){
+  const obs = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting && e.target.dataset.title) document.title = e.target.dataset.title;
+  }), {threshold: .4});
+  document.querySelectorAll('[data-title]').forEach(el => obs.observe(el));
+})();
+
+/* §二5 四联：点击换帧（08-07 通则改，原为进视口自动渐变）。
+   四帧＝三次点击；年号与逐帧文案随帧交叉淡入；换完才放行 */
+(function(){
+  const quad = document.getElementById('quad');
+  if (!quad) return;
+  const frames = [...quad.querySelectorAll('.qs')];
+  const years  = [...quad.querySelectorAll('.yr')];
+  const caps   = [...quad.querySelectorAll('.qcap')];
+  ckAdvance(quad, frames.length - 1,
+    (i) => {
+      [frames, years, caps].forEach(a => a[i].classList.remove('on'));
+      [frames, years, caps].forEach(a => a[i + 1].classList.add('on'));
+    },
+    () => [frames, years, caps].forEach(a => {
+      a.forEach(el => el.classList.remove('on'));
+      a[a.length - 1].classList.add('on');
+    }));
+})();
+
+/* 保簿互动（PRD 三8）：点击开卷，批注延迟 1.6s 显现；开卷前锁滚（互动一），开卷即放行 */
+(function(){
+  const bb = document.getElementById('baobu');
+  if (!bb) return;
+  let opened = false;
+  bb.addEventListener('click', () => {
+    if (opened) return;
+    opened = true;
+    bb.classList.add('opened');
+    const minis = [...bb.querySelectorAll('.bp-mini')];
+    minis.forEach((m, i) => setTimeout(() => m.classList.add('on'), 350 + i * 280));
+    setTimeout(() => {
+      bb.classList.add('noted');
+      const q = document.getElementById('after-baobu');
+      if (q) q.style.visibility = 'visible';
+    }, 350 + minis.length * 280 + 300);
+  });
+  /* 刷新落点已在保簿之后：视为已开卷，不把人拽回来 */
+  const skipIfPast = () => {
+    const r = bb.getBoundingClientRect();
+    if (r.bottom < innerHeight * 0.4 && !opened) {
+      opened = true;
+      bb.classList.add('opened', 'noted');
+      [...bb.querySelectorAll('.bp-mini')].forEach(m => m.classList.add('on'));
+      const q = document.getElementById('after-baobu');
+      if (q) q.style.visibility = 'visible';
+    }
+  };
+  window.addEventListener('load', () => setTimeout(skipIfPast, 80));
+  window.addEventListener('pageshow', () => setTimeout(skipIfPast, 80));
+  window.addEventListener('scroll', () => {
+    if (opened) return;
+    const r = bb.getBoundingClientRect();
+    const maxY = r.bottom + scrollY - innerHeight;
+    const over = scrollY - maxY;
+    if (over > innerHeight * 1.5) { skipIfPast(); return; }
+    if (over > 1) window.scrollTo({top: Math.max(0, maxY), behavior: 'instant'});
+  }, {passive: true});
+})();
+
+/* §四5 坟被撕：点击播放（08-07 通则改，原为进视口自动播一次）。
+   点一下开始，播完（ended）沉入黑屏并放行；播放中锁滚，读者跑不掉也就看得完 */
+(function(){
+  const vid = document.getElementById('tearvid');
+  const sec = document.getElementById('tearsec');
+  if (!vid || !sec) return;
+  let started = false, done = false;
+  sec.classList.add('ckwait');
+  const endState = () => {
+    vid.style.filter = 'brightness(0)';
+    sec.style.background = '#000';
+  };
+  const finish = () => { done = true; sec.classList.add('ckdone'); };
+  sec.addEventListener('click', () => {
+    if (started) return;
+    started = true;
+    sec.classList.add('ckdone');          /* 一点即停呼吸，画面交给视频 */
+    vid.play().catch(() => vid.addEventListener('canplay', () => vid.play().catch(()=>{}), {once: true}));
+  });
+  vid.addEventListener('ended', () => { endState(); finish(); });
+  const release = () => {
+    if (done) return;
+    try { vid.pause(); if (vid.duration) vid.currentTime = vid.duration; } catch (e) {}
+    endState(); finish();
+  };
+  const skipIfPast = () => {
+    const r = sec.getBoundingClientRect();
+    if (r.bottom < innerHeight * 0.4 && !done) release();
+  };
+  window.addEventListener('load', () => setTimeout(skipIfPast, 80));
+  window.addEventListener('pageshow', () => setTimeout(skipIfPast, 80));
+  window.addEventListener('scroll', () => {
+    if (done) return;
+    const r = sec.getBoundingClientRect();
+    const maxY = r.bottom + scrollY - innerHeight;
+    const over = scrollY - maxY;
+    if (over > innerHeight * 1.5) { release(); return; }
+    if (over > 1) window.scrollTo({top: Math.max(0, maxY), behavior: 'instant'});
+  }, {passive: true});
+})();
+
+/* §五 剪纸云六片：只在 §五 背景在场时显示（照 v7 定稿参数） */
+(function(){
+  const CLOUDS = [
+    {f:'云雾-3.png', y:11.5, w:42, op:0.420, dur:285.0, delay:-22.5},
+    {f:'云雾-1.png', y:17.5, w:34, op:0.350, dur:337.5, delay:-142.5},
+    {f:'云雾-5.png', y:23.5, w:30, op:0.315, dur:382.5, delay:-255.0},
+    {f:'云雾-2.png', y:30.0, w:46, op:0.434, dur:247.5, delay:-67.5},
+    {f:'云雾-6.png', y:35.5, w:50, op:0.406, dur:218.0, delay:-165.0},
+    {f:'云雾-4.png', y:41.5, w:54, op:0.364, dur:188.0, delay:-105.0}
+  ];
+  const set = document.createElement('div');
+  set.id = 'cloudset';
+  CLOUDS.forEach(c => {
+    const t = document.createElement('div');
+    t.className = 'track';
+    t.style.top = c.y + '%';
+    t.style.animationDuration = c.dur + 's';
+    t.style.animationDelay = c.delay + 's';
+    const im = document.createElement('img');
+    im.src = 'assets/anim-五/' + c.f;
+    im.alt = '';
+    im.style.width = c.w + '%';
+    im.style.opacity = c.op;
+    t.appendChild(im);
+    set.appendChild(t);
+  });
+  document.body.appendChild(set);
+  const sync = () => {
+    const bg = decodeURIComponent(document.querySelector('#bg img').src);
+    set.classList.toggle('on', bg.includes('章背景-五-出徽州山路'));
+  };
+  window.addEventListener('scroll', sync, {passive: true});
+  window.addEventListener('load', () => setTimeout(sync, 200));
+  setInterval(sync, 800);
+})();
+
+/* §五6 状子三着：点击一次亮一句（08-07 通则改，原为进视口后依次自动亮起）。
+   三着是他写状子的三步，由读者一步一步点出来；三句亮完才放行 */
+(function(){
+  const box = document.getElementById('sanzhuo');
+  if (!box) return;
+  const zl = [...box.querySelectorAll('.zl')];
+  ckAdvance(box, zl.length,
+    (i) => zl[i].classList.add('on'),
+    () => zl.forEach(e => e.classList.add('on')));
+})();
+
+/* §八6 隔窗棂：前景随滚动轻位移（PRD v2 手法二，幅度 2–3%） */
+(function(){
+  const box = document.getElementById('chuangling');
+  if (!box) return;
+  const fg = box.querySelector('.qian');
+  const tick = () => {
+    const r = box.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    const p = (innerHeight - r.top) / (innerHeight + r.height);   // 0→1
+    fg.style.transform = `translateY(${(p - .5) * 5}%)`;
+  };
+  window.addEventListener('scroll', tick, {passive: true});
+  tick();
+})();
+
+/* §八13 改字互动（第三处；08-06 复验第一轮改）：
+   大手悬空为静态起点（不绑观察器，不存在"读者到之前播完"）；
+   点击画面 → 手落到当前列、刀尖刮「有」成「無」→ 抬回悬空、移到下一列；点一下改一处；
+   四处改完手退出画面、出价钱句；改完之前锁滚（回访按教训 13 放行）。 */
+(function(){
+  const box = document.getElementById('gaizi');
+  if (!box) return;
+  const cols = [...box.querySelectorAll('.gz-col')];
+  const hand = box.querySelector('.gz-hand');
+  /* 刀尖在手件内的相对位置（08-06 落刀帧实测校准）。四列「有」字各在不同字位
+     （第 2/4/5/4 字），固定落刀高度对不准——用 Range 量出每列「有」字的真实矩形，
+     刀尖逐列瞄准，横向纵向都按字算。 */
+  const TIPX = 0.159, TIPY = 0.948;
+  const HOVER = '-38%';
+  const T_DROP = 'left .55s cubic-bezier(.22,.61,.36,1), top .32s cubic-bezier(.55,0,.85,.36)';
+  const T_LIFT = 'left .55s cubic-bezier(.22,.61,.36,1), top .5s cubic-bezier(.22,.61,.36,1)';
+  let n = 0, busy = false, done = false;
+  const youRect = (col) => {
+    const node = col.querySelector('.t.you').firstChild;
+    const i = node.textContent.indexOf('有');
+    const r = document.createRange();
+    r.setStart(node, i); r.setEnd(node, i + 1);
+    return r.getBoundingClientRect();
+  };
+  const aim = (i) => {                           /* 横移：刀尖到第 i 列「有」字正上方 */
+    const br = box.getBoundingClientRect(), hr = hand.getBoundingClientRect();
+    const yr = youRect(cols[i]);
+    hand.style.left = ((yr.left + yr.width / 2 - TIPX * hr.width - br.left) / br.width * 100) + '%';
+  };
+  const drop = (i) => {                          /* 落刀：刀尖到「有」字中心 */
+    const br = box.getBoundingClientRect(), hr = hand.getBoundingClientRect();
+    const yr = youRect(cols[i]);
+    hand.style.top = ((yr.top + yr.height / 2 - TIPY * hr.height - br.top) / br.height * 100) + '%';
+  };
+  cols[0].classList.add('due');
+  window.addEventListener('load', () => setTimeout(() => { if (!done && n === 0) aim(0); }, 120));
+  box.addEventListener('click', () => {
+    if (done || busy || n >= cols.length) return;
+    busy = true;
+    const c = cols[n];
+    hand.style.transition = T_DROP;
+    drop(n);                                     /* 落刀 */
+    setTimeout(() => {
+      c.classList.add('flipped');                /* 刀到即改：有 → 無，带刮痕 */
+      c.classList.remove('due');
+      setTimeout(() => {
+        n += 1;
+        hand.style.transition = T_LIFT;
+        hand.style.top = HOVER;                  /* 抬回悬空 */
+        if (n < cols.length) {
+          aim(n);                                /* 移到下一列「有」字上方 */
+          cols[n].classList.add('due');
+          setTimeout(() => { busy = false; }, 550);
+        } else {
+          done = true;
+          hand.style.left = '112%';              /* 四处改完，手退出画面 */
+          setTimeout(() => box.classList.add('done'), 500);
+        }
+      }, 480);                                   /* 刀在字上停一拍 */
+    }, 340);
+  });
+  const release = () => { done = true; busy = true;
+    cols.forEach(c => { c.classList.add('flipped'); c.classList.remove('due'); });
+    hand.style.transition = 'none'; hand.style.top = HOVER; hand.style.left = '112%';
+    box.classList.add('done'); };
+  const skipIfPast = () => {
+    const r = box.getBoundingClientRect();
+    if (r.bottom < innerHeight * 0.4 && !done) release();
+  };
+  window.addEventListener('load', () => setTimeout(skipIfPast, 80));
+  window.addEventListener('pageshow', () => setTimeout(skipIfPast, 80));
+  window.addEventListener('scroll', () => {
+    if (done) return;
+    const r = box.getBoundingClientRect();
+    const maxY = r.bottom + scrollY - innerHeight;
+    const over = scrollY - maxY;
+    if (over > innerHeight * 1.5) { release(); return; }
+    if (over > 1) window.scrollTo({top: Math.max(0, maxY), behavior: 'instant'});
+  }, {passive: true});
+})();
+
+/* §九9 陈经出列：点击淡入（08-07 通则改，原为进视口后自动淡入）。
+   满朝纸人立着不动，读者点一下，红袍的那一个才从纸串里站出来 */
+(function(){
+  const c = document.getElementById('chenjing');
+  if (!c) return;
+  ckAdvance(c, 1,
+    () => c.classList.add('seen'),
+    () => c.classList.add('seen'));
+})();
+
+/* §十8 落刀互动（第三处；悬空落刀模型）：刻书手悬停等读者，点击落刀开刻；
+   落刀前锁滚，回访照教训 13 放行；零提示 */
+(function(){
+  const box = document.getElementById('kefang');
+  if (!box) return;
+  let done = false;
+  box.addEventListener('click', () => {
+    if (done) return;
+    done = true;
+    box.classList.add('done');           /* 手落下，刀尖抵版 */
+  });
+  const release = () => { done = true; box.classList.add('done'); };
+  const skipIfPast = () => {
+    const r = box.getBoundingClientRect();
+    if (r.bottom < innerHeight * 0.4 && !done) release();
+  };
+  window.addEventListener('load', () => setTimeout(skipIfPast, 80));
+  window.addEventListener('pageshow', () => setTimeout(skipIfPast, 80));
+  window.addEventListener('scroll', () => {
+    if (done) return;
+    const r = box.getBoundingClientRect();
+    const maxY = r.bottom + scrollY - innerHeight;
+    const over = scrollY - maxY;
+    if (over > innerHeight * 1.5) { release(); return; }
+    if (over > 1) window.scrollTo({top: Math.max(0, maxY), behavior: 'instant'});
+  }, {passive: true});
+})();
+
+/* §十10 箱底三拍：点击换帧（08-07 通则改，原为进视口自动渐变）。
+   三帧＝两次点击：箱底一册 → 院落一排 → 巷灯入雾；换完才放行 */
+(function(){
+  const box = document.getElementById('sanpai');
+  if (!box) return;
+  const frames = [...box.querySelectorAll('.qs')];
+  ckAdvance(box, frames.length - 1,
+    (i) => { frames[i].classList.remove('on'); frames[i + 1].classList.add('on'); },
+    () => { frames.forEach(el => el.classList.remove('on')); frames[frames.length - 1].classList.add('on'); });
+})();
+
+/* §十13 残页「罗家岂能」退淡：点击触发（08-07 通则改，原为停留 1 秒自动起、4 秒渐变）。
+   读者先自己在页子上逐列找，点一下，四个字以外的字退墨。这一格不加呼吸——整屏纸白，
+   亮度一动全屏都在闪，只给指针形状；退完才放行 */
+(function(){
+  const page = document.querySelector('.cy-page');
+  if (!page) return;
+  ckAdvance(page, 1,
+    () => page.classList.add('fadeback'),
+    () => page.classList.add('fadeback'), false);
+})();
+
+/* 尾18 合箱盖：点击合上（08-07 通则改，原为进视口停 1 秒自动播）。
+   **这一处与 08-05 台账 #22 第⑥条「合箱盖互动改为动画」相反**，按 08-07 的新通则执行，
+   已呈报馆主。点击后：箱盖合下 1.6s → 延 2.4s → 黑场淡入 2s，落黑才放行 */
+(function(){
+  const box = document.getElementById('boxend');
+  if (!box) return;
+  let started = false, done = false;
+  box.classList.add('ckwait');
+  const finish = () => { done = true; box.classList.add('ckdone'); };
+  box.addEventListener('click', () => {
+    if (started) return;
+    started = true;
+    box.classList.add('ckdone');
+    box.classList.add('closing');
+    setTimeout(() => {
+      box.classList.add('dark');
+      setTimeout(finish, 1200);
+    }, 2400);
+  });
+  const release = () => { if (done) return; box.classList.add('closing', 'dark'); finish(); };
+  const skipIfPast = () => {
+    const r = box.getBoundingClientRect();
+    if (r.bottom < innerHeight * 0.4 && !done) release();
+  };
+  window.addEventListener('load', () => setTimeout(skipIfPast, 80));
+  window.addEventListener('pageshow', () => setTimeout(skipIfPast, 80));
+  window.addEventListener('scroll', () => {
+    if (done) return;
+    const r = box.getBoundingClientRect();
+    const maxY = r.bottom + scrollY - innerHeight;
+    const over = scrollY - maxY;
+    if (over > innerHeight * 1.5) { release(); return; }
+    if (over > 1) window.scrollTo({top: Math.max(0, maxY), behavior: 'instant'});
+  }, {passive: true});
+})();
+
+/* ══ 中英切换 ══
+   〔用户裁定·2026-08-07·当面会话·"做中英文切换按钮"〕
+   页面上每个会读的中文块都带 data-i 编号，英文存在 en.js 的同名键里；表里没有的编号
+   照旧显示中文（分批补译时页面始终是可用的）。素材上的中文一律不动——画面里的文书是
+   明代的文书，换成英文就不是它了；英文态改为在那一格下面补一行小字说明它写的是什么。
+   语言存 localStorage，键名与站内其它作品页一致；head 里的 aigora-lang=self 让站内通用
+   切换脚本退出，不与本页的机制打架（08-07 立宪史整页空白的教训）。 */
+(function(){
+  const KEY = 'aigora-site-lang';
+  const box = document.getElementById('langsw');
+  if (!box) return;
+  const EN = window.EN || {}, GLOSS = window.EN_GLOSS || {};
+  /* 头一次切英文前，把每块的中文原文收起来，切回中文时照原样放回去 */
+  const zh = new Map();
+  const nodes = () => [...document.querySelectorAll('[data-i]')];
+  const apply = (lang) => {
+    const toEn = lang === 'en';
+    nodes().forEach(el => {
+      const id = el.dataset.i;
+      if (!zh.has(id)) zh.set(id, el.innerHTML);
+      const t = toEn ? EN[id] : null;
+      el.innerHTML = (t !== undefined && t !== null) ? t : zh.get(id);
+    });
+    /* 素材标注：英文态生成，中文态由 CSS 隐藏（节点留着，不反复增删） */
+    document.querySelectorAll('[data-gloss]').forEach(host => {
+      const g = GLOSS[host.dataset.gloss];
+      if (!g) return;
+      let note = host.nextElementSibling;
+      if (!note || !note.classList.contains('engloss')) {
+        note = document.createElement('div');
+        note.className = 'engloss';
+        host.parentNode.insertBefore(note, host.nextSibling);
+      }
+      note.innerHTML = g;
+    });
+    document.documentElement.setAttribute('lang', lang);
+    [...box.querySelectorAll('button')].forEach(b =>
+      b.classList.toggle('on', b.dataset.lang === lang));
+    try { localStorage.setItem(KEY, lang); } catch (e) {}
+    /* 注释是点词展开的，换语言后一律收起，免得读者看到另一种语言的展开残留 */
+    document.querySelectorAll('.annot.open').forEach(a => a.classList.remove('open'));
+  };
+  box.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) apply(b.dataset.lang);
+  });
+  // 离开开头就淡下去（见上面那条 CSS 的缘由）
+  const dim = () => box.classList.toggle('dim', scrollY > 420);
+  addEventListener('scroll', dim, {passive: true});
+  ['pointerdown', 'touchstart'].forEach(ev =>
+    box.addEventListener(ev, () => box.classList.remove('dim'), {passive: true}));
+  dim();
+
+  let saved = 'zh-Hans';
+  try { saved = localStorage.getItem(KEY) || 'zh-Hans'; } catch (e) {}
+  apply(saved === 'en' ? 'en' : 'zh-Hans');
+})();
+
+/* 注释点词展开（台账 #24：正文里的词是唯一入口） */
+document.querySelectorAll('.term').forEach(t => {
+  t.addEventListener('click', () => {
+    const a = document.getElementById(t.dataset.annot);
+    if (a) a.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>
