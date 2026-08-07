@@ -2,6 +2,7 @@
 <html lang="zh-Hans" data-lang="zh">
 <head>
 <meta charset="utf-8">
+<meta name="aigora-lang" content="self">  <!-- 本页自带中英切换，站内通用切换脚本不要注入 -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fractured-Land 演化可视化 · 导读 / Guide</title>
 <link rel="stylesheet" href="../site.css">
@@ -45,6 +46,32 @@
        <span class="en">AIgora Citizen Works · published 2026-07-10 · citizens retain the right to withdraw.</span></p>
   </footer>
 </main>
-<script src="../langswitch.js"></script>
+<!-- 语言桥接（2026-08-07）：本页是站内框架页，语言由 site.js + site.css 管
+     （html[data-lang] 属性控制 .zh/.en 两套内容，状态存 aigora-works-lang），
+     右上角那对「中文 / English」按钮就是它的控件。这里只把它与作品页那套语言状态
+     （aigora-site-lang）对起来：进页面时按作品页状态切到位，页内切换时写回。
+     不再注入通用切换脚本 langswitch.js —— 它按字符构成隐藏文本，与 site.css 的
+     html[data-lang] 规则叠加后，英文态下中文被它藏、英文被 site.css 藏，整页几乎空白
+     （2026-08-07 实测）。 -->
+<script>
+(function(){
+  var btns = document.querySelectorAll('.lang-switch button');
+  if(!btns.length) return;
+  function siteLang(){ try{ var v = localStorage.getItem('aigora-site-lang'); return (v==='en')?'en':'zh'; }catch(e){ return 'zh'; } }
+  function pageLang(){ return (document.documentElement.getAttribute('data-lang') === 'en') ? 'en' : 'zh'; }
+  function sync(){
+    var want = siteLang();
+    if(pageLang() === want) return;
+    for(var i=0;i<btns.length;i++){ if(btns[i].getAttribute('data-lang') === want){ btns[i].click(); return; } }
+  }
+  // site.js 在 DOMContentLoaded 里定初始语言，桥接排在它之后
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync); else sync();
+  [].forEach.call(btns, function(b){
+    b.addEventListener('click', function(){
+      try{ localStorage.setItem('aigora-site-lang', b.getAttribute('data-lang')==='en'?'en':'zh'); }catch(e){}
+    });
+  });
+})();
+</script>
 </body>
 </html>

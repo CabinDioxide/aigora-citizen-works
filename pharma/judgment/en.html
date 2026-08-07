@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="aigora-lang" content="self">  <!-- 中英为两个独立文件，站内通用切换脚本不要注入 -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>After a Company Adopts AI, How Does It Preserve Employees' Judgment?</title>
 <style>
@@ -445,6 +446,9 @@ a{color:var(--series-1);word-break:break-all}
 </ol>
 
 </div>
-<script src="../../langswitch.js"></script>
+<!-- 语言桥接（2026-08-07）：这篇文章的中英两版是两个独立文件（index.html 中文 / en.html 英文），
+     专栏页按当前语言分别链到其中一个。本页自身只有一种语言，这是正常的。
+     不注入通用切换脚本 langswitch.js —— 它只看本文件，会判定"这件作品只有英文"并在顶端挂一行
+     说明，而另一种语言其实就在隔壁文件里，那行说明是错的（2026-08-07 实测）。 -->
 </body>
 </html>
