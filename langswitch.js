@@ -3,6 +3,13 @@
    原理：遍历文本节点，按字符构成判为中文/英文，各自包一层 span；
    已带 en 类名的原有英文层直接接管。切换只切显示，不动 DOM 顺序。 */
 (function(){
+  // 自带切换的页面不启动本脚本（2026-08-07 加）。
+  // 页面若已经自己管中英（像立宪史卷一的 .zh/.en 两套内容、《这次》的开场选择屏），
+  // 再叠一层按字符隐藏，两套规则会互相吃掉对方该显示的那一边。立宪史英文态因此
+  // 整页几乎空白，《这次》的选择屏只剩一个选项。这类页面在自己的 head 里写一行
+  // <meta name="aigora-lang" content="self">，本脚本读到就退出，改由该页写状态桥接。
+  if(document.querySelector('meta[name="aigora-lang"][content="self"]')) return;
+
   var ZH = /[一-鿿]/, EN = /[A-Za-z]{2,}/;
   var SKIP = {SCRIPT:1, STYLE:1, TEXTAREA:1, PRE:1, CODE:1};  // CODE 内是作品原名等专名，不分语言、两态都留
   var EN_CLASS = /(^|\s)(en|en-t|en-line|enrel|seden|hn-en|tp-en|t-en|dek-en)(\s|$)/;
