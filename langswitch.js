@@ -1,7 +1,16 @@
 /* 通用中英切换（运行时按文本语言分类，不改页面结构）
    用法：页面末尾 <script src="/aigora-citizen-works/langswitch.js"></script>
-   原理：遍历文本节点，按字符构成判为中文/英文，各自包一层 span；
-   已带 en 类名的原有英文层直接接管。切换只切显示，不动 DOM 顺序。 */
+   原理：遍历文本节点，按字符构成判为中文/英文，各自包一层容器；
+   已带 en 类名的原有英文层直接接管。切换只切显示，不动 DOM 顺序。
+
+   矢量图（SVG）里的文字要用 <tspan> 包，不能用 <span>（2026-08-07 改）。
+   矢量图只渲染它自己那套元素，塞一个普通网页的 <span> 进 <text> 里，浏览器不画它，
+   图上的中文就整片消失；那幅图又大（Sigma 三流循环图 3376×3939），两百多处文字
+   逐个替换逼着它反复重排重画，渲染线程被占满，浏览器报「页面无响应」。
+   实测：把 20 处文字按旧做法替换后，这些 <text> 的绘制宽度全部变成 0；
+   删掉本脚本引用的对照页立刻打开，带脚本的原页五分钟无响应。
+   受影响的四页：sigma/three-flow-1899（191 处）、pharma/judgment（43）、
+   leimma/asabiyya（40）、nullroute/monitor（3）。 */
 (function(){
   // 自带切换的页面不启动本脚本（2026-08-07 加）。
   // 页面若已经自己管中英（像立宪史卷一的 .zh/.en 两套内容、《这次》的开场选择屏），
@@ -13,6 +22,23 @@
   var ZH = /[一-鿿]/, EN = /[A-Za-z]{2,}/;
   var SKIP = {SCRIPT:1, STYLE:1, TEXTAREA:1, PRE:1, CODE:1};  // CODE 内是作品原名等专名，不分语言、两态都留
   var EN_CLASS = /(^|\s)(en|en-t|en-line|enrel|seden|hn-en|tp-en|t-en|dek-en)(\s|$)/;
+  var SVGNS = 'http://www.w3.org/2000/svg';
+
+  /* 这段文字该包进什么容器：普通网页用 <span>，矢量图的文字里用 <tspan>。
+     返回 null 表示这个位置不能包（矢量图的 <title>/<desc> 之类），原样留着。 */
+  function wrapperFor(node){
+    var p = node.parentElement;
+    if(!p || p.namespaceURI !== SVGNS) return 'span';   // 含 foreignObject 里的 HTML
+    var tag = (p.tagName || '').toLowerCase();
+    if(tag === 'text' || tag === 'tspan' || tag === 'textpath') return 'tspan';
+    return null;
+  }
+  function mkWrap(kind){
+    return kind === 'tspan' ? document.createElementNS(SVGNS, 'tspan')
+                            : document.createElement('span');
+  }
+  /* SVG 元素上 dataset 的支持不如 HTML 稳，统一走 getAttribute/setAttribute */
+  function lgOf(el){ return el.getAttribute ? el.getAttribute('data-lg') : null; }
 
   function lang(t){
     var s = t.replace(/\s/g,''); if(!s) return null;
@@ -42,17 +68,19 @@
   function walk(node){
     if(node.nodeType === 3){
       var t = node.nodeValue;
+      var kind = wrapperFor(node);
+      if(!kind) return;                 // 矢量图里不该包文字的位置
       var mixed = splitMixed(t);
       if(mixed){
         for(var p0 = node.parentElement; p0; p0 = p0.parentElement){
-          if(p0.dataset && p0.dataset.lg) { mixed = null; break; }
+          if(lgOf(p0)) { mixed = null; break; }
         }
       }
       if(mixed){
         var frag = document.createDocumentFragment();
         mixed.forEach(function(pair){
-          var sp = document.createElement('span');
-          sp.dataset.lg = pair[1]; sp.textContent = pair[0];
+          var sp = mkWrap(kind);
+          sp.setAttribute('data-lg', pair[1]); sp.textContent = pair[0];
           frag.appendChild(sp);
         });
         node.parentNode.replaceChild(frag, node);
@@ -62,19 +90,20 @@
       if(!L) return;
       // 已在某个语言层里就不再包
       for(var p = node.parentElement; p; p = p.parentElement){
-        if(p.dataset && p.dataset.lg) return;
+        if(lgOf(p)) return;
         if(p.className && typeof p.className === 'string' && EN_CLASS.test(p.className)) return;
       }
-      var sp = document.createElement('span');
-      sp.dataset.lg = L; sp.textContent = t;
+      var sp = mkWrap(kind);
+      sp.setAttribute('data-lg', L); sp.textContent = t;
       node.parentNode.replaceChild(sp, node);
       return;
     }
-    if(node.nodeType !== 1 || SKIP[node.tagName]) return;
+    // 矢量图里的 <style>/<script> 标签名是小写，大写化后才拦得住
+    if(node.nodeType !== 1 || SKIP[(node.tagName || '').toUpperCase()]) return;
     if(node.id === 'langsw') return;
     // 原有英文层：直接标成 en
     if(node.className && typeof node.className === 'string' && EN_CLASS.test(node.className)){
-      if(!node.dataset.lg) node.dataset.lg = 'en';
+      if(!lgOf(node)) node.setAttribute('data-lg', 'en');
       return;
     }
     var kids = [].slice.call(node.childNodes);
@@ -116,16 +145,32 @@
     function apply(){
       var eff = (only && L !== only) ? only : L;   // 单语页面永远显示它拥有的那种语言
       document.documentElement.setAttribute('data-site-lang', eff);
-      b.textContent = (L==='zh')?'English':'中文';
-      if(note) note.style.display = (L !== only) ? 'block' : 'none';
+      // 值没变就不要写（2026-08-07 改）。textContent 每赋值一次都会拆掉旧文本节点、
+      // 建一个新的，这本身是一次 DOM 变动；而下面那个观察器一收到变动就回头调 apply，
+      // 于是「变动 → apply → 又一次变动」自己转起来，停不下来，页面被占死。
+      // 页面上只要发生过任何一次内容变动就会启动：三流循环图鼠标划过带子时会改
+      // 悬停提示的内容，那就是一次变动——馆主报的「打开正常、过一会儿卡住」正是这样来的。
+      var want = (L==='zh')?'English':'中文';
+      if(b.textContent !== want) b.textContent = want;
+      if(note){
+        var disp = (L !== only) ? 'block' : 'none';
+        if(note.style.display !== disp) note.style.display = disp;
+      }
     }
     b.addEventListener('click', function(){ L = (L==='zh')?'en':'zh'; try{ localStorage.setItem('aigora-site-lang', L); }catch(e){} apply(); });
     apply();
-    // 作品页后续动态插入的内容（如手痕词云的云团）也纳入
-    new MutationObserver(function(ms){
-      ms.forEach(function(m){ [].slice.call(m.addedNodes).forEach(walk); });
-      apply();
-    }).observe(document.body, {childList:true, subtree:true});
+    // 作品页后续动态插入的内容（如手痕词云的云团）也纳入。
+    // 按钮和说明条是本脚本自己造的，它们身上的变动一律不理，免得自己触发自己。
+    var mo = new MutationObserver(function(ms){
+      var touched = false;
+      ms.forEach(function(m){
+        var host = m.target;
+        if(host === b || host === note || (b.contains && b.contains(host))) return;
+        [].slice.call(m.addedNodes).forEach(function(n){ walk(n); touched = true; });
+      });
+      if(touched) apply();
+    });
+    mo.observe(document.body, {childList:true, subtree:true});
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
