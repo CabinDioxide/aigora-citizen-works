@@ -477,7 +477,7 @@ var SITE_WORKS = {
     {img:'assets/cards/zh-monitor.png', imgEn:'assets/cards/en-monitor.png', name:['九条产业线监控面板','The Nine-Industry Monitor Dashboard'], href:'nullroute/monitor/', tag:['已上线 · 2026-08-05 快照','online · snapshot of 2026-08-05']}
   ]},
   pharma: { cards: [
-    {img:'assets/cards/share-prolabour.png', imgEn:'assets/cards/share-prolabour.png', name:['Pro-Labour AI 如何可能','How Is Pro-Labour AI Possible?'], href:'pharma/judgment/', tag:['已上线','online']},
+    {img:'assets/cards/share-prolabour.png', imgEn:'assets/cards/share-prolabour.png', name:['Pro-Labour AI 如何可能','How Is Pro-Labour AI Possible?'], href:'pharma/judgment/', hrefEn:'pharma/judgment/en.html', tag:['已上线','online']},
     {img:'assets/cards/zh-weekly.png', imgEn:'assets/cards/en-weekly.png', name:['AI 观察周报','The AI Observation Weekly'], href:null, tag:['网页版在做','web version in progress']},
     {img:'assets/cards/zh-security.png', imgEn:'assets/cards/en-security.png', name:['AI 时代的非传统安全问题','Non-Traditional Security in the Age of AI'], href:null, tag:['在做','in progress']}
   ]},
@@ -617,11 +617,14 @@ function buildWorks(who){
     html += '<div class="cardrow">';
     w.cards.forEach(function(c){
       var cimg = (LANG==='en' && c.imgEn) ? c.imgEn : c.img;
+      // 有的作品中英是两个独立文件（法玛《Pro-Labour AI 如何可能》＝judgment/ 与 judgment/en.html），
+      // 这类卡另写 hrefEn，英文态下链到英文那一份；不写 hrefEn 的照旧只有一个地址。（2026-08-07 补）
+      var chref = (LANG==='en' && c.hrefEn) ? c.hrefEn : c.href;
       html += '<div class="hang">'
         + '<img class="tack" src="assets/rig/钉-B-透明.png" alt="">'
         + '<img class="rope" src="assets/rig/绳-钉挂件-v3.png" alt="">'
         + '<div class="wcard"><img src="'+cimg+'" alt="'+L(c.name)+'"></div>'
-        + (c.href ? '<a href="'+c.href+'" aria-label="'+L(c.name)+'"></a>' : '')
+        + (chref ? '<a href="'+chref+'" aria-label="'+L(c.name)+'"></a>' : '')
         + '</div>';
     });
     html += '</div>';
