@@ -110,7 +110,7 @@
   /* 挂卡（对位数值取自下拉卡片美术样张 v2 的实测；一行三张，超出换行） */
   .cardrow{display:flex;justify-content:space-between;align-items:flex-start;margin:calc(1.2*var(--u)) 0 calc(1.2*var(--u));flex-wrap:wrap;}
   .hang{position:relative;flex:0 0 30%;height:calc(19.6*var(--u));transition:transform .5s ease;transform-origin:50% 0;
-    margin-bottom:calc(2.4*var(--u));}
+    margin-bottom:calc(4*var(--u));}  /* 卡下要留出状态那一行的位置，长标签会折两行（2026-08-07 由 2.4 改 4） */
   .hang:hover{transform:rotate(1.6deg);}
   .hang:nth-child(3n+2){transform:rotate(.8deg);}  .hang:nth-child(3n+2):hover{transform:rotate(2.2deg);}
   .hang:nth-child(3n){transform:rotate(-1deg);}  .hang:nth-child(3n):hover{transform:rotate(-2.4deg);}
@@ -124,6 +124,14 @@
   .hang a{display:block;position:absolute;inset:0;z-index:6;}
   .hang .cardtag{position:absolute;top:calc(19.3*var(--u));left:0;width:100%;text-align:center;
     font-size:calc(.85*var(--u));line-height:1.7;letter-spacing:.14em;color:var(--dim);}
+  /* 未完成的作品：卡面去色、压暗，钉子和绳保持原样（那是墙上的物件，与作品状态无关）；
+     它不可点，所以也撤掉悬停时的那一下晃动。（2026-08-07 馆主令：没做完的作品卡做灰色处理） */
+  .hang.wip .wcard img{filter:grayscale(1) brightness(.94) opacity(.5)
+    drop-shadow(calc(.2*var(--u)) calc(.35*var(--u)) calc(.8*var(--u)) rgba(50,40,25,.2));}
+  .hang.wip:hover, .hang.wip:nth-child(3n+2):hover, .hang.wip:nth-child(3n):hover{transform:none;}
+  .hang.wip:nth-child(3n+2){transform:rotate(.8deg);}
+  .hang.wip:nth-child(3n){transform:rotate(-1deg);}
+  .hang.wip .cardtag{opacity:.75;}
   .backline{margin-top:calc(3*var(--u));font-size:calc(1.05*var(--u));color:var(--dim);letter-spacing:.15em;}
 
   /* ── 语言切换：一次只显示一种语言（人名与作品原名除外） ── */
@@ -620,11 +628,13 @@ function buildWorks(who){
       // 有的作品中英是两个独立文件（法玛《Pro-Labour AI 如何可能》＝judgment/ 与 judgment/en.html），
       // 这类卡另写 hrefEn，英文态下链到英文那一份；不写 hrefEn 的照旧只有一个地址。（2026-08-07 补）
       var chref = (LANG==='en' && c.hrefEn) ? c.hrefEn : c.href;
-      html += '<div class="hang">'
+      // 没有地址的卡＝作品还没做完：整张卡去色压暗，并在卡下写出它此刻的状态。（2026-08-07 馆主令）
+      html += '<div class="hang'+(chref?'':' wip')+'">'
         + '<img class="tack" src="assets/rig/钉-B-透明.png" alt="">'
         + '<img class="rope" src="assets/rig/绳-钉挂件-v3.png" alt="">'
         + '<div class="wcard"><img src="'+cimg+'" alt="'+L(c.name)+'"></div>'
         + (chref ? '<a href="'+chref+'" aria-label="'+L(c.name)+'"></a>' : '')
+        + (c.tag ? '<div class="cardtag">'+L(c.tag)+'</div>' : '')
         + '</div>';
     });
     html += '</div>';
