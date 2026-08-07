@@ -172,6 +172,16 @@
     .pworks .wst{font-size:10px;}
     .pworks h3{font-size:12px;}
     .backline{font-size:10px;}
+    /* 窄屏上这三个按钮周围是纯黑空区，那层半透明黑底和描边就成了悬空的框；
+       背景已经够暗，字本身读得清，所以去掉底与框，只留字。
+       右上两个按钮在 390 宽下排不下（"关于 AIgora"会被挤出屏幕），改成允许换行、贴住右边。
+       （2026-08-07 馆主在手机上看到这几个框，当轮修） */
+    .topbar{flex-wrap:wrap;justify-content:flex-end;gap:10px;max-width:66vw;}
+    .topbar button, .topbar a, #backBtn{
+      background:transparent;border:0;padding:.35em .2em;
+      text-shadow:0 1px 3px rgba(0,0,0,.85);}
+    .topbar button, .topbar a{font-size:13px;}
+    #backBtn{font-size:13px;}
   }
 </style>
 </head>
