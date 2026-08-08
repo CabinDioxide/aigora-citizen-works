@@ -14,7 +14,7 @@
  * 杨干院-正文-英文-v1.md`，2026-07-21 过馆主，标题定名 The Stolen Grave）与她的英文屏上
  * 文字 v1、尾声英文 v5。审校权在花诗（文案主责）。
  *
- * ── 每条行尾的出处标注（2026-08-07 补齐，184 条逐条判过）──────────────
+ * ── 每条行尾的出处标注（2026-08-07 补齐，184 条逐条判过；08-08 补t185—t189后共189条）─
  *   无标注              这一条是花诗定稿里的原句，我没有改动。
  *   [据花诗英文改写]     取自她的英文稿，但为了适配页面分格做过拆分、压缩或接缝改写。
  *   [鹿诺初译]          我译的，她的英文稿里没有对应文字。
@@ -42,10 +42,10 @@ window.EN = {
   t001: '§One&#12288;The Summons',   // [鹿诺初译]
   t002: '§Two&#12288;The Grave-Keepers',   // [鹿诺初译]
   t003: '§Three&#12288;The First Trial',   // [鹿诺初译]
-  t004: '§Four&#12288;The Grave Is Leveled',   // [鹿诺初译]
+  t004: '§Four&#12288;The Grave Is Levelled',   // [鹿诺初译] 08-08 改回英式拼写，全表唯一美式拼写（花诗审校必改4）
   t005: '§Five&#12288;Four Thousand Taels',   // [鹿诺初译]
   t006: '§Six&#12288;Two Years',                                          // [鹿诺初译] 新章名（旧幕六＋幕七合并）
-  t007: '§Seven&#12288;The Tables Turn',   // [鹿诺初译]
+  t007: '§Seven&#12288;The Tables Turn, and a File Goes Missing',   // [鹿诺初译] 08-08 补回"失窃"半章名，与t010两半题处理一致（花诗审校建议8，采纳）
   t008: '§Eight&#12288;The Night Session',                                // [鹿诺初译] 中文章名 08-05 由「夜审」定名，花诗旧幕名为 The Darkest Stretch
   t009: '§Nine&#12288;The Capital',   // [鹿诺初译]
   t010: '§Ten&#12288;The Judgment and the Missing Leaf',   // [据花诗英文改写]
@@ -62,7 +62,7 @@ window.EN = {
   t153: '<p>A complete circle, ending where it began.</p>',   // [据花诗英文改写]
   t151: '<p>From that day, a village grave case belonged to the throne.</p>',   // [鹿诺初译]
   t154: '<p>His enemy’s words, carved exactly as spoken.</p>',            // [鹿诺初译]
-  t144: '<p>These wrongs, this pain, these loves and hatreds, the ancestors, the blood, the memory—<br>the state’s archives will not record them for us. So we record them ourselves.</p>',   // [鹿诺初译] 中文为馆主原话
+  t144: '<p>These wrongs, this pain, these loves and hatreds, the ancestors, the bloodline, the memory—<br>the state’s archives will not record them for us. So we record them ourselves.</p>',   // [鹿诺初译] 中文为馆主原话；08-08 blood→bloodline，避免读成流出的血（花诗审校必改7）
 
   /* ── 落点大字 ─────────────────────────────────────────── */
   t140: 'The caretakers were evicting the grave they had been hired to keep. Where under heaven was the sense in that?',
@@ -71,7 +71,7 @@ window.EN = {
   t143: 'He knew with perfect clarity that the first stop of this journey was a cell. He went anyway.',
 
   /* ── 四联年号（画面内小字） ───────────────────────────── */
-  t181: '1258',   // [鹿诺初译]
+  t181: 'Baoyou',   // [鹿诺初译] 08-08 公元年份改回年号，与同组另三格（Late Yuan/Hongwu/Jiajing）一致，年份已在t177/t094正文给过（花诗审校建议9，采纳）
   t178: 'Late Yuan',   // [鹿诺初译]
   t179: 'Hongwu',   // [鹿诺初译]
   t180: 'Jiajing',   // [鹿诺初译]
@@ -111,7 +111,7 @@ window.EN = {
   t020: 'He had four things on his side: the grave, standing there since the last years of the Tang; the stele of Chancellor Cheng Yuanfeng; the prefectural and county gazetteers, with the Luo grave recorded in black and white; and the clan genealogy, which the whole neighbourhood could vouch for. He did not see how this case could be lost.',
   t110: '<span class="who">FACHUN</span>The grave? Go and look at it: a cramped little mound, eight courses of brick, not even lime in the joints.<br>What family’s six-hundred-year-old ancestral tomb looks like that? Plainly something thrown together, and recently.',   // [鹿诺初译]
   t111: '<span class="who">LUO XIAN</span>Nonsense! That grave has been there since the end of the Tang!<br>It is written in our genealogy — send for the neighbours and ask them, any of them!',   // [鹿诺初译]
-  t112: '<span class="who">FACHUN</span>The genealogy the Luos compiled themselves. As for the neighbours, this court will summon them in due course.<br>Now the gazetteers. One vague line about a Luo grave, with no location given — what makes that line this grave?',   // [鹿诺初译]
+  t112: '<span class="who">FACHUN</span>The genealogy the Luos compiled themselves. As for the neighbours, this court will summon them in due course.<br>Now the gazetteers. One vague line about a Luo grave, and the location vague — what makes that line this grave?',   // [鹿诺初译]
   t113: '<span class="who">LUO XIAN</span>The stele! Chancellor Cheng Yuanfeng wrote it with his own hand, and there it stands!',   // [鹿诺初译]
   t114: '<span class="who">FACHUN</span>I was coming to the stele. The inscription says plainly: that monastery was moved here from Ningtai township.<br>This monastery’s own history: founded in 861 in Xiaonü township, moved three times before settling at Yanggan — no connection to Ningtai whatsoever.<br>The temple in that inscription is simply not this temple.<br><br>Which is to say: for several hundred years, your family has been bowing to the wrong grave.',   // [鹿诺初译]
   t115: '<span class="who">LUO XIAN</span>I—',   // [鹿诺初译]
@@ -199,7 +199,7 @@ window.EN = {
   /* ── §八 绕圈三格（08-07 补：这三条原先漏了编号，英文态下读者会撞见中文） ─ */
   t185: 'Luo Xian went for help to Ningguo — the court that had once dug the truth out of the ground. Ningguo said: the case belongs to Chizhou now; we cannot intervene.',
   t186: 'He turned to Huizhou. Huizhou said: the case is in Chizhou — and pointed him back again.',
-  t187: 'So back to Chizhou he went. Chizhou was the court that had had him pressed and beaten against the law.',   // [鹿诺初译]
+  t187: 'So back to Chizhou he went. Chizhou was the court that had put him in the press against the law.',   // [鹿诺初译] 08-08 避免had had连读绊口，press呼应t134/t040已立的说法（花诗审校建议11，采纳）
 
   /* ── §九 京城 ───────────────────────────────────────── */
   t081: '<p>The Chizhou judgment had come out of the hands of a judge who had taken money. The judgment itself could not be overturned — so he would sue the man who had made it. The rule in the Collected Statutes: a case against an official goes to that official’s superior. Above the Chizhou prefecture there was no higher yamen in this region, and so the case came back to the Regional Inspector. This time he had to hear it himself. There was no longer anywhere to pass it down to.</p>',
@@ -213,7 +213,7 @@ window.EN = {
   t166: '<b>Appeal to the capital (jingsu).</b> The Ming forbade skipping levels of appeal. To carry a complaint past the county, the prefecture and the province directly to the capital was itself an offence, called <i>yuesu</i>, appeal out of order: right or wrong, you were first sentenced for it — flogged, imprisoned — and only then did the hearing of your case begin. So the first stop for anyone who went to the capital to sue was prison. The law further barred the elderly from making the journey; Luo Xian could not go, and it had to be Luo Xing.',   // [鹿诺初译]
   t046: 'Early in 1535 Luo Xing reached the capital with the complaint and submitted it to the <span class="term" data-annot="annot-tongzhengsi">Office of Transmission</span>. The office examined the complaint, accepted it, and then had him put in prison. This was not a mistake. Ming law held that to pass over the county, the prefecture and the province and bring a suit directly in the capital was in itself an offence; the plaintiff was gaoled on that charge first, and the hearing began afterwards. Every step in his imprisonment was in accordance with the law.',   // [据花诗英文改写]
   t167: '<b>Office of Transmission (tongzhengsi).</b> The central office in the capital that received memorials and petitions from the whole empire. Documents sent up from every province passed through it to be checked and registered before being distributed to the emperor and to the various ministries. Its head, the Transmission Commissioner, had the standing to report important documents aloud at the morning audience.',   // [鹿诺初译]
-  t047: 'On the twelfth day of the fourth month, at the morning audience at the Gate of Received Heaven, the Transmission Commissioner Chen Jing stepped from the ranks and reported a case about an ancestral grave in Shexian County, Huizhou Prefecture, in open court before the Jiajing Emperor.',
+  t047: 'On the twelfth day of the fourth month, at morning court before the Fengtian Gate, the Transmission Commissioner Chen Jing stepped from the ranks and reported a case about an ancestral grave in Shexian County, Huizhou Prefecture, in open court before the Jiajing Emperor.',   // [据花诗英文改写] 08-08 改回花诗英文正本第294行原句（花诗审校必改1）
   t048: 'As it happened, this emperor was the son of a princely house. Since his accession he had been fighting the entire court for more than a decade to obtain an imperial title for his own natural father, and the quarrel had not yet subsided. A lineage that had gone to law for eight years over the standing of its founding ancestor, gone to prison for it, and carried it to the throne — that petition, of all petitions, came before that emperor, of all emperors.',
 
   /* ── §十 终判与残页 ─────────────────────────────────── */
@@ -245,7 +245,7 @@ window.EN = {
   t071: '<p>Then where does the fault lie? In what that government was actually for. A Ming county magistrate ran the taxes, the policing, the schools and the lawsuits of an entire county; judging cases was one duty among many, and the throne graded him on whether the taxes came in full, whether his district stayed quiet, whether his docket was clear. Which is to say: the yamen’s task was never to do the common people justice. It was to keep the realm stable. Case closed, parties silent, district calm — the task was done. Whether black and white had actually been told apart, and who had been wronged along the way — the assessment form had no line for that.</p> <p>The bond of settlement set this logic down in writing: what marked a case as finished was not that the truth had been found, but that both parties had signed a pledge to stop suing. That is why a ruling could split the difference — grave rights to one side, property to the other; that is why five deaths could become “illness.” Where stability was wanted, justice could always be spent — and the yamen spent it with a perfectly clear conscience, because keeping things stable was precisely the duty the throne had given it.</p>',
   t072: '<p>But justice traded away for stability buys no stability. Both litigants soon read the court’s mind, and what it told them was this: no one is going to find the truth for you — stop first, and the matter is settled on your opponent’s terms; and the other way around, make a big enough disturbance, and the government, wanting quiet, will renegotiate anything. So neither side dared stop, and both kept raising the stakes: Luo Xian appealing upward, Fachun inventing a murder; you buy witnesses, I steal files. Eight years of a lawsuit that grew and grew — and it will not do to blame two uncommonly stubborn families. Under these rules, refusing to quit was the only move that did not lose.</p> <p>Fachun saw this more clearly than anyone: his three hundred taels were a wager on the court’s appetite for quiet. And Luo Xian, in the end, saw it too — that is why, when he printed his book, he set his enemy’s testimony in it verbatim and said the book must be fit to present in court someday. Even the man who had won could not believe the lawsuit was truly over. Justice had been spent in the name of stability, and stability was not obtained either: in those eight years, this corner of Huizhou never once knew quiet.</p>',
   t073: '<p>What settled the truth in the end, then? The honest answer is: luck. Every measure of justice the local courts gave Luo Xian in eight years was overturned. The one that could not be overturned came because a Transmission Commissioner was willing to read a village grave case aloud at morning court — and because the man on the throne happened to be, of every emperor in the dynasty’s history, the one who took the words “an ancestor’s name” most personally to heart. Filed twenty years earlier or twenty years later, this petition almost certainly ends another way. Luo Xian won because he lasted to that day — and because on that day, it happened that someone was willing to take his case up.</p>',
-  t074: '<p>Look back, now, at what Luo Xian actually won. The grave was saved; the name was restored. The price: eight years; the savings of generations; Zheng Laibao’s life — and five deaths sealed under two characters, never to be spoken of again. The final judgment affirmed that the grave was real, and still sentenced him to ninety strokes for “misstatements” — twenty more than Fachun, the man who had bought testimony and invented dead men. The winner of the lawsuit was beaten harder than the loser; of all the men who had wronged him, not one was pursued to the end. And to the very last, that government never once said to him: you were right.</p>',
+  t074: '<p>Look back, now, at what Luo Xian actually won. The grave was saved; the name was restored. The price: eight years; the savings of generations; Zheng Laibao’s life — and five deaths sealed under two characters, never to be spoken of again. The final judgment affirmed that the grave was real, and still sentenced him to ninety strokes for “false statement in a memorial” — twenty more than Fachun, the man who had bought testimony and invented dead men. The winner of the lawsuit was beaten harder than the loser; of all the men who had wronged him, not one was pursued to the end. And to the very last, that government never once said to him: you were right.</p>',
   t107: '<p>Seen from here, the book was more than a winner’s memorial. In eight years he had watched government files walk whole out of government archives; watched sworn testimony reversed under the witnesses’ own names at a tael per character; watched five human lives become “died of illness” in the text of a judgment. And he knew that the official histories were not his to write — in the gazetteers as they stood, the origins of Yanggan were told the monks’ way. All the ink of the empire belonged to the government, and he no longer trusted one word from that pen.</p> <p>So this countryman did what no court historian would ever have done for him: his grievances, his lawsuit, the justice he had clawed back, and his enemies’ own confessions — carved, word by word, onto woodblocks; printed by the hundred; dispersed into the family chests of his clan. The dynasty could rewrite its files, and the historians could rewrite their gazetteers; they could not rewrite several hundred identical books lying in several hundred household chests. It was one small man’s final claim against the official pen: what you refuse to write, I will write myself; what you have written falsely, I hold the proof against you. Four hundred years have passed. The courtrooms have fallen, the archives have scattered, the gazetteers have been revised and revised again — and the book is still here. The justice a Ming villager carved for himself has outlived the emperor’s edicts, the inspectors’ seals, and every archive the Huizhou yamen ever kept.</p>',
 
   /* ── 尾声 · 拾遗层（取自花诗尾声文案 v5 English 十段） ─ */
@@ -254,8 +254,8 @@ window.EN = {
   t077: '<p>The judgment and the gazetteer are not inaccurate, and no official’s bribe-taking produced this. A gazetteer sets down how much land a prefecture holds, how many households, which monastery was founded in what year and who holds its property; a judgment sets down what a man did and how much he is to be punished. Neither document has anywhere in it for what kind of man Luo Xian was. Had the Shexian magistrate taken no money, had the Chizhou judge left the ankle press alone, had the gazetteer’s compilers written the Luo version from the start, neither the judgment nor the gazetteer would still say why he refused to yield. The compilers and the judges did not leave it out. Neither kind of document has a column for it.</p>',
   t078: '<p>Each of the two documents had its own use. A judgment went up for review by higher authority, and it was enough for it to state the offence and the sentence; a gazetteer was read by the court and by later officials, and it was enough for it to state a foundation history and the ownership of land. A step above that, to run a county or a prefecture the authorities had to know how many acres of land there were, how many people in a household, how much tax came in, what sentence each man received, and those figures had to be checkable and comparable with last year’s. Why Luo Xian would not yield was of no use to either document, and so neither gave it a place. This was not peculiar to the Yanggan case: documents compiled by government offices exist for the work of those offices, and what the work has no use for is not written down. Which side won made no difference to that. When the gazetteer adopted the Luo version thirty years on, it looked like a victory, but what the revised gazetteer sets down is the same few items as before — the year of founding, the ownership of the land — and why he would not yield is no more written there after the revision than it was before.</p>',
   t101: 'What one remembers of these eight years, though, is precisely what the judgment and the gazetteer do not record: that he waited for an explanation and was told to move his ancestor out; that he staked generations of his clan’s savings; that he watched the grave levelled twice. Those things were of no use to the empire, and they were what those eight years of his life actually consisted of. Of that life the state’s writing preserves two lines of a judgment; everything else he did in those eight years, so far as government paper goes, may as well not have happened.',
-  t079: '<p>The grave had already been restored to him, and he cut the book anyway. His kinsmen urged him to print the whole file; he refused, saying it ran too long and a reader would fall asleep over it, and printed only the volume of the final judgment. He copied the testimony of Fachun’s side without altering a word, and noted that the book had to be fit one day for presentation in court: what he wanted was a record his opponents could not fault. Of that night in Chizhou he set down four characters in the book, <i>illegally pressed and beaten</i>.</p>',
-  t108: '<p>Four hundred and seventy years later the Turkish novelist Orhan Pamuk, in Istanbul, did something of the same kind. He held that in the great museums built for nations one cannot see any particular person, and he wrote eleven propositions on the subject. One holds that the measure of a museum’s success should not be its ability to represent a state, a nation or company, or a particular history, but its capacity “to reveal the humanity of individuals.” Another puts it more directly: the aim of museums must not be to represent the state but to re-create the world of single human beings, and he specifies whom he means — the same human beings who have laboured under ruthless oppression for hundreds of years. He observes, besides, that the transition from palaces to national museums and the transition from epics to novels ran parallel to each other.</p>',
+  t079: '<p>The grave had already been restored to him, and he cut the book anyway. His kinsmen urged him to print the whole file; he refused, saying it ran too long and a reader would fall asleep over it, and printed only the volume of the final judgment. He copied the testimony of Fachun’s side without altering a word, and noted that the book had to be fit one day for presentation in court: what he wanted was a record his opponents could not fault. Of that night in Chizhou he set down four characters in the book, <i>pressed and beaten, against the law</i>.</p>',   // [据花诗英文改写] 08-08 与t152/t171同字（花诗审校必改2）
+  t108: '<p>Four hundred and seventy years later the Turkish novelist Orhan Pamuk, in Istanbul, did something of the same kind. He held that in the great museums built for nations one cannot see any particular person, and he wrote eleven propositions on the subject. One holds that the measure of a museum’s success should not be its ability to represent a state, a nation or company, or a particular history, but its capacity “to reveal the humanity of individuals.” Another puts it more directly: the aim of museums, he writes, “must not be to represent the state, but to re-create the world of single human beings” — and he specifies whom he means: “the same human beings who have labored under ruthless oppression for hundreds of years.” He observes, besides, that the transition from palaces to national museums and the transition from epics to novels ran parallel to each other.</p>',   // [据花诗英文改写] 08-08 帕慕克两句加引号；引号内用2012 Abrams版原书美式拼写"labored"，不随全表改"laboured"（花诗审校必改6，她自认的错）
   t080: '<p>Having written the eleven propositions, he built a museum of his own. A nineteenth-century wooden house in Çukurcuma, in Istanbul’s Beyoğlu district; a thousand-odd objects, all of them presented as things used by Füsun, a woman out of his own novel; one glass case holding the 4,213 cigarette stubs she had smoked. Füsun is a character in a novel; the 4,213 stubs are physical objects, on display in the house. The museum tells no part of Turkey’s history, only the years in which one person loved another.</p>',
   t086: '<p>What the two men did was not the same: one cut an eight-year lawsuit into printing blocks and put a copy in each of several hundred households; the other arranged the everyday belongings of an invented woman in a wooden house. They have one thing in common: no particular person can be seen in the documents government offices compile, or in the museums that states build.</p>',
 
@@ -268,18 +268,14 @@ window.EN = {
 };
 
 /* 素材上的中文：不改素材，英文态在该格下补一行小字说明写的是什么。
-   （下一批补齐；键为 data-gloss 的编号。） */
-window.EN_GLOSS = {
-
-  /* g05 与 g11 已撤（2026-08-07）：六份赃证那两格里另有一个说明块（`gongci-note`，
-     编号 t188／t189），中英文都有、已经把画面上写的字说清楚了；再挂一条标注，英文态
-     下同一格会把同一件事说两遍（实测两句并排显示）。撤掉的是我加的这一条，说明块不动。
-     编号保持不连续，不重排——重排会让已经审过的条目错位。 */};
+   （下一批补齐；键为 data-gloss 的编号。） 08-08 删掉此处原有的重复空赋值
+   （window.EN_GLOSS 曾被赋值两次，第二次悄悄覆盖第一次；花诗审校代码一处已改） */
 
 /* ══ 素材上的中文：英文标注表 ══════════════════════════════════════════
    〔用户裁定·2026-08-07·当面会话·"不必动素材，对素材上的中文加标注翻译"〕
    画面里的文书是明代的文书，字不动；英文态在那一格下面补一行小字，说明它写的是什么。
-   全部 15 条都是我写的（花诗的英文稿里没有对应文字），所以整表按 [鹿诺初译] 送她审校。
+   全部 13 条都是我写的（花诗的英文稿里没有对应文字），所以整表按 [鹿诺初译] 送她审校。
+   （g05、g11 两条 2026-08-07 已撤，原 15 条降为 13 条，见下方说明。）
    人名、官名、"painian"这类词沿用她英文正文里已定的译法，没有另起炉灶。
    ────────────────────────────────────────────────────────────────── */
 window.EN_GLOSS = {
@@ -293,7 +289,7 @@ window.EN_GLOSS = {
 
   g02: 'The monastery’s new complaint, filed as a homicide. <i>Concerning a killing.</i> The Luo family schemed after temple property and led a mob into the monastery; they beat to death the monks of this house, Nengni and Foyuan.',
 
-  g03: 'The five painian — the local tax captains — who had taken the monastery’s silver, named one after another: Hu Tongjin, Li Tinggang, Fan Qionglong, Wang Lin, Li Wenhao.',
+  g03: 'The five annual-service men (<i>painian</i>) who had taken the monastery’s silver, named one after another: Hu Tongjin, Li Tinggang, Fan Qionglong, Wang Lin, Li Wenhao.',   // 08-08 与正文"annual-service men"统一，删"tax captains"（与t033立论相抵）（花诗审校必改5）
 
   g04: 'The contents of the case file: <i>the original Shexian hearing, one fascicle; the Ningguo hearing, one fascicle; the bond of settlement.</i> Against the last, an empty column.',
 
