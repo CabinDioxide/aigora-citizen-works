@@ -999,9 +999,10 @@
     <p>罗显这回没有等着开庭。他先去了一趟巡按察院，把郑来保被打死的事又原样告了一遍——同一件事，告了两个衙门。</p>
     <p>这一步的用处，在两个衙门转案的规矩不一样。巡抚接了民间的状子，批一句话发回地方，就算办完，此后不再过问。巡按不同：他转出去的案子要登记编号，定下审结的期限，到期不结要追究经办的官员，结了案还得回报给他核准。案子经巡按转一道，头上就多了一层盯着的人。</p>
     <p>徽州知府因此不敢把这案子随手交给下面的推官，改派府里的二号人物、<span class="term" data-annot="annot-tongzhi">同知</span>李邦亲自审。买通一个推官，法椿出得起这个价；李邦是知府的副手，案子又在巡按那里挂着号，他要是徇私，丢的是自己的官。</p>
-    <p>另一头是证人。罗家吃过证人被收买的亏，这回派人留意那几户排年的动静。九个人里有个胡通进，欠着旧债，拿到佛熙的银子转身就去还账，让罗家的人看见了。上门一问，原委全说了出来。</p>
+    <p>另一头是证人。罗家吃过证人被收买的亏，这回派人留意那几户<span class="term" data-annot="annot-painian">排年</span>的动静。里头有个胡通进，欠着旧债，拿到佛熙的银子转身就去还账，让罗家的人看见了。上门一问，原委全说了出来。</p>
   </div>
   <div class="annot" data-i="t163" id="annot-tongzhi">同知：明代一个府的长官是知府，同知是知府的副手，正五品，一府通常设一两员，分管粮务、治安或案件。知府管全局，要紧的案子常交同知去审。</div>
+  <div class="annot" data-i="t190" id="annot-painian">排年：明代乡村按户编册，一百一十户编成一里；一里之中田粮丁口最多的十户轮流当里长，十年轮一遍。轮到当值的那一年叫现年，也写作见年；没轮到的年份叫排年，所谓「本里排年」，说的就是这十户里当年不当值的那几户人家。不当值不等于没干系：他们仍是里中管事的人户，地方上出了事、官府要查问，常先传他们到堂作证。这也是这场官司里两边都肯出大钱买他们的缘故。</div>
 
   <!-- 七2 酒宴三连：台词纸条贴排快连 -->
   <div class="breath quote qR" data-i="t125" style="max-width:min(52%,520px)"><span class="who">佛熙</span>诸位排年，都是乡里乡亲。佛熙先敬各位一杯。</div>
@@ -2157,12 +2158,15 @@ function ckAdvance(box, steps, stepFn, endFn, glow){
   apply(saved === 'en' ? 'en' : 'zh-Hans');
 })();
 
-/* 注释点词展开（台账 #24：正文里的词是唯一入口） */
-document.querySelectorAll('.term').forEach(t => {
-  t.addEventListener('click', () => {
-    const a = document.getElementById(t.dataset.annot);
-    if (a) a.classList.toggle('open');
-  });
+/* 注释点词展开（台账 #24：正文里的词是唯一入口）
+   08-09 改成事件委托。原先是页面加载时给每个 .term 各绑一个处理器，而切换语言要用
+   innerHTML 重写整块文字，重写出来的新元素身上没有处理器——实测只要切过一次语言，
+   全部 16 条注释就都点不开了，中英文两态都一样。委托到 document 上就不受重写影响。 */
+document.addEventListener('click', e => {
+  const t = e.target.closest('.term');
+  if (!t) return;
+  const a = document.getElementById(t.dataset.annot);
+  if (a) a.classList.toggle('open');
 });
 </script>
 </body>
