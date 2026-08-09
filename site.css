@@ -84,6 +84,12 @@ h1{margin:0 0 14px;font-size:clamp(1.9rem,5vw,3rem);line-height:1.15}
 .work{
   padding:22px;border:1px solid var(--line);border-radius:12px;background:var(--panel);box-shadow:var(--shadow);
 }
+/* 还没做完的作品：同一张卡的未完成态——虚线边、不填底、不投影，一眼看得出它跟上面几件不是一类。
+   照 2026-08-07 馆主对首页作品卡的裁定（没做完的作品卡做灰色处理）落到专栏页上。 */
+.work.wip{
+  border-style:dashed;background:transparent;box-shadow:none;
+}
+.work.wip h3{color:var(--muted)}
 .work h3{margin:0 0 6px;font-size:1.3rem}
 .work .meta{margin:0 0 12px;font:.82rem/1.5 ui-sans-serif,system-ui,sans-serif;color:var(--muted)}
 .work p{margin:0 0 12px;max-width:720px}
