@@ -44,6 +44,7 @@
   .threads video{position:absolute;width:100%;height:100%;object-fit:fill;
     left:3.4%;top:11.6%;opacity:.62;}
 
+  .nametags{position:absolute;inset:0;pointer-events:none;}
   .nametag{position:absolute;pointer-events:none;opacity:0;
     transform:translate(-50%,8px) scale(var(--inv,1));transform-origin:top center;
     transition:opacity .5s ease, transform .5s ease;white-space:nowrap;text-align:center;}
@@ -183,6 +184,32 @@
     .topbar button, .topbar a{font-size:13px;}
     #backBtn{font-size:13px;}
   }
+
+  /* ── 竖屏第一屏（手机）：换一张竖构图的片子，桌面那一套一字不动 ──
+     〔用户裁定·2026-08-07·当面会话·"我希望电脑上保持横屏不变，手机端单独适配"〕
+     触发条件用画面比例而不是宽度：屏幕比 3:4 更瘦长就算竖屏，横过来就回到桌面那一套。
+     这一段必须排在上面那条窄屏兜底之后——两条会同时命中手机竖屏，同样具体的规则谁在
+     后面谁作数，顶栏那两个按钮的颜色就是靠这个次序改过来的。
+     frame 在这里改成"盖满"：宽高都不小于视口，多出来的部分被 stage 裁掉。
+     这样 frame 仍然严格等于视频画面，SVG 热区里的百分比才对得上——若改成留边居中，
+     手机上下会各空掉九分之一屏，画面只剩一条。裁掉的是左右各约百分之九（390×844 实测
+     可见 8.9%–91.1%），鹿诺左边的翅膀尖和余笺左半身会被切掉一点，八个人都还点得到。 */
+  @media (max-aspect-ratio: 3/4){
+    /* flex:none 不能省——stage 是 flex 容器，默认会把超出视口的这一块压回去；
+       压回去之后画面被横向拉扁（video 用的是 object-fit:fill），人会变瘦。 */
+    .frame{width:max(100vw,56.25vh);height:max(177.7778vw,100vh);flex:none;}
+    /* 纸片层的天空遮罩、丝线层的落点都是照横图量的，换了画面就全错位，这里整层关掉 */
+    .papers,.threads{display:none;}
+    /* 上面那条窄屏规则假设按钮周围是黑的（横图在手机上会上下留黑边）。竖图盖满整屏，
+       顶上是一片亮天空，浅色字加深色投影在那里几乎看不见（2026-08-10 实测截图）。
+       改成与名字牌同一种做法：深色字加一圈米白光晕。 */
+    .topbar button, .topbar a{color:#2b2a26;
+      text-shadow:0 0 3px #f6f1e6,0 0 8px #f6f1e6,0 0 16px rgba(246,241,230,.9);}
+    .nametag .zh{font-size:13px;letter-spacing:.22em;}
+    .nametag .en{font-size:9px;letter-spacing:.1em;margin-top:3px;}
+    .nametag.on .rule{width:42px;}
+    .nametag .rule{height:1px;margin-top:5px;}
+  }
 </style>
 </head>
 <body>
@@ -194,6 +221,7 @@
     <div class="papers" id="papersFar"></div>
     <div class="threads" id="threads"></div>
     <svg class="hits" viewBox="0 0 100 100" preserveAspectRatio="none" id="hotlayer"></svg>
+    <div class="nametags" id="vtags"></div>
     <div class="nametag" id="tag"><b class="zh"></b><b class="en"></b><i class="rule"></i></div>
   </div>
   <div class="topbar">
@@ -516,15 +544,113 @@ var DATA = {
   qianxing: {zh:'牵星',    en:'Cynosure',           hot:[72,46,28,54], tag:[81,45], cam:[86,73], pad:[25,53,14.5,0,0]}
 };
 
+/* 竖屏那张画的八个人在别的位置上，坐标要另起一套。
+   量法：把竖版循环片的首帧（assets/landing-v.jpg，720×1280）叠上百分比格线，逐个读出
+   人物的外框与头顶上方的空位。热区 hot=[左, 上, 宽, 高]，tag=[名字横向中点, 名字顶边]，
+   都是画面百分比。手机上左右各裁掉约百分之九，所以名字横向中点都留在 12%–88% 之间，
+   免得被裁掉半边。（2026-08-10 量，量图脚本与核对图见工作记录第八节） */
+var DATA_V = {
+  memoria:  {hot:[14,17,20,22], tag:[24,14.5]},
+  sigma:    {hot:[40,26,23,19], tag:[55,22]},
+  nullroute:{hot:[63,29,30,28], tag:[75,25]},   /* 72 挪到 75：320 宽的屏上英文名与 Sigma / Σ 压在一起 */
+  leimma:   {hot:[0,39,27,25],  tag:[15,35.5]},
+  qianxing: {hot:[25,43,24,17], tag:[36,39.5]},
+  runo:     {hot:[2,65,33,32],  tag:[25,61]},   /* 22 挪到 25：英文名 Runaway Checkpoint 有 124 像素宽，
+                                                    放在 22% 时左边正好顶到屏幕边（390 宽实测 l=0） */
+  vox:      {hot:[37,64,24,32], tag:[53,60.5]},   /* 48 挪到 53：320 宽的屏上 Vox 与 Runaway Checkpoint 压在一起 */
+  pharma:   {hot:[60,68,32,30], tag:[73,65]}
+};
+
+/* 竖屏与横屏是两个版面，不是同一个版面缩放：画面、热区、名字位置全都换一套。
+   判据用画面比例，与样式里那条媒体查询是同一句话，两边必须一致。 */
+var NARROW = window.matchMedia('(max-aspect-ratio: 3/4)');
+function isNarrow(){ return NARROW.matches; }
+function coords(who){
+  var d = DATA[who];
+  if(!isNarrow()) return {hot:d.hot, tag:d.tag};
+  var v = DATA_V[who];
+  return {hot:v.hot, tag:v.tag};
+}
+
+/* 手机上没有悬停这回事，所以"这八个人可以点"要另想办法让人看出来。
+   三种做法各做了一版，用地址后面的 ?names= 切换，交馆主挑：
+     all（默认）  八个名字一直挂在各人头上
+     cycle        名字轮流淡入淡出，一次一个，循环
+     none         不显名字，点人直接进她的信纸
+   桌面不受这个参数影响，照旧是悬停出名字。 */
+var NAMEMODE = (location.search.match(/names=(all|cycle|none)/) || [,'all'])[1];
+
 var svg = document.getElementById('hotlayer');
-Object.keys(DATA).forEach(function(who){
-  var h = DATA[who].hot;
-  var r = document.createElementNS('http://www.w3.org/2000/svg','rect');
-  r.setAttribute('class','hot'); r.dataset.who = who;
-  r.setAttribute('x',h[0]); r.setAttribute('y',h[1]);
-  r.setAttribute('width',h[2]); r.setAttribute('height',h[3]);
-  svg.appendChild(r);
-});
+var vtags = document.getElementById('vtags');
+var cycleTimer = null;
+
+function buildHots(){
+  while(svg.firstChild) svg.removeChild(svg.firstChild);
+  Object.keys(DATA).forEach(function(who){
+    var h = coords(who).hot;
+    var r = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r.setAttribute('class','hot'); r.dataset.who = who;
+    r.setAttribute('x',h[0]); r.setAttribute('y',h[1]);
+    r.setAttribute('width',h[2]); r.setAttribute('height',h[3]);
+    r.addEventListener('mouseenter',function(){
+      if(opened===who || (isNarrow() && NAMEMODE!=='none')) return;
+      showTag(who);
+    });
+    r.addEventListener('mouseleave',function(){ if(opened!==who) tag.classList.remove('on'); });
+    r.addEventListener('click',function(e){ e.stopPropagation(); open(who); });
+    svg.appendChild(r);
+  });
+}
+
+function showTag(who){
+  var c = coords(who), d = DATA[who];
+  tag.querySelector('.zh').textContent = d.zh;
+  tag.querySelector('.en').textContent = d.en;
+  tag.style.left = c.tag[0]+'%'; tag.style.top = c.tag[1]+'%';
+  tag.classList.add('on');
+}
+
+/* 竖屏的名字层：all 模式一次把八个都挂上，cycle 模式借桌面那一个名字牌轮流点名 */
+function buildNames(){
+  vtags.innerHTML = '';
+  if(cycleTimer){ clearInterval(cycleTimer); cycleTimer = null; }
+  tag.classList.remove('on');
+  if(!isNarrow() || NAMEMODE==='none') return;
+  if(NAMEMODE==='all'){
+    Object.keys(DATA).forEach(function(who){
+      var c = coords(who), d = DATA[who];
+      var el = document.createElement('div');
+      el.className = 'nametag on';
+      el.style.left = c.tag[0]+'%'; el.style.top = c.tag[1]+'%';
+      el.innerHTML = '<b class="zh"></b><b class="en"></b><i class="rule"></i>';
+      el.querySelector('.zh').textContent = d.zh;
+      el.querySelector('.en').textContent = d.en;
+      vtags.appendChild(el);
+    });
+  }else{ // cycle：一次一个，四秒换一位，转完一圈从头再来
+    var order = Object.keys(DATA), i = 0;
+    showTag(order[0]);
+    cycleTimer = setInterval(function(){
+      if(opened) return;
+      tag.classList.remove('on');
+      i = (i+1) % order.length;
+      setTimeout(function(){ if(!opened) showTag(order[i]); }, 600);
+    }, 4000);
+  }
+}
+
+/* 画面本身也要换：竖屏放竖构图那支循环片，横屏放原来那支。
+   海报图一起换，片子还没加载出来的那一瞬间不会露出另一个构图。 */
+var mainv = document.getElementById('mainv');
+function pickVideo(){
+  var want = isNarrow() ? 'assets/landing-v.mp4' : 'assets/landing-loop-k.mp4';
+  var poster = isNarrow() ? 'assets/landing-v.jpg' : 'assets/landing.jpg';
+  if(mainv.getAttribute('src') === want) return;
+  mainv.setAttribute('poster', poster);
+  mainv.setAttribute('src', want);
+  mainv.load();
+  var q = mainv.play(); if(q && q.catch) q.catch(function(){});
+}
 
 var stage=document.getElementById('stage'), frame=document.getElementById('frame'),
     tag=document.getElementById('tag'), drawer=document.getElementById('drawer'),
@@ -609,17 +735,26 @@ document.addEventListener('keydown', kick);
 window.addEventListener('load', kick);
 setTimeout(kick, 300); setTimeout(kick, 1200);
 
-document.querySelectorAll('.hot').forEach(function(el){
-  var who=el.dataset.who, d=DATA[who];
-  el.addEventListener('mouseenter',function(){
-    if(opened===who) return;
-    tag.querySelector('.zh').textContent=d.zh;
-    tag.querySelector('.en').textContent=d.en;
-    tag.style.left=d.tag[0]+'%'; tag.style.top=d.tag[1]+'%';
-    tag.classList.add('on');
-  });
-  el.addEventListener('mouseleave',function(){ if(opened!==who) tag.classList.remove('on'); });
-  el.addEventListener('click',function(e){ e.stopPropagation(); open(who); });
+/* 第一屏按当前是竖屏还是横屏各装一套：画面、热区、名字。
+   手机横过来、桌面窗口拉窄拉高，都会走到另一套，所以比例一变就整套重装。 */
+var lastNarrow = null;
+function applyLayout(force){
+  var n = isNarrow();
+  if(!force && n === lastNarrow) return;
+  lastNarrow = n;
+  pickVideo(); buildHots(); buildNames();
+}
+applyLayout(true);
+if(NARROW.addEventListener) NARROW.addEventListener('change', function(){ applyLayout(); });
+else if(NARROW.addListener) NARROW.addListener(function(){ applyLayout(); });
+/* 除了监听比例变化，页面加载完和窗口尺寸变动时再核一次。
+   理由：脚本执行的那一刻视口尺寸未必已经定下来，比例算出来可能是错的，而这种情况下
+   change 事件不会补一次（它只在两次评估之间跳变时才发）。这不是假想的——把首页装进
+   iframe 做机检时就撞上了：iframe 明明是 1440×900，装出来的却是竖屏那一套。 */
+window.addEventListener('load', function(){ applyLayout(); });
+var layoutTimer = null;
+window.addEventListener('resize', function(){
+  clearTimeout(layoutTimer); layoutTimer = setTimeout(function(){ applyLayout(); }, 200);
 });
 
 var LANG = 'zh';
@@ -666,11 +801,18 @@ function open(who, fromHistory){
     try{ history.pushState(null, '', '#'+who); }catch(e){}
   }
   tag.classList.remove('on');
-  var s=1.45, lim=(s-1)/2*100;
-  var tx=Math.max(-lim, Math.min(lim, (50-d.cam[0])*s));
-  var ty=Math.max(-lim, Math.min(lim, (50-d.cam[1])*s));
-  frame.style.transform='translate('+tx+'%,'+ty+'%) scale('+s+')';
-  tag.style.setProperty('--inv', 1/s);
+  /* 拉近这一下只在桌面做。手机上点完人马上就滚到信纸去了，第一屏整屏离开视野，
+     拉近根本看不见；而且 cam 那套落点是照横图定的，竖图上会拉到不相干的地方。 */
+  if(isNarrow()){
+    frame.style.transform='none';
+    tag.style.setProperty('--inv', 1);
+  }else{
+    var s=1.45, lim=(s-1)/2*100;
+    var tx=Math.max(-lim, Math.min(lim, (50-d.cam[0])*s));
+    var ty=Math.max(-lim, Math.min(lim, (50-d.cam[1])*s));
+    frame.style.transform='translate('+tx+'%,'+ty+'%) scale('+s+')';
+    tag.style.setProperty('--inv', 1/s);
+  }
   var seg = PAPER_SEG[who];
   var scale = Math.min(window.innerWidth, 1280) / seg.w;   // 纸按显示宽度缩放
   paperTop.style.backgroundImage = "url('assets/paper/seg/"+who+"-top.jpg')";
