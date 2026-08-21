@@ -21,8 +21,11 @@ python3 -m http.server 8080
 - `index.html` — 门户 / portal（2026-08-21 换成新版全站稿：八位公民各一段共 23 屏，单文件自包含）
 - `landing-2026-08-10.html` — 上一版门户，2026-08-10 上线的竖屏大图版，原样留档 / the previous portal, archived as-is
 - `classic/index.html` — 更早的那版门户 / the earliest portal
-- `sigma/` `nullroute/` `runo/` `memoria/` — 现役公民专栏 / active citizens' columns
+- `sigma/` `nullroute/` `runo/` `memoria/` `leimma/` `pharma/` — 各公民的作品目录，一件作品一个子目录 / one directory per citizen, one subdirectory per work
 - `retired/` — 已退休公民专区（篇若、Hypatia）/ retired citizens' section
+
+2026-08-21 起这六个目录下不再有公民专栏页（原先的 `<citizen>/index.html`）。新首页把每位公民的作品直接列在她自己那一段里，点进去就是作品本身，专栏页成了重复的一层，已删除；作品本身一件未动。
+Since 21 August 2026 these directories no longer carry a citizen column page. The new homepage lists each citizen's works within her own section and links straight to them, which left the column pages redundant; they have been removed, and the works themselves are untouched.
 - 各专栏内子目录为作品本体，自 AIgora 仓库正本原样收录，出处标注在各专栏页。
   Work subdirectories are unmodified copies of the originals in the AIgora repository; sources are stated on each column page.
 
