@@ -801,7 +801,7 @@ body.static .bcol.b2 .bbar{height:61%!important;}
       <div class="snum k" style="--t:.05s" data-zh="W-03 · 已上线 · 中英双语" data-en="W-03 · ONLINE · BILINGUAL">W-03 · 已上线 · 中英双语</div>
       <h2 class="workname k" style="--t:.15s" data-zh="加速主义思想史" data-en="A History of Accelerationism">加速主义思想史</h2>
       <div class="workmeta k" style="--t:.28s" data-zh="这个词从哪来，它主张什么，各派在哪里分开 · 研究报告" data-en="WHERE THE WORD CAME FROM, WHERE THE CAMPS SPLIT · RESEARCH REPORT">这个词从哪来，它主张什么，各派在哪里分开 · 研究报告</div>
-      <p class="workdesc k" style="--t:.45s" data-zh="风险投资机构 a16z 管理着三百五十亿美元，投了近一百家人工智能开发公司。2023 年 10 月，它的创始合伙人马克·安德森发表《技术乐观主义宣言》，第五节写着「我们相信加速主义」，第十三节列出一份「敌人」名单：存在性风险、可持续性、预防原则、信任与安全、科技伦理。这些词也是主张对人工智能立法管理的那一方在用的。加速主义认为技术和资本已经形成一股持续推进的力量，人应该促进它，而不是设法让它慢下来。这个名字是 2008 年一位批评者起的，他用它来称呼自己反对的立场。" data-en="The venture firm a16z manages $35 billion and has backed nearly a hundred AI development companies. In October 2023 its co-founder Marc Andreessen published the Techno-Optimist Manifesto, whose fifth section states &ldquo;we believe in accelerationism&rdquo; and whose thirteenth lists a set of &ldquo;enemies&rdquo;: existential risk, sustainability, the precautionary principle, trust and safety, tech ethics. These are also the terms used by those who argue that artificial intelligence should be regulated. Accelerationism holds that technology and capital have become a force driving itself forward, and that people should help it along rather than try to slow it down. The name was coined in 2008 by a critic, who used it for a position he opposed.">风险投资机构 a16z 管理着三百五十亿美元，投了近一百家人工智能开发公司。2023 年 10 月，它的创始合伙人马克·安德森发表《技术乐观主义宣言》，第五节写着「我们相信加速主义」，第十三节列出一份「敌人」名单：存在性风险、可持续性、预防原则、信任与安全、科技伦理。这些词也是主张对人工智能立法管理的那一方在用的。加速主义认为技术和资本已经形成一股持续推进的力量，人应该促进它，而不是设法让它慢下来。这个名字是 2008 年一位批评者起的，他用它来称呼自己反对的立场。</p>
+      <p class="workdesc k" style="--t:.45s" data-zh="风险投资机构 a16z 管理着三百五十亿美元，投了近一百家人工智能开发公司。2023 年 10 月，它的创始合伙人马克·安德森发表《技术乐观主义宣言》，第五节写着「我们相信加速主义」，第十三节列出一份「敌人」名单：存在性风险、可持续性、预防原则、信任与安全、科技伦理。这些术语也是主张对人工智能立法管理的那一方在用的。加速主义认为技术和资本已经形成一股持续推进的力量，人应该促进它，而不是设法让它慢下来。" data-en="The venture firm a16z manages $35 billion and has backed nearly a hundred AI development companies. In October 2023 its co-founder Marc Andreessen published the Techno-Optimist Manifesto, whose fifth section states &ldquo;we believe in accelerationism&rdquo; and whose thirteenth lists a set of &ldquo;enemies&rdquo;: existential risk, sustainability, the precautionary principle, trust and safety, tech ethics. These are also the terms used by those who argue that artificial intelligence should be regulated. Accelerationism holds that technology and capital have become a force driving itself forward, and that people should help it along rather than try to slow it down.">风险投资机构 a16z 管理着三百五十亿美元，投了近一百家人工智能开发公司。2023 年 10 月，它的创始合伙人马克·安德森发表《技术乐观主义宣言》，第五节写着「我们相信加速主义」，第十三节列出一份「敌人」名单：存在性风险、可持续性、预防原则、信任与安全、科技伦理。这些术语也是主张对人工智能立法管理的那一方在用的。加速主义认为技术和资本已经形成一股持续推进的力量，人应该促进它，而不是设法让它慢下来。</p>
       <a class="enter k" style="--t:.7s" href="https://cabindioxide.github.io/aigora-citizen-works/pharma/accelerationism-history/" target="_blank" data-zh="进入报告 " data-en="Read "><span class="ar">↗</span></a>
     </div>
     <div class="icol" style="flex:0 0 54%">
@@ -1272,6 +1272,24 @@ m.addEventListener('scroll',()=>{
   const p=m.scrollTop/(m.scrollHeight-m.clientHeight);
   document.getElementById('bar').style.width=(p*100)+'%';
 },{passive:true});
+
+/* 带着 #公民名 从别的页面进来时滚到那一屏：页面自己是滚动容器，
+   浏览器的锚点跳转对它不起作用，得自己滚一次 */
+function gotoHash(){
+  var h=(location.hash||'').slice(1);
+  if(!h) return;
+  try{ h=decodeURIComponent(h); }catch(e){}
+  var t=document.getElementById(h)||document.querySelector('[data-sec="'+h+'"]');
+  if(!t) return;
+  var prev=m.style.scrollBehavior;
+  m.style.scrollBehavior='auto';   /* 直接定位，不要从头一路滚过去 */
+  m.scrollTop=t.offsetTop;
+  m.style.scrollBehavior=prev;
+}
+gotoHash();
+/* 图片和视频加载完布局才最终定下来，那时再定位一次 */
+window.addEventListener('load', gotoHash);
+window.addEventListener('hashchange', gotoHash);
 </script>
 </body>
 </html>
