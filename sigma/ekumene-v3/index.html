@@ -114,16 +114,29 @@ html[data-lang=zh] .en,html[data-lang=en] .zh{display:none}
 <tbody>
 <tr><td>3000 BC</td><td class="n">5.6M</td><td class="n">43M</td><td class="n">0.13×</td></tr>
 <tr><td>2000 BC</td><td class="n">5.8M</td><td class="n">71M</td><td class="n">0.08×</td></tr>
-<tr><td>1000 BC</td><td class="n">9.7M</td><td class="n">107M</td><td class="n">0.09×</td></tr>
-<tr><td>AD 1</td><td class="n">72.6M</td><td class="n">225M</td><td class="n">0.32×</td></tr>
-<tr><td>AD 1000</td><td class="n">240M</td><td class="n">314M</td><td class="n">0.76×</td></tr>
-<tr><td>AD 1500</td><td class="n">388M</td><td class="n">488M</td><td class="n">0.79×</td></tr>
+<tr><td>1000 BC</td><td class="n">9.1M</td><td class="n">107M</td><td class="n">0.09×</td></tr>
+<tr><td>AD 1</td><td class="n">80.4M</td><td class="n">225M</td><td class="n">0.36×</td></tr>
+<tr><td>AD 1000</td><td class="n">270M</td><td class="n">314M</td><td class="n">0.86×</td></tr>
+<tr><td>AD 1500</td><td class="n">427M</td><td class="n">488M</td><td class="n">0.88×</td></tr>
 </tbody></table>
 <p class="note">
 <span class="zh">HYDE 是荷兰环境评估署的全球历史人口与土地利用数据库，这里只作事后对照，没有参与任何取值。公元前的三千年模型明显偏低，成因还没查完，如实留着。</span>
 <span class="en">HYDE is the Netherlands Environmental Assessment Agency's history database of the global environment; it is used here only for after-the-fact comparison and played no part in setting any parameter. The model runs clearly low through the three millennia BC; the cause has not yet been traced, and the gap is left on the record.</span>
 </p>
 
+<h2><span class="zh">版图为什么长成这样</span><span class="en">Why the map looks like this</span></h2>
+<p>
+<span class="zh">看政体图层会注意到两件事：国家覆盖的格子只占陆地的一成，其余大片是无人统治的灰色；国家的个头也不大，最大的一个占 216 格（约 38 万平方公里）。这两件事的成因查过，一件是缺陷、已经修了，一件是模型在如实反映自己的规则。</span>
+<span class="en">Two things stand out in the polity layer: states cover only about a tenth of the land, the rest staying grey and stateless; and states are not large, the biggest holding 216 cells (some 380,000 km²). Both were traced. One was a defect and has been fixed; the other is the model faithfully following its own rules.</span>
+</p>
+<p>
+<span class="zh">缺陷是军队只在建国那一期招募一次，之后不再扩编，而驻军需求随领土增长——一个政体长大之后，全部兵力都被驻防吃掉，野战军只剩几百人，再也打不动。现在改为常备军：兵力目标等于治下人口乘以聚居度除以军民战力比，缺额每期补募，用的是建国门本来那条口径，没有引入新参数。改完之后最大政体从 70 格涨到 216 格，一半是单格小国的局面降到不足三成。</span>
+<span class="en">The defect: an army was recruited once, at founding, and never expanded, while garrison demand grew with territory — so a state that expanded had its whole force absorbed into garrison duty, leaving a few hundred men in the field and no capacity to campaign. It now maintains a standing army: the target strength is the subject population times the clustering share divided by the soldier-to-civilian strength ratio — the same formula the founding threshold already used, with no new parameter. The largest polity went from 70 cells to 216, and the share of single-cell statelets fell from about half to under three in ten.</span>
+</p>
+<p>
+<span class="zh">另一件不是缺陷。那些无人统治的格子，每格的可耕地上限中位只有 2 平方公里，而有国家的格子是 241 平方公里——它们是沙漠、高山、极地和雨林，本来就没多少地可种。模型里开战要求征收所得能覆盖驻防开销，于是国家不去占它们。前现代的实际情形与此相符：国家控制的是河谷、平原与灌溉农业区，山地、干旱带和森林里的人长期不在任何国家治下。</span>
+<span class="en">The second is not a defect. Those stateless cells hold a median of just 2 km² of cultivable land each, against 241 km² in cells under a state — they are desert, high mountain, polar, and rainforest, with little to farm in the first place. The model requires that what can be extracted from a cell cover the cost of garrisoning it, so states do not take them. This matches the pre-modern record: states held river valleys, plains, and irrigated country, while people in the mountains, the drylands, and the forests lived outside any state for long stretches.</span>
+</p>
 <h2><span class="zh">八个图层各是什么</span><span class="en">The eight layers</span></h2>
 <p>
 <span class="zh">政体归属：每个国家一种颜色，灰色是无人统治的格。人口：每格人数取对数着色。耕地：每格熟地面积。口粮比值：每人每天分到的口粮相对于温饱线，1 是刚够吃，红色是饥荒。城市：城内人口。文字与铸币：各格所达的档位。官僚：在编官吏按治下格摊算。</span>
