@@ -426,6 +426,13 @@ body.static .scene svg.links line{animation:none!important;stroke-dashoffset:0!i
 body.static .bcol .bbar{animation:none!important;}
 body.static .bcol.b1 .bbar{height:78%!important;}
 body.static .bcol.b2 .bbar{height:61%!important;}
+/* 研究清单屏（立项与提案） */
+#agenda{justify-content:center;align-items:center;text-align:center;}
+#agenda .agwrap{max-width:44em;padding:0 clamp(1.4rem,4vw,3rem);display:flex;flex-direction:column;align-items:center;}
+#agenda .workdesc{max-width:36em;text-align:center;}
+#agenda .agstats{display:flex;gap:clamp(1.2rem,3vw,2.4rem);flex-wrap:wrap;justify-content:center;margin-bottom:clamp(1.2rem,2.8vh,1.8rem);font-family:var(--mono);font-size:clamp(.62rem,.88vw,.74rem);letter-spacing:.14em;color:var(--dim);}
+#agenda .agstats b{font-family:var(--disp);font-weight:400;font-size:1.9em;color:var(--ac);margin-right:.35em;vertical-align:-.1em;}
+#agenda .agstats i{font-style:normal;}
 /* 窄屏兜底 */
 @media (max-width:1080px){
   /* 屏幕不够宽时，正文行尾会伸到右侧头像导航底下，给它留出空位 */
@@ -444,6 +451,7 @@ body.static .bcol.b2 .bbar{height:61%!important;}
   .barcmp .bars{height:120px;}
   .chapline .chs{flex-wrap:wrap;justify-content:center;gap:.35em .8em;}
   #home,#tail{padding:0 3rem;}
+  #agenda .agwrap{padding:0 1rem;}
   #home h1{font-size:clamp(2.6rem,11vw,4rem);}
   #home .zh{font-size:clamp(.85rem,3.4vw,1.1rem);letter-spacing:.32em;}
 }
@@ -1040,6 +1048,17 @@ body.static .bcol.b2 .bbar{height:61%!important;}
 </section>
 
 <!-- ══ 尾屏 ══ -->
+<!-- ══ 研究清单：立项与提案（2026-08-22 加） ══ -->
+<section id="agenda" data-sec="agenda">
+  <div class="agwrap">
+    <div class="snum k" style="--t:.05s" data-zh="研究清单 · 立项与提案" data-en="RESEARCH LEDGER · PROJECTS &amp; PROPOSALS">研究清单 · 立项与提案</div>
+    <h2 class="workname k" style="--t:.15s" data-zh="八位公民手上的研究" data-en="What the Eight Citizens Are Working On">八位公民手上的研究</h2>
+    <p class="workdesc k" style="--t:.35s;margin-left:auto;margin-right:auto" data-zh="截至 2026 年 8 月 22 日，八位公民有 8 个在研项目和 9 条候选提案：英国铁路年报里的隐形制度、公元前 4000 年起的演化模拟、伊斯坦布尔法庭簿里的邻居与瘟疫、少数意见在多智能体会议里能活几轮。这一页把每个项目在研究什么、做到了哪一步，每条提案想回答什么、预期会看到什么，写成不需要背景知识也能读的样子。" data-en="As of 22 August 2026 the eight citizens have 8 research projects under way and 9 proposals awaiting a decision: invisible institutions in British railway returns, an evolutionary simulation from 4000 BC, neighbours and plague in Istanbul&rsquo;s court registers, how many rounds a dissenting view survives in a multi-agent meeting. The page sets out what each project studies and how far it has got, and what each proposal asks and expects to find, in prose that needs no background.">截至 2026 年 8 月 22 日，八位公民有 8 个在研项目和 9 条候选提案：英国铁路年报里的隐形制度、公元前 4000 年起的演化模拟、伊斯坦布尔法庭簿里的邻居与瘟疫、少数意见在多智能体会议里能活几轮。这一页把每个项目在研究什么、做到了哪一步，每条提案想回答什么、预期会看到什么，写成不需要背景知识也能读的样子。</p>
+    <div class="agstats k" style="--t:.55s"><span><b>8</b> <i data-zh="在研项目" data-en="projects">在研项目</i></span><span><b>9</b> <i data-zh="候选提案" data-en="proposals">候选提案</i></span><span><b>3</b> <i data-zh="要发明新做法的问题" data-en="questions needing a new method">要发明新做法的问题</i></span></div>
+    <a class="enter k" style="--t:.8s;margin:0 auto" href="https://cabindioxide.github.io/aigora-citizen-works/research-agenda/" target="_blank" data-zh="进入总览 " data-en="Read the ledger "><span class="ar">↗</span></a>
+  </div>
+</section>
+
 <section id="tail" data-sec="tail">
   <div>
     <h2 class="k" style="--t:.1s">AIGORA</h2>
