@@ -32,7 +32,11 @@ h1{font-size:26px;font-weight:600;margin:0 0 4px;letter-spacing:.02em}
 .layers button[aria-pressed=true]{border-color:var(--ac);color:var(--fg);background:var(--acs)}
 .stage{position:relative;background:#0b1d33;border-radius:4px;overflow:hidden;min-height:220px}
 .stage img{width:100%;display:block}
-.stage .ld{position:absolute;inset:0;display:grid;place-items:center;color:var(--dim);font-size:13px}
+.stage .ld{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:10px;
+  color:var(--dim);font-size:13px;background:rgba(11,29,51,.86);text-align:center;padding:20px}
+.stage .ld .pb{width:220px;height:3px;background:var(--line);border-radius:2px;overflow:hidden}
+.stage .ld .pb i{display:block;height:100%;width:0;background:var(--ac);transition:width .18s}
+.stage img{transition:opacity .12s}
 .bar{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
 .bar button{background:var(--acs);border:1px solid var(--ac);color:var(--fg);
   padding:6px 16px;border-radius:3px;cursor:pointer;font-size:13px;min-width:74px}
@@ -76,7 +80,10 @@ html[data-lang=zh] .en,html[data-lang=en] .zh{display:none}
 
 <div class="panel">
   <div class="layers" id="layers"></div>
-  <div class="stage"><div class="ld" id="ld">载入中…</div><img id="im" alt=""></div>
+  <div class="stage">
+    <div class="ld" id="ld"><span id="ldt">准备中…</span><span class="pb"><i id="ldb"></i></span></div>
+    <img id="im" alt="">
+  </div>
   <div class="bar">
     <button id="play">▶ <span class="zh">播放</span><span class="en">Play</span></button>
     <input type="range" id="sl" min="0" max="110" value="0">
@@ -151,9 +158,11 @@ const PERIODS=[...Array(110).keys()].map(i=>i*10).concat([1099]);
 let layer='owner', idx=0, timer=null, SERIES=null;
 const im=document.getElementById('im'), sl=document.getElementById('sl'),
       yr=document.getElementById('yr'), ld=document.getElementById('ld'),
+      ldt=document.getElementById('ldt'), ldb=document.getElementById('ldb'),
       stats=document.getElementById('stats');
 const pad=n=>String(n).padStart(4,'0');
 const isEN=()=>document.documentElement.getAttribute('data-lang')==='en';
+const CACHE={};          // layer -> {imgs:[Image], done:n, total:n, ready:bool}
 
 const lb=document.getElementById('layers');
 LAYERS.forEach(L=>{
@@ -161,10 +170,42 @@ LAYERS.forEach(L=>{
   b.innerHTML='<span class="zh">'+L.zh+'</span><span class="en">'+L.en+'</span>';
   b.setAttribute('aria-pressed', L.k===layer);
   b.onclick=()=>{layer=L.k; [...lb.children].forEach(c=>c.setAttribute('aria-pressed','false'));
-    b.setAttribute('aria-pressed','true'); show(idx);};
+    b.setAttribute('aria-pressed','true'); preload(L.k); show(idx);};
   lb.appendChild(b);
 });
 
+// 整批预加载一个图层的全部帧。逐帧现取在慢网络上会一直卡在"载入中"，
+// 而这一页的用途是连续播放，所以先把一层 111 帧都取下来再放行。
+function preload(k){
+  if(CACHE[k]) return CACHE[k];
+  const c={imgs:new Array(PERIODS.length), done:0, total:PERIODS.length, ready:false, failed:0};
+  CACHE[k]=c;
+  PERIODS.forEach((p,i)=>{
+    const g=new Image();
+    g.onload=()=>{c.done++; tick(k);};
+    g.onerror=()=>{c.done++; c.failed++; tick(k);};
+    g.src='frames/'+k+'_i'+pad(p)+'.png';
+    c.imgs[i]=g;
+  });
+  tick(k);
+  return c;
+}
+function tick(k){
+  const c=CACHE[k]; if(!c) return;
+  if(c.done>=c.total) c.ready=true;
+  if(k!==layer) return;
+  const pct=Math.round(100*c.done/c.total);
+  ldb.style.width=pct+'%';
+  if(c.ready){
+    ld.style.display='none';
+    im.style.opacity='1';
+    if(c.failed) ldt.textContent=isEN()?(c.failed+' frames failed'):('有 '+c.failed+' 帧没取到');
+    show(idx);
+  }else{
+    ld.style.display='grid';
+    ldt.textContent=(isEN()?'Loading frames ':'正在载入这一层的动画帧 ')+c.done+'/'+c.total;
+  }
+}
 function fmt(n){
   if(n>=1e9) return (n/1e9).toFixed(2)+'B';
   if(n>=1e6) return (n/1e6).toFixed(1)+'M';
@@ -179,13 +220,15 @@ function yearLabel(p){
 function show(i){
   idx=i; sl.value=i;
   const p=PERIODS[i];
-  ld.style.display='grid'; ld.textContent=isEN()?'loading…':'载入中…';
-  im.src='frames/'+layer+'_i'+pad(p)+'.png';
+  const c=CACHE[layer]||preload(layer);
+  if(c.ready){
+    const g=c.imgs[i];
+    if(g && g.naturalWidth) im.src=g.src;
+    ld.style.display='none';
+  }
   yr.textContent=yearLabel(p)+(isEN()?'  · period '+p:'  · 期 '+p);
   drawStats(p);
 }
-im.onload=()=>{ld.style.display='none'};
-im.onerror=()=>{ld.textContent=isEN()?'frame missing':'该帧缺失'};
 
 function drawStats(p){
   if(!SERIES) return;
@@ -200,9 +243,11 @@ function drawStats(p){
 sl.oninput=()=>show(+sl.value);
 document.getElementById('play').onclick=function(){
   if(timer){clearInterval(timer);timer=null;this.innerHTML='▶ <span class="zh">播放</span><span class="en">Play</span>';return}
+  const c=CACHE[layer]; if(!c||!c.ready){tick(layer);return}
   this.innerHTML='❚❚ <span class="zh">暂停</span><span class="en">Pause</span>';
   timer=setInterval(()=>show((idx+1)%PERIODS.length),240);
 };
+preload('owner');
 fetch('series.json').then(r=>r.json()).then(d=>{SERIES=d; drawStats(PERIODS[idx]);}).catch(()=>{});
 show(0);
 
