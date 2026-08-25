@@ -24,10 +24,10 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);}
-main{height:100vh;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth;}
+main{height:100vh;overflow-y:auto;scroll-snap-type:y proximity;scroll-behavior:smooth;}
 body.static main{scroll-behavior:auto;}
 section{
-  height:100vh;scroll-snap-align:start;position:relative;overflow:hidden;
+  min-height:100vh;height:auto;scroll-snap-align:start;position:relative;overflow:hidden;
   display:flex;flex-direction:column;cursor:default;
   --ac:#c79a44;--acs:rgba(199,154,68,.14);
   background-image:
@@ -45,7 +45,7 @@ section.c-vox{--ac:#b3a5d9;--acs:rgba(179,165,217,.14);}
 section.c-qianxing{--ac:#d98e63;--acs:rgba(217,142,99,.14);}
 section.c-memoria{--ac:#b58339;--acs:rgba(181,131,57,.14);}
 #bar{position:fixed;top:0;left:0;height:2px;background:#c79a44;width:0;z-index:10;transition:width .25s;}
-.corner{position:fixed;bottom:1rem;z-index:9;font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(240,234,217,.3);}
+.corner{position:fixed;bottom:1rem;z-index:9;pointer-events:none;font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(240,234,217,.3);}
 .corner.l{left:clamp(1.2rem,3.5vw,3.2rem);}
 .corner.r{right:clamp(1.2rem,3.5vw,3.2rem);}
 /* 语言开关 */
@@ -73,7 +73,7 @@ section.play .k{animation:kIn .65s ease forwards;animation-delay:var(--t,0s);}
 /* 通用件 */
 .snum{font-family:var(--mono);font-size:clamp(.66rem,.92vw,.78rem);color:var(--ac);letter-spacing:.2em;margin-bottom:clamp(.7rem,1.6vh,1.1rem);font-weight:500;}
 .split{flex:1;display:flex;min-height:0;align-items:stretch;}
-.tcol{display:flex;flex-direction:column;justify-content:center;padding:0 clamp(1.4rem,4vw,4rem);}
+.tcol{display:flex;flex-direction:column;justify-content:center;padding:clamp(1rem,3vh,2.4rem) clamp(1.4rem,4vw,4rem) clamp(3rem,7vh,4.5rem);}
 .icol{display:flex;align-items:center;justify-content:center;padding:clamp(1.2rem,3vw,3rem);position:relative;}
 h1.cname{font-family:var(--disp);font-weight:400;font-size:clamp(2.8rem,7vw,5.6rem);line-height:1.05;letter-spacing:.06em;margin-bottom:.4rem;}
 .ename{font-family:var(--disp);font-size:clamp(.95rem,1.7vw,1.4rem);color:var(--ac);letter-spacing:.1em;margin-bottom:clamp(.9rem,2vh,1.3rem);line-height:1.25;min-height:1.3em;}
