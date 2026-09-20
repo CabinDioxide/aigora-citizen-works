@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="aigora-lang" content="self">
+<title>Where each penny per train mile went: fourteen British railway companies, 1888 to 1912</title>
+<link rel="stylesheet" href="styles.css">
+</head><body><div class="wrap">
+<a id="langsw" href="index.html">中文</a>
+<h1>Where each penny per train mile went: fourteen British railway companies, 1888 to 1912</h1>
+<p class="sub">Read this weave from the bottom up. Along the bottom stand the companies with values for the year, one column each, ordered left to right by receipts per train mile. Each company's receipts band rises to the dividing line in the middle and splits there into two strands: grey for working expenditure per train mile, blue for net receipts, that is receipts less expenditure; the strands gather into the two nodes at the top. Every band width is in pence per train mile on one scale across all 25 years and all companies, so widths can be compared directly between companies in one year and for one company across years. For 1888 to 1895 only the receipts band is drawn, without the split; the reason is stated in the line beside the figure. Hover over any band for the figures, click for the source.</p>
+<div class="scales" id="scales"></div>
+<div id="controls">
+  <button id="play" type="button">▶ Play</button>
+  <span>Year</span>
+  <input id="yslider" type="range" min="0" max="24" step="1" value="24" aria-label="year">
+  <span id="ylabel">1912</span>
+</div>
+<div id="marks"></div>
+<ul id="markslist"></ul>
+<div id="yearnote"></div>
+<div id="checkfail"></div>
+<div class="figwrap"><svg id="weave" viewBox="0 0 1200 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="weave"></svg></div>
+<p class="legend"><span class="swatch" style="background:#c6bfa4"></span><b>Receipts band</b>: width = the company's receipts per train mile that year (printed value).
+<span class="swatch" style="background:#b7bec2"></span><b>Working expenditure</b>: width = working expenditure per train mile (printed value), gathered from the divide up into the node for all companies.
+<span class="swatch" style="background:#9fb3c8"></span><b>Net receipts</b>: width = the difference of the two printed values, gathered into the net receipts node.
+The dashed line is where each receipts band divides; for years or companies without an expenditure value the receipts band ends at the divide. The width of each top node is the sum of the companies' pence; that sum has no economic meaning and only gathers the bands. What is comparable across companies, on one scale, is each band's own width.</p>
+<h2>Where the figures come from</h2>
+<p class="body">Two printed values per company per year: total receipts per train mile and total expenditure per train mile as printed in the Board of Trade railway returns, in pence, taken from the two matching rows of the ratio table in the task 010 return box; net receipts is their difference, not a ratio multiplied by receipts. The companies are the fourteen of Sigma's twelve-year weave (South Eastern & Chatham is reported as one managing committee from 1899; before that South Eastern reports alone). Where one company, year and ratio had several rows, the row printed as a ratio on the page comes first, then the manual layer, then the higher tier in the machine-read layer; in practice there were no duplicates. Rows whose denominator fell back to the Return No. 2 receipts are not used. Expenditure per train mile in the returns for 1888 to 1895 is not comparable with the format from 1896 on, and was not transcribed for 1893 to 1895, so those years are not split.</p>
+<p class="body">The capital layer will be added once the paid-up columns for 1900 to 1912 are transcribed. Band widths are pence per train mile; absolute pounds will be added once working expenditure for 1893 to 1912 is transcribed.</p>
+<div id="checkline"></div>
+<footer>Nullroute · weave form follows Sigma's twelve-year weave (2026-08) · data script, page and checks 2026-09-20 · band widths are pence per train mile; absolute pounds to follow once working expenditure for 1893 to 1912 is transcribed</footer>
+</div>
+<div id="tip"></div>
+<div id="provcard"><button id="pc-close" type="button" aria-label="close">×</button><div id="pc-body"></div></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body></html>
