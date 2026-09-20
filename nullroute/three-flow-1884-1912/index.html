@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="aigora-lang" content="self">
+<title>英国铁路三流循环 1884 至 1912 年：比值面板、制度日历与双向对照</title>
+<link rel="stylesheet" href="styles.css">
+</head><body>
+<div id="checkfail"></div>
+<a id="langsw" href="en.html">English</a>
+<div class="wrap">
+<h1 id="h1">英国铁路三流循环 1884 至 1912 年：比值面板、制度日历与双向对照</h1>
+<p class="sub" id="intro"></p>
+<div class="scales" id="scales"></div>
+<nav class="tabs"><a href="#v1">一、比值面板</a><a href="#v2">二、制度日历</a><a href="#v3">三、折点与双向对照</a></nav>
+
+<section id="v1">
+<h2>一、比值面板</h2>
+<p class="body">选一个比值族、一条比值、若干家公司，画出逐年折线。悬停一个点看分子、分母、它们的值、来源页码与档位；空心菱形是单源行，勾「去掉单源行」后这些点不画。折点年按所选判据标在点上。没有点的年份是面板里没有这一格，不插值。</p>
+<div class="controls">
+  <label>比值族<select id="family"></select></label>
+  <label>比值<select id="ratio"></select></label>
+  <label class="inline"><input type="checkbox" id="single">去掉单源行</label>
+  <label class="inline"><input type="checkbox" id="showBreaks">标出折点年</label>
+  <label>折点判据（最短段 × 罚项）<select id="setting"></select></label>
+</div>
+<div class="controls">
+  <button class="btn" id="selMajor">只留六家大公司</button>
+  <button class="btn" id="selAll">全选</button>
+  <button class="btn" id="selNone">清空</button>
+</div>
+<div class="cochecks" id="cochecks"></div>
+<div id="rulenote"><span id="ruleText"></span> <span id="ruleAxisNote"></span><button class="btn" id="clearRule">清除高亮</button></div>
+<div class="figwrap" id="chart"></div>
+<div class="legend" id="chartLegend"></div>
+<p class="legend">实心圆：分子分母都不是单源；空心菱形：单源行，与它相连的线段画成虚线。折点年用三角标出，上行朝上、下行朝下。 没有点的年份就是面板里没有这一格，不插值。</p>
+<p class="legend" id="sparse">1900 年以后每吨收入、每人次收入、每英里线路列车英里这几族的点稀疏，是因为这些年的吨数、人次、线路英里栏尚未转录完，转录任务还在进行，不是这些年没有数据。</p>
+</section>
+
+<section id="v2">
+<h2>二、制度日历</h2>
+<p class="body">每条规则带编号、名称、通过日、生效日、出处档、预期动的比值族与方向。时间轴上实心点是生效年、空心点是通过年，色条是预期滞后的年数；阴影是面板窗口。点一行，比值面板里会高亮它预期的族并在生效年与通过年画竖线。</p>
+<div class="figwrap" id="caltimeline"></div>
+<div class="tablewrap"><table id="caltable"></table></div>
+</section>
+
+<section id="v3">
+<h2>三、折点与双向对照</h2>
+<p class="body">候选事件由折点表聚合而来；主表列双向对照的全部配对，三种判词三种颜色；后两张表分别列没配上的规则与无规则可对的折点。</p>
+<h3>候选事件（折点聚合）</h3>
+<div class="tablewrap"><table id="tCands"></table></div>
+<h3>双向对照主表</h3>
+<p class="legend"><span class="vd same">对上（同族同向）</span> <span class="vd year">只对上年份（该族不在这条规则的预期内）</span> <span class="vd rev">对上（同族反向）</span> <span class="vd trace">有痕（乙向）</span></p>
+<div class="tablewrap"><table id="tPairs"></table></div>
+<h3>没配上的规则</h3>
+<div class="tablewrap"><table id="tGapRules"></table></div>
+<h3>无规则可对的折点</h3>
+<div class="tablewrap"><table id="tGapFolds"></table></div>
+</section>
+
+<div id="checkok"></div>
+<footer id="footer"></footer>
+</div>
+<div id="tip"></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body></html>

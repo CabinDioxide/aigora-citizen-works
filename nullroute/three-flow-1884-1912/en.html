@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="aigora-lang" content="self">
+<title>British railways, the three-flow circuit 1884–1912: ratio panel, institutional calendar and two-way matching</title>
+<link rel="stylesheet" href="styles.css">
+</head><body>
+<div id="checkfail"></div>
+<a id="langsw" href="index.html">中文</a>
+<div class="wrap">
+<h1 id="h1">British railways, the three-flow circuit 1884–1912: ratio panel, institutional calendar and two-way matching</h1>
+<p class="sub" id="intro"></p>
+<div class="scales" id="scales"></div>
+<nav class="tabs"><a href="#v1">1. Ratio panel</a><a href="#v2">2. Institutional calendar</a><a href="#v3">3. Folds and two-way matching</a></nav>
+
+<section id="v1">
+<h2>1. Ratio panel</h2>
+<p class="body">Choose a ratio family, one ratio and any number of companies to draw year-by-year lines. Hover a point to see numerator, denominator, their values, source pages and tiers; hollow diamonds are single-source rows, and they disappear when "Drop single-source rows" is ticked. Fold years are marked on the points under the chosen criterion. A year without a point is a cell missing from the panel; nothing is interpolated.</p>
+<div class="controls">
+  <label>Ratio family<select id="family"></select></label>
+  <label>Ratio<select id="ratio"></select></label>
+  <label class="inline"><input type="checkbox" id="single">Drop single-source rows</label>
+  <label class="inline"><input type="checkbox" id="showBreaks">Mark fold years</label>
+  <label>Fold criterion (min segment × penalty)<select id="setting"></select></label>
+</div>
+<div class="controls">
+  <button class="btn" id="selMajor">Six large companies only</button>
+  <button class="btn" id="selAll">Select all</button>
+  <button class="btn" id="selNone">Clear</button>
+</div>
+<div class="cochecks" id="cochecks"></div>
+<div id="rulenote"><span id="ruleText"></span> <span id="ruleAxisNote"></span><button class="btn" id="clearRule">Clear highlight</button></div>
+<div class="figwrap" id="chart"></div>
+<div class="legend" id="chartLegend"></div>
+<p class="legend">Filled circle: neither numerator nor denominator is single-source; hollow diamond: single-source row, with the adjoining segments dashed. Fold years are marked with triangles, pointing up or down. A year without a point is a cell missing from the panel; nothing is interpolated.</p>
+<p class="legend" id="sparse">After 1900 the points in receipts per ton, receipts per passenger and train miles per route mile are sparse because the tons, passengers and route-miles columns for those years have not yet been fully transcribed; the transcription is still in progress. It does not mean there is no data for those years.</p>
+</section>
+
+<section id="v2">
+<h2>2. Institutional calendar</h2>
+<p class="body">Each rule carries a code, name, date passed, date effective, source class, and the ratio families and direction it is expected to move. On the timeline the filled dot is the effective year, the hollow dot the passing year, the bar the expected lag in years; the shaded band is the panel window. Click a row to highlight its expected families in the ratio panel and draw vertical lines at the effective and passing years.</p>
+<div class="figwrap" id="caltimeline"></div>
+<div class="tablewrap"><table id="caltable"></table></div>
+</section>
+
+<section id="v3">
+<h2>3. Folds and two-way matching</h2>
+<p class="body">Candidate events are aggregated from the fold table; the main table lists every pair of the two-way matching, with three verdicts in three colours; the last two tables list the rules that were not matched and the folds with no rule to match.</p>
+<h3>Candidate events (aggregated folds)</h3>
+<div class="tablewrap"><table id="tCands"></table></div>
+<h3>Two-way matching, main table</h3>
+<p class="legend"><span class="vd same">Matched: same family, same direction</span> <span class="vd year">Year only: family not in the rule's expectation</span> <span class="vd rev">Matched: same family, opposite direction</span> <span class="vd trace">Trace found (direction B)</span></p>
+<div class="tablewrap"><table id="tPairs"></table></div>
+<h3>Rules not matched</h3>
+<div class="tablewrap"><table id="tGapRules"></table></div>
+<h3>Folds with no rule to match</h3>
+<div class="tablewrap"><table id="tGapFolds"></table></div>
+</section>
+
+<div id="checkok"></div>
+<footer id="footer"></footer>
+</div>
+<div id="tip"></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body></html>
