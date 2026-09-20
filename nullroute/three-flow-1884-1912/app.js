@@ -597,8 +597,7 @@
 
   // ------------------------------------------------------------ 启动
   function init() {
-    document.title = T.title;
-    $('h1').textContent = T.title;
+    // 标题与 h1 由页面本身写定（2026-09-20 起是结论句），脚本不再覆盖。
     $('intro').innerHTML = intro();
     $('langsw').textContent = T.lswitch; $('langsw').href = T.lhref;
     scalesStrip();
