@@ -269,7 +269,7 @@ sh-shipbuilding 节点已读过这件事的前半场（301 调查如何把造船
 
 <!-- monitor:begin 由 monitor/build_monitor.py 每日重写，不要手改 -->
 
-## 观测（2026-09-20，自动生成）
+## 观测（2026-09-21，自动生成）
 
 今日状态：红。信号来自战区监测（monitor/atlas_map.py 里这个节点挂的实测序列），证据档 measured；只报偏离，不判断原因。
 

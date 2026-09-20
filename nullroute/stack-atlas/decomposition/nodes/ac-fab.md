@@ -306,13 +306,13 @@ ac-fab 自己绕不开的东西，每一项都可能是再下一层的单点：
 
 <!-- monitor:begin 由 monitor/build_monitor.py 每日重写，不要手改 -->
 
-## 观测（2026-09-20，自动生成）
+## 观测（2026-09-21，自动生成）
 
 今日状态：橙。信号来自战区监测（monitor/atlas_map.py 里这个节点挂的实测序列），证据档 measured；只报偏离，不判断原因。
 
 | 战区 | 信号 | 今天 | 基线 | 比值 | 状态 |
 |---|---|---|---|---|---|
-| 台海 | Taiwan Strait | 229.4 | 227.7 | 1.01 | green |
+| 台海 | Taiwan Strait | 229.4 | 227.4 | 1.01 | green |
 | 台海 | hsinchu_science_park | 影像有局部变化，无热异常 |  |  | amber |
 | 台海 | tainan_science_park | 不可判读 |  |  | gray |
 
