@@ -1,0 +1,81 @@
+/* 综合仪表盘壳：总览、栈、传导链、代价四个视图与抽屉。战区页自身的样式在 dashboard.css。 */
+.ov{display:grid;grid-template-columns:2fr 1fr;gap:14px;align-items:start}
+.ov .mapwrap{background:var(--panel);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+#m_overview{height:600px}
+.ov .side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.ov .tgroup{background:var(--panel);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow)}
+.ov .tgroup h3{margin:0 0 6px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;cursor:pointer}
+.ov .tgroup h3 .st{width:10px;height:10px;border-radius:50%;display:inline-block}
+.ov .tgroup .tiles{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ov .tgroup .tile{padding:8px 10px}
+.ov .tgroup .tile .v{font-size:18px}
+.ov .tgroup .rd{font-size:12.5px;color:var(--ink2);margin-top:6px;line-height:1.5}
+.alerts{background:var(--panel);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow);margin-top:14px}
+.alerts table{width:100%;border-collapse:collapse;font-size:13px}
+.alerts th{text-align:left;color:var(--ink3);font-weight:500;padding:4px 8px;border-bottom:1px solid var(--line)}
+.alerts td{padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.lv{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.lv.red{background:var(--st-stopped)}.lv.amber{background:var(--st-narrowed)}.lv.green{background:var(--st-inuse)}.lv.gray{background:var(--st-unknown)}
+.ev{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11px;border:1px solid var(--line2);color:var(--ink2)}
+.ev.measured{background:#e6f0ff;color:#1a4fa3;border-color:#b9cff5}
+.ckring{border-radius:50%}
+.ovlegend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink2);padding:8px 14px;border-top:1px solid var(--line)}
+.ovlegend i{display:inline-block;width:12px;height:12px;border-radius:50%;border:3px solid;vertical-align:middle;margin-right:4px;background:#fff}
+/* 栈视图 */
+.stacks{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.stackcol{background:var(--panel);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow)}
+.stackcol h3{margin:4px 0 8px;font-size:14px;font-weight:600}
+.stk{margin-bottom:10px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stk .sh{padding:6px 10px;font-size:13px;font-weight:600;background:var(--panel2);display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.stk .sh .cnt{font-weight:400;color:var(--ink3);font-size:12px}
+.stk .rows{display:none;padding:4px 8px 8px}
+.stk.open .rows{display:block}
+.lrow{display:flex;gap:6px;align-items:flex-start;padding:4px 0;border-top:1px solid var(--line)}
+.lrow .ln{width:92px;flex:none;font-size:11.5px;color:var(--ink3);padding-top:4px}
+.lrow .nodes{display:flex;flex-wrap:wrap;gap:5px}
+.nd{position:relative;border:1px solid var(--line2);background:#fff;border-radius:8px;padding:3px 9px 3px 9px;font-size:12.5px;cursor:pointer;line-height:1.4}
+.nd:hover,.nd.hl{border-color:var(--hl);box-shadow:0 0 0 2px var(--hl-soft)}
+.nd .dot{position:absolute;top:-4px;right:-4px;width:10px;height:10px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.15)}
+.nd .dot.red{background:var(--st-stopped)}.nd .dot.amber{background:var(--st-narrowed)}.nd .dot.green{background:var(--st-inuse)}.nd .dot.gray{background:var(--st-unknown)}
+.nd.s-blocked{border-style:dashed}
+/* 抽屉 */
+.drawer{position:fixed;top:0;right:-560px;width:540px;max-width:92vw;height:100vh;background:var(--panel);box-shadow:-4px 0 24px rgba(0,0,0,.12);z-index:2000;overflow:auto;padding:18px 20px 40px;transition:right .2s}
+.drawer.on{right:0}
+.drawer .close{position:absolute;top:10px;right:12px;border:none;background:rgba(0,0,0,.06);border-radius:50%;width:28px;height:28px;font-size:16px;cursor:pointer}
+.drawer h2{margin:6px 0 4px;font-size:16px}
+.drawer h4{margin:14px 0 6px;font-size:13px;color:var(--ink2);font-weight:600}
+.drawer table{width:100%;border-collapse:collapse;font-size:12.5px}
+.drawer td,.drawer th{padding:4px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.drawer .chip{display:inline-block;background:rgba(0,0,0,.06);border-radius:999px;padding:2px 9px;font-size:12px;margin:2px 3px 2px 0;cursor:pointer}
+.drawer .chip:hover{background:var(--hl-soft)}
+.drawer canvas{width:100%!important;height:120px!important}
+/* 传导链与代价：两个视图都是整页嵌进来的 iframe */
+#t_transmission iframe,#t_cost iframe{width:100%;height:calc(100vh - 80px);border:none;border-radius:14px;background:#fff}
+/* 总览顶部去「代价」视图的入口 */
+.costbanner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0 14px;padding:11px 14px;border-radius:12px;cursor:pointer;
+  background:linear-gradient(90deg,#fff7ea,#fdecec);border:1px solid #f0d3bb;box-shadow:var(--shadow)}
+.costbanner:hover{border-color:#e08a4e;box-shadow:0 0 0 2px rgba(224,138,78,.18),var(--shadow)}
+.costbanner:focus-visible{outline:2px solid #e08a4e;outline-offset:2px}
+.costbanner .cb-tag{flex:none;background:#eb6834;color:#fff;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600}
+.costbanner .cb-text{font-size:14px;font-weight:600;color:#1d1d1f}
+.costbanner .cb-cta{margin-left:auto;font-size:13px;color:#c2521f;white-space:nowrap}
+
+/* 头部：标题与导航不换行，说明文字可截断 */
+header h1{white-space:nowrap}
+header .meta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
+nav{flex:none}
+nav a,nav button{white-space:nowrap}
+
+/* 语言链接（页头右侧，指向另一语言的页面）与数据里未翻译中文的标注 */
+a.lang{flex:none;margin-left:8px;border:1px solid var(--line2);border-radius:999px;padding:3px 11px;font-size:12px;color:var(--ink2);text-decoration:none;white-space:nowrap}
+a.lang:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.zh{font-size:10.5px;color:var(--ink3);margin-left:2px}
+
+/* 窄屏：导航加到七个按钮后，英文页头会把整页挤出横向滚动条。
+   1060px 以下收起说明文字，940px 以下让页头换到第二行。 */
+@media (max-width:1060px){header .meta{display:none}}
+@media (max-width:940px){
+  header{flex-wrap:wrap;row-gap:8px}
+  nav{flex:1 1 100%;order:2;display:flex;flex-wrap:wrap;gap:6px}
+  a.lang{order:1;margin-left:auto}
+}

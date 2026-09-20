@@ -633,9 +633,34 @@ button.eae-chip{appearance:none}
 .dep-link.rel-new-energy{stroke:var(--stack-ne)}
 .dep-link.rel-telecom{stroke:var(--stack-tc)}
 
-/* ---- bilingual UI (2026-07-10): English sub-lines for labels & explanatory copy ---- */
-.en-t{color:var(--muted); font-size:11.5px; line-height:1.5}
-p.en-t{margin:4px 0 0; max-width:1100px}
-span.en-t{display:block; margin-top:2px}
-.linklabel .en{display:block; color:var(--muted); font-size:9.5px; margin-top:1px}
-.ev-label .ev-label-en{opacity:.72}
+/* ---- 2026-07-21 新增四条栈的配色（航运/工业基础件/航空/医药） --------------- */
+:root{
+  --stack-sh:#5fb0c8; --stack-im:#c99a6a; --stack-av:#9aa8c8; --stack-ph:#d98fb8;
+}
+.layer-row.tech-stack-shipping::before{background:var(--stack-sh)}
+.layer-row.tech-stack-industrial::before{background:var(--stack-im)}
+.layer-row.tech-stack-aviation::before{background:var(--stack-av)}
+.layer-row.tech-stack-pharma::before{background:var(--stack-ph)}
+.node.tech-stack-shipping{border-top-color:rgba(95,176,200,.75); background:linear-gradient(180deg,rgba(95,176,200,.08),#10151e 46%)}
+.node.tech-stack-industrial{border-top-color:rgba(201,154,106,.75); background:linear-gradient(180deg,rgba(201,154,106,.08),#10151e 46%)}
+.node.tech-stack-aviation{border-top-color:rgba(154,168,200,.75); background:linear-gradient(180deg,rgba(154,168,200,.08),#10151e 46%)}
+.node.tech-stack-pharma{border-top-color:rgba(217,143,184,.75); background:linear-gradient(180deg,rgba(217,143,184,.08),#10151e 46%)}
+.node.hl.tech-stack-shipping{outline-color:var(--stack-sh); background:rgba(95,176,200,.16)}
+.node.hl.tech-stack-industrial{outline-color:var(--stack-im); background:rgba(201,154,106,.16)}
+.node.hl.tech-stack-aviation{outline-color:var(--stack-av); background:rgba(154,168,200,.16)}
+.node.hl.tech-stack-pharma{outline-color:var(--stack-ph); background:rgba(217,143,184,.16)}
+.dep-link.rel-shipping{stroke:var(--stack-sh)}
+.dep-link.rel-industrial{stroke:var(--stack-im)}
+.dep-link.rel-aviation{stroke:var(--stack-av)}
+.dep-link.rel-pharma{stroke:var(--stack-ph)}
+
+/* ---- 子节点小节（父节点详情档案下方；Nullroute 07-21 放法甲） ---------------- */
+.arch-subnodes{margin-top:12px; padding-top:9px; border-top:1px dashed #2f4a41}
+.arch-subnodes-lab{font-size:11px; color:#8fd0b2; text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px}
+.arch-subnode{margin:6px 0; border:1px solid var(--line); border-radius:6px; background:rgba(14,17,22,.4)}
+.arch-subnode>summary{cursor:pointer; padding:6px 9px; font-size:12px; color:#cfe0d8; list-style-position:inside}
+.arch-subnode>summary:hover{color:var(--hl)}
+.arch-subnode[open]>summary{border-bottom:1px solid var(--line)}
+.arch-subnode .subnode-name{font-weight:600; margin-right:6px}
+.arch-subnode-body{padding:8px 10px}
+.arch-subnode-body .arch-meta{display:block; margin-bottom:6px}

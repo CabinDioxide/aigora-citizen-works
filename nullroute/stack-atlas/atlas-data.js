@@ -220,8 +220,12 @@ window.ATLAS_DATA = {
           countries: ["QA"], companies: ["qatargas"], chokepoints: ["hormuz"], gap_zh: "", gap_en: "" },
         { id: "en-tanker",  layer: "L1", label_zh: "油轮/LNG 航道", label_en: "Tanker / LNG routes", status: "contested", evidence: "source-linked",
           countries: ["JP","KR","CN","IN"], companies: [], chokepoints: ["hormuz","malacca","babelmandeb"], gap_zh: "保险/重航成本 needs source", gap_en: "Insurance / rerouting cost: needs source" },
-        { id: "en-refinery",layer: "L1", label_zh: "炼厂", label_en: "Refining", status: "dependent", evidence: "unknown",
-          countries: ["CN","IN","SG"], companies: [], chokepoints: [], gap_zh: "各国炼能与依赖度 needs source", gap_en: "Refining capacity & dependency: needs source" },
+        /* 2026-07-21：en-refine 取代旧空壳 en-refinery（Nullroute 07-21 拍板甲）。
+         * 同主题、现有真档案（decomposition/nodes/en-refine.md）；接能源栈 L1 位。
+         * 骨架节点：状态/证据待 Nullroute 定级，深度由 data/node-archives.js 管道加载。 */
+        { id: "en-refine",  layer: "L1", label_zh: "炼化产能", label_en: "Refining capacity", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
         { id: "en-reserve", layer: "L2", label_zh: "战略储备", label_en: "Strategic reserves", status: "unknown", evidence: "unknown",
           countries: ["CN","JP","KR","IN"], companies: [], chokepoints: [], gap_zh: "储备天数为非公开/估算，标 unknown", gap_en: "Reserve days are non-public/estimated; unknown" },
         { id: "en-sanction",layer: "L3", label_zh: "能源制裁/价格上限", label_en: "Energy sanctions / price cap", status: "contested", evidence: "source-linked",
@@ -266,6 +270,13 @@ window.ATLAS_DATA = {
           countries: [], companies: [], chokepoints: [],
           gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
         { id: "ag-grain",         layer: "L1", label_zh: "全球粮食贸易", label_en: "Global grain trade", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        /* 2026-07-21 新增（Nullroute 07-21 拍板：进现有农业栈 L0 投入品层，与 ag-fertilizer 并列）。 */
+        { id: "ag-pesticide",     layer: "L0", label_zh: "农药", label_en: "Pesticides", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        { id: "ag-seed",          layer: "L0", label_zh: "种子/性状", label_en: "Seeds & traits", status: "unknown", evidence: "unknown",
           countries: [], companies: [], chokepoints: [],
           gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" }
       ]
@@ -318,10 +329,117 @@ window.ATLAS_DATA = {
           gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案（档案层标 L0 物理·L1 系统，取 L1）", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive (archive 'L0/L1' mapped to L1)" },
         { id: "tc-mobile-chip", layer: "L1", label_zh: "移动芯片（智能手机 SoC）", label_en: "Mobile chips (smartphone SoC)", status: "unknown", evidence: "unknown",
           countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        /* 2026-07-21 新增（Nullroute 07-21 拍板：进现有通信栈 L1）。 */
+        { id: "tc-satcom",      layer: "L1", label_zh: "卫星通信", label_en: "Satellite comms", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" }
+      ]
+    },
+
+    /* ── 2026-07-21 新增四条栈（Nullroute 07-21 拍板：11 列先原样加、对真图判疏密）──
+     * 双语名与节点标签取自 decomposition/nodes/<id>.md 档案标题；层位按 03 布局稿。
+     * 全部骨架节点：结构关系与状态待 Nullroute 定级（不预填、不编造），
+     * 深度内容由 data/node-archives.js 档案管道接入详情抽屉。
+     * 7 个子节点（cm-germanium / re-graphite / re-metsilicon / re-wafer /
+     * im-machine-tools-cnc-controller / im-robots-reducer / im-robots-magnet）
+     * 不占独立栈位，挂在各自父节点详情里（见下方 subNodes 登记 + app.js 子节点小节）。 */
+    {
+      id: "shipping", name_zh: "航运/海运栈", name_en: "Shipping & Maritime Stack",
+      nodes: [
+        { id: "sh-shipbuilding", layer: "L0", label_zh: "造船产能", label_en: "Shipbuilding", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        { id: "sh-port-infra",   layer: "L0", label_zh: "港口基础设施", label_en: "Port infrastructure", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        { id: "sh-container",    layer: "L1", label_zh: "集装箱航运", label_en: "Container shipping", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        { id: "sh-lng-carrier",  layer: "L1", label_zh: "LNG 运输船", label_en: "LNG carriers", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" }
+      ]
+    },
+    {
+      id: "industrial", name_zh: "工业基础件栈", name_en: "Industrial Base Stack",
+      nodes: [
+        { id: "im-machine-tools", layer: "L0", label_zh: "数控机床", label_en: "CNC machine tools", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        { id: "im-bearings",      layer: "L0", label_zh: "精密轴承", label_en: "Precision bearings", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        { id: "im-industrial-gas", layer: "L0", label_zh: "工业气体", label_en: "Industrial gases", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        { id: "im-robots",        layer: "L1", label_zh: "工业机器人", label_en: "Industrial robots", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" }
+      ]
+    },
+    {
+      id: "aviation", name_zh: "航空栈", name_en: "Aviation Stack",
+      nodes: [
+        { id: "av-engine",   layer: "L0", label_zh: "航空发动机", label_en: "Aero engines", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        { id: "av-airframe", layer: "L0", label_zh: "商用客机机身", label_en: "Airframes", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        { id: "av-avionics", layer: "L1", label_zh: "航电系统", label_en: "Avionics", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        { id: "av-leasing",  layer: "L2", label_zh: "飞机租赁", label_en: "Aircraft leasing", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" }
+      ]
+    },
+    {
+      id: "pharma", name_zh: "医药栈", name_en: "Pharma Stack",
+      nodes: [
+        { id: "ph-api",       layer: "L0", label_zh: "原料药", label_en: "APIs", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        { id: "ph-generic",   layer: "L1", label_zh: "仿制药", label_en: "Generic drugs", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        { id: "ph-biotech",   layer: "L1", label_zh: "生物制剂", label_en: "Biologics", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        { id: "ph-vaccine",   layer: "L1", label_zh: "疫苗产能", label_en: "Vaccines", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
+          gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" },
+        { id: "ph-meddevice", layer: "L1", label_zh: "医疗设备", label_en: "Medical devices", status: "unknown", evidence: "unknown",
+          countries: [], companies: [], chokepoints: [],
           gap_zh: "骨架节点：关系/状态待 Nullroute 定级；深度内容见节点档案", gap_en: "Skeleton node: relations/status pending grading; depth loads from node archive" }
       ]
     }
   ],
+
+  /* 子节点登记（Nullroute 07-21 拍板放法甲：全部挂父节点详情，不占独立栈位）。
+   * 键 = 父节点网页 id；值 = 该父节点下的子节点（id + 双语显示名，取自档案标题短形）。
+   * app.js archiveBlock 读它，在父节点详情档案下方渲染「子节点」小节，
+   * 每个子节点点开显示它自己的 data/node-archives.js 档案内容。子节点自身不定级、不改档案正文。 */
+  subNodes: {
+    "cm-gallium": [
+      { id: "cm-germanium", label_zh: "锗", label_en: "Germanium" }
+    ],
+    "re-battery-material": [
+      { id: "re-graphite", label_zh: "石墨（电池负极材料）", label_en: "Graphite (battery anode)" }
+    ],
+    "re-polysilicon": [
+      { id: "re-metsilicon", label_zh: "金属硅/工业硅（上游）", label_en: "Metallurgical-grade silicon (upstream)" },
+      { id: "re-wafer", label_zh: "光伏硅片（下游）", label_en: "Solar wafers (downstream)" }
+    ],
+    "im-machine-tools": [
+      { id: "im-machine-tools-cnc-controller", label_zh: "数控系统", label_en: "CNC controller" }
+    ],
+    "im-robots": [
+      { id: "im-robots-reducer", label_zh: "精密减速器", label_en: "Precision reducer" },
+      { id: "im-robots-magnet", label_zh: "伺服电机磁体", label_en: "Servo-motor magnets" }
+    ]
+  },
 
   politicalStacks: [
     {
@@ -357,7 +475,7 @@ window.ATLAS_DATA = {
           gap_zh: "已核（NIST 一手）：USA Rare Earth CHIPS 直接拨款 $277M（贷款 $1.3B 另计，$1.6B 总包不可并表）；Intel CHIPS 奖励 $7.865B（2024-11），2025-08 转股权（约 $8.9B 换约 10% 股份）。其余补贴金额、项目状态、并网许可和本土替代进度需进 MAG v0.2",
           gap_en: "Verified (NIST primary): USA Rare Earth CHIPS direct grant $277M (loan $1.3B separate; $1.6B total not consolidatable); Intel CHIPS award $7.865B (2024-11), equitized 2025-08 (~$8.9B for ~10% stake). Remaining subsidy amounts, project status, permits, and substitution progress belong in MAG v0.2" },
         { id: "ps-domestic-price", layer: "P3", label_zh: "国内价格/就业/选举压力", label_en: "Domestic prices / jobs / electoral pressure", status: "contested", evidence: "unknown",
-          countries: ["US","CN","JP","KR","IN","DE"], companies: [], chokepoints: ["hormuz","malacca"], techNodes: ["en-reserve","en-refinery","en-narr","ac-narr"],
+          countries: ["US","CN","JP","KR","IN","DE"], companies: [], chokepoints: ["hormuz","malacca"], techNodes: ["en-reserve","en-refine","en-narr","ac-narr"],
           gap_zh: "本版只标出政治压力入口，不给强度评分；需要民调、价格、就业和政策响应数据", gap_en: "This version marks pressure entry points only; intensity needs polling, price, jobs, and response data" },
         { id: "ps-legitimacy-narratives", layer: "P4", label_zh: "国家安全/技术主权/能源安全叙事", label_en: "National-security / tech-sovereignty / energy-security narratives", status: "contested", evidence: "unknown",
           countries: ["US","CN","JP","KR","DE","IN"], companies: [], chokepoints: [], techNodes: ["ac-narr","en-narr","re-narr","ac-export","re-filter"],
