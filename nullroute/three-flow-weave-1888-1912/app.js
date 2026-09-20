@@ -13,7 +13,7 @@ var svgEl = $('weave');
 var NS = 'http://www.w3.org/2000/svg';
 var LY = D.layout, S = LY.px_per_d, NH = LY.node_h;
 var YEARS = D.years.map(function (y) { return y.year; });
-var state = { yi: YEARS.length - 1, lastRenderMs: null };
+var state = { yi: 0, lastRenderMs: null };  // 2026-09-20 主人问「为什么默认不停留在第一年」：默认停在第一年 1888，播放从头走起
 var CAL = {}; D.calendar.forEach(function (c) { CAL[c.year] = c; });
 var CO = D.companies;
 var NSAMP = 28;
