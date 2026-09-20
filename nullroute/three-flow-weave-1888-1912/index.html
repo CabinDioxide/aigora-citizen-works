@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="aigora-lang" content="self">
+<title>每列车英里收进的便士去了哪里：十四家英国铁路公司，1888 至 1912</title>
+<link rel="stylesheet" href="styles.css">
+</head><body><div class="wrap">
+<a id="langsw" href="en.html">English</a>
+<h1>每列车英里收进的便士去了哪里：十四家英国铁路公司，1888 至 1912</h1>
+<p class="sub">这张织图从下往上读。底部是当年有数的公司，每家一根柱，按每列车英里收入从大到小自左向右排；每家的收入带向上走到中间那道分界，在那里分成两股：灰的是每列车英里营运支出，蓝的是净收入，即收入减支出；两股各自汇到顶部的两个节点。带宽一律是便士／列车英里，25 年与全部公司同一把尺，同一年里各公司之间、同一家公司不同年份之间都可以直接比宽。1888 至 1895 年只画收入带、不分股，原因写在图旁那一行。悬停任一带子看数字，点击看出处。</p>
+<div class="scales" id="scales"></div>
+<div id="controls">
+  <button id="play" type="button">▶ 播放</button>
+  <span>年份</span>
+  <input id="yslider" type="range" min="0" max="24" step="1" value="24" aria-label="年份">
+  <span id="ylabel">1912</span>
+</div>
+<div id="marks"></div>
+<ul id="markslist"></ul>
+<div id="yearnote"></div>
+<div id="checkfail"></div>
+<div class="figwrap"><svg id="weave" viewBox="0 0 1200 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="织图"></svg></div>
+<p class="legend"><span class="swatch" style="background:#c6bfa4"></span><b>收入带</b>：宽 = 该公司该年每列车英里收入（印刷值）。
+<span class="swatch" style="background:#b7bec2"></span><b>营运支出</b>：宽 = 每列车英里营运支出（印刷值），从分界向上汇到「全体营运支出」。
+<span class="swatch" style="background:#9fb3c8"></span><b>净收入</b>：宽 = 两个印刷值之差，汇到「全体净收入」。
+分界那道虚线是收入带分成两股的地方；没有支出值的年份或公司，收入带到分界为止。顶部两个节点的宽度是各公司便士数之和，这个和没有经济含义，只为把带子汇拢；各公司之间按同一把尺比较的是各自带宽。</p>
+<h2>数字从哪里来</h2>
+<p class="body">每家公司每年两个印刷值：贸易部铁路年报里印出的「全部列车每英里收入」与「每列车英里支出合计」，单位便士，取自任务 010 回件箱比值表里的两行；净收入是两者之差，不是用比值乘收入推算的。公司是 Σ 十二年织图的十四家（东南与查塔姆自 1899 年起按管理委员会合报，此前东南单独报）。同一公司同一年同一比值若有多行，先取原页直接印出比值的那一行，其次人工层，再次机读层里档位高的；这批行里实际没有重复。分母回退到第二号表的行不用。1888 至 1895 年年报里的支出项与 1896 年起的表式不可比，1893 至 1895 年该项未转录，所以这几年不分股。</p>
+<p class="body">资本层待 1900 至 1912 年付讫栏转录完成后接入。带宽为便士／列车英里，英镑绝对数待 1893 至 1912 年营运支出转录后接入。</p>
+<div id="checkline"></div>
+<footer>空路由 · 织图形式沿用 Σ 的十二年织图（2026-08）· 数据脚本、页面与检查层 2026-09-20 · 带宽为便士／列车英里，英镑绝对数待 1893 至 1912 年营运支出转录后接入</footer>
+</div>
+<div id="tip"></div>
+<div id="provcard"><button id="pc-close" type="button" aria-label="关闭">×</button><div id="pc-body"></div></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body></html>
