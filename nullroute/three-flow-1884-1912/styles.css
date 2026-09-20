@@ -1,0 +1,128 @@
+/* 样式骨架整段复用同系列参照页（three-flow-1899 的 参照样式提取.css）：变量、字体、标题、表格、提示框。
+   本页新增的只有折线图、日历时间轴、控件与窄屏规则。 */
+:root{--ink:#2f3a40;--ink2:#5d6a71;--line:#d6d9d6;--bg:#fdfdfc;
+ --capNode:#3f4a52;--incNode:#8d8358;--trafNode:#6f7f74;--capRib:#b7bec2;--incRib:#c6bfa4;--trafRib:#b5c2ba;--retRib:#b9aec2;--thin:#9c7358;--retThin:#8a7d98;--gate:#3f4a52;
+ --up:#8a5a3c;--down:#5d7d88;--vSame:#4f7a5a;--vYear:#9a6a1a;--vRev:#8d3a2a;--vTrace:#5d7d88;--rule:#8d8358;}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+ font-family:"Songti SC","Source Han Serif SC","Noto Serif CJK SC",Georgia,serif;}
+html[lang="en"] body{font-family:Georgia,"Times New Roman",serif}
+.wrap{max-width:1400px;margin:0 auto;padding:16px 20px 80px;}
+h1{font-size:21px;font-weight:600;margin:0 0 4px;letter-spacing:.02em;padding-right:110px}
+.sub{font-size:13px;color:var(--ink2);margin:0 0 14px;line-height:1.75;max-width:1120px}
+.sub b{color:var(--ink)}
+.scales{display:flex;gap:24px;flex-wrap:wrap;font-size:12.5px;color:var(--ink2);
+ border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;margin-bottom:6px;line-height:1.7}
+.scales b{color:var(--ink);font-weight:600}
+h2{font-size:15px;font-weight:600;margin:32px 0 6px}
+h3{font-size:13.5px;font-weight:600;margin:18px 0 4px}
+p.body{font-size:13px;line-height:1.85;color:var(--ink2);max-width:1180px;margin:6px 0}
+p.body b{color:var(--ink)}
+.legend{font-size:12.5px;color:var(--ink2);line-height:1.85;margin:10px 0 0;max-width:1180px}
+.legend b{color:var(--ink)}
+.swatch{display:inline-block;width:26px;height:9px;vertical-align:middle;margin-right:6px;border:.5px solid #aeb4b6}
+ul.notes{font-size:12.5px;color:var(--ink2);line-height:1.85;max-width:1180px;padding-left:20px}
+.boxpanel{border:1px solid var(--line);background:#fbfbf9;padding:14px 18px;margin:14px 0;max-width:1400px}
+.boxpanel h3{font-size:14px;margin:0 0 8px}
+
+/* 顶部切换与视图导航 */
+#langsw{position:fixed;top:14px;right:16px;z-index:99;font:13px Georgia,serif;letter-spacing:.15em;
+ padding:6px 14px;cursor:pointer;background:rgba(20,18,15,.75);color:#d8cdb8;border:1px solid #6b6152;border-radius:2px;text-decoration:none}
+#langsw:hover{color:#fff;border-color:#d8cdb8}
+nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5;border-bottom:1px solid var(--line)}
+nav.tabs a{font-size:13px;color:var(--ink);text-decoration:none;border:1px solid var(--line);padding:5px 12px;background:#fff}
+nav.tabs a:hover{background:#f2f3f1}
+
+/* 控件 */
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:flex-end;margin:10px 0 6px;font-size:13px}
+.controls label{display:flex;flex-direction:column;gap:3px;color:var(--ink2)}
+.controls label.inline{flex-direction:row;align-items:center;gap:6px;color:var(--ink)}
+select,button.btn{font:inherit;font-size:13px;color:var(--ink);background:#fff;border:1px solid #b9bec0;padding:5px 8px;border-radius:2px;max-width:100%}
+button.btn{cursor:pointer}
+button.btn:hover{background:#f2f3f1}
+.cochecks{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;margin:6px 0 0;max-width:1180px}
+.cochecks label{display:inline-flex;align-items:center;gap:5px;cursor:pointer;color:var(--ink);padding:2px 0}
+.cochecks .sw{display:inline-block;width:14px;height:4px;border-radius:2px}
+.cochecks .grp{flex-basis:100%;color:var(--ink2);font-size:12px;margin-top:4px}
+input[type=checkbox]{width:15px;height:15px;margin:0}
+#rulenote{font-size:12.5px;color:var(--ink);background:#fbfbf9;border:1px solid var(--line);border-left:3px solid var(--rule);padding:6px 10px;margin:8px 0;display:none;max-width:1180px;line-height:1.7}
+#rulenote button{margin-left:8px}
+
+/* 折线图 */
+.figwrap{padding:6px 0 0;width:100%}
+svg{display:block;max-width:100%}
+.axis line,.axis path{stroke:#b9bec0;stroke-width:1px;fill:none}
+.grid line{stroke:#ececea;stroke-width:1px}
+.axis text{font-size:11.5px;fill:var(--ink2)}
+.axlab{font-size:12px;fill:var(--ink)}
+.ctitle{font-size:13.5px;font-weight:600;fill:var(--ink)}
+.sline{fill:none;stroke-width:1.6px}
+.sline.dash{stroke-dasharray:4 3}
+.pt{cursor:pointer}
+.pt.single{fill:#fff;stroke-width:1.5px}
+.brk{cursor:pointer;stroke:#fff;stroke-width:.8px}
+.rulev{stroke:var(--rule);stroke-width:1.2px}
+.rulev.pass{stroke-dasharray:3 3}
+.rulelab{font-size:11px;fill:var(--rule)}
+.gapnote{font-size:11px;fill:var(--ink2)}
+.nodata{font-size:13px;fill:var(--ink2)}
+
+/* 日历时间轴 */
+.cal .band{fill:var(--gate);fill-opacity:.07}
+.cal .rowline{stroke:#ececea}
+.cal .rlab{font-size:11.5px;fill:var(--ink);cursor:pointer}
+.cal .rname{font-size:11px;fill:var(--ink2);cursor:pointer}
+.cal .rlab.sel,.cal .rname.sel{fill:var(--rule);font-weight:600}
+.cal .eff{cursor:pointer}
+.cal .pass{fill:#fff;stroke-width:1.2px;cursor:pointer}
+.cal .link{stroke-width:1px}
+.cal .lagbar{fill-opacity:.25}
+.cal .ytick{font-size:11px;fill:var(--ink2)}
+
+/* 表格 */
+.tablewrap{overflow-x:auto;max-width:100%;margin:8px 0 0}
+table{border-collapse:collapse;font-size:12.5px;margin:0;width:100%}
+th,td{border-bottom:1px solid var(--line);padding:5px 8px;text-align:right;white-space:nowrap;vertical-align:top}
+th{font-weight:600;color:var(--ink2);border-bottom:1px solid #b9bec0;text-align:left}
+td.l,th.l{text-align:left;white-space:normal;min-width:120px}
+td.w{white-space:normal;min-width:220px;max-width:520px}
+tbody tr:hover{background:#f2f3f1}
+tr.sel td{background:#f3efe2}
+tr.clickable{cursor:pointer}
+.vd{display:inline-block;padding:1px 7px;border-radius:2px;color:#fff;font-size:11.5px;white-space:normal}
+.vd.same{background:var(--vSame)} .vd.year{background:var(--vYear)} .vd.rev{background:var(--vRev)} .vd.trace{background:var(--vTrace)}
+.dir.up{color:var(--up)} .dir.down{color:var(--down)}
+.kind{display:inline-block;border:1px solid #b9bec0;padding:0 6px;font-size:11.5px;color:var(--ink2);border-radius:2px}
+.rid{font-family:Georgia,serif;letter-spacing:.03em}
+.main{color:var(--vRev);font-weight:600}
+
+#tip{position:fixed;pointer-events:none;background:#2f3a40;color:#f3f4f2;font-size:12px;
+ padding:8px 11px;border-radius:3px;line-height:1.65;max-width:380px;display:none;z-index:9;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+#tip b{color:#fff}
+#checkfail{display:none;background:#8d3a2a;color:#fff;padding:8px 14px;font-size:13px}
+#checkok{font-size:11.5px;color:#8a949a;margin-top:18px}
+footer{font-size:11.5px;color:#8a949a;margin-top:30px;line-height:1.7;word-break:break-all}
+
+@media (max-width:720px){
+  .wrap{padding:12px 12px 60px}
+  h1{font-size:19px;padding-right:0;margin-top:34px}
+  #langsw{top:8px;right:10px}
+  .sub,p.body,.legend,ul.notes{font-size:13.5px}
+  .scales{gap:8px 16px;font-size:13px}
+  nav.tabs a{font-size:13.5px;padding:6px 10px}
+  .controls{gap:8px 12px;font-size:13.5px}
+  select{font-size:14px}
+  .cochecks{font-size:13.5px}
+  table{font-size:13px}
+  th,td{padding:5px 6px}
+  td.w{min-width:180px;max-width:320px}
+  #tip{max-width:80vw}
+  .axis text,.cal .rlab,.cal .rname,.cal .ytick,.rulelab{font-size:12px}
+  .vd,.kind{font-size:12px}
+  /* 窄屏：宽表改成每行一张卡，格子前面写列名，不横向滚动 */
+  table.stack thead{display:none}
+  table.stack,table.stack tbody,table.stack tr{display:block;width:100%}
+  table.stack tr{border-bottom:2px solid #b9bec0;padding:6px 0}
+  table.stack td{display:flex;gap:8px;border:none;padding:2px 0;white-space:normal;min-width:0;max-width:none;text-align:left}
+  table.stack td::before{content:attr(data-th);color:var(--ink2);flex:0 0 5.5em;font-size:12px;padding-top:1px}
+}
