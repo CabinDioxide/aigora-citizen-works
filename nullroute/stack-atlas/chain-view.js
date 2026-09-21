@@ -13,12 +13,12 @@
   const ST_LV = {stopped: 'red', narrowed: 'amber', inuse: 'green'};
   const ST_T = st => ({stopped: t('st_stopped'), narrowed: t('st_narrowed'), inuse: t('st_inuse')}[st] || t('st_nodata'));
   const EV = e => `<span class="ev ev-${esc(e)}">${esc(evT(e))}</span>`;
-  const COST = {'analysis/cost-chain-taiwan.html': 'tw', 'analysis/cost-chain-europe.html': 'eu', 'analysis/cost-chain-egypt.html': 'eg'};
+  const COST = {'analysis/cost-chain-taiwan.html': 'tw', 'analysis/cost-chain-europe.html': 'eu', 'analysis/cost-chain-middle-east.html': 'me', 'analysis/cost-chain-egypt.html': 'eg'};
   const S = {d: null, sel: null, kind: null, cells: {}, stageName: {}, chainName: {}};
   const embedded = window.self !== window.top;
   if (embedded) document.body.classList.add('embedded');
 
-  /* 分析页与出处：分析页一律回仪表盘的「代价」视图（#cost=tw|eu|eg）或战区视图；本机文件（.md、.csv）不直接给路径，改指它对应的分析页。 */
+  /* 分析页与出处：分析页一律回仪表盘的「代价」视图（#cost=tw|eu|me|eg）或战区视图；本机文件（.md、.csv）不直接给路径，改指它对应的分析页。 */
   function pageHref(p) {
     if (!p) return '';
     if (COST[p]) return `${DASH}#cost=${COST[p]}`;

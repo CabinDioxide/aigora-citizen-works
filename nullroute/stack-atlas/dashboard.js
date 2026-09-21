@@ -1,11 +1,11 @@
 /* 综合仪表盘壳。读 data/monitor/latest.json（build_monitor.py 每天重建），组装四个视图：
  * 总览（本文件）、战区三个（dashboard-theaters.js）、栈（本文件，读 atlas-data.js）、传导链（chain-view.html 五段联动视图，读 data/monitor/five_stage.json；2026-09-21 起替换六月的 transmission.html）、
- * 代价（analysis/cost-chain-{taiwan,europe,egypt}*.html，同样用 iframe 嵌，视图顶部三个按钮切换，选择写进 #cost=tw|eu|eg）。
+ * 代价（analysis/cost-chain-{taiwan,europe,middle-east,egypt}*.html，同样用 iframe 嵌，视图顶部四个按钮切换，选择写进 #cost=tw|eu|me|eg；中东 2026-09-21 加）。
  * 选中逻辑：selectNode(theater, num) 在战区页内；栈节点 → openDrawer(id)；总览地图上的站、咽喉点、战区框各自跳到对应视图。
  * 中英文：index.html 是中文页、en.html 是英文页，语言由 <html lang> 定（i18n.js 的 LANG）；两页共用本脚本与同一份数据，页头的语言按钮是链接，带着当前视图的锚过去。
- * 传导链页里点节点会以 #sel=type:id 回到本页（target=_top），boot() 末尾按它打开栈抽屉或定位咽喉点；#cost=tw|eu|eg 打开代价视图的那一条链。 */
-const COST_PAGES = {tw: 'cost-chain-taiwan', eu: 'cost-chain-europe', eg: 'cost-chain-egypt'};
-const COST_TITLE = {tw: 'cost_iframe_title', eu: 'cost_iframe_title_eu', eg: 'cost_iframe_title_eg'};
+ * 传导链页里点节点会以 #sel=type:id 回到本页（target=_top），boot() 末尾按它打开栈抽屉或定位咽喉点；#cost=tw|eu|me|eg 打开代价视图的那一条链。 */
+const COST_PAGES = {tw: 'cost-chain-taiwan', eu: 'cost-chain-europe', me: 'cost-chain-middle-east', eg: 'cost-chain-egypt'};
+const COST_TITLE = {tw: 'cost_iframe_title', eu: 'cost_iframe_title_eu', me: 'cost_iframe_title_me', eg: 'cost_iframe_title_eg'};
 window.COST_SEL = 'tw';
 const A = window.ATLAS_DATA;
 const STATUS_T = st => ({stopped: t('st_stopped'), narrowed: t('st_narrowed'), inuse: t('st_inuse'), nodata: t('st_nodata'), damaged: t('st_damaged'), unknown: t('st_unknown')}[st] || '');
@@ -40,9 +40,9 @@ function boot() {
   const bc = document.createElement('button'); bc.textContent = t('nav_cost'); bc.dataset.k = 'cost'; bc.onclick = () => show('cost'); nav.appendChild(bc);
   const ss = document.createElement('section'); ss.className = 'theater'; ss.id = 't_stack'; ss.innerHTML = `<p class="legend">${t('built_on_show')}</p>`; root.appendChild(ss);
   const st = document.createElement('section'); st.className = 'theater'; st.id = 't_transmission'; st.innerHTML = `<iframe src="./chain-view${LANG === 'en' ? '-en' : ''}.html" title="${t('iframe_title')}"></iframe>`; root.appendChild(st);
-  const cm = /^cost=(tw|eu|eg)$/.exec(cur); if (cm) window.COST_SEL = cm[1];
+  const cm = /^cost=(tw|eu|me|eg)$/.exec(cur); if (cm) window.COST_SEL = cm[1];
   const sc = document.createElement('section'); sc.className = 'theater'; sc.id = 't_cost';
-  sc.innerHTML = `<div class="costpick" role="group" aria-label="${t('cost_pick')}">${['tw', 'eu', 'eg'].map(k => `<button data-cost="${k}" onclick="pickCost('${k}')">${t('cost_' + k)}</button>`).join('')}</div><iframe id="costframe" title=""></iframe>`;
+  sc.innerHTML = `<div class="costpick" role="group" aria-label="${t('cost_pick')}">${['tw', 'eu', 'me', 'eg'].map(k => `<button data-cost="${k}" onclick="pickCost('${k}')">${t('cost_' + k)}</button>`).join('')}</div><iframe id="costframe" title=""></iframe>`;
   root.appendChild(sc);
   pickCost(window.COST_SEL, true);
   viewHooks.stack = {fn: buildStack, done: false};
@@ -54,7 +54,7 @@ function boot() {
   window.__lastBootMs = Math.round(performance.now() - t0);
 }
 
-/* 代价视图的三条链：换 iframe 的 src，选择写进地址 #cost=<tw|eu|eg>（show() 写锚时读 COST_SEL），刷新后保持。 */
+/* 代价视图的四条链：换 iframe 的 src，选择写进地址 #cost=<tw|eu|me|eg>（show() 写锚时读 COST_SEL），刷新后保持。 */
 function pickCost(k, quiet) {
   if (!COST_PAGES[k]) k = 'tw';
   window.COST_SEL = k;
@@ -76,7 +76,7 @@ window.addEventListener('hashchange', () => {
   if (!window.RAW) return;
   const h = (location.hash || '').slice(1);
   if (h.startsWith('sel=')) openSel(h);
-  else if (/^cost=(tw|eu|eg)$/.test(h)) { pickCost(h.slice(5), true); show('cost'); }
+  else if (/^cost=(tw|eu|me|eg)$/.test(h)) { pickCost(h.slice(5), true); show('cost'); }
   else if (h && document.getElementById('t_' + h) && !document.getElementById('t_' + h).classList.contains('on')) show(h);
 });
 

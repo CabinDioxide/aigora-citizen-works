@@ -1,6 +1,6 @@
 {
  "date": "2026-09-21",
- "built": "2026-09-21 16:47",
+ "built": "2026-09-21 17:42",
  "stages": [
   {
    "key": "s1",
@@ -857,6 +857,378 @@
    }
   },
   {
+   "id": "iq-hormuz-oil",
+   "title": "霍尔木兹关闭 → 伊拉克",
+   "title_en": "Hormuz closure → Iraq",
+   "cause": "hormuz",
+   "theater": "middle_east",
+   "state": "实物中止",
+   "current_stage": "s5",
+   "page": "analysis/cost-chain-middle-east.html",
+   "summary": "出口几乎全部在海峡以内、北部管道扩不上去、没有预算也没有大额主权基金，封锁不到五个月就发不出工资；这是项目要找的付不起的案例。",
+   "summary_en": "With almost all exports inside the strait, a northern pipeline that could not be expanded, no budget and no large sovereign fund, Iraq could not pay salaries within five months; this is the case of a country that cannot pay that the project was looking for.",
+   "turning_point": {
+    "text": "已过折点：7 月工资大量未发，议员呼吁央行增发货币；下一步看是否转为印钞或向海湾国家求援",
+    "text_en": "Past the turning point: many July salaries unpaid and a lawmaker urging central bank money creation; next watch whether this turns into money printing or a request for Gulf support",
+    "evidence": "source-linked",
+    "source": "https://www.thenationalnews.com/news/mena/2026/08/04/iraq-struggles-with-july-salary-payments-as-oil-revenue-fails-to-cover-budget/"
+   },
+   "cells": {
+    "s1": {
+     "status": "partial",
+     "head": "北部管道设计能力 160 万桶/日，实际只输约 20 万桶",
+     "head_en": "The northern pipeline is built for 1.6 million bbl per day but carries about 200 thousand",
+     "figures": [
+      {
+       "label": "北部管道实际输量",
+       "label_en": "Northern pipeline actual flow",
+       "value": "约 20",
+       "value_en": "about 20",
+       "unit": "万桶/日",
+       "unit_en": "10 thousand bbl per day",
+       "evidence": "source-linked",
+       "source": "https://www.cnbc.com/2026/06/09/iraq-uae-hormuz-oil-pipelines-oil-iran-war.html",
+       "note": "设计能力 160 万桶/日；伊土协议目标 75 万桶/日",
+       "note_en": "Design capacity 1.6 million bbl per day; the Iraq–Turkey agreement targets 750 thousand"
+      }
+     ]
+    },
+    "s2": {
+     "status": "done",
+     "head": "巴士拉原油码头出口只剩封锁前的一成左右",
+     "head_en": "The Basra oil terminal exports about a tenth of its pre-closure level",
+     "figures": [
+      {
+       "label": "巴士拉原油码头",
+       "label_en": "Basra oil terminal",
+       "value": "0.00–0.21",
+       "value_en": null,
+       "unit": "（4–8 月日均出口 ÷ 封锁前基线）",
+       "unit_en": "(2026-04–2026-08 daily exports ÷ pre-closure baseline)",
+       "evidence": "measured",
+       "source": "https://portwatch.imf.org/",
+       "note": "封锁前日均 333 千吨",
+       "note_en": "Pre-closure 333 thousand t per day"
+      },
+      {
+       "label": "杰伊汉（北部管道出口）",
+       "label_en": "Ceyhan (northern pipeline outlet)",
+       "value": "0.85–1.10",
+       "value_en": null,
+       "unit": "（4–8 月日均出口 ÷ 封锁前基线）",
+       "unit_en": "(2026-04–2026-08 daily exports ÷ pre-closure baseline)",
+       "evidence": "measured",
+       "source": "https://portwatch.imf.org/",
+       "note": "封锁前日均 89 千吨",
+       "note_en": "Pre-closure 89 thousand t per day"
+      },
+      {
+       "label": "原油出口",
+       "label_en": "Crude exports",
+       "value": "99.87→18.6",
+       "value_en": null,
+       "unit": "百万桶/月",
+       "unit_en": "million bbl per month",
+       "evidence": "source-linked",
+       "source": "https://english.aawsat.com/business/5261746-iraqi-oil-exports-plummet-813-march-due-hormuz-closure",
+       "note": "3 月比 2 月少 81.3%",
+       "note_en": "Down 81.3% in March from February"
+      }
+     ],
+     "live": [
+      "Strait of Hormuz"
+     ]
+    },
+    "s3": {
+     "status": "done",
+     "head": "石油收入 3 月由 68.1 亿美元降到 19.5 亿",
+     "head_en": "Oil revenue fell from US$6.81 billion to US$1.95 billion in March",
+     "figures": [
+      {
+       "label": "石油收入",
+       "label_en": "Oil revenue",
+       "value": "6.81→1.95",
+       "value_en": null,
+       "unit": "十亿美元/月",
+       "unit_en": "US$ billion per month",
+       "evidence": "source-linked",
+       "source": "https://english.aawsat.com/business/5261746-iraqi-oil-exports-plummet-813-march-due-hormuz-closure",
+       "note": "",
+       "note_en": ""
+      }
+     ]
+    },
+    "s4": {
+     "status": "done",
+     "head": "收入只够支出的三分之一，没有通过预算",
+     "head_en": "Revenue covers a third of spending, with no budget passed",
+     "figures": [
+      {
+       "label": "每月支出对收入",
+       "label_en": "Monthly spending against revenue",
+       "value": "支出 7.77，非石油收入 1.40，石油收入 1.08",
+       "value_en": "spending 7.77; non-oil revenue 1.40; oil revenue 1.08",
+       "unit": "十亿美元/月",
+       "unit_en": "US$ billion per month",
+       "evidence": "source-linked",
+       "source": "https://www.qcintel.com/article/iraq-fiscal-shortfall-reaches-crisis-levels-july-salaries-unpaid-report-70420.html",
+       "note": "收入只够支出的三分之一",
+       "note_en": "Revenue covers about a third of spending"
+      },
+      {
+       "label": "议员呼吁央行增发货币",
+       "label_en": "Lawmaker urges money creation",
+       "value": "",
+       "value_en": null,
+       "unit": "",
+       "unit_en": "",
+       "evidence": "source-linked",
+       "source": "https://en.964media.com/50615/",
+       "note": "伊拉克当年没有通过预算",
+       "note_en": "Iraq was running without a budget"
+      }
+     ]
+    },
+    "s5": {
+     "status": "done",
+     "head": "7 月公职人员工资大量未发",
+     "head_en": "Many July public-sector salaries went unpaid",
+     "figures": [
+      {
+       "label": "7 月工资",
+       "label_en": "July salaries",
+       "value": "大量未发",
+       "value_en": "many unpaid",
+       "unit": "",
+       "unit_en": "",
+       "evidence": "source-linked",
+       "source": "https://www.thenationalnews.com/news/mena/2026/08/04/iraq-struggles-with-july-salary-payments-as-oil-revenue-fails-to-cover-budget/",
+       "note": "财政部官员：出口中断若持续，以后工资都不能按时发",
+       "note_en": "A finance ministry official said salaries could not be paid on time if the disruption continued"
+      }
+     ]
+    },
+    "loop": {
+     "status": "partial",
+     "head": "9 月袭击沙特东西管道的无人机，从伊拉克迈桑省起飞",
+     "head_en": "The drones that hit Saudi Arabia's East–West pipeline in September took off from Maysan province in Iraq",
+     "figures": [
+      {
+       "label": "东西管道遇袭关闭",
+       "label_en": "East–West pipeline shut after strikes",
+       "value": "关闭前输量 400 万至 500 万桶/日",
+       "value_en": "4–5 million bbl per day before closure",
+       "unit": "",
+       "unit_en": "",
+       "evidence": "source-linked",
+       "source": "https://www.aljazeera.com/news/2026/9/12/saudi-arabia-shuts-critical-oil-pipeline-after-drone-attack-what-happened",
+       "note": "无人机自伊拉克迈桑省起飞，无人认领；4 月曾受损、三天内恢复；布伦特油价升到 104 美元以上；分析师本·卡希尔在同一篇报道里说，撑过前六个月的那些缓冲已经基本耗尽",
+       "note_en": "Drones launched from Maysan province in Iraq; unclaimed; the pipeline was damaged in April and restored within three days; Brent above US$104; in the same report analyst Ben Cahill said the key buffers that got the market through the first six months had been worn away"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "gulf-bypass",
+   "title": "霍尔木兹关闭 → 海湾产油国的绕行通道",
+   "title_en": "Hormuz closure → the Gulf producers' bypass routes",
+   "cause": "hormuz",
+   "theater": "middle_east",
+   "state": "绕行重塑",
+   "current_stage": "loop",
+   "page": "analysis/cost-chain-middle-east.html",
+   "summary": "沙特经红海延布、阿联酋经富查伊拉、阿曼本来就在海峡以外，封锁初期靠高油价多收；但这些通道接连遭到袭击，9 月东西管道关闭，绕行本身成了下一轮攻击的目标。",
+   "summary_en": "Saudi Arabia via Yanbu on the Red Sea, the UAE via Fujairah and Oman, already outside the strait, earned more from high prices early on; but these routes were attacked one after another, the East–West pipeline shut in September, and the bypass itself became the next target.",
+   "turning_point": {
+    "text": "9 月 10 至 11 日东西管道关闭，关闭前输量 400 万至 500 万桶/日；延布储油只够五到七天出口",
+    "text_en": "The East–West pipeline shut on 10–11 September after carrying 4–5 million bbl per day; Yanbu storage covers five to seven days of exports",
+    "evidence": "source-linked",
+    "source": "https://www.aljazeera.com/news/2026/9/12/saudi-arabia-shuts-critical-oil-pipeline-after-drone-attack-what-happened"
+   },
+   "cells": {
+    "s1": {
+     "status": "partial",
+     "head": "阿联酋第二条绕行管道 5 月建成一半",
+     "head_en": "The UAE's second bypass pipeline was half built in May",
+     "figures": [
+      {
+       "label": "第二条绕行管道",
+       "label_en": "Second bypass pipeline",
+       "value": "建成约一半",
+       "value_en": "about half built",
+       "unit": "",
+       "unit_en": "",
+       "evidence": "source-linked",
+       "source": "https://www.cnbc.com/2026/05/20/uae-pipeline-strait-hormuz-iran-war-oil.html",
+       "note": "建成后富查伊拉出口能力翻倍",
+       "note_en": "Would double export capacity through Fujairah"
+      }
+     ]
+    },
+    "s2": {
+     "status": "done",
+     "head": "海峡以内的沙特码头出口归零，红海延布是封锁前的 2.4 到 5.7 倍",
+     "head_en": "Saudi terminals inside the strait fell to nothing while Yanbu on the Red Sea ran at 2.4 to 5.7 times its pre-closure level",
+     "figures": [
+      {
+       "label": "朱艾玛（海峡以内）",
+       "label_en": "Juaymah (inside the strait)",
+       "value": "0.00–0.09",
+       "value_en": null,
+       "unit": "（4–8 月日均出口 ÷ 封锁前基线）",
+       "unit_en": "(2026-04–2026-08 daily exports ÷ pre-closure baseline)",
+       "evidence": "measured",
+       "source": "https://portwatch.imf.org/",
+       "note": "封锁前日均 492 千吨",
+       "note_en": "Pre-closure 492 thousand t per day"
+      },
+      {
+       "label": "延布（红海）",
+       "label_en": "Yanbu (Red Sea)",
+       "value": "2.44–5.67",
+       "value_en": null,
+       "unit": "（3–7 月日均出口 ÷ 封锁前基线）",
+       "unit_en": "(2026-03–2026-07 daily exports ÷ pre-closure baseline)",
+       "evidence": "measured",
+       "source": "https://portwatch.imf.org/",
+       "note": "封锁前日均 116 千吨",
+       "note_en": "Pre-closure 116 thousand t per day"
+      },
+      {
+       "label": "富查伊拉（海峡以外）",
+       "label_en": "Fujairah (outside the strait)",
+       "value": "0.10–0.65",
+       "value_en": null,
+       "unit": "（4–8 月日均出口 ÷ 封锁前基线）",
+       "unit_en": "(2026-04–2026-08 daily exports ÷ pre-closure baseline)",
+       "evidence": "measured",
+       "source": "https://portwatch.imf.org/",
+       "note": "封锁前日均 102 千吨",
+       "note_en": "Pre-closure 102 thousand t per day"
+      }
+     ],
+     "live": [
+      "Strait of Hormuz",
+      "Bab el-Mandeb Strait",
+      "Suez Canal"
+     ]
+    },
+    "s3": {
+     "status": "done",
+     "head": "沙特第二季度石油收入比去年多 22%",
+     "head_en": "Saudi oil revenue in Q2 was 22% above a year earlier",
+     "figures": [
+      {
+       "label": "第二季度石油收入同比",
+       "label_en": "Q2 oil revenue y/y",
+       "value": "22",
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "source-linked",
+       "source": "https://www.agbi.com/oil-and-gas/2026/07/saudi-budget-deficit-narrows-as-oil-revenue-jumps/",
+       "note": "油价上涨抵消了出口量下降；第二季度赤字 340 亿里亚尔",
+       "note_en": "Higher prices outweighed lower volumes; Q2 deficit SAR 34 billion"
+      },
+      {
+       "label": "阿曼 2026 年增长预测",
+       "label_en": "Oman 2026 growth forecast",
+       "value": "3.7",
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "source-linked",
+       "source": "https://www.middleeastbriefing.com/news/omans-hormuz-advantage-in-a-time-of-regional-disruption/",
+       "note": "预计财政盈余占国内生产总值 4.5%；出口设施都在海峡以外",
+       "note_en": "Budget surplus of 4.5% of GDP expected; all export facilities lie outside the strait"
+      }
+     ]
+    },
+    "s4": {
+     "status": "partial",
+     "head": "沙特第一季度战争支出使赤字创纪录",
+     "head_en": "War spending gave Saudi Arabia a record Q1 deficit",
+     "figures": [
+      {
+       "label": "第一季度赤字",
+       "label_en": "Q1 deficit",
+       "value": "335",
+       "value_en": null,
+       "unit": "亿美元",
+       "unit_en": "US$100 million",
+       "evidence": "source-linked",
+       "source": "https://www.aljazeera.com/economy/2026/5/6/saudi-arabia-posts-33-5bn-budget-deficit-amid-drop-in-oil-sales",
+       "note": "创纪录；支出大增",
+       "note_en": "A record; driven by a surge in spending"
+      }
+     ]
+    },
+    "s5": {
+     "status": "partial",
+     "head": "阿联酋日产量下降一半以上",
+     "head_en": "UAE output fell by more than half",
+     "figures": [
+      {
+       "label": "阿联酋日产量",
+       "label_en": "UAE output",
+       "value": "下降一半以上",
+       "value_en": "down by more than half",
+       "unit": "",
+       "unit_en": "",
+       "evidence": "source-linked",
+       "source": "https://pgjonline.com/news/2026/march/oil-falls-as-uae-output-drops-after-fujairah-export-attack",
+       "note": "阿布扎比国家石油公司大范围关井",
+       "note_en": "Widespread shut-ins by ADNOC"
+      }
+     ]
+    },
+    "loop": {
+     "status": "done",
+     "head": "绕行通道接连遇袭：富查伊拉 3 月、红海 7 月下旬起、东西管道 9 月",
+     "head_en": "Bypass routes attacked in turn: Fujairah in March, the Red Sea from late July, the East–West pipeline in September",
+     "figures": [
+      {
+       "label": "富查伊拉遇袭",
+       "label_en": "Fujairah attacked",
+       "value": "",
+       "value_en": null,
+       "unit": "",
+       "unit_en": "",
+       "evidence": "source-linked",
+       "source": "https://www.cnbc.com/2026/03/16/uae-fujairah-oil-hub-drone-fire-iran-war-us-israel-middle-east.html",
+       "note": "5 月再次遇袭",
+       "note_en": "Hit again in May"
+      },
+      {
+       "label": "延布以西油轮遇袭",
+       "label_en": "Tanker hit west of Yanbu",
+       "value": "63",
+       "value_en": null,
+       "unit": "海里",
+       "unit_en": "nautical miles",
+       "evidence": "source-linked",
+       "source": "https://www.aljazeera.com/news/2026/8/24/yemens-houthis-report-attack-on-saudi-ship",
+       "note": "油轮起火；7 月下旬起红海袭击持续",
+       "note_en": "The tanker caught fire; Red Sea attacks had continued since late July"
+      },
+      {
+       "label": "东西管道关闭",
+       "label_en": "East–West pipeline shut",
+       "value": "关闭前输量 400 万至 500 万桶/日",
+       "value_en": "4–5 million bbl per day before closure",
+       "unit": "",
+       "unit_en": "",
+       "evidence": "source-linked",
+       "source": "https://www.aljazeera.com/news/2026/9/12/saudi-arabia-shuts-critical-oil-pipeline-after-drone-attack-what-happened",
+       "note": "无人机自伊拉克迈桑省起飞，无人认领；4 月曾受损、三天内恢复；布伦特油价升到 104 美元以上；分析师本·卡希尔在同一篇报道里说，撑过前六个月的那些缓冲已经基本耗尽",
+       "note_en": "Drones launched from Maysan province in Iraq; unclaimed; the pipeline was damaged in April and restored within three days; Brent above US$104; in the same report analyst Ben Cahill said the key buffers that got the market through the first six months had been worn away"
+      }
+     ]
+    }
+   }
+  },
+  {
    "id": "ru-eu-arms-supply",
    "title": "俄方袭击 → 欧洲援乌武器供应链",
    "title_en": "Russian attacks → Europe's arms supply chain to Ukraine",
@@ -1132,6 +1504,76 @@
    "kind": "escalation",
    "zh": "油价上涨与对俄制裁松动（枚举表第 27 条）抬高俄方收入",
    "en": "Higher oil prices and loosened sanctions on Russia (enumeration table no. 27) raise Russian revenue",
+   "evidence": "source-linked"
+  },
+  {
+   "from": [
+    "gulf-bypass",
+    "s2"
+   ],
+   "to": [
+    "tw-hormuz-energy",
+    "s2"
+   ],
+   "kind": "same_cause",
+   "zh": "出口一侧的实测印证进口一侧的发现：海峡以内的码头停摆，海峡以外的延布、阿曼增加",
+   "en": "Export-side measurements match the import-side finding: terminals inside the strait stopped while Yanbu and Oman rose",
+   "evidence": "measured"
+  },
+  {
+   "from": [
+    "gulf-bypass",
+    "loop"
+   ],
+   "to": [
+    "eu-hormuz-energy",
+    "s2"
+   ],
+   "kind": "escalation",
+   "zh": "9 月东西管道关闭，欧洲经延布与苏伊士北上的沙特原油来源中断",
+   "en": "The East–West pipeline closure in September cuts off the Saudi crude that reached Europe via Yanbu and Suez",
+   "evidence": "source-linked"
+  },
+  {
+   "from": [
+    "gulf-bypass",
+    "s2"
+   ],
+   "to": [
+    "eg-hormuz-gas",
+    "loop"
+   ],
+   "kind": "transfer",
+   "zh": "延布的原油改经苏伊士运河和苏伊士—地中海管道北上，西迪克里尔码头 8 月出口是封锁前的 3.6 倍",
+   "en": "Yanbu crude went north via the Suez Canal and the Suez–Mediterranean pipeline; Sidi Kerir exported 3.6 times its pre-closure level in August",
+   "evidence": "measured"
+  },
+  {
+   "from": [
+    "iq-hormuz-oil",
+    "s5"
+   ],
+   "to": [
+    "eg-hormuz-gas",
+    "s5"
+   ],
+   "kind": "contrast",
+   "zh": "对照：埃及靠基金组织、战前合同和运河收入付得起，伊拉克没有绕行通道也没有缓冲，发不出工资",
+   "en": "Contrast: Egypt could pay with IMF money, pre-war contracts and canal revenue; Iraq had neither a bypass nor buffers and could not pay salaries",
+   "evidence": "source-linked"
+  },
+  {
+   "from": [
+    "iq-hormuz-oil",
+    "loop"
+   ],
+   "to": [
+    "gulf-bypass",
+    "loop"
+   ],
+   "kind": "escalation",
+   "zh": "袭击沙特东西管道的无人机从伊拉克迈桑省起飞",
+   "en": "The drones that hit the Saudi East–West pipeline took off from Maysan province in Iraq",
    "evidence": "source-linked"
   },
   {

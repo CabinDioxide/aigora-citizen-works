@@ -153,8 +153,9 @@ const UI = {
   /* 证据档 */
   ev_measured: ['实测', 'measured'], ev_verified: ['已核', 'verified'], 'ev_source-linked': ['有出处', 'source-linked'], 'ev_needs-review': ['待核', 'needs-review'], 'ev_query-designed': ['查询已设计', 'query-designed'], ev_unknown: ['未知', 'unknown'], ev_news: ['新闻', 'news'], ev_atlas: ['枚举表', 'atlas'],
   /* 代价视图的三条链（2026-09-21） */
-  cost_pick: ['看哪一条链', 'Chain'], cost_tw: ['台湾', 'Taiwan'], cost_eu: ['欧洲', 'Europe'], cost_eg: ['埃及', 'Egypt'],
+  cost_pick: ['看哪一条链', 'Chain'], cost_tw: ['台湾', 'Taiwan'], cost_eu: ['欧洲', 'Europe'], cost_me: ['中东', 'Middle East'], cost_eg: ['埃及', 'Egypt'],
   cost_iframe_title_eu: ['霍尔木兹关闭之后，欧洲多付的钱由谁承担', 'After the Hormuz closure: who bore Europe’s extra energy bill'],
+  cost_iframe_title_me: ['霍尔木兹关闭之后的中东：各国出口与代价由谁承担', 'The Middle East after the Hormuz closure: exports and who bore the cost'],
   cost_iframe_title_eg: ['霍尔木兹关闭与以色列断气：埃及的代价由谁承担', 'The Hormuz closure and the Israeli gas cut-off: who bore Egypt’s cost'],
   /* 乌克兰战区：援乌武器供应链遭袭（2026-09-21） */
   sa_h2: ['援乌武器供应链在欧洲境内遭袭', 'Attacks on Europe’s arms supply chain to Ukraine'],
