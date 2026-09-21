@@ -51,6 +51,11 @@
 .drawer canvas{width:100%!important;height:120px!important}
 /* 传导链与代价：两个视图都是整页嵌进来的 iframe */
 #t_transmission iframe,#t_cost iframe{width:100%;height:calc(100vh - 80px);border:none;border-radius:14px;background:#fff}
+/* 代价视图顶部三个按钮（台湾、欧洲、埃及），切换下面 iframe 的 src */
+.costpick{display:flex;gap:6px;margin:0 0 10px;flex-wrap:wrap}
+.costpick button{border:1px solid var(--line2);background:#fff;border-radius:999px;padding:5px 16px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink)}
+.costpick button.on{background:#eb6834;border-color:#eb6834;color:#fff}
+#t_cost iframe{height:calc(100vh - 124px)}
 /* 总览顶部去「代价」视图的入口 */
 .costbanner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0 14px;padding:11px 14px;border-radius:12px;cursor:pointer;
   background:linear-gradient(90deg,#fff7ea,#fdecec);border:1px solid #f0d3bb;box-shadow:var(--shadow)}

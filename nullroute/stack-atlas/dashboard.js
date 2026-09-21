@@ -1,8 +1,12 @@
 /* 综合仪表盘壳。读 data/monitor/latest.json（build_monitor.py 每天重建），组装四个视图：
- * 总览（本文件）、战区三个（dashboard-theaters.js）、栈（本文件，读 atlas-data.js）、传导链（transmission.html）、代价（analysis/cost-chain-taiwan*.html，同样用 iframe 嵌）。
+ * 总览（本文件）、战区三个（dashboard-theaters.js）、栈（本文件，读 atlas-data.js）、传导链（chain-view.html 五段联动视图，读 data/monitor/five_stage.json；2026-09-21 起替换六月的 transmission.html）、
+ * 代价（analysis/cost-chain-{taiwan,europe,egypt}*.html，同样用 iframe 嵌，视图顶部三个按钮切换，选择写进 #cost=tw|eu|eg）。
  * 选中逻辑：selectNode(theater, num) 在战区页内；栈节点 → openDrawer(id)；总览地图上的站、咽喉点、战区框各自跳到对应视图。
  * 中英文：index.html 是中文页、en.html 是英文页，语言由 <html lang> 定（i18n.js 的 LANG）；两页共用本脚本与同一份数据，页头的语言按钮是链接，带着当前视图的锚过去。
- * 传导链页里点节点会以 #sel=type:id 回到本页（target=_top），boot() 末尾按它打开栈抽屉或定位咽喉点。 */
+ * 传导链页里点节点会以 #sel=type:id 回到本页（target=_top），boot() 末尾按它打开栈抽屉或定位咽喉点；#cost=tw|eu|eg 打开代价视图的那一条链。 */
+const COST_PAGES = {tw: 'cost-chain-taiwan', eu: 'cost-chain-europe', eg: 'cost-chain-egypt'};
+const COST_TITLE = {tw: 'cost_iframe_title', eu: 'cost_iframe_title_eu', eg: 'cost_iframe_title_eg'};
+window.COST_SEL = 'tw';
 const A = window.ATLAS_DATA;
 const STATUS_T = st => ({stopped: t('st_stopped'), narrowed: t('st_narrowed'), inuse: t('st_inuse'), nodata: t('st_nodata'), damaged: t('st_damaged'), unknown: t('st_unknown')}[st] || '');
 const LEVEL_T = lv => ({red: t('lv_red'), amber: t('lv_amber'), green: t('lv_green'), gray: t('lv_gray')}[lv] || '');
@@ -35,15 +39,30 @@ function boot() {
   const bt = document.createElement('button'); bt.textContent = t('nav_transmission'); bt.dataset.k = 'transmission'; bt.onclick = () => show('transmission'); nav.appendChild(bt);
   const bc = document.createElement('button'); bc.textContent = t('nav_cost'); bc.dataset.k = 'cost'; bc.onclick = () => show('cost'); nav.appendChild(bc);
   const ss = document.createElement('section'); ss.className = 'theater'; ss.id = 't_stack'; ss.innerHTML = `<p class="legend">${t('built_on_show')}</p>`; root.appendChild(ss);
-  const st = document.createElement('section'); st.className = 'theater'; st.id = 't_transmission'; st.innerHTML = `<iframe src="./transmission${LANG === 'en' ? '-en' : ''}.html" title="${t('iframe_title')}"></iframe>`; root.appendChild(st);
-  const sc = document.createElement('section'); sc.className = 'theater'; sc.id = 't_cost'; sc.innerHTML = `<iframe src="./analysis/cost-chain-taiwan${LANG === 'en' ? '-en' : ''}.html" title="${t('cost_iframe_title')}"></iframe>`; root.appendChild(sc);
+  const st = document.createElement('section'); st.className = 'theater'; st.id = 't_transmission'; st.innerHTML = `<iframe src="./chain-view${LANG === 'en' ? '-en' : ''}.html" title="${t('iframe_title')}"></iframe>`; root.appendChild(st);
+  const cm = /^cost=(tw|eu|eg)$/.exec(cur); if (cm) window.COST_SEL = cm[1];
+  const sc = document.createElement('section'); sc.className = 'theater'; sc.id = 't_cost';
+  sc.innerHTML = `<div class="costpick" role="group" aria-label="${t('cost_pick')}">${['tw', 'eu', 'eg'].map(k => `<button data-cost="${k}" onclick="pickCost('${k}')">${t('cost_' + k)}</button>`).join('')}</div><iframe id="costframe" title=""></iframe>`;
+  root.appendChild(sc);
+  pickCost(window.COST_SEL, true);
   viewHooks.stack = {fn: buildStack, done: false};
   viewHooks.transmission = {fn: () => {}, done: false};
   viewHooks.cost = {fn: () => {}, done: false};
   renderOverview();
-  show(document.getElementById('t_' + cur) ? cur : 'overview');
+  show(cm ? 'cost' : (document.getElementById('t_' + cur) ? cur : 'overview'));
   if (cur.startsWith('sel=')) openSel(cur);
   window.__lastBootMs = Math.round(performance.now() - t0);
+}
+
+/* 代价视图的三条链：换 iframe 的 src，选择写进地址 #cost=<tw|eu|eg>（show() 写锚时读 COST_SEL），刷新后保持。 */
+function pickCost(k, quiet) {
+  if (!COST_PAGES[k]) k = 'tw';
+  window.COST_SEL = k;
+  const f = document.getElementById('costframe'); if (!f) return;
+  const src = `./analysis/${COST_PAGES[k]}${LANG === 'en' ? '-en' : ''}.html`;
+  if (f.getAttribute('src') !== src) { f.setAttribute('src', src); f.title = t(COST_TITLE[k]); }
+  document.querySelectorAll('.costpick button').forEach(b => { const on = b.dataset.cost === k; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+  if (!quiet && document.getElementById('t_cost').classList.contains('on')) show('cost');
 }
 
 /* 传导链页的深链 #sel=type:id：node / polnode 开栈抽屉，chokepoint 到总览定位，其余到栈。
@@ -57,6 +76,7 @@ window.addEventListener('hashchange', () => {
   if (!window.RAW) return;
   const h = (location.hash || '').slice(1);
   if (h.startsWith('sel=')) openSel(h);
+  else if (/^cost=(tw|eu|eg)$/.test(h)) { pickCost(h.slice(5), true); show('cost'); }
   else if (h && document.getElementById('t_' + h) && !document.getElementById('t_' + h).classList.contains('on')) show(h);
 });
 
@@ -74,7 +94,7 @@ function renderOverview() {
       <div class="tiles">${tiles}</div><div class="rd">${rd}</div></div>`;
   }).join('');
   const thT = key => tv(D.theaters.find(x => x.key === key).title);
-  const alerts = D.alerts.map(a => `<tr><td><span class="lv ${a.level}"></span>${esc(tv(a.kind))}</td><td>${esc(thT(a.theater))}</td><td><b>${esc(tv(a.title))}</b>${a.detail ? '<div class="u">' + (a.detail_en || a.kind === '影像判读' ? tzh(a.detail, a.detail_en) : esc(tv(a.detail))) + '</div>' : ''}</td><td><span class="ev measured">${t('ev_measured')}</span><div class="u" title="${esc(a.source)}">${esc(srcT(a.source))}</div></td></tr>`).join('');
+  const alerts = D.alerts.map(a => `<tr><td><span class="lv ${a.level}"></span>${esc(tv(a.kind))}</td><td>${esc(thT(a.theater))}</td><td>${LANG === 'en' && !a.title_en && a.detail_en && HAS_CJK(a.title) ? `<b>${esc(a.detail_en)}</b>` /* 援乌供应链遭袭的警报只带 detail_en（2026-09-21） */ : `<b>${a.title_en && LANG === 'en' ? esc(a.title_en) : esc(tv(a.title))}</b>${a.detail ? '<div class="u">' + (a.detail_en || a.kind === '影像判读' ? tzh(a.detail, a.detail_en) : esc(tv(a.detail))) + '</div>' : ''}`}</td><td><span class="ev measured">${t('ev_measured')}</span><div class="u" title="${esc(a.source)}">${esc(srcT(a.source))}</div></td></tr>`).join('');
   const cks = [...D.chokepoints].sort((a, b) => (a.ratio ?? 9) - (b.ratio ?? 9)).map(c => `<tr><td><span class="lv ${({stopped: 'red', narrowed: 'amber', inuse: 'green', nodata: 'gray'})[c.status]}"></span>${esc(nz(c.name))}</td><td class="num">${c.recent7 ?? ''}</td><td class="num">${c.baseline ?? ''}</td><td class="num">${c.ratio ?? ''}</td><td>${esc(c.break_date || '')}</td><td>${esc(c.last_date)}</td></tr>`).join('');
   sec.innerHTML = `<h2>${t('ov_h2')} <small>${t('ov_sub')}</small></h2>
   <div class="costbanner" role="link" tabindex="0" onclick="show('cost')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();show('cost')}"><span class="cb-tag">${t('cost_banner_tag')}</span><span class="cb-text">${t('cost_banner_text')}</span><span class="cb-cta">${t('cost_banner_cta')}</span></div>

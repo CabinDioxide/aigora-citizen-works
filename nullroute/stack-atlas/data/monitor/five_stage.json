@@ -1,0 +1,1778 @@
+{
+ "date": "2026-09-21",
+ "built": "2026-09-21 16:47",
+ "stages": [
+  {
+   "key": "s1",
+   "zh": "预期与缓冲",
+   "en": "Expectations and buffers",
+   "q": "冲击到来之前，市场与政府已经备下了什么",
+   "q_en": "What had markets and governments put in place before the shock"
+  },
+  {
+   "key": "s2",
+   "zh": "干扰",
+   "en": "Disruption",
+   "q": "切断了什么、到什么程度",
+   "q_en": "What was cut, and how far"
+  },
+  {
+   "key": "s3",
+   "zh": "重塑",
+   "en": "Reshaping",
+   "q": "货和钱怎样绕过去，多付了多少",
+   "q_en": "How goods and money went around it, and how much more it cost"
+  },
+  {
+   "key": "s4",
+   "zh": "代价落在谁身上",
+   "en": "Who bears the cost",
+   "q": "谁先付、政府怎样介入、最后落在谁身上",
+   "q_en": "Who paid first, how governments stepped in, where it finally landed"
+  },
+  {
+   "key": "s5",
+   "zh": "后果",
+   "en": "Consequences",
+   "q": "付不起的地方发生了什么",
+   "q_en": "What happened where the cost could not be carried"
+  },
+  {
+   "key": "loop",
+   "zh": "回环",
+   "en": "Feedback loop",
+   "q": "后果有没有反过来加重或抵消干扰",
+   "q_en": "Did the consequences feed back into the disruption"
+  }
+ ],
+ "states": {
+  "库存吸收": "Absorbed by stocks",
+  "绕行重塑": "Rerouted and reshaped",
+  "限量配给": "Rationed",
+  "实物中止": "Physical stop"
+ },
+ "kinds": {
+  "same_cause": [
+   "同一起因",
+   "Same cause"
+  ],
+  "common_price": [
+   "同一价格",
+   "Common price"
+  ],
+  "contrast": [
+   "对照",
+   "Contrast"
+  ],
+  "transfer": [
+   "钱的转移",
+   "Transfer of money"
+  ],
+  "offset": [
+   "抵消",
+   "Offset"
+  ],
+  "escalation": [
+   "加重",
+   "Escalation"
+  ],
+  "same_region": [
+   "同一地区",
+   "Same region"
+  ]
+ },
+ "chains": [
+  {
+   "id": "tw-hormuz-energy",
+   "title": "霍尔木兹关闭 → 台湾的原油与天然气",
+   "title_en": "Hormuz closure → Taiwan's crude and gas",
+   "cause": "hormuz",
+   "theater": "middle_east",
+   "state": "绕行重塑",
+   "current_stage": "s4",
+   "page": "analysis/cost-chain-taiwan.html",
+   "summary": "海峡关闭半年，台湾没有断油断气；多付的钱主要由国库承担，消费者只付了一小部分，冲击落在把石油天然气当原料的行业。",
+   "summary_en": "Six months into the closure Taiwan ran short of neither oil nor gas; the extra cost was carried mostly by the treasury, consumers paid a small part, and the shock fell on industries that use oil and gas as feedstock.",
+   "turning_point": {
+    "text": "中油增资 73.53 亿美元一案，2026-09-04 被两个党团扬言全数删除；删掉则成本转向中油资产负债表之外",
+    "text_en": "The US$7.354 billion capital injection into CPC was threatened with deletion by two caucuses on 4 September 2026; if cut, the cost moves off CPC's balance sheet to somewhere not yet observed",
+    "evidence": "source-linked",
+    "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md"
+   },
+   "cells": {
+    "s1": {
+     "status": "done",
+     "head": "缓冲是十个月前为别的理由建成的第三接收站",
+     "head_en": "The buffer was a third LNG terminal finished ten months earlier for other reasons",
+     "figures": [
+      {
+       "label": "中油第三接收站投资",
+       "label_en": "CPC third LNG terminal investment",
+       "value": 965,
+       "value_en": 96.5,
+       "unit": "亿新台币",
+       "unit_en": "NT$ billion",
+       "evidence": "verified",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "危机前十个月投产，使换气源成为可能",
+       "note_en": "Commissioned ten months before the crisis; it made switching gas sources possible"
+      }
+     ]
+    },
+    "s2": {
+     "status": "done",
+     "head": "台湾 61.7% 的原油原在海峡以内装船",
+     "head_en": "61.7% of Taiwan's crude used to load inside the strait",
+     "figures": [
+      {
+       "label": "海峡通过量降幅",
+       "label_en": "Fall in strait transits",
+       "value": -91,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "measured",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "科威特供台原油",
+       "label_en": "Kuwaiti crude to Taiwan",
+       "value": -86.5,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "verified",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "装运港在海峡以内",
+       "note_en": "Loading port inside the strait"
+      },
+      {
+       "label": "阿曼供台原油",
+       "label_en": "Omani crude to Taiwan",
+       "value": 34.6,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "verified",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "装运港在海峡以外",
+       "note_en": "Loading port outside the strait"
+      },
+      {
+       "label": "美国供台原油",
+       "label_en": "US crude to Taiwan",
+       "value": -1.6,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "verified",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "普遍预期的替代没有发生",
+       "note_en": "The widely expected substitution did not happen"
+      }
+     ],
+     "live": [
+      "Strait of Hormuz"
+     ]
+    },
+    "s3": {
+     "status": "done",
+     "head": "三至七月多付 48.31 亿美元，来自涨价",
+     "head_en": "US$4.831 billion more paid in March–July, from prices",
+     "figures": [
+      {
+       "label": "进口支出增额",
+       "label_en": "Extra import spending",
+       "value": 48.31,
+       "value_en": 4.831,
+       "unit": "亿美元",
+       "unit_en": "US$ billion",
+       "evidence": "verified",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "涨价 +61.89，少买 −9.74，交叉 −3.84",
+       "note_en": "Price +6.189, volume −0.974, cross −0.384 (US$ billion)"
+      },
+      {
+       "label": "海峡关闭致每桶多付（六月重开期估计）",
+       "label_en": "Extra paid per barrel due to closure (June reopening estimate)",
+       "value": 24.23,
+       "value_en": null,
+       "unit": "美元/桶",
+       "unit_en": "US$/bbl",
+       "evidence": "verified",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "",
+       "note_en": ""
+      }
+     ]
+    },
+    "s4": {
+     "status": "done",
+     "head": "电价传导率为零，差额由国库承担",
+     "head_en": "Zero pass-through to electricity; the treasury carried the difference",
+     "figures": [
+      {
+       "label": "汽油传导率",
+       "label_en": "Gasoline pass-through",
+       "value": 12.4,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "verified",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "柴油传导率",
+       "label_en": "Diesel pass-through",
+       "value": 22.3,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "verified",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "电价传导率",
+       "label_en": "Electricity pass-through",
+       "value": 0,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "verified",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "费率审议会记录写明应调 12.83%、决议不调、差额由 711 亿元拨补",
+       "note_en": "Tariff review minutes record a due rise of 12.83%, a decision not to raise, and 71.1 billion NT$ in subsidy to cover it"
+      },
+      {
+       "label": "财政承担（价差补贴＋增资）",
+       "label_en": "Fiscal absorption (price subsidies + capital injection)",
+       "value": 130.43,
+       "value_en": 13.043,
+       "unit": "亿美元",
+       "unit_en": "US$ billion",
+       "evidence": "verified",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "56.90 补贴＋73.53 增资；覆盖的不只是这五个月的进口增额",
+       "note_en": "5.690 subsidy + 7.353 capital (US$ billion); covers more than this five-month import increase"
+      }
+     ]
+    },
+    "s5": {
+     "status": "done",
+     "head": "原料行业减产，能源用户照常",
+     "head_en": "Feedstock industries cut output; energy users did not",
+     "figures": [
+      {
+       "label": "化学材料及肥料业",
+       "label_en": "Chemical materials and fertilizers",
+       "value": -8.9,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "verified",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "非金属矿物制品业",
+       "label_en": "Non-metallic mineral products",
+       "value": -10.6,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "verified",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "基本金属业",
+       "label_en": "Basic metals",
+       "value": 7.9,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "verified",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "消费者物价年增率峰值",
+       "label_en": "Peak CPI inflation",
+       "value": 2.56,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "verified",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "",
+       "note_en": ""
+      }
+     ]
+    },
+    "loop": {
+     "status": "partial",
+     "head": "未见回环；政治后果依附在核电公投这一现成议题上",
+     "head_en": "No loop seen; the political consequence attached itself to an existing nuclear referendum",
+     "figures": [
+      {
+       "label": "核电公投日期",
+       "label_en": "Nuclear referendum date",
+       "value": "2026-11-28",
+       "value_en": null,
+       "unit": "",
+       "unit_en": "",
+       "evidence": "source-linked",
+       "source": "analysis/台湾-进口支出增额与承担结构-2026-09-19.md",
+       "note": "",
+       "note_en": ""
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "eu-hormuz-energy",
+   "title": "霍尔木兹关闭 → 欧盟的原油与天然气",
+   "title_en": "Hormuz closure → EU crude and gas",
+   "cause": "hormuz",
+   "theater": "middle_east",
+   "state": "绕行重塑",
+   "current_stage": "s5",
+   "page": "analysis/cost-chain-europe.html",
+   "summary": "欧盟换掉了海峡以内的供应，多付的钱大部分按市场价落在消费者与企业身上，政府只补了两到三成；制造业没有出现台湾那样的原料行业减产。",
+   "summary_en": "The EU replaced supply from inside the strait; most of the extra cost reached consumers and firms through market prices and governments covered only a fifth to a quarter or so; manufacturing showed none of Taiwan's feedstock-industry cuts.",
+   "turning_point": {
+    "text": "政府拨款占进口增额 22.9%–28.3%，离财政约束还远；折点更可能出现在家庭与运输企业一侧",
+    "text_en": "Government support equals 22.9–28.3% of the extra import bill, far from a fiscal limit; a turning point is more likely on the side of households and transport firms",
+    "evidence": "measured",
+    "source": "analysis/cost-chain-europe.html"
+   },
+   "cells": {
+    "s1": {
+     "status": "partial",
+     "head": "国际能源署成员国 3 月 11 日决定投放 4 亿桶储备",
+     "head_en": "IEA members agreed on 11 March to release 400 million barrels",
+     "figures": [
+      {
+       "label": "集体投放决定量",
+       "label_en": "Collective release agreed",
+       "value": 400,
+       "value_en": null,
+       "unit": "百万桶",
+       "unit_en": "million bbl",
+       "evidence": "source-linked",
+       "source": "https://www.iea.org/news/iea-member-countries-to-carry-out-largest-ever-oil-stock-release-amid-market-disruptions-from-middle-east-conflict",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "截至 7 月实际投放",
+       "label_en": "Actually supplied by July",
+       "value": 290,
+       "value_en": null,
+       "unit": "百万桶",
+       "unit_en": "million bbl",
+       "evidence": "source-linked",
+       "source": "https://pgjonline.com/news/2026/july/iea-members-release-290-million-barrels-of-oil-since-march",
+       "note": "欧洲的份额主要是成品油，分国数未取",
+       "note_en": "Europe's contribution was mainly refined products; country split not collected"
+      }
+     ]
+    },
+    "s2": {
+     "status": "done",
+     "head": "伊拉克少了六成、卡塔尔的气归零，沙特反而多了一成半",
+     "head_en": "Iraq down three-fifths and Qatari gas to zero, while Saudi supply rose by about 15%",
+     "figures": [
+      {
+       "label": "伊拉克原油（03–06 月合计同比）",
+       "label_en": "Iraqi crude (2026-03 to 2026-06 total, y/y)",
+       "value": -61.1,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "measured",
+       "source": "https://ec.europa.eu/eurostat/",
+       "note": "巴士拉装船点在海峡以内；剩下的量推测来自基尔库克—杰伊汉管道，未核",
+       "note_en": "Basra loads inside the strait; the remainder probably comes through the Kirkuk–Ceyhan pipeline, not verified"
+      },
+      {
+       "label": "沙特原油（03–06 月合计同比）",
+       "label_en": "Saudi crude (2026-03 to 2026-06 total, y/y)",
+       "value": 15.7,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "measured",
+       "source": "https://ec.europa.eu/eurostat/",
+       "note": "沙特有海峡以外的延布港（东西管道），推测多数改由红海装船，未核",
+       "note_en": "Saudi Arabia has Yanbu outside the strait via the East–West pipeline; most cargoes probably loaded on the Red Sea, not verified"
+      },
+      {
+       "label": "卡塔尔天然气 4 至 6 月",
+       "label_en": "Qatari gas, April–June",
+       "value": 0,
+       "value_en": null,
+       "unit": "百万立方米/月",
+       "unit_en": "million m3 per month",
+       "evidence": "measured",
+       "source": "https://ec.europa.eu/eurostat/",
+       "note": "3 月还有 922",
+       "note_en": "922 in March"
+      }
+     ],
+     "live": [
+      "Strait of Hormuz",
+      "Suez Canal",
+      "Bab el-Mandeb Strait"
+     ]
+    },
+    "s3": {
+     "status": "done",
+     "head": "三至七月多付 418 亿至 516 亿欧元，主要来自原油涨价",
+     "head_en": "€41.8–51.6 billion more in March–July, mostly from crude prices",
+     "figures": [
+      {
+       "label": "能源进口增额（对 2025 年同期）",
+       "label_en": "Extra energy import bill (vs same months 2025)",
+       "value": 41.81,
+       "value_en": null,
+       "unit": "十亿欧元",
+       "unit_en": "€ billion",
+       "evidence": "measured",
+       "source": "https://ec.europa.eu/eurostat/",
+       "note": "涨价 33.78，数量 6.64，交叉 1.39",
+       "note_en": "Price 33.78, volume 6.64, cross 1.39"
+      },
+      {
+       "label": "按封锁前单价算的增额",
+       "label_en": "Extra bill at pre-closure unit prices",
+       "value": 51.63,
+       "value_en": null,
+       "unit": "十亿欧元",
+       "unit_en": "€ billion",
+       "evidence": "measured",
+       "source": "https://ec.europa.eu/eurostat/",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "美国原油（03–06 月合计同比）",
+       "label_en": "US crude (2026-03 to 2026-06 total, y/y)",
+       "value": 41.5,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "measured",
+       "source": "https://ec.europa.eu/eurostat/",
+       "note": "与台湾不同，欧洲确实转向了美国原油",
+       "note_en": "Unlike Taiwan, Europe did switch to US crude"
+      },
+      {
+       "label": "原油进口单价峰值（同比）",
+       "label_en": "Peak crude import unit value (y/y)",
+       "value": 73.6,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "measured",
+       "source": "https://ec.europa.eu/eurostat/",
+       "note": "2026-05",
+       "note_en": "2026-05"
+      }
+     ]
+    },
+    "s4": {
+     "status": "done",
+     "head": "车用燃料全额按市场价走；家庭电气价格各国差很远",
+     "head_en": "Road fuel moved with the market everywhere; household power and gas prices diverged widely by country",
+     "figures": [
+      {
+       "label": "车用燃料消费价格（欧盟，2026-08）",
+       "label_en": "Road fuel consumer prices (EU, 2026-08)",
+       "value": 23.8,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "measured",
+       "source": "https://ec.europa.eu/eurostat/",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "家庭电价：德国",
+       "label_en": "Household electricity: Germany",
+       "value": -5.6,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "measured",
+       "source": "https://ec.europa.eu/eurostat/",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "家庭电价：意大利",
+       "label_en": "Household electricity: Italy",
+       "value": 16.9,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "measured",
+       "source": "https://ec.europa.eu/eurostat/",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "各国政府拨款（有明确金额者）",
+       "label_en": "Government support with stated amounts",
+       "value": 11.8,
+       "value_en": null,
+       "unit": "十亿欧元",
+       "unit_en": "€ billion",
+       "evidence": "source-linked",
+       "source": "https://www.bruegel.org/dataset/2026-european-energy-crisis-fiscal-response-tracker",
+       "note": "布鲁盖尔 6 月 16 日版；非定向措施占 54.4%；西班牙一国占四成",
+       "note_en": "Bruegel, 16 June version; untargeted measures 54.4%; Spain alone about 40%"
+      }
+     ]
+    },
+    "s5": {
+     "status": "partial",
+     "head": "制造业持平，原料行业没有减产；运输业破产上升只在部分国家",
+     "head_en": "Manufacturing flat and no feedstock cuts; a rise in transport bankruptcies only in some countries",
+     "figures": [
+      {
+       "label": "化学品制造（欧盟，3–7 月平均同比）",
+       "label_en": "Chemicals (EU, Mar–Jul average y/y)",
+       "value": -1.3,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "measured",
+       "source": "https://ec.europa.eu/eurostat/",
+       "note": "封锁前四个月平均 -3.8",
+       "note_en": "Four months before the closure: -3.8"
+      },
+      {
+       "label": "基本金属（欧盟）",
+       "label_en": "Basic metals (EU)",
+       "value": 1.2,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "measured",
+       "source": "https://ec.europa.eu/eurostat/",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "运输业破产登记（欧盟，二季度同比）",
+       "label_en": "Transport bankruptcies (EU, Q2 y/y)",
+       "value": 21.0,
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "measured",
+       "source": "https://ec.europa.eu/eurostat/",
+       "note": "德国 13.1，法国 -5.2，意大利 -8.2，西班牙 -2.2；不是普遍现象",
+       "note_en": "Germany 13.1, France -5.2, Italy -8.2, Spain -2.2; not uniform"
+      }
+     ]
+    },
+    "loop": {
+     "status": "partial",
+     "head": "欧洲的替代货经红海与运河北上，这笔运费流向埃及",
+     "head_en": "Europe's replacement cargoes came north via the Red Sea and Suez, and those tolls went to Egypt",
+     "figures": []
+    }
+   }
+  },
+  {
+   "id": "eg-hormuz-gas",
+   "title": "霍尔木兹关闭与以色列断气 → 埃及",
+   "title_en": "Hormuz closure and Israeli gas cut-off → Egypt",
+   "cause": "hormuz",
+   "theater": "middle_east",
+   "state": "绕行重塑",
+   "current_stage": "s5",
+   "page": "analysis/cost-chain-egypt.html",
+   "summary": "原定要找一个付不起的国家，埃及这一次付得起：燃料一次调价、埃镑贬值一成半，把代价摊给了所有人；外汇缺口由基金组织拨款、战前的套期保值与长期合同、以及因霍尔木兹关闭而增加的运河收入补上。",
+   "summary_en": "This was meant to be a country that could not pay; this time Egypt could. A one-off fuel price rise and a 15% fall of the pound spread the cost over everyone; the foreign-currency gap was filled by IMF money, pre-war hedges and long-term contracts, and extra canal revenue caused by the Hormuz closure itself.",
+   "turning_point": {
+    "text": "8 月储备创新高全靠金价，外币持有当月减少 11.58 亿美元；外币持有继续下降是最先要看的约束",
+    "text_en": "August's record reserves came entirely from gold; currency holdings fell US$1.158 billion that month, and a continued fall there is the first constraint to watch",
+    "evidence": "source-linked",
+    "source": "https://www.dailynewsegypt.com/2026/09/07/egypts-net-international-reserves-rise-to-57-214bn-in-august/"
+   },
+   "cells": {
+    "s1": {
+     "status": "partial",
+     "head": "战前签下的原油套期保值与长期天然气合同起了作用",
+     "head_en": "Oil hedges and long-term gas contracts signed before the war did their work",
+     "figures": [
+      {
+       "label": "基金组织第七次审查后拨付",
+       "label_en": "IMF disbursement after the seventh review",
+       "value": "1800",
+       "value_en": null,
+       "unit": "百万美元",
+       "unit_en": "US$ million",
+       "evidence": "verified",
+       "source": "https://www.imf.org/en/news/articles/2026/07/30/pr26271-egypt-imf-completes-the-7th-review-under-eff-and-2nd-review-under-the-rsf",
+       "note": "新闻稿称冲击被侨汇、旅游、运河收入回升、原油套期保值合同与长期天然气合同缓冲",
+       "note_en": "The press release says the shock was cushioned by remittances tourism the Suez recovery oil hedging contracts and long-term gas agreements"
+      }
+     ]
+    },
+    "s2": {
+     "status": "done",
+     "head": "以色列管道气 2 月 28 日起中断",
+     "head_en": "Israeli pipeline gas stopped from 28 February",
+     "figures": [
+      {
+       "label": "1 月以色列管道供气",
+       "label_en": "Israeli pipeline gas in January",
+       "value": "802",
+       "value_en": null,
+       "unit": "百万立方米",
+       "unit_en": "million m3",
+       "evidence": "source-linked",
+       "source": "https://www.calcalistech.com/ctechnews/article/9oa2ylqxo",
+       "note": "2026-02-28 起以色列关停利维坦与卡里什气田、塔马尔只供本国，对埃及与约旦的出口中断；恢复日期未查到",
+       "note_en": "From 28 February 2026 Israel shut the Leviathan and Karish fields and kept Tamar for its own market; exports to Egypt and Jordan stopped; restart date not found"
+      }
+     ],
+     "live": [
+      "Suez Canal",
+      "Bab el-Mandeb Strait",
+      "Strait of Hormuz"
+     ]
+    },
+    "s3": {
+     "status": "partial",
+     "head": "能源进口每月由 5.6 亿美元升到 16.5 亿",
+     "head_en": "Energy imports rose from US$560 million to US$1.65 billion a month",
+     "figures": [
+      {
+       "label": "每月能源进口支出",
+       "label_en": "Monthly energy import bill",
+       "value": "560→1650",
+       "value_en": null,
+       "unit": "百万美元/月",
+       "unit_en": "US$ million per month",
+       "evidence": "source-linked",
+       "source": "https://www.calcalistech.com/ctechnews/article/9oa2ylqxo",
+       "note": "与总理马德布利 3 月所说「战后天然气进口每月多 11 亿美元」相合",
+       "note_en": "Consistent with Prime Minister Madbouly's March statement that gas imports cost US$1.1 billion more a month since the war"
+      },
+      {
+       "label": "2026/27 财年天然气进口拨款",
+       "label_en": "FY2026/27 gas import allocation",
+       "value": "10700",
+       "value_en": null,
+       "unit": "百万美元",
+       "unit_en": "US$ million",
+       "evidence": "source-linked",
+       "source": "https://newsbase.com/story/egypt-allocates-10-7bn-for-gas-imports-in-fy-2026-27-up-26-y-y-as-global-prices-grow-439771",
+       "note": "比上一财年增加 26%",
+       "note_en": "Up 26% year on year"
+      },
+      {
+       "label": "2026/27 财年成品油进口拨款",
+       "label_en": "FY2026/27 refined fuel import allocation",
+       "value": "5500",
+       "value_en": null,
+       "unit": "百万美元",
+       "unit_en": "US$ million",
+       "evidence": "source-linked",
+       "source": "https://www.agbi.com/oil-and-gas/2026/05/egypt-raises-fuel-import-budget-to-meet-demand/",
+       "note": "比上一财年增加近四成",
+       "note_en": "Up almost 40 percent"
+      }
+     ]
+    },
+    "s4": {
+     "status": "done",
+     "head": "3 月 10 日燃料一次上调 14% 至 30%，冻结承诺作废；埃镑一个半月贬值 14.4%",
+     "head_en": "Fuel up 14–30% in one step on 10 March, breaking the freeze pledge; the pound lost 14.4% in six weeks",
+     "figures": [
+      {
+       "label": "95 号汽油",
+       "label_en": "95-octane gasoline",
+       "value": "21→24",
+       "value_en": null,
+       "unit": "埃镑/升",
+       "unit_en": "EGP per litre",
+       "evidence": "source-linked",
+       "source": "https://www.thenationalnews.com/business/2026/03/10/egypt-raises-fuel-prices-up-to-30-as-iran-war-pushes-up-oil/",
+       "note": "调后价取自公告；调前价按「每升加 3 埃镑」倒推，涨 14.3%，与英文报道所报 14% 至 17% 相合。国家新闻处原页证书无效未能打开。2025-10 宣布的一年冻结，在油价升破每桶 115 美元后放弃",
+       "note_en": "New price from the announcement; old price derived from the EGP 3 per litre rise; up 14.3 percent consistent with the 14 to 17 percent reported by The National. The SIS page could not be opened (invalid certificate). The one-year freeze announced in October 2025 was abandoned after oil passed US$115 a barrel"
+      },
+      {
+       "label": "柴油",
+       "label_en": "Diesel",
+       "value": "17.5→20.5",
+       "value_en": null,
+       "unit": "埃镑/升",
+       "unit_en": "EGP per litre",
+       "evidence": "source-linked",
+       "source": "https://www.thenationalnews.com/business/2026/03/10/egypt-raises-fuel-prices-up-to-30-as-iran-war-pushes-up-oil/",
+       "note": "调前价按「每升加 3 埃镑」倒推，涨 17.1%",
+       "note_en": "Old price derived from the EGP 3 per litre rise; up 17.1 percent"
+      },
+      {
+       "label": "车用天然气",
+       "label_en": "Vehicle natural gas",
+       "value": "10→13",
+       "value_en": null,
+       "unit": "埃镑/立方米",
+       "unit_en": "EGP per m3",
+       "evidence": "source-linked",
+       "source": "https://www.thenationalnews.com/business/2026/03/10/egypt-raises-fuel-prices-up-to-30-as-iran-war-pushes-up-oil/",
+       "note": "涨 30%，即报道里的「最高三成」",
+       "note_en": "Up 30 percent; the 'up to 30 percent' in the headlines"
+      },
+      {
+       "label": "埃镑兑美元",
+       "label_en": "EGP per US dollar",
+       "value": "46.68→54.53",
+       "value_en": null,
+       "unit": "埃镑/美元",
+       "unit_en": "EGP per US$",
+       "evidence": "source-linked",
+       "source": "https://themiddleeastinsider.com/2026/03/14/egyptian-pound-exchange-rate-march-2026/",
+       "note": "一个半月贬值 14.4%（按美元计的埃镑价值）",
+       "note_en": "The pound lost 14.4 percent of its dollar value in six weeks"
+      },
+      {
+       "label": "家庭电价",
+       "label_en": "Household electricity tariff",
+       "value": "未调",
+       "value_en": null,
+       "unit": "",
+       "unit_en": "",
+       "evidence": "source-linked",
+       "source": "https://www.zawya.com/en/economy/north-africa/egypt-says-no-summer-power-cuts-denies-household-tariff-increase-iweg0o0h",
+       "note": "政府否认上调家庭电价，并称夏季不拉闸限电",
+       "note_en": "The government denied a household tariff rise and said there would be no summer load shedding"
+      }
+     ]
+    },
+    "s5": {
+     "status": "partial",
+     "head": "城市通胀 3 月升到 15.2% 后回落到 14.5%，未拉闸限电",
+     "head_en": "Urban inflation rose to 15.2% in March and eased to 14.5%; no load shedding",
+     "figures": [
+      {
+       "label": "城市通胀 2 月",
+       "label_en": "Urban inflation, February",
+       "value": "13.4",
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "source-linked",
+       "source": "https://www.dailynewsegypt.com/2026/03/10/egypts-urban-inflation-rises-to-13-4-in-february-capmas/",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "城市通胀 3 月",
+       "label_en": "Urban inflation, March",
+       "value": "15.2",
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "source-linked",
+       "source": "https://www.egypttoday.com/Article/3/146276/Egypt%E2%80%99s-urban-inflation-climbs-to-15-2-in-March-2026",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "城市通胀 8 月",
+       "label_en": "Urban inflation, August",
+       "value": "14.5",
+       "value_en": null,
+       "unit": "%",
+       "unit_en": "%",
+       "evidence": "source-linked",
+       "source": "https://enterpriseam.com/egypt/2026/09/13/urban-inflation-unexpectedly-slowed-to-14-5-in-august/",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "国际储备 8 月",
+       "label_en": "International reserves, August",
+       "value": "57214",
+       "value_en": null,
+       "unit": "百万美元",
+       "unit_en": "US$ million",
+       "evidence": "source-linked",
+       "source": "https://www.dailynewsegypt.com/2026/09/07/egypts-net-international-reserves-rise-to-57-214bn-in-august/",
+       "note": "增加来自黄金（171.39 亿升至 190.58 亿）；外币持有当月减少 11.58 亿",
+       "note_en": "The rise came from gold (17.139 to 19.058 billion); currency holdings fell 1.158 billion that month"
+      }
+     ]
+    },
+    "loop": {
+     "status": "done",
+     "head": "霍尔木兹关闭让油轮改走苏伊士，运河收入反而上升",
+     "head_en": "The Hormuz closure sent tankers through Suez, so canal revenue rose",
+     "figures": [
+      {
+       "label": "7 月运河收入（同比 +42%）",
+       "label_en": "Canal revenue in July (+42% y/y)",
+       "value": "505",
+       "value_en": null,
+       "unit": "百万美元",
+       "unit_en": "US$ million",
+       "evidence": "source-linked",
+       "source": "https://www.ttnews.com/articles/suez-canal-revenue-rises",
+       "note": "比去年同月增 42%，1340 艘通过；油轮因霍尔木兹关闭改走运河",
+       "note_en": "Up 42 percent year on year with 1340 transits; tankers rerouted because Hormuz is shut"
+      },
+      {
+       "label": "二季度运河收入",
+       "label_en": "Canal revenue, Q2",
+       "value": "1260",
+       "value_en": null,
+       "unit": "百万美元",
+       "unit_en": "US$ million",
+       "evidence": "source-linked",
+       "source": "https://www.riotimesonline.com/suez-canal-revenue-second-quarter-2026",
+       "note": "比去年同季增 13%",
+       "note_en": "Up 13 percent year on year"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "ru-eu-arms-supply",
+   "title": "俄方袭击 → 欧洲援乌武器供应链",
+   "title_en": "Russian attacks → Europe's arms supply chain to Ukraine",
+   "cause": "russia",
+   "theater": "ukraine",
+   "state": "绕行重塑",
+   "current_stage": "s2",
+   "page": "index.html#ukraine",
+   "summary": "袭击对象从铁路与包裹转向为乌克兰生产的军工厂和空运枢纽；公开材料只量得到第二段，交付受没受影响、代价由谁承担，多数还没有数。",
+   "summary_en": "Targets have moved from rail and parcels to plants producing for Ukraine and to an air-cargo hub; public material measures only the disruption stage, and whether deliveries suffered or who bore the cost is mostly unmeasured.",
+   "turning_point": {
+    "text": "德国 9 月 1 日把威胁等级由一般升为高，并关闭俄驻波恩领事馆；下一步看北约是否把这类袭击纳入集体防御的讨论",
+    "text_en": "On 1 September Germany raised the threat level from general to high and closed the Russian consulate in Bonn; next watch whether NATO brings such attacks into collective-defence discussion",
+    "evidence": "source-linked",
+    "source": "https://www.aljazeera.com/news/2026/9/1/germany-accuses-russia-of-drone-attack-on-leipzig-airport"
+   },
+   "cells": {
+    "s1": {
+     "status": "empty",
+     "head": "企业与政府的安保投入没有公开数",
+     "head_en": "Security spending by firms and governments is not published",
+     "figures": [],
+     "gap": "要量：各国反破坏预算、军工企业安保支出、保险费率；材料候选是德国联邦预算的宪法保卫局科目与上市军工企业年报",
+     "gap_en": "To measure: national counter-sabotage budgets, defence-firm security spending, insurance premiums; candidate sources are the German federal budget line for the BfV and listed defence firms' annual reports"
+    },
+    "s2": {
+     "status": "done",
+     "head": "直接针对援乌设施的事件 14 件，近 30 天 4 件；其中 5 件官方或检方已指向俄方",
+     "head_en": "14 scope-A incidents, 4 in the last 30 days; 5 officially attributed or charged as Russian-directed",
+     "figures": [
+      {
+       "label": "直接针对援乌设施的事件（2024 年起）",
+       "label_en": "Incidents directly targeting Ukraine supply (since 2024)",
+       "value": 14,
+       "value_en": null,
+       "unit": "件",
+       "unit_en": "incidents",
+       "evidence": "source-linked",
+       "source": "data/monitor/ua_supply_attacks/events.csv",
+       "note": "为乌克兰生产或运输的设施与人员",
+       "note_en": "Facilities and people producing or transporting for Ukraine"
+      },
+      {
+       "label": "其中军工厂",
+       "label_en": "Of which arms plants",
+       "value": 9,
+       "value_en": null,
+       "unit": "件",
+       "unit_en": "incidents",
+       "evidence": "source-linked",
+       "source": "data/monitor/ua_supply_attacks/events.csv",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "欧洲已查明实施者的俄方关联破坏",
+       "label_en": "Russia-linked sabotage in Europe with identified perpetrators",
+       "value": 151,
+       "value_en": null,
+       "unit": "件（2022-02 至 2026-02）",
+       "unit_en": "incidents (Feb 2022–Feb 2026)",
+       "evidence": "source-linked",
+       "source": "https://icct.nl/publication/more-same-russias-crime-terror-nexus-criminality-tool-hybrid-warfare-revisited",
+       "note": "",
+       "note_en": ""
+      }
+     ],
+     "live_attacks": true
+    },
+    "s3": {
+     "status": "partial",
+     "head": "交付是否受影响，只有两家企业的说法",
+     "head_en": "Whether deliveries suffered rests on the word of two firms",
+     "figures": [
+      {
+       "label": "爱沙尼亚米尔雷姆机器人公司对乌交付",
+       "label_en": "Milrem Robotics deliveries to Ukraine",
+       "value": "未受影响",
+       "value_en": null,
+       "unit": "（公司自述）",
+       "unit_en": "(company statement)",
+       "evidence": "source-linked",
+       "source": "https://euromaidanpress.com/2026/08/20/milrem-robotics-arson-ukraine-deliveries/",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "捷克帕尔杜比采热成像工厂的产能",
+       "label_en": "Archer-LPP capacity (Pardubice)",
+       "value": "几乎全毁",
+       "value_en": null,
+       "unit": "（乌军反坦克导弹用的热成像瞄准具）",
+       "unit_en": "(AT-300 thermal sights)",
+       "evidence": "source-linked",
+       "source": "https://dronexl.co/2026/03/26/ukrainian-thermal-factory-czech-republic/",
+       "note": "",
+       "note_en": ""
+      }
+     ],
+     "gap": "要量：受袭工厂的复产时间与替代产地；乌方对应装备的到货量",
+     "gap_en": "To measure: restart time and substitute sites of the plants hit; deliveries of the matching equipment to Ukraine"
+    },
+    "s4": {
+     "status": "empty",
+     "head": "损失由企业、保险还是国家承担，没有公开数",
+     "head_en": "Whether firms, insurers or states bore the losses is not published",
+     "figures": [],
+     "gap": "要量：企业财报里的一次性损失、保险理赔、政府补偿；捷克那家热成像工厂的母公司与保加利亚的 EMCO 是最先该查的两家",
+     "gap_en": "To measure: one-off losses in company accounts, insurance claims, state compensation; LPP Holding and EMCO are the first two to check"
+    },
+    "s5": {
+     "status": "partial",
+     "head": "德国升级威胁等级并关闭俄方机构",
+     "head_en": "Germany raised its threat level and closed Russian offices",
+     "figures": [
+      {
+       "label": "德国关闭俄驻波恩领事馆与柏林俄罗斯之家",
+       "label_en": "Germany closed the Russian consulate in Bonn and Russian House in Berlin",
+       "value": "2026-09-01",
+       "value_en": null,
+       "unit": "",
+       "unit_en": "",
+       "evidence": "source-linked",
+       "source": "https://www.aljazeera.com/news/2026/9/1/germany-accuses-russia-of-drone-attack-on-leipzig-airport",
+       "note": "",
+       "note_en": ""
+      },
+      {
+       "label": "德国疑似破坏登记（1–8 月）",
+       "label_en": "Suspected sabotage recorded in Germany (Jan–Aug)",
+       "value": "165+",
+       "value_en": null,
+       "unit": "起",
+       "unit_en": "cases",
+       "evidence": "source-linked",
+       "source": "https://euromaidanpress.com/2026/09/05/suspected-sabotage-hits-german-defense-firm/",
+       "note": "",
+       "note_en": ""
+      }
+     ]
+    },
+    "loop": {
+     "status": "partial",
+     "head": "霍尔木兹关闭使对俄制裁松动，俄方收入与这条链相连",
+     "head_en": "The Hormuz closure loosened sanctions on Russia, linking Russian revenue to this chain",
+     "figures": []
+    }
+   }
+  }
+ ],
+ "links": [
+  {
+   "from": [
+    "tw-hormuz-energy",
+    "s2"
+   ],
+   "to": [
+    "eu-hormuz-energy",
+    "s2"
+   ],
+   "kind": "same_cause",
+   "zh": "同一次海峡关闭；两地都证实能否替代看装运港在海峡内外",
+   "en": "The same closure; both show that substitutability depends on whether the loading port is inside the strait",
+   "evidence": "measured"
+  },
+  {
+   "from": [
+    "tw-hormuz-energy",
+    "s2"
+   ],
+   "to": [
+    "eg-hormuz-gas",
+    "s2"
+   ],
+   "kind": "same_cause",
+   "zh": "同一场战争：海峡关闭与以色列关停气田同在 2 月 28 日",
+   "en": "The same war: the strait closure and Israel's field shutdown both date from 28 February",
+   "evidence": "source-linked"
+  },
+  {
+   "from": [
+    "tw-hormuz-energy",
+    "s3"
+   ],
+   "to": [
+    "eu-hormuz-energy",
+    "s3"
+   ],
+   "kind": "common_price",
+   "zh": "同一个世界油价：两地原油进口单价同时在四五月见顶",
+   "en": "One world oil price: crude import unit values peaked in April–May in both",
+   "evidence": "measured"
+  },
+  {
+   "from": [
+    "tw-hormuz-energy",
+    "s2"
+   ],
+   "to": [
+    "eu-hormuz-energy",
+    "s3"
+   ],
+   "kind": "contrast",
+   "zh": "对照：美国原油在欧洲成了替代（3–6 月 +41.5%），在台湾没有（−1.6%）",
+   "en": "Contrast: US crude became the substitute in Europe (+41.5% in March–June) but not in Taiwan (−1.6%)",
+   "evidence": "measured"
+  },
+  {
+   "from": [
+    "tw-hormuz-energy",
+    "s4"
+   ],
+   "to": [
+    "eu-hormuz-energy",
+    "s4"
+   ],
+   "kind": "contrast",
+   "zh": "对照：台湾国库承担多于进口增额，欧洲政府只补了两到三成",
+   "en": "Contrast: Taiwan's treasury absorbed more than the import increase; European governments covered a fifth to a quarter or so",
+   "evidence": "measured"
+  },
+  {
+   "from": [
+    "tw-hormuz-energy",
+    "s5"
+   ],
+   "to": [
+    "eu-hormuz-energy",
+    "s5"
+   ],
+   "kind": "contrast",
+   "zh": "对照：台湾原料行业减产 8%–11%，欧洲化工业没有减产；「行政定价把经济按原料与能源分成两半」这条猜想，在市场定价的欧洲找不到对应的分界",
+   "en": "Contrast: Taiwan's feedstock industries fell 8–11%, European chemicals did not; the conjecture that administered pricing splits an economy between feedstock and energy users finds no matching divide in market-priced Europe",
+   "evidence": "measured"
+  },
+  {
+   "from": [
+    "eu-hormuz-energy",
+    "loop"
+   ],
+   "to": [
+    "eg-hormuz-gas",
+    "loop"
+   ],
+   "kind": "transfer",
+   "zh": "欧洲的替代货走红海与苏伊士，运河收入 7 月同比 +42%",
+   "en": "Europe's replacement cargoes used the Red Sea and Suez; canal revenue +42% y/y in July",
+   "evidence": "source-linked"
+  },
+  {
+   "from": [
+    "eg-hormuz-gas",
+    "loop"
+   ],
+   "to": [
+    "eg-hormuz-gas",
+    "s3"
+   ],
+   "kind": "offset",
+   "zh": "抵消但远不够：运河每月多一亿多美元，能源进口每月多约十一亿",
+   "en": "An offset but far from enough: canal revenue up about US$0.1–0.15 billion a month against about US$1.1 billion more for energy imports",
+   "evidence": "source-linked"
+  },
+  {
+   "from": [
+    "tw-hormuz-energy",
+    "s3"
+   ],
+   "to": [
+    "ru-eu-arms-supply",
+    "loop"
+   ],
+   "kind": "escalation",
+   "zh": "油价上涨与对俄制裁松动（枚举表第 27 条）抬高俄方收入",
+   "en": "Higher oil prices and loosened sanctions on Russia (enumeration table no. 27) raise Russian revenue",
+   "evidence": "source-linked"
+  },
+  {
+   "from": [
+    "ru-eu-arms-supply",
+    "s2"
+   ],
+   "to": [
+    "eu-hormuz-energy",
+    "s5"
+   ],
+   "kind": "same_region",
+   "zh": "同一批欧洲国家同时承受能源代价与境内袭击",
+   "en": "The same European states carry the energy cost and attacks on their own soil",
+   "evidence": "needs-review"
+  }
+ ],
+ "live": {
+  "Strait of Hormuz": {
+   "atlas_id": "hormuz",
+   "name_zh": "霍尔木兹海峡",
+   "status": "stopped",
+   "ratio": 0.1,
+   "last_date": "2026-09-13",
+   "recent7": 5.3,
+   "baseline": 54.0,
+   "fig": {
+    "label": "霍尔木兹海峡近 7 日通过量 ÷ 基线",
+    "label_en": "Strait of Hormuz: 7-day transits ÷ baseline",
+    "value": 0.1,
+    "value_en": null,
+    "unit": "（停摆，读数日 2026-09-13）",
+    "unit_en": "(stopped, reading 2026-09-13)",
+    "evidence": "measured",
+    "source": "https://portwatch.imf.org/",
+    "note": "国际货币基金组织港口监测平台的逐日船舶通过数，仪表盘每日重建",
+    "note_en": "IMF PortWatch daily transit counts, rebuilt daily on the dashboard"
+   }
+  },
+  "Suez Canal": {
+   "atlas_id": "suez",
+   "name_zh": "苏伊士运河",
+   "status": "inuse",
+   "ratio": 0.92,
+   "last_date": "2026-09-13",
+   "recent7": 37.9,
+   "baseline": 40.9,
+   "fig": {
+    "label": "苏伊士运河近 7 日通过量 ÷ 基线",
+    "label_en": "Suez Canal: 7-day transits ÷ baseline",
+    "value": 0.92,
+    "value_en": null,
+    "unit": "（照常，读数日 2026-09-13）",
+    "unit_en": "(in use, reading 2026-09-13)",
+    "evidence": "measured",
+    "source": "https://portwatch.imf.org/",
+    "note": "国际货币基金组织港口监测平台的逐日船舶通过数，仪表盘每日重建",
+    "note_en": "IMF PortWatch daily transit counts, rebuilt daily on the dashboard"
+   }
+  },
+  "Bab el-Mandeb Strait": {
+   "atlas_id": "babelmandeb",
+   "name_zh": "曼德海峡",
+   "status": "narrowed",
+   "ratio": 0.79,
+   "last_date": "2026-09-13",
+   "recent7": 27.3,
+   "baseline": 34.7,
+   "fig": {
+    "label": "曼德海峡近 7 日通过量 ÷ 基线",
+    "label_en": "Bab el-Mandeb Strait: 7-day transits ÷ baseline",
+    "value": 0.79,
+    "value_en": null,
+    "unit": "（收窄，读数日 2026-09-13）",
+    "unit_en": "(narrowed, reading 2026-09-13)",
+    "evidence": "measured",
+    "source": "https://portwatch.imf.org/",
+    "note": "国际货币基金组织港口监测平台的逐日船舶通过数，仪表盘每日重建",
+    "note_en": "IMF PortWatch daily transit counts, rebuilt daily on the dashboard"
+   }
+  },
+  "Bosporus Strait": {
+   "atlas_id": "bosporus",
+   "name_zh": "博斯普鲁斯海峡",
+   "status": "narrowed",
+   "ratio": 0.57,
+   "last_date": "2026-09-13",
+   "recent7": 52.3,
+   "baseline": 91.9,
+   "fig": {
+    "label": "博斯普鲁斯海峡近 7 日通过量 ÷ 基线",
+    "label_en": "Bosporus Strait: 7-day transits ÷ baseline",
+    "value": 0.57,
+    "value_en": null,
+    "unit": "（收窄，读数日 2026-09-13）",
+    "unit_en": "(narrowed, reading 2026-09-13)",
+    "evidence": "measured",
+    "source": "https://portwatch.imf.org/",
+    "note": "国际货币基金组织港口监测平台的逐日船舶通过数，仪表盘每日重建",
+    "note_en": "IMF PortWatch daily transit counts, rebuilt daily on the dashboard"
+   }
+  },
+  "Kerch Strait": {
+   "atlas_id": "kerch",
+   "name_zh": "刻赤海峡",
+   "status": "stopped",
+   "ratio": 0.0,
+   "last_date": "2026-09-13",
+   "recent7": 0.0,
+   "baseline": 13.1,
+   "fig": {
+    "label": "刻赤海峡近 7 日通过量 ÷ 基线",
+    "label_en": "Kerch Strait: 7-day transits ÷ baseline",
+    "value": 0.0,
+    "value_en": null,
+    "unit": "（停摆，读数日 2026-09-13）",
+    "unit_en": "(stopped, reading 2026-09-13)",
+    "evidence": "measured",
+    "source": "https://portwatch.imf.org/",
+    "note": "国际货币基金组织港口监测平台的逐日船舶通过数，仪表盘每日重建",
+    "note_en": "IMF PortWatch daily transit counts, rebuilt daily on the dashboard"
+   }
+  }
+ },
+ "attacks": {
+  "summary": {
+   "n_A": 14,
+   "n_B": 3,
+   "n_A_last30": 4,
+   "n_A_last90": 7,
+   "by_kind": {
+    "军工厂": 9,
+    "机场": 1,
+    "人员": 1,
+    "铁路": 1,
+    "寄递": 2
+   },
+   "by_country": {
+    "保加利亚": 2,
+    "德国": 5,
+    "波兰": 2,
+    "斯洛伐克": 1,
+    "爱沙尼亚": 1,
+    "捷克": 1,
+    "罗马尼亚": 1,
+    "立陶宛": 1
+   },
+   "by_tier": {
+    "1": 5,
+    "2": 7,
+    "3": 1,
+    "4": 1
+   },
+   "tier_names": {
+    "1": [
+     "官方或检方已指向俄方",
+     "Officially attributed to Russia or charged as Russian-directed"
+    ],
+    "2": [
+     "官方怀疑或正在查俄方线索",
+     "Russia suspected or under investigation"
+    ],
+    "3": [
+     "按可能的破坏立案",
+     "Investigated as possible sabotage"
+    ],
+    "4": [
+     "未归因或官方称内部原因",
+     "Unattributed or officially called internal"
+    ]
+   },
+   "by_outcome": {
+    "已发生": 7,
+    "被挫败": 5,
+    "未遂": 2
+   },
+   "monthly_A": [
+    {
+     "month": "2025-01",
+     "n": 0
+    },
+    {
+     "month": "2025-02",
+     "n": 0
+    },
+    {
+     "month": "2025-03",
+     "n": 0
+    },
+    {
+     "month": "2025-04",
+     "n": 0
+    },
+    {
+     "month": "2025-05",
+     "n": 1
+    },
+    {
+     "month": "2025-06",
+     "n": 0
+    },
+    {
+     "month": "2025-07",
+     "n": 0
+    },
+    {
+     "month": "2025-08",
+     "n": 0
+    },
+    {
+     "month": "2025-09",
+     "n": 0
+    },
+    {
+     "month": "2025-10",
+     "n": 1
+    },
+    {
+     "month": "2025-11",
+     "n": 1
+    },
+    {
+     "month": "2025-12",
+     "n": 0
+    },
+    {
+     "month": "2026-01",
+     "n": 0
+    },
+    {
+     "month": "2026-02",
+     "n": 0
+    },
+    {
+     "month": "2026-03",
+     "n": 2
+    },
+    {
+     "month": "2026-04",
+     "n": 0
+    },
+    {
+     "month": "2026-05",
+     "n": 0
+    },
+    {
+     "month": "2026-06",
+     "n": 1
+    },
+    {
+     "month": "2026-07",
+     "n": 0
+    },
+    {
+     "month": "2026-08",
+     "n": 5
+    },
+    {
+     "month": "2026-09",
+     "n": 2
+    }
+   ],
+   "latest": "2026-09-12"
+  },
+  "events": [
+   {
+    "id": "ua-sab-14",
+    "date": "2026-09-12",
+    "date_precision": "report",
+    "country": "保加利亚",
+    "country_en": "Bulgaria",
+    "place": "EMCO 另一处厂区",
+    "place_en": "Another EMCO site",
+    "target": "EMCO 军工厂另一处厂区",
+    "target_en": "Another EMCO arms site",
+    "target_kind": "军工厂",
+    "target_kind_en": "Arms plant",
+    "scope": "A",
+    "act": "爆炸",
+    "act_en": "Explosion",
+    "outcome": "已发生",
+    "outcome_en": "Carried out",
+    "attribution": "官方调查破坏可能",
+    "attribution_en": "Possible sabotage under investigation",
+    "tier": 3,
+    "source_url": "https://wifc.com/2026/09/12/explosion-hits-another-weapons-site-in-bulgaria/"
+   },
+   {
+    "id": "ua-sab-13",
+    "date": "2026-09-03",
+    "date_precision": "day",
+    "country": "德国",
+    "country_en": "Germany",
+    "place": "慕尼黑",
+    "place_en": "Munich",
+    "target": "罗德与施瓦茨公司总部旁的工地（邻近一家无人机企业）",
+    "target_en": "Construction site by the Rohde & Schwarz headquarters (near Helsing)",
+    "target_kind": "军工厂",
+    "target_kind_en": "Arms plant",
+    "scope": "A",
+    "act": "纵火",
+    "act_en": "Arson",
+    "outcome": "已发生",
+    "outcome_en": "Carried out",
+    "attribution": "官方怀疑俄方",
+    "attribution_en": "Officials suspect Russia",
+    "tier": 2,
+    "source_url": "https://euromaidanpress.com/2026/09/05/suspected-sabotage-hits-german-defense-firm/"
+   },
+   {
+    "id": "ua-sab-17",
+    "date": "2026-09-01",
+    "date_precision": "report",
+    "country": "德国",
+    "country_en": "Germany",
+    "place": "勃兰登堡与北莱茵—威斯特法伦",
+    "place_en": "Brandenburg and North Rhine-Westphalia",
+    "target": "高压输电线路",
+    "target_en": "High-voltage power lines",
+    "target_kind": "电网",
+    "target_kind_en": "Power grid",
+    "scope": "B",
+    "act": "短路装置",
+    "act_en": "Short-circuit device",
+    "outcome": "已发生",
+    "outcome_en": "Carried out",
+    "attribution": "未归因",
+    "attribution_en": "Unattributed",
+    "tier": 4,
+    "source_url": "https://euromaidanpress.com/2026/09/05/suspected-sabotage-hits-german-defense-firm/"
+   },
+   {
+    "id": "ua-sab-12",
+    "date": "2026-08-31",
+    "date_precision": "day",
+    "country": "波兰",
+    "country_en": "Poland",
+    "place": "斯卡日斯科-卡缅纳",
+    "place_en": "Skarżysko-Kamienna",
+    "target": "WB 电子公司工厂",
+    "target_en": "WB Electronics plant",
+    "target_kind": "军工厂",
+    "target_kind_en": "Arms plant",
+    "scope": "A",
+    "act": "纵火",
+    "act_en": "Arson",
+    "outcome": "已发生",
+    "outcome_en": "Carried out",
+    "attribution": "官方调查俄方线索",
+    "attribution_en": "Russian link under investigation",
+    "tier": 2,
+    "source_url": "https://www.aljazeera.com/news/2026/8/31/poland-opens-terror-probe-into-fire-at-drone-factory"
+   },
+   {
+    "id": "ua-sab-11",
+    "date": "2026-08-25",
+    "date_precision": "day",
+    "country": "斯洛伐克",
+    "country_en": "Slovakia",
+    "place": "斯洛伐克东部",
+    "place_en": "Eastern Slovakia",
+    "target": "一家乌克兰企业在斯洛伐克的无人机工厂",
+    "target_en": "Skyeton drone plant",
+    "target_kind": "军工厂",
+    "target_kind_en": "Arms plant",
+    "scope": "A",
+    "act": "纵火",
+    "act_en": "Arson",
+    "outcome": "被挫败",
+    "outcome_en": "Foiled",
+    "attribution": "官方怀疑俄方",
+    "attribution_en": "Officials suspect Russia",
+    "tier": 2,
+    "source_url": "https://euromaidanpress.com/2026/08/26/a-gasoline-and-polystyrene-mix-police-call-it-napalm-was-meant-for-a-ukrainian-drone-plant-in-slovakia/"
+   },
+   {
+    "id": "ua-sab-10",
+    "date": "2026-08-15",
+    "date_precision": "day",
+    "country": "爱沙尼亚",
+    "country_en": "Estonia",
+    "place": "塔林拉斯纳梅区",
+    "place_en": "Lasnamäe district of Tallinn",
+    "target": "米尔雷姆机器人公司厂房",
+    "target_en": "Milrem Robotics building",
+    "target_kind": "军工厂",
+    "target_kind_en": "Arms plant",
+    "scope": "A",
+    "act": "纵火",
+    "act_en": "Arson",
+    "outcome": "已发生",
+    "outcome_en": "Carried out",
+    "attribution": "官方调查俄方线索",
+    "attribution_en": "Russian link under investigation",
+    "tier": 2,
+    "source_url": "https://news.err.ee/1610114578/3-suspects-detained-over-suspected-arson-at-milrem-robotics-factory-in-estonia"
+   },
+   {
+    "id": "ua-sab-09",
+    "date": "2026-08-10",
+    "date_precision": "day",
+    "country": "保加利亚",
+    "country_en": "Bulgaria",
+    "place": "特里亚夫纳",
+    "place_en": "Tryavna",
+    "target": "EMCO 军工厂",
+    "target_en": "EMCO arms plant",
+    "target_kind": "军工厂",
+    "target_kind_en": "Arms plant",
+    "scope": "A",
+    "act": "爆炸",
+    "act_en": "Explosion",
+    "outcome": "已发生",
+    "outcome_en": "Carried out",
+    "attribution": "官方称内部原因",
+    "attribution_en": "Officials say internal cause",
+    "tier": 4,
+    "source_url": "https://news.liga.net/en/world/news/explosions-occurred-at-an-ammunition-plant-in-bulgaria"
+   },
+   {
+    "id": "ua-sab-08",
+    "date": "2026-08-04",
+    "date_precision": "day",
+    "country": "德国",
+    "country_en": "Germany",
+    "place": "莱比锡/哈勒机场",
+    "place_en": "Leipzig/Halle Airport",
+    "target": "乌克兰安-124 货机与机场货运作业",
+    "target_en": "A Ukrainian An-124 cargo aircraft and airport cargo operations",
+    "target_kind": "机场",
+    "target_kind_en": "Airport",
+    "scope": "A",
+    "act": "携爆炸物无人机",
+    "act_en": "Drone carrying explosives",
+    "outcome": "未遂",
+    "outcome_en": "Attempted, failed",
+    "attribution": "官方归因俄方",
+    "attribution_en": "Officially attributed to Russia",
+    "tier": 1,
+    "source_url": "https://en.wikipedia.org/wiki/2026_Leipzig_Airport_drone_incidents"
+   },
+   {
+    "id": "ua-sab-16",
+    "date": "2026-07-15",
+    "date_precision": "month",
+    "country": "德国",
+    "country_en": "Germany",
+    "place": "科隆—杜塞尔多夫铁路",
+    "place_en": "Cologne–Düsseldorf railway",
+    "target": "铁路信号电缆",
+    "target_en": "Rail signalling cables",
+    "target_kind": "铁路",
+    "target_kind_en": "Railway",
+    "scope": "B",
+    "act": "纵火与剪断电缆",
+    "act_en": "Arson and cable cutting",
+    "outcome": "已发生",
+    "outcome_en": "Carried out",
+    "attribution": "未归因",
+    "attribution_en": "Unattributed",
+    "tier": 4,
+    "source_url": "https://www.pravda.com.ua/eng/news/2026/09/04/8051831/"
+   },
+   {
+    "id": "ua-sab-07",
+    "date": "2026-06-15",
+    "date_precision": "month",
+    "country": "德国",
+    "country_en": "Germany",
+    "place": "图林根",
+    "place_en": "Thuringia",
+    "target": "一家巴伐利亚军工企业的设施",
+    "target_en": "Facility of a Bavarian defence company",
+    "target_kind": "军工厂",
+    "target_kind_en": "Arms plant",
+    "scope": "A",
+    "act": "侦察",
+    "act_en": "Surveillance",
+    "outcome": "被挫败",
+    "outcome_en": "Foiled",
+    "attribution": "官方怀疑俄方",
+    "attribution_en": "Officials suspect Russia",
+    "tier": 2,
+    "source_url": "https://euromaidanpress.com/2026/09/05/suspected-sabotage-hits-german-defense-firm/"
+   },
+   {
+    "id": "ua-sab-05",
+    "date": "2026-03-20",
+    "date_precision": "day",
+    "country": "捷克",
+    "country_en": "Czechia",
+    "place": "帕尔杜比采",
+    "place_en": "Pardubice",
+    "target": "帕尔杜比采的热成像与无人机工厂",
+    "target_en": "Archer-LPP plant (LPP Holding)",
+    "target_kind": "军工厂",
+    "target_kind_en": "Arms plant",
+    "scope": "A",
+    "act": "纵火",
+    "act_en": "Arson",
+    "outcome": "已发生",
+    "outcome_en": "Carried out",
+    "attribution": "官方调查俄方线索",
+    "attribution_en": "Russian link under investigation",
+    "tier": 2,
+    "source_url": "https://euromaidanpress.com/2026/03/30/fourth-suspect-arrested-in-arson-attack-on-czech-factory-that-made-drones-and-thermal-optics-for-ukraine/"
+   },
+   {
+    "id": "ua-sab-06",
+    "date": "2026-03-15",
+    "date_precision": "month",
+    "country": "德国",
+    "country_en": "Germany",
+    "place": "巴伐利亚",
+    "place_en": "Bavaria",
+    "target": "一家无人机制造商及其总经理",
+    "target_en": "A drone manufacturer and its managing director",
+    "target_kind": "人员",
+    "target_kind_en": "People",
+    "scope": "A",
+    "act": "侦察与暗杀预备",
+    "act_en": "Surveillance and assassination preparation",
+    "outcome": "被挫败",
+    "outcome_en": "Foiled",
+    "attribution": "官方怀疑俄方",
+    "attribution_en": "Officials suspect Russia",
+    "tier": 2,
+    "source_url": "https://euromaidanpress.com/2026/09/05/suspected-sabotage-hits-german-defense-firm/"
+   },
+   {
+    "id": "ua-sab-03",
+    "date": "2025-11-16",
+    "date_precision": "day",
+    "country": "波兰",
+    "country_en": "Poland",
+    "place": "米卡与戈翁布（华沙—卢布林铁路）",
+    "place_en": "Mika and Gołąb (Warsaw–Lublin railway)",
+    "target": "华沙—卢布林铁路",
+    "target_en": "Warsaw–Lublin railway line",
+    "target_kind": "铁路",
+    "target_kind_en": "Railway",
+    "scope": "A",
+    "act": "爆炸",
+    "act_en": "Explosion",
+    "outcome": "已发生",
+    "outcome_en": "Carried out",
+    "attribution": "官方归因俄方",
+    "attribution_en": "Officially attributed to Russia",
+    "tier": 1,
+    "source_url": "https://www.cnn.com/2025/11/17/europe/poland-train-track-ukraine-aid-sabotage-intl"
+   },
+   {
+    "id": "ua-sab-02",
+    "date": "2025-10-21",
+    "date_precision": "day",
+    "country": "罗马尼亚",
+    "country_en": "Romania",
+    "place": "布加勒斯特",
+    "place_en": "Bucharest",
+    "target": "国际快递公司网点",
+    "target_en": "An international courier depot",
+    "target_kind": "寄递",
+    "target_kind_en": "Parcels and couriers",
+    "scope": "A",
+    "act": "爆炸物包裹",
+    "act_en": "Explosive parcel",
+    "outcome": "被挫败",
+    "outcome_en": "Foiled",
+    "attribution": "检方称受俄方指使",
+    "attribution_en": "Prosecutors say Russian-directed",
+    "tier": 1,
+    "source_url": "https://www.aljazeera.com/news/2025/10/21/poland-detains-suspected-saboteurs-amid-fears-of-russian-hybrid"
+   },
+   {
+    "id": "ua-sab-15",
+    "date": "2025-08-15",
+    "date_precision": "month",
+    "country": "拉脱维亚",
+    "country_en": "Latvia",
+    "place": "拉脱维亚（地点未公布）",
+    "place_en": "Latvia (location not published)",
+    "target": "一列火车与铁路继电器柜",
+    "target_en": "A train and railway relay cabinets",
+    "target_kind": "铁路",
+    "target_kind_en": "Railway",
+    "scope": "B",
+    "act": "纵火",
+    "act_en": "Arson",
+    "outcome": "已发生",
+    "outcome_en": "Carried out",
+    "attribution": "官方归因俄方",
+    "attribution_en": "Officially attributed to Russia",
+    "tier": 1,
+    "source_url": "https://www.washingtonpost.com/national/2026/03/12/russia-latvia-rail-sabotage/0c4dcfd2-1e2a-11f1-a29c-fd43da9a479a_story.html"
+   },
+   {
+    "id": "ua-sab-01",
+    "date": "2025-05-09",
+    "date_precision": "day",
+    "country": "德国",
+    "country_en": "Germany",
+    "place": "科隆、康斯坦茨",
+    "place_en": "Cologne and Konstanz",
+    "target": "经德国发往乌克兰的货运包裹",
+    "target_en": "Freight parcels sent from Germany to Ukraine",
+    "target_kind": "寄递",
+    "target_kind_en": "Parcels and couriers",
+    "scope": "A",
+    "act": "爆炸物或燃烧物包裹",
+    "act_en": "Explosive or incendiary parcel",
+    "outcome": "被挫败",
+    "outcome_en": "Foiled",
+    "attribution": "检方称受俄方指使",
+    "attribution_en": "Prosecutors say Russian-directed",
+    "tier": 1,
+    "source_url": "https://www.euronews.com/2025/05/14/germany-arrests-three-ukrainians-for-plotting-russian-sabotage-bomb-attacks"
+   },
+   {
+    "id": "ua-sab-04",
+    "date": "2024-01-01",
+    "date_precision": "year",
+    "country": "立陶宛",
+    "country_en": "Lithuania",
+    "place": "立陶宛（工厂所在地未公布）",
+    "place_en": "Lithuania (plant location not published)",
+    "target": "一家为乌军生产移动电台的工厂",
+    "target_en": "TVC Solutions plant",
+    "target_kind": "军工厂",
+    "target_kind_en": "Arms plant",
+    "scope": "A",
+    "act": "纵火",
+    "act_en": "Arson",
+    "outcome": "未遂",
+    "outcome_en": "Attempted, failed",
+    "attribution": "检方称受俄方指使",
+    "attribution_en": "Prosecutors say Russian-directed",
+    "tier": 1,
+    "source_url": "https://www.eurojust.europa.eu/news/terrorist-group-responsible-arson-attacks-across-europe-taken-court"
+   }
+  ]
+ },
+ "note": "每格的数字各自带证据档：实测是本项目从一手数据算出，已核是核过一手出处，有出处多为新闻转述，待核是推断。第二段的咽喉点读数每天重建。",
+ "note_en": "Each figure carries its own evidence grade: measured means computed by this project from primary data, verified means checked against a primary source, source-linked is mostly news reporting, needs-review is inference. Chokepoint readings in the disruption stage are rebuilt daily."
+}

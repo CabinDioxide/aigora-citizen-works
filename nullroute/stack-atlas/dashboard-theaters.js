@@ -45,8 +45,9 @@ function show(k) {
     if (T.built && !maps[k]) { buildMap(T); buildCharts(T); if (T.metro) buildMetro(T); }
   } else if (viewHooks[k] && !viewHooks[k].done) { viewHooks[k].fn(); viewHooks[k].done = true; }
   if (maps[k]) setTimeout(() => maps[k].invalidateSize(), 50);
-  history.replaceState(null, '', '#' + k);
-  const a = document.getElementById('langlink'); if (a) a.href = t('lang_href') + '#' + k;  // 语言链接带上当前视图
+  const anchor = k === 'cost' && window.COST_SEL ? 'cost=' + window.COST_SEL : k;  // 代价视图带上当前那一条链（2026-09-21）
+  history.replaceState(null, '', '#' + anchor);
+  const a = document.getElementById('langlink'); if (a) a.href = t('lang_href') + '#' + anchor;  // 语言链接带上当前视图
 }
 function renderPlan(T) {
   return `<h2>${esc(tv(T.title))} <small>${t('plan_sub')}</small></h2><div class="plan">${tzf(T, 'plan')}</div>`;
@@ -88,6 +89,7 @@ function renderBuilt(T) {
   <div class="multi">${charts}</div>
   <h2>${t('ba_h2')} <small>${t('ba_sub')}</small></h2>
   ${ba}
+  ${renderSupplyAttacks(T)}
   ${renderStrikes(T)}
   ${renderS2(T)}
   ${renderChains(T)}
@@ -149,6 +151,82 @@ function buildMetro(T) {
   leg.querySelectorAll('.l').forEach(sp => sp.addEventListener('click', () => { const on = sp.classList.toggle('on'); leg.querySelectorAll('.l').forEach(o => { if (o !== sp) o.classList.remove('on'); });
     svg.querySelectorAll('.seg').forEach(p => p.classList.toggle('dim', on && p.dataset.line !== sp.dataset.line));
     (geoLines[T.key] || []).forEach(o => o.pl.setStyle({opacity: (on && o.line !== sp.dataset.line) ? 0.08 : (o.kind === 'bypass' ? 0.9 : 0.95)})); }));
+}
+/* 援乌武器供应链在欧洲境内遭袭（乌克兰战区，2026-09-21）。数据是 latest.json 的 theaters[ukraine].supply_attacks（monitor/supply_attacks.py）：
+ * 事件表人工维护、逐行出处；范围 A 直接针对援乌设施，B 通用设施单列；归因照官方与检方原话分四档，tier 1 最强。英文页取 *_en 字段；
+ * names_orig（外文原名）只放在对象格的 title 里，中文页正文不出现拉丁字母。 */
+const SA_TIER_COLOR = {1: '#7f1d1d', 2: '#c0392b', 3: '#e8836f', 4: '#f2ab99'};
+const saL = (o, k) => (LANG === 'en' ? (o[k + '_en'] || o[k]) : o[k]) ?? '';
+function saDate(e) {
+  if (e.date_precision === 'month') return esc(e.date.slice(0, 7)) + `<span class="u">${t('date_month_note')}</span>`;
+  if (e.date_precision === 'year') return esc(e.date.slice(0, 4));
+  if (e.date_precision === 'report') return esc(e.date) + `<span class="u">${t('date_report_note')}</span>`;
+  return esc(e.date);
+}
+function saBars(monthly, narrow) {  // narrow：窄屏另出一份宽 380 的图，字不随整图缩小到看不清
+  const W = narrow ? 380 : 760, H = narrow ? 170 : 150, L_ = 26, B = 22, T_ = 14, n = monthly.length, mx = Math.max(1, ...monthly.map(m => m.n)), fs = narrow ? 12 : 10.5;
+  const step = (W - L_ - 6) / n, bw = step * 0.7;
+  let o = '';
+  for (let g = 0; g <= mx; g++) { const y = T_ + (H - T_ - B) * (1 - g / mx); o += `<line x1="${L_}" x2="${W - 6}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#ececE8"/><text x="${L_ - 5}" y="${(y + 4).toFixed(1)}" text-anchor="end" font-size="${fs}" fill="#86868b">${g}</text>`; }
+  monthly.forEach((m, i) => { const x = L_ + i * step + (step - bw) / 2, h = (H - T_ - B) * m.n / mx, y = H - B - h;
+    o += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(h, 0).toFixed(1)}" fill="#c0392b" rx="2"><title>${esc(m.month)}: ${m.n}</title></rect>`;
+    if (m.n) o += `<text x="${(x + bw / 2).toFixed(1)}" y="${(y - 3).toFixed(1)}" text-anchor="middle" font-size="${fs}" fill="#7f1d1d">${m.n}</text>`;
+    if (i % (narrow ? 6 : 3) === 0) o += `<text x="${(x + bw / 2).toFixed(1)}" y="${H - 6}" text-anchor="${narrow && i === 0 ? 'start' : 'middle'}" font-size="${fs}" fill="#86868b">${esc(m.month)}</text>`; });
+  return `<svg class="${narrow ? 'sa-n' : 'sa-w'}" viewBox="0 0 ${W} ${H}" width="100%" style="max-width:${W}px">${o}</svg>`;
+}
+function saRow(e, compact) {
+  const tier = `<span class="sa-tier t${e.tier}" title="${esc(saL(e, 'attribution_note'))}">${esc(saL(e, 'attribution'))}</span>`;
+  const src = `<a href="${esc(e.source_url)}" target="_blank" rel="noopener">${t('src_link')}</a>${e.source_url2 ? ` · <a href="${esc(e.source_url2)}" target="_blank" rel="noopener">${t('src_link2')}</a>` : ''}`;
+  const cells = [
+    [t('th_date'), saDate(e)], [t('th_country'), esc(saL(e, 'country'))], [t('th_place'), esc(saL(e, 'place'))],
+    [t('th_target'), `<span title="${esc(nn(e.names_orig))}">${esc(saL(e, 'target'))}</span>`], [t('th_role'), esc(saL(e, 'supply_role'))],
+    [t('th_act'), esc(saL(e, 'act'))], [t('th_outcome'), `<span title="${esc(saL(e, 'damage'))}">${esc(saL(e, 'outcome'))}</span>`],
+    [t('th_legal'), esc(saL(e, 'legal_status'))], [t('th_attr'), tier], [t('th_src'), src]];
+  return `<tr>${cells.map(([h, v]) => `<td data-h="${esc(h)}">${v}</td>`).join('')}</tr>`;
+}
+function renderSupplyAttacks(T) {
+  const SA = T.supply_attacks; if (!SA) return '';
+  const s = SA.summary, tiers = s.by_tier || {}, tn = s.tier_names || {};
+  const tierName = k => (tn[k] || [])[LANG === 'en' ? 1 : 0] || '';
+  const A = SA.events.filter(e => e.scope === 'A'), B = SA.events.filter(e => e.scope !== 'A');
+  const tile = (label, v, sub) => `<div class="tile"><div class="l">${label}</div><div class="v">${esc(v)}</div><div class="u">${t('sa_unit')}${sub ? ' · ' + sub : ''}</div></div>`;
+  const head = [t('th_date'), t('th_country'), t('th_place'), t('th_target'), t('th_role'), t('th_act'), t('th_outcome'), t('th_legal'), t('th_attr'), t('th_src')].map(h => `<th>${h}</th>`).join('');
+  const legend = [1, 2, 3, 4].map(k => `<span class="sa-tier t${k}">${esc(tierName(k))}</span>`).join(' ');
+  const ag = (SA.aggregates || []).map(r => `<tr><td data-h="${esc(t('th_metric'))}">${esc(saL(r, 'metric'))}</td><td data-h="${esc(t('th_value'))}" class="num">${esc(r.value)}</td><td data-h="${esc(t('th_unit'))}">${esc(saL(r, 'unit'))}</td><td data-h="${esc(t('th_period'))}">${esc(LANG === 'en' ? String(r.period).replace(' 至 ', ' to ').replace(/(\d{4}) 年全年/, 'full year $1') : r.period)}</td><td data-h="${esc(t('th_geo'))}">${esc(saL(r, 'geo'))}</td><td data-h="${esc(t('th_note'))}">${esc(saL(r, 'note'))}</td><td data-h="${esc(t('th_src'))}"><a href="${esc(r.source_url)}" target="_blank" rel="noopener" title="${esc(LANG === 'en' ? '' : '')}">${t('src_link')}</a></td></tr>`).join('');
+  return `<section class="sa" id="sa_${T.key}">
+  <h2>${t('sa_h2')}</h2>
+  <p class="legend sa-note">${tzh(SA.scope_note, SA.scope_note_en)}</p>
+  <div class="tiles sa-tiles">${tile(t('sa_n_A'), s.n_A, A.length ? t('sa_since', {y: A.map(e => e.date.slice(0, 4)).sort()[0]}) : '')}${tile(t('sa_last30'), s.n_A_last30)}${tile(esc(tierName(1)), tiers['1'] ?? tiers[1] ?? 0)}${tile(t('sa_plants'), (s.by_kind || {})['军工厂'] ?? 0)}</div>
+  <div class="multi sa-bars"><div class="legend" style="margin-bottom:4px">${t('sa_monthly')}</div>${saBars(s.monthly_A || [])}${saBars(s.monthly_A || [], true)}<p class="legend sa-caveat">${t('sa_trend_note')}</p></div>
+  <p class="legend">${t('sa_tiers')}${legend}</p>
+  <p class="legend">${t('sa_map_hint')}</p>
+  <h3 class="sa-h3">${t('sa_events_h')}</h3>
+  <div class="sa-scroll"><table class="sa-tbl"><tr>${head}</tr>${A.map(e => saRow(e)).join('')}</table></div>
+  ${B.length ? `<h3 class="sa-h3">${t('sa_b_h')}</h3><div class="sa-scroll"><table class="sa-tbl sa-b"><tr>${head}</tr>${B.map(e => saRow(e)).join('')}</table></div>` : ''}
+  <h3 class="sa-h3">${t('sa_agg_h')}</h3>
+  <div class="sa-scroll"><table class="sa-tbl sa-agg"><tr><th>${t('th_metric')}</th><th class="num">${t('th_value')}</th><th>${t('th_unit')}</th><th>${t('th_period')}</th><th>${t('th_geo')}</th><th>${t('th_note')}</th><th>${t('th_src')}</th></tr>${ag}</table></div>
+  </section>`;
+}
+/* 地图图层：每件一个点，按归因分档上色；位置只到国家或地区的画空心圈。默认视野不改，另给一个「看全部遭袭点」按钮。 */
+function addSupplyAttackLayer(T, map) {
+  const SA = T.supply_attacks; if (!SA || !SA.events || !SA.events.length) return null;
+  const g = L.layerGroup(), pts = [];
+  SA.events.forEach(e => {
+    if (e.lat == null || e.lon == null) return;
+    const coarse = e.loc_precision === 'country' || e.loc_precision === 'region';
+    const c = SA_TIER_COLOR[e.tier] || '#888';
+    pts.push([e.lat, e.lon]);
+    L.circleMarker([e.lat, e.lon], coarse ? {radius: 9, color: c, weight: 3.5, fill: false} : {radius: 7, color: '#5b1a0e', weight: 1.2, fillColor: c, fillOpacity: 0.95})
+      .bindTooltip(`${e.date.slice(0, e.date_precision === 'year' ? 4 : e.date_precision === 'month' ? 7 : 10)} · ${saL(e, 'place')} · ${saL(e, 'target')}`, {direction: 'top', className: 'lbl'})
+      .bindPopup(`<b>${esc(saL(e, 'target'))}</b><br>${saDate(e)} · ${esc(saL(e, 'country'))} · ${esc(saL(e, 'place'))}<br>${esc(saL(e, 'act'))} · ${esc(saL(e, 'outcome'))}<br><span class="sa-tier t${e.tier}">${esc(saL(e, 'attribution'))}</span>${e.scope !== 'A' ? `<br><span class="u">${t('sa_b_h')}</span>` : ''}${coarse ? `<br><span class="u">${t('ua_loc_approx')}</span>` : ''}<br><a href="${esc(e.source_url)}" target="_blank" rel="noopener">${t('src_link')}</a>`)
+      .addTo(g);
+  });
+  const Fit = L.Control.extend({options: {position: 'topright'}, onAdd() {
+    const b = L.DomUtil.create('button', 'sa-fit'); b.type = 'button'; b.textContent = t('ua_fit_all'); b.title = t('ua_fit_all');
+    L.DomEvent.disableClickPropagation(b); L.DomEvent.on(b, 'click', () => { if (!map.hasLayer(g)) g.addTo(map); map.fitBounds(L.latLngBounds(pts).pad(0.12)); }); return b; }});
+  new Fit().addTo(map);
+  map.__saBounds = pts;
+  return g;
 }
 function renderStrikes(T) {
   if (!T.fire_sites) return `<h2>${t('strikes_h2')} <small>${t('strikes_sub_short')}</small></h2><p class="legend">${t('strikes_none')}</p>`;
@@ -323,6 +401,8 @@ function buildMap(T) {
   }
   if (T.metro) { strat.addTo(map); nodesLayer.addTo(map); metroLayer.addTo(map); } else { pts.addTo(map); gd.addTo(map); uc.addTo(map); strat.addTo(map); infraHit.addTo(map); nodesLayer.addTo(map); }
   const overlays = {[t('layer_metro')]: metroLayer, [t('layer_nodes')]: nodesLayer, [t('layer_pts')]: pts, [t('layer_strat', {n: nStrat})]: strat, [t('layer_hit', {n: nHit})]: infraHit, [t('layer_rest', {n: nRest})]: infraRest, [t('layer_gdelt')]: gd, [t('layer_ucdp')]: uc, [t('layer_fires')]: fires};
+  const saLayer = addSupplyAttackLayer(T, map);
+  if (saLayer) { saLayer.addTo(map); overlays[t('layer_ua_attacks')] = saLayer; }
   L.control.layers(bases, overlays, {collapsed: true}).addTo(map); layersTitle(map);
   map.__overlays = overlays;  // 验收脚本按它遍历默认不显示的图层里的提示与弹窗
 }

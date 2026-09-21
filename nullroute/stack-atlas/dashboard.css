@@ -98,3 +98,32 @@ tr.strat td{background:rgba(240,180,41,.08)}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 5px 0 10px;vertical-align:middle}
 .leaflet-popup-content{font-size:12.5px;line-height:1.45}
 a{color:var(--s1)}
+/* 乌克兰战区：援乌武器供应链遭袭一节（2026-09-21） */
+.sa{margin-top:6px}
+.sa .sa-note{margin:0 0 8px;max-width:1100px}
+.sa-tiles{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));margin-bottom:10px}
+.sa-bars{margin-bottom:8px}
+.sa-bars svg.sa-w{display:block}.sa-bars svg.sa-n{display:none}
+@media (max-width:760px){.sa-bars svg.sa-w{display:none}.sa-bars svg.sa-n{display:block}.sa-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.sa-caveat{margin:4px 0 0;color:var(--ink2)}
+.sa-h3{font-size:13.5px;margin:14px 0 6px;font-weight:600}
+.sa-scroll{overflow-x:auto}
+.sa-tbl td{font-size:12.5px}
+.sa-tbl td .u{color:var(--ink3);font-size:11.5px}
+.sa-b{opacity:.92}
+@media (min-width:761px){.sa-tbl td:nth-child(10),.sa-tbl td:nth-child(2),.sa-tbl td:nth-child(6),.sa-tbl td:nth-child(7),.sa-tbl td:nth-child(8){white-space:nowrap}.sa-tbl td:nth-child(1){white-space:nowrap}.sa-tbl td:nth-child(9){min-width:118px}.sa-agg td:nth-child(n){white-space:normal}}
+.sa-tier{display:inline-block;border-radius:4px;padding:0 6px;font-size:11.5px;font-weight:600;color:#fff;line-height:1.6}
+.sa-tier.t1{background:#7f1d1d}.sa-tier.t2{background:#c0392b}.sa-tier.t3{background:#e8836f;color:#3b0d06}.sa-tier.t4{background:#f6c9bd;color:#5b1a0e}
+.sa-fit{background:#fff;border:2px solid rgba(0,0,0,.2);border-radius:6px;padding:4px 9px;font-size:12px;font-weight:600;cursor:pointer;color:#7f1d1d}
+.sa-fit:hover{background:#fdecec}
+/* 窄屏：事件表每行摊成一张卡，表头用 data-h 写在格前，不出横向滚动 */
+@media (max-width:760px){
+  .sa-tbl,.sa-tbl tbody,.sa-tbl tr,.sa-tbl td{display:block;width:100%}
+  .sa-tbl tr:first-child{display:none}
+  .sa-tbl tr{border-bottom:2px solid var(--line2);padding:6px 0}
+  .sa-tbl td{border:0;padding:2px 8px}
+  .sa-tbl td::before{content:attr(data-h);display:inline-block;min-width:6.5em;color:var(--ink3);font-size:11.5px;margin-right:6px}
+  .sa-tbl td.num{text-align:left}
+}
+/* 窄屏：战区页底部两栏（冲突事件与公司表）改单栏，公司表可在自身内横向滚动，不把整页撑出横向滚动条（2026-09-21，375 宽验收时发现英文页乌克兰视图被公司表撑到 399 宽） */
+@media (max-width:760px){.grid2{grid-template-columns:minmax(0,1fr)}.grid2 table{display:block;overflow-x:auto}}
