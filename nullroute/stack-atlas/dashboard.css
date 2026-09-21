@@ -127,3 +127,21 @@ a{color:var(--s1)}
 }
 /* 窄屏：战区页底部两栏（冲突事件与公司表）改单栏，公司表可在自身内横向滚动，不把整页撑出横向滚动条（2026-09-21，375 宽验收时发现英文页乌克兰视图被公司表撑到 399 宽） */
 @media (max-width:760px){.grid2{grid-template-columns:minmax(0,1fr)}.grid2 table{display:block;overflow-x:auto}}
+/* 战区页：海域船数与上空飞机两节（2026-09-21） */
+.va{margin-top:6px}
+.va .va-lead{margin:0 0 8px;max-width:1100px}
+.va-scroll{overflow-x:auto;max-width:100%}
+.va-tbl td,.va-air td,.va-mil td{font-size:12.5px;vertical-align:middle}
+.va-tbl th.va-grp{text-align:center;border-bottom:1px solid var(--line2)}
+.va-tbl td .u{color:var(--ink3);font-size:11px;white-space:nowrap}
+.va-row{cursor:pointer}
+.va-row:hover td{background:var(--panel2)}
+.va-row.on td{background:#eaf2fe}
+.va-row.on td:first-child{box-shadow:inset 3px 0 0 #1d1d1f}
+.va-row:focus-visible{outline:2px solid var(--s1);outline-offset:-2px}
+.va-tbl .vb{display:inline-block;min-width:2.6em;text-align:center;border:1px solid transparent;border-radius:4px;padding:0 4px;font-weight:600}
+.va-spark{display:block}
+.va-src{margin-top:4px}
+.ident{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.95em}
+/* 窄屏：说明一栏收起；海域名不逐字折行，表在自身框内横向滚动，整页不出横向滚动条；小折线缩到 100 宽 */
+@media (max-width:760px){.va-tbl .va-note{display:none}.va-tbl td,.va-tbl th{padding-left:5px;padding-right:5px}.va-tbl th{white-space:nowrap}.va-tbl td:first-child{min-width:7em}.va-tbl .va-spark{width:100px;height:26px}.va-mil th{white-space:nowrap}}

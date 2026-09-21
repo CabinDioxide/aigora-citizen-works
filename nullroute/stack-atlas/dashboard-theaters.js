@@ -89,6 +89,7 @@ function renderBuilt(T) {
   <div class="multi">${charts}</div>
   <h2>${t('ba_h2')} <small>${t('ba_sub')}</small></h2>
   ${ba}
+  ${renderVesselsAir(T)}
   ${renderSupplyAttacks(T)}
   ${renderStrikes(T)}
   ${renderS2(T)}
@@ -403,6 +404,7 @@ function buildMap(T) {
   const overlays = {[t('layer_metro')]: metroLayer, [t('layer_nodes')]: nodesLayer, [t('layer_pts')]: pts, [t('layer_strat', {n: nStrat})]: strat, [t('layer_hit', {n: nHit})]: infraHit, [t('layer_rest', {n: nRest})]: infraRest, [t('layer_gdelt')]: gd, [t('layer_ucdp')]: uc, [t('layer_fires')]: fires};
   const saLayer = addSupplyAttackLayer(T, map);
   if (saLayer) { saLayer.addTo(map); overlays[t('layer_ua_attacks')] = saLayer; }
+  addVesselAirLayers(T, map, overlays);
   L.control.layers(bases, overlays, {collapsed: true}).addTo(map); layersTitle(map);
   map.__overlays = overlays;  // 验收脚本按它遍历默认不显示的图层里的提示与弹窗
 }
@@ -422,4 +424,134 @@ function buildCharts(T) {
       scales: {x: {grid: {display: false}, ticks: {maxTicksLimit: 10, maxRotation: 0, autoSkip: true}}, y: {grid: {color: col('--line')}, beginAtZero: s.kind === 'bar', ticks: {maxTicksLimit: 4}}}
     }}));
   });
+}
+/* 海域船数与上空飞机两节（2026-09-21）。数据是 latest.json 每个战区的 vessels 与 aircraft（monitor/vessel_air.py）：
+ * 船数来自全球渔业观察，每片海域逐日货船数与全部船数，基线 2026-01-01 至 02-27 日均，近况取最后 7 个有记录的日子的日均；
+ * 飞机来自 adsb.fi，日更时一次快照。只做算术，不判断原因。船名、船旗码、呼号、注册号、机型代码是识别码，标 class ident，
+ * 中文页照原样显示（语言扫描单列这一类）。点船数表一行：在战区地图上高亮这片海域的框（2026-09-21 委托改：不列具体船只，week_vessels 不上页）。 */
+const VA_RATIO_CLS = r => r == null ? '' : r < 0.5 ? 'v-red' : r < 0.85 ? 'v-amber' : r > 1.15 ? 'v-blue' : '';
+const VA_RATIO_COLOR = r => r == null ? '#86868b' : r < 0.5 ? '#d93025' : r < 0.85 ? '#e8a000' : r > 1.15 ? '#1a6fe0' : '#5a8f6a';
+const vaPolys = {};  // {theater: {areaId: L.polygon}}
+const vaLayers = {};  // {theater: {vessels, aircraft}}
+const vaRatio = (a, b) => (b ? Math.round(a / b * 100) / 100 : null);
+const vaNum = v => v == null ? '—' : String(v);
+const vaMean = v => v == null ? '—' : Number(v).toFixed(1);  // 日均一律一位小数，与警报文字一致
+const vaUtc = s => String(s || '').replace('T', ' ').replace(/:\d\dZ$/, '').replace(/Z$/, '');
+const vaIdent = (s, title) => `<span class="ident"${title ? ` title="${esc(title)}"` : ''}>${esc(s)}</span>`;
+/* 逐日货船数的小折线：横轴按日期（缺日断线），竖线 2026-02-28。 */
+function vaSpark(daily, from, mark) {
+  const W = 150, H = 32, day = s => Date.parse(s + 'T00:00:00Z') / 864e5;
+  const pts = daily.filter(x => x.date >= from);
+  if (pts.length < 2) return '';
+  const x0 = day(from), x1 = day(pts[pts.length - 1].date), mx = Math.max(1, ...pts.map(x => x.cargo));
+  const X = d => 1 + (day(d) - x0) / Math.max(1, x1 - x0) * (W - 2), Y = v => H - 2 - v / mx * (H - 4);
+  let path = '', prev = null;
+  pts.forEach(p => { const d = day(p.date); path += (prev == null || d - prev > 3 ? 'M' : 'L') + X(p.date).toFixed(1) + ',' + Y(p.cargo).toFixed(1); prev = d; });
+  const mx_ = X(mark).toFixed(1);
+  return `<svg class="va-spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}"><title>${esc(t('va_spark_title', {a: from, b: pts[pts.length - 1].date, m: mark, mx: mx}))}</title>` +
+    `<line x1="${mx_}" x2="${mx_}" y1="0" y2="${H}" stroke="#ff3b30" stroke-dasharray="3 2" stroke-width="1"/><path d="${path}" fill="none" stroke="#0071e3" stroke-width="1.3"/></svg>`;
+}
+function vaHistSpark(h) {
+  if (!h || h.length < 2) return '';
+  const W = 120, H = 28, mx = Math.max(1, ...h.map(x => x.total));
+  const pts = h.map((x, i) => `${(1 + i / (h.length - 1) * (W - 2)).toFixed(1)},${(H - 2 - x.total / mx * (H - 4)).toFixed(1)}`).join(' ');
+  return `<svg class="va-spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}"><title>${esc(t('ac_hist_title', {n: h.length}))}</title><polyline points="${pts}" fill="none" stroke="#0071e3" stroke-width="1.3"/></svg>`;
+}
+function renderVessels(T) {
+  const V = T.vessels; if (!V || !V.areas || !V.areas.length) return '';
+  const pre = T.key === 'middle_east' ? t('va_pre') : t('va_base');
+  const rows = V.areas.map(a => {
+    const rAll = vaRatio(a.recent_all, a.baseline_all);
+    const note = LANG === 'en' ? (VA_NOTE_EN[a.id] || '') : (a.note || '');
+    const off = a.recent_to && a.recent_to !== V.data_through ? `<div class="u">${t('va_recent_span', {a: esc(a.recent_from), b: esc(a.recent_to)})}</div>` : '';
+    return `<tr class="va-row" data-area="${esc(a.id)}" tabindex="0" onclick="vaPick('${T.key}','${esc(a.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();vaPick('${T.key}','${esc(a.id)}')}">
+      <td data-f="name"><b>${esc(LANG === 'en' ? a.en : a.zh)}</b></td><td class="va-note">${esc(note)}</td>
+      <td class="num" data-f="baseline_cargo">${vaMean(a.baseline_cargo)}</td><td class="num" data-f="recent_cargo">${vaMean(a.recent_cargo)}${off}</td><td class="num" data-f="ratio_cargo"><span class="vb ${VA_RATIO_CLS(a.ratio_cargo)}">${vaNum(a.ratio_cargo)}</span></td>
+      <td class="num" data-f="baseline_all">${vaMean(a.baseline_all)}</td><td class="num" data-f="recent_all">${vaMean(a.recent_all)}</td><td class="num" data-f="ratio_all"><span class="vb ${VA_RATIO_CLS(rAll)}">${vaNum(rAll)}</span></td>
+      <td>${vaSpark(a.daily || [], '2026-01-01', '2026-02-28')}</td></tr>`;
+  }).join('');
+  return `<section class="va" id="va_${T.key}">
+  <h2>${t('va_h2')}</h2>
+  <p class="legend va-lead">${t('va_note', {d: esc(V.data_through), b0: esc(V.baseline[0]), b1: esc(V.baseline[1])})}</p>
+  <div class="va-scroll"><table class="va-tbl" id="vat_${T.key}">
+    <tr><th rowspan="2">${t('va_th_area')}</th><th rowspan="2" class="va-note">${t('th_note')}</th><th colspan="3" class="va-grp">${t('va_th_cargo')}</th><th colspan="3" class="va-grp">${t('va_th_all')}</th><th rowspan="2">${t('va_th_spark')}</th></tr>
+    <tr><th class="num">${pre}</th><th class="num">${t('va_recent')}</th><th class="num">${t('th_ratio')}</th><th class="num">${pre}</th><th class="num">${t('va_recent')}</th><th class="num">${t('th_ratio')}</th></tr>
+    ${rows}</table></div>
+  <p class="legend">${t('va_legend')} <span class="vb v-red">&lt; 0.5</span> <span class="vb v-amber">0.5–0.85</span> <span class="vb v-blue">&gt; 1.15</span> · ${t('va_click')}</p>
+  <p class="legend va-src">${t('va_src')}</p>
+  </section>`;
+}
+/* 点一行：地图上这片海域的框加粗高亮，其余复原，地图移到框上；再点同一行取消。不滚动页面。 */
+function vaPick(key, id) {
+  const row = document.querySelector(`#vat_${key} tr.va-row[data-area="${id}"]`); if (!row) return;
+  const on = !row.classList.contains('on');
+  document.querySelectorAll(`#vat_${key} tr.va-row`).forEach(r => { r.classList.remove('on'); r.setAttribute('aria-pressed', 'false'); });
+  if (on) { row.classList.add('on'); row.setAttribute('aria-pressed', 'true'); }
+  vaHighlight(key, on ? id : null);
+}
+function vaHighlight(key, id) {
+  const P = vaPolys[key] || {}, map = maps[key];
+  Object.entries(P).forEach(([k, p]) => p.setStyle(k === id ? {weight: 4, color: '#1d1d1f', dashArray: null, fillOpacity: 0.45} : {weight: 1.5, color: p.options.baseColor, dashArray: null, fillOpacity: 0.25}));
+  if (!id || !map || !P[id]) return;
+  const L_ = (vaLayers[key] || {}).vessels; if (L_ && !map.hasLayer(L_)) L_.addTo(map);
+  P[id].bringToFront();
+  map.fitBounds(P[id].getBounds(), {maxZoom: 8, padding: [40, 40], animate: false});
+}
+function renderAircraft(T) {
+  const A_ = T.aircraft; if (!A_ || !A_.circles) return '';
+  const hasHist = A_.circles.some(c => (c.history || []).length >= 2);
+  const rows = A_.circles.map(c => `<tr data-circle="${esc(c.id)}"><td><b>${esc(LANG === 'en' ? c.en : c.zh)}</b></td><td class="num" data-f="total">${vaNum(c.total)}</td><td class="num" data-f="military">${vaNum(c.military)}</td>${hasHist ? `<td>${vaHistSpark(c.history)}</td>` : ''}</tr>`).join('');
+  const mil = vaMilList(A_);
+  const alt = v => v == null ? '—' : (typeof v === 'number' ? v.toLocaleString('en-US') : (v === 'ground' ? t('ac_ground') : esc(v)));
+  const milRows = mil.map(m => `<tr data-hex="${esc(m.hex)}"><td>${(m.flight || '').trim() ? vaIdent((m.flight || '').trim()) : '—'}</td><td>${m.t ? vaIdent(m.t, m.desc || '') : '—'}</td><td>${m.r ? vaIdent(m.r) : '—'}</td><td class="num">${alt(m.alt_baro)}</td><td class="num">${m.lat != null ? m.lat.toFixed(2) + ', ' + m.lon.toFixed(2) : '—'}</td></tr>`).join('');
+  const rad = (A_.circles[0] || {}).dist_nm ?? '';
+  return `<section class="va" id="ac_${T.key}">
+  <h2>${t('ac_h2')}</h2>
+  <p class="legend va-lead">${t('ac_note', {t: esc(vaUtc(A_.taken_utc)), r: esc(rad)})}</p>
+  <div class="va-scroll"><table class="va-air" id="act_${T.key}"><tr><th>${t('ac_th_area')}</th><th class="num">${t('ac_th_total')}</th><th class="num">${t('ac_th_mil')}</th>${hasHist ? `<th>${t('ac_th_hist')}</th>` : ''}</tr>${rows}</table></div>
+  ${hasHist ? '' : `<p class="legend">${t('ac_one_snap')}</p>`}
+  <h3 class="sa-h3">${t('ac_mil_h', {n: mil.length})}</h3>
+  ${mil.length ? `<div class="va-scroll"><table class="va-mil" id="acm_${T.key}"><tr><th>${t('ac_th_call')}</th><th>${t('ac_th_type')}</th><th>${t('ac_th_reg')}</th><th class="num">${t('ac_th_alt')}</th><th class="num">${t('ac_th_pos')}</th></tr>${milRows}</table></div>` : `<p class="legend">${t('ac_mil_none')}</p>`}
+  <p class="legend va-src">${t('ac_src')}</p>
+  </section>`;
+}
+/* 军机明细：各圆形区域的 military_list 在前，战区范围内的 mil_in_box 在后，按 hex 去重，先出现的留下。 */
+function vaMilList(A_) {
+  const seen = new Set(), out = [];
+  [...A_.circles.flatMap(c => c.military_list || []), ...(A_.mil_in_box || [])].forEach(m => { if (!m || !m.hex || seen.has(m.hex)) return; seen.add(m.hex); out.push(m); });
+  return out;
+}
+function renderVesselsAir(T) { return renderVessels(T) + renderAircraft(T); }
+/* 战区地图的两个图层：海域框按货船比值上色；圆形区域画圆（只描边，不挡下面图层的点击），军机画点。 */
+function addVesselAirLayers(T, map, overlays) {
+  const V = T.vessels, A_ = T.aircraft;
+  if (V && V.areas && V.areas.length) {
+    const g = L.layerGroup(); vaPolys[T.key] = {};
+    V.areas.forEach(a => {
+      if (!a.polygon || !a.polygon.length) return;
+      const c = VA_RATIO_COLOR(a.ratio_cargo), rAll = vaRatio(a.recent_all, a.baseline_all), name = LANG === 'en' ? a.en : a.zh;
+      const p = L.polygon(a.polygon.map(([lon, lat]) => [lat, lon]), {color: c, baseColor: c, weight: 1.5, fillColor: c, fillOpacity: 0.25})
+        .bindTooltip(name, {direction: 'top', className: 'lbl', sticky: true})
+        .bindPopup(`<b>${esc(name)}</b><br>${t('va_pop_cargo', {b: vaMean(a.baseline_cargo), r: vaMean(a.recent_cargo), x: vaNum(a.ratio_cargo)})}<br>${t('va_pop_all', {b: vaMean(a.baseline_all), r: vaMean(a.recent_all), x: vaNum(rAll)})}<br><span class="u">${t('va_pop_base', {b0: esc(V.baseline[0]), b1: esc(V.baseline[1]), d: esc(V.data_through)})}</span>`)
+        .addTo(g);
+      vaPolys[T.key][a.id] = p;
+    });
+    g.addTo(map); overlays[t('layer_vessels')] = g; (vaLayers[T.key] = vaLayers[T.key] || {}).vessels = g;
+  }
+  if (A_ && A_.circles && A_.circles.length) {
+    const g = L.layerGroup();
+    A_.circles.forEach(c => {
+      const name = LANG === 'en' ? c.en : c.zh;
+      L.circle([c.lat, c.lon], {radius: c.dist_nm * 1852, color: '#5856d6', weight: 1.5, dashArray: '5 5', fill: false})
+        .bindTooltip(name, {sticky: true, className: 'lbl'})
+        .bindPopup(`<b>${esc(name)}</b><br>${t('ac_pop', {r: c.dist_nm, n: c.total, m: c.military})}<br><span class="u">${t('ac_pop_t', {t: esc(vaUtc(A_.taken_utc))})}</span>`).addTo(g);
+    });
+    vaMilList(A_).forEach(m => {
+      if (m.lat == null || m.lon == null) return;
+      const call = (m.flight || '').trim();
+      L.circleMarker([m.lat, m.lon], {radius: 4.5, color: '#fff', weight: 1.2, fillColor: '#5856d6', fillOpacity: 0.95})
+        .bindTooltip(`${t('ac_mil_pt')} ${call ? vaIdent(call) : ''} ${m.t ? vaIdent(m.t) : ''}`, {direction: 'top', className: 'lbl'}).addTo(g);
+    });
+    g.addTo(map); overlays[t('layer_aircraft')] = g; (vaLayers[T.key] = vaLayers[T.key] || {}).aircraft = g;
+  }
 }

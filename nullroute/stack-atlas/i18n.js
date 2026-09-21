@@ -15,6 +15,7 @@
 const LATIN_KEEP = [
   'SWIFT', 'CIPS', 'LNG', 'LPG', 'GPU', 'EUV', 'DUV', 'HBM', 'EDA', 'GaN', 'AI', 'AIS', 'ADS-B', 'FIRMS', 'GDELT', 'PortWatch', 'SEC', 'IMF', 'DWT', 'WTI', 'ADR', 'CPC', 'MSA', 'UCDP', 'FRP', 'OFAC', 'BGP', 'DNS', 'CA', 'CDN', 'DDoS', 'ENTSOG', 'GIE', 'AGSI', 'IODA', 'GEM', 'OSM', 'MRI',
   'Esri', 'Leaflet', 'Sentinel-2', 'Copernicus', 'Stack Atlas', 'aisstream', 'Global Fishing Watch', 'GitHub',
+  'adsb.fi',  // 飞机数据来源的名称，署名要求照原样写并链接主页（2026-09-21）；船名、呼号、注册号、机型代码是识别码，不进这张表，页面上标 class ident，扫描脚本单列
   'QAFCO', 'MAPNA', 'OPC', 'SWCC', 'IPP', 'RCMC', 'RPPG', 'ZPPG', 'NCI', 'ISCC', 'IGCC', 'OCGT', 'CCGT', 'ALBA', 'BAZAN', 'ABOT', 'OTEKO', 'ADMA-OPCO', 'Ethydco', 'SASREF', 'MARAFIQ', 'ICE',
   'MAG', 'FDP', 'EL', 'SDN', 'RMB', 'API', 'IP', 'HTTPS', 'TSMC', 'ASML', 'NVIDIA', 'Nullroute', 'capacity_tanker',
   'Esc', 'English', 'CHIPS', 'Fedwire', 'Visa', 'Mastercard', 'USDT', 'SoC', 'OPEC', 'SK',  // 键名、语言链接、栈节点标签里的机构与品牌名
@@ -174,6 +175,34 @@ const UI = {
   date_month_note: ['（日未公布）', ' (day not published)'], date_report_note: ['（取报道日）', ' (report date)'], src_link: ['出处', 'Source'], src_link2: ['另一出处', 'Second source'],
   layer_ua_attacks: ['援乌供应链遭袭', 'Attacks on the Ukraine-aid supply chain'], ua_fit_all: ['看全部遭袭点', 'Show all attack sites'],
   ua_loc_approx: ['位置取所在国家或地区', 'Location is the country or region'],
+  /* 战区页：海域船数与上空飞机（2026-09-21） */
+  va_h2: ['海域船数', 'Vessels in key waters'],
+  va_note: ['数据来自全球渔业观察，卫星加岸站船位，滞后约 4 天，这一版数据到 {d}。货船一栏含油轮。基线是 {b0} 至 {b1} 的日均，近况是最后 7 天的日均；当天没有船的日子按 0 计。这里只做算术，不判断原因。',
+    'Data from Global Fishing Watch: satellite and shore-station vessel positions, about four days behind; this release runs to {d}. The cargo columns include tankers. The baseline is the daily mean for {b0} to {b1}; the recent figure is the daily mean of the last 7 days; days with no vessels count as zero. Arithmetic only; no judgment about causes.'],
+  va_pre: ['封锁前', 'Before closure'], va_base: ['基线', 'Baseline'], va_recent: ['最近 7 天', 'Last 7 days'],
+  va_th_area: ['海域', 'Area'], va_th_cargo: ['货船日均（含油轮）', 'Cargo vessels a day (incl. tankers)'], va_th_all: ['全部船只日均', 'All vessels a day'], va_th_spark: ['逐日货船数', 'Cargo vessels by day'],
+  va_recent_span: ['{a} 至 {b}', '{a} to {b}'],
+  va_spark_title: ['逐日货船数，{a} 至 {b}，最高 {mx} 艘；红色竖线是 {m}', 'Cargo vessels by day, {a} to {b}, peak {mx}; the red line marks {m}'],
+  va_legend: ['比值是最近 7 天日均除以基线日均：', 'Ratio is the last-7-day mean over the baseline mean: '],
+  va_click: ['小折线从 2026 年 1 月起，红色竖线是 2026 年 2 月 28 日。点一行，本页上方的战区地图高亮这片海域的框并移到它上面；再点一次取消。', 'Sparklines start in January 2026; the red line is 28 February 2026. Click a row and that area\u2019s box lights up on the theater map above, which moves to it; click again to clear.'],
+  va_src: ['数据来源：<a href="https://globalfishingwatch.org/" target="_blank" rel="noopener">全球渔业观察</a>', 'Source: <a href="https://globalfishingwatch.org/" target="_blank" rel="noopener">Global Fishing Watch</a>'],
+  va_pop_cargo: ['货船日均：基线 {b}，最近 7 天 {r}（比值 {x}）', 'Cargo vessels a day: baseline {b}, last 7 days {r} (ratio {x})'],
+  va_pop_all: ['全部船只日均：基线 {b}，最近 7 天 {r}（比值 {x}）', 'All vessels a day: baseline {b}, last 7 days {r} (ratio {x})'],
+  va_pop_base: ['基线 {b0} 至 {b1}；数据到 {d}；全球渔业观察', 'Baseline {b0} to {b1}; data to {d}; Global Fishing Watch'],
+  ac_h2: ['上空飞机', 'Aircraft overhead'],
+  ac_note: ['数据来自 adsb.fi 社区接收站网络，每天日更时取一次快照，这一次在 {t}（协调世界时）；每个圆形区域半径 {r} 海里。军机按数据库里的标记计。接收站覆盖不均，读数为 0 可能是那里没有接收站，而不是没有飞机（红海南部就是这种情况）。',
+    'Data from the adsb.fi community receiver network: one snapshot at each daily update, this one at {t} UTC; each circle has a radius of {r} nautical miles. Military aircraft are those flagged as such in the database. Receiver coverage is uneven: a reading of 0 may mean there is no receiver there rather than no aircraft (the southern Red Sea is such a case).'],
+  ac_th_area: ['区域', 'Area'], ac_th_total: ['飞机总数', 'Aircraft'], ac_th_mil: ['其中军机', 'Of which military'], ac_th_hist: ['历次快照', 'Snapshots so far'],
+  ac_hist_title: ['历次快照的飞机总数，共 {n} 次', 'Aircraft total at each snapshot, {n} snapshots'],
+  ac_one_snap: ['目前只有一次快照，攒到两次以上再画逐次折线。', 'Only one snapshot so far; a line across snapshots is drawn once there are two or more.'],
+  ac_mil_h: ['军机明细（{n} 架，各圆形区域与战区范围内合并、去重）', 'Military aircraft ({n}, circles and theater area combined, duplicates removed)'],
+  ac_mil_none: ['这次快照里没有标记为军机的飞机。', 'No aircraft flagged as military in this snapshot.'],
+  ac_th_call: ['呼号', 'Call sign'], ac_th_type: ['机型代码', 'Type code'], ac_th_reg: ['注册号', 'Registration'], ac_th_alt: ['气压高度（英尺）', 'Barometric altitude (ft)'], ac_th_pos: ['位置（纬度，经度）', 'Position (lat, lon)'],
+  ac_ground: ['地面', 'on ground'],
+  ac_src: ['数据来源：<a href="https://adsb.fi" target="_blank" rel="noopener">adsb.fi 社区接收网</a>', 'Source: <a href="https://adsb.fi" target="_blank" rel="noopener">adsb.fi</a> community receiver network'],
+  ac_pop: ['半径 {r} 海里 · 飞机 {n} 架，其中军机 {m} 架', 'Radius {r} nautical miles · {n} aircraft, {m} military'], ac_pop_t: ['快照 {t}（协调世界时）；adsb.fi', 'Snapshot {t} UTC; adsb.fi'],
+  ac_mil_pt: ['军机', 'Military aircraft'],
+  layer_vessels: ['海域船数', 'Vessels in key waters'], layer_aircraft: ['上空飞机', 'Aircraft overhead'],
   /* 五段联动视图 chain-view.html（2026-09-21） */
   cv_title: ['传导链：五段联动视图', 'Transmission: five-stage linked view'],
   cv_h1: ['五段联动视图', 'Five-stage linked view'],
@@ -228,6 +257,7 @@ const SRC = {
   'data/monitor/portwatch': ['PortWatch 港口与咽喉点计数', 'PortWatch port and chokepoint counts'], 'data/monitor/market_prices': ['市场价格', 'Market prices'],
   'data/monitor/gdelt_timeline': ['GDELT 新闻量时间线', 'GDELT news-volume timeline'], 'data/monitor/fires_at_sites': ['FIRMS 火点匹配站点', 'FIRMS fire detections matched to sites'],
   'data/monitor/sentinel2_archive': ['Sentinel-2 影像判读', 'Sentinel-2 imagery reading'],
+  'https://globalfishingwatch.org/our-apis/': ['全球渔业观察', 'Global Fishing Watch'],
   'data/monitor/portwatch 或 market_prices 或 gdelt_timeline': ['PortWatch、市场价格或 GDELT 时间线', 'PortWatch, market prices or GDELT timeline'],
 };
 const LIST = {
@@ -239,6 +269,10 @@ const COMP = {
   nvidia: ['英伟达', 'NVIDIA'], tsmc: ['台积电', 'TSMC'], asml: ['阿斯麦', 'ASML'], samsung: ['三星', 'Samsung'], skhynix: ['SK 海力士', 'SK Hynix'], synopsys: ['新思', 'Synopsys'], cadence: ['楷登', 'Cadence'],
   aramco: ['沙特阿美', 'Saudi Aramco'], qatargas: ['卡塔尔能源', 'QatarEnergy'], adnoc: ['阿布扎比国家石油', 'ADNOC'], hyperscalers: ['美国超大规模云厂商', 'US hyperscalers (AWS/Azure/GCP)'], lynas: ['莱纳斯稀土', 'Lynas Rare Earths'],
   'lpt-makers': ['大型变压器制造商', 'Large power transformer makers (ABB / Siemens Energy / GE Vernova)'], gazprom: ['俄气', 'Gazprom'],
+};
+/* 海域说明的英文（latest.json 的 note 只有中文；按海域 id 对应，表外的海域英文页不显示说明）。 */
+const VA_NOTE_EN = {
+  hormuz: 'Narrowest part of the strait and the lanes on either side', fujairah: 'UAE loading and anchorage area outside the strait', ras_tanura: 'Main Saudi loading point on the Gulf side', basra: 'Iraq\u2019s offshore oil loading terminal', yanbu: 'Saudi bypass outlet on the Red Sea', bab_el_mandeb: 'Southern entrance to the Red Sea', suez_south: 'Southern end of the canal and off Sokhna port', bosporus_n: 'Entrance to and exit from the Black Sea', odesa: 'Odesa, Chornomorsk, Pivdennyi', kerch: 'Outlet of the Sea of Azov', taiwan_strait: 'Many fishing boats; read the cargo columns', bashi: 'Main shipping lane south of Taiwan', kaohsiung: 'Taiwan\u2019s largest oil, gas and container port',
 };
 const compT = (id, fallback) => pick(COMP, id, fallback);
 const pick = (tab, k, fallback) => { const e = tab[k]; return e ? (LANG === 'en' ? e[1] : e[0]) : (fallback != null ? fallback : (k ?? '')); };
@@ -275,7 +309,7 @@ const DV = {
   /* 前后表的类 */
   '价格均值': 'Price mean', '新闻量均值 %': 'News volume mean %', '海关月报': 'Customs monthly', '物理量': 'Physical quantity', '通过艘数/日': 'Transits/day',
   /* 警报类型与模板 */
-  '断点': 'Break', '指标偏离': 'Indicator deviation', '影像判读': 'Imagery reading', '火点异常': 'Fire anomaly', '援乌供应链遭袭': 'Attack on the Ukraine-aid supply chain',
+  '断点': 'Break', '指标偏离': 'Indicator deviation', '影像判读': 'Imagery reading', '火点异常': 'Fire anomaly', '援乌供应链遭袭': 'Attack on the Ukraine-aid supply chain', '海域船数骤减': 'Sharp drop in vessels in key waters',
   /* five_stage.json 里文字型的数（没有 value_en；2026-09-21） */ '未受影响': 'Not affected', '几乎全毁': 'Almost entirely destroyed', '未调': 'Not raised',
   'FIRMS 火点落在站点三公里内且超过该站基线 95 分位；荒地火与事故火同样会进来，要对新闻核': 'FIRMS detections within 3 km of the site exceeding its 95th-percentile baseline; wildfires and accidents enter too, check against news',
   /* 六档结论 */
@@ -357,8 +391,10 @@ function t(key, vars) {
  * 换完把两个汉字之间多出来的空格收掉（「台中 港挂靠」→「台中港挂靠」）。 */
 let NAMES = {}, NAME_RE = null;
 const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+/* 数据名称里的来源名，中文页按署名写中文（警报详情里的「数据来自 Global Fishing Watch」；2026-09-21）。 */
+const NAMES_EXTRA = {'Global Fishing Watch': '全球渔业观察'};
 function setNames(m) {
-  NAMES = m || {};
+  NAMES = Object.assign({}, NAMES_EXTRA, m || {});
   NAMES_UP = {}; for (const k in NAMES) NAMES_UP[k.toUpperCase()] = NAMES[k];
   const keys = Object.keys(NAMES).sort((a, b) => b.length - a.length);
   NAME_RE = keys.length ? new RegExp('(?<![A-Za-z0-9_])(' + keys.map(escRe).join('|') + ')(?![A-Za-z0-9_])', 'g') : null;
