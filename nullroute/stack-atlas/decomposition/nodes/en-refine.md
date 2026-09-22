@@ -435,8 +435,8 @@ en-refine 在物理上的上游就是 en-crude（原油供给），但它对原�
 | 中东 | abadan_refinery | 无可见结构变化 |  |  | green |
 | 乌克兰 | tuapse_refinery | 疑似受损，需核 |  |  | red |
 | 乌克兰 | feodosia_oil_terminal | 无可见结构变化 |  |  | green |
+| 台海 | mailiao_refinery | 整幅变化，非局部 |  |  | green |
 | 台海 | kaohsiung_dalin_refinery | 无可见变化 |  |  | green |
-| 台海 | mailiao_refinery | 不可判读 |  |  | gray |
 
 战区关键节点：中东 4 阿布盖格与拉斯坦努拉；台海 2 高雄港、永安接收站与大林炼厂
 
