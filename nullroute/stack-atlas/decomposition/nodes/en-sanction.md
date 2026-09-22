@@ -117,3 +117,18 @@
 6. 中国、印度进口被制裁原油的海关/贸易数据。
 7. 非西方保险与人民币结算在俄油贸易中的实际占比。
 8. 委内瑞拉制裁（含雪佛龙许可证等）的最新状态，本草图未覆盖。
+
+<!-- monitor:begin 由 monitor/build_monitor.py 每日重写，不要手改 -->
+
+## 观测（2026-09-22，自动生成）
+
+今日状态：绿。信号来自战区监测（monitor/atlas_map.py 里这个节点挂的实测序列），证据档 measured；只报偏离，不判断原因。
+
+| 战区 | 信号 | 今天 | 基线 | 比值 | 状态 |
+|---|---|---|---|---|---|
+| 中东 | bandar_abbas_shahid_rajaee_port | 无可见变化 |  |  | green |
+| 中东 | kharg_island_terminal | 无可见结构变化 |  |  | green |
+
+仪表盘：index.html#stack，点这个节点打开抽屉看序列图。
+
+<!-- monitor:end -->

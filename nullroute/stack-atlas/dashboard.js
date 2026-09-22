@@ -9,7 +9,7 @@ const COST_TITLE = {tw: 'cost_iframe_title', eu: 'cost_iframe_title_eu', me: 'co
 window.COST_SEL = 'tw';
 const A = window.ATLAS_DATA;
 const STATUS_T = st => ({stopped: t('st_stopped'), narrowed: t('st_narrowed'), inuse: t('st_inuse'), nodata: t('st_nodata'), damaged: t('st_damaged'), unknown: t('st_unknown')}[st] || '');
-const LEVEL_T = lv => ({red: t('lv_red'), amber: t('lv_amber'), green: t('lv_green'), gray: t('lv_gray')}[lv] || '');
+const LEVEL_T = lv => ({red: t('lv_red'), amber: t('lv_amber'), green: t('lv_green'), gray: t('lv_gray'), info: t('lv_info')}[lv] || '');
 let ovMap = null;
 window.RAW = null;
 
@@ -227,7 +227,7 @@ function openDrawer(id) {
   const el = document.getElementById('nd_' + id); if (el) el.classList.add('hl');
   const st = (D.node_status || {})[id];
   const thT = key => tv(D.theaters.find(x => x.key === key).title);
-  const sig = st ? `<table><tr><th>${t('th_theater')}</th><th>${t('th_signal')}</th><th>${t('th_today')}</th><th>${t('th_baseline')}</th><th>${t('th_ratio')}</th><th>${t('th_status')}</th></tr>${st.signals.map(s => `<tr><td>${esc(thT(s.theater))}</td><td>${esc(tv(s.label))}</td><td>${esc(tv(s.value ?? ''))}</td><td>${esc(s.base ?? '')}</td><td>${esc(s.ratio ?? '')}</td><td><span class="lv ${s.level}"></span>${LEVEL_T(s.level)}</td></tr>`).join('')}</table>` : `<p class="legend">${t('no_signal')}</p>`;
+  const sig = st ? `<table><tr><th>${t('th_theater')}</th><th>${t('th_signal')}</th><th>${t('th_today')}</th><th>${t('th_baseline')}</th><th>${t('th_ratio')}</th><th>${t('th_status')}</th></tr>${st.signals.map(s => `<tr><td>${esc(thT(s.theater))}</td><td>${esc(LANG === 'en' && s.label_en ? s.label_en : tv(s.label))}</td><td>${esc(tv(s.value ?? ''))}</td><td>${esc(s.base ?? '')}</td><td>${esc(s.ratio ?? '')}</td><td><span class="lv ${s.level}"></span>${LEVEL_T(s.level)}</td></tr>`).join('')}</table>` : `<p class="legend">${t('no_signal')}</p>`;
   const tn = Object.entries(D.theater_nodes || {}).filter(([k, v]) => (v.atlas || []).includes(id));
   const tnHtml = tn.length ? tn.map(([k, v]) => `<span class="chip" onclick="closeDrawer(); selectNode('${v.theater}', ${v.num})">${esc(thT(v.theater))} · ${v.num} ${esc(tv(v.name))}</span>`).join('') : `<span class="u">${t('no_theater_node')}</span>`;
   const cks = (n.chokepoints || []).map(c => { const row = D.chokepoints.find(x => x.atlas_id === c); return row ? `<span class="chip" onclick="closeDrawer(); show('overview'); setTimeout(() => ovMap.setView([${row.lat}, ${row.lon}], 6), 100)"><span class="lv ${({stopped: 'red', narrowed: 'amber', inuse: 'green'})[row.status] || 'gray'}"></span>${esc(nz(row.name))} ${row.ratio ?? ''}</span>` : `<span class="chip">${esc(c)}</span>`; }).join('');

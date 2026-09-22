@@ -117,3 +117,21 @@
 4. Cable Landing License Act（47 U.S.C. §34-39）与 Team Telecom 行政令原文。
 5. 各主要接收港口国（中国/印度/土耳其等）对被制裁船的实际接收数据。
 6. 影子船队规模与运量的权威第三方统计（如 KSE Institute、Lloyd's List Intelligence 原始数据）。
+
+<!-- monitor:begin 由 monitor/build_monitor.py 每日重写，不要手改 -->
+
+## 观测（2026-09-22，自动生成）
+
+今日状态：红。信号来自战区监测（monitor/atlas_map.py 里这个节点挂的实测序列），证据档 measured；只报偏离，不判断原因。
+
+| 战区 | 信号 | 今天 | 基线 | 比值 | 状态 |
+|---|---|---|---|---|---|
+| 乌克兰 | Odessa 港挂靠 | 0.0 | 0.0 | 0.0 | red |
+| 中东 | Haifa 港挂靠 | 6.4 | 7.0 | 0.92 | green |
+| 中东 | Ras Tanura 港挂靠 | 1.0 | 1.7 | 0.59 | amber |
+| 中东 | 富查伊拉外锚地 货船日均 | 103.6 | 60.4 | 1.72 | green |
+| 中东 | 延布港外 货船日均 | 2.9 | 5.1 | 0.57 | amber |
+
+仪表盘：index.html#stack，点这个节点打开抽屉看序列图。
+
+<!-- monitor:end -->

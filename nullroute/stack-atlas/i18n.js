@@ -15,7 +15,7 @@
 const LATIN_KEEP = [
   'SWIFT', 'CIPS', 'LNG', 'LPG', 'GPU', 'EUV', 'DUV', 'HBM', 'EDA', 'GaN', 'AI', 'AIS', 'ADS-B', 'FIRMS', 'GDELT', 'PortWatch', 'SEC', 'IMF', 'DWT', 'WTI', 'ADR', 'CPC', 'MSA', 'UCDP', 'FRP', 'OFAC', 'BGP', 'DNS', 'CA', 'CDN', 'DDoS', 'ENTSOG', 'GIE', 'AGSI', 'IODA', 'GEM', 'OSM', 'MRI',
   'Esri', 'Leaflet', 'Sentinel-2', 'Copernicus', 'Stack Atlas', 'aisstream', 'Global Fishing Watch', 'GitHub',
-  'adsb.fi',  // 飞机数据来源的名称，署名要求照原样写并链接主页（2026-09-21）；船名、呼号、注册号、机型代码是识别码，不进这张表，页面上标 class ident，扫描脚本单列
+  'adsb.fi', 'aisstream.io',  // 飞机数据来源的名称，署名要求照原样写并链接主页（2026-09-21）；船名、呼号、注册号、机型代码是识别码，不进这张表，页面上标 class ident，扫描脚本单列
   'QAFCO', 'MAPNA', 'OPC', 'SWCC', 'IPP', 'RCMC', 'RPPG', 'ZPPG', 'NCI', 'ISCC', 'IGCC', 'OCGT', 'CCGT', 'ALBA', 'BAZAN', 'ABOT', 'OTEKO', 'ADMA-OPCO', 'Ethydco', 'SASREF', 'MARAFIQ', 'ICE',
   'MAG', 'FDP', 'EL', 'SDN', 'RMB', 'API', 'IP', 'HTTPS', 'TSMC', 'ASML', 'NVIDIA', 'Nullroute', 'capacity_tanker',
   'Esc', 'English', 'CHIPS', 'Fedwire', 'Visa', 'Mastercard', 'USDT', 'SoC', 'OPEC', 'SK',  // 键名、语言链接、栈节点标签里的机构与品牌名
@@ -50,7 +50,7 @@ const UI = {
   ov_sub: ['真实地图上：咽喉点状态环（IMF PortWatch 近七日通过艘数对基线：停摆红、收窄橙、在用绿）、三个战区的供应链线路、战略站点按影像判读着色、Stack Atlas 事件标记。右侧是三个战区今天的读数，下面是今天的警报',
     'On a real map: chokepoint status rings (IMF PortWatch 7-day transits against baseline: red stopped, amber narrowed, green in use), supply-chain lines of the three theaters, strategic sites colored by imagery reading, Stack Atlas event markers. Right: today\'s readings for the three theaters; below: today\'s alerts'],
   st_stopped: ['停摆', 'Stopped'], st_narrowed: ['收窄', 'Narrowed'], st_inuse: ['在用', 'In use'], st_nodata: ['无数据', 'No data'], st_damaged: ['受损', 'Damaged'], st_unknown: ['未知', 'Unknown'], st_halted: ['已停', 'Stopped'],
-  lv_red: ['红', 'Red'], lv_amber: ['橙', 'Amber'], lv_green: ['绿', 'Green'], lv_gray: ['灰', 'Gray'],
+  lv_red: ['红', 'Red'], lv_amber: ['橙', 'Amber'], lv_green: ['绿', 'Green'], lv_gray: ['灰', 'Gray'], lv_info: ['参考', 'Reference'],
   sites_legend: ['站点：', 'Sites: '], site_damaged: ['影像疑似受损', 'Suspected damage in imagery'], site_thermal: ['有热异常', 'Thermal anomaly'], site_nochange: ['无变化', 'No change'], site_unreadable: ['不可判读', 'Not interpretable'],
   click_hint: ['点战区框或线路上的编号站进入战区页', 'Click a theater box or a numbered station on a line to open the theater view'],
   baseline: ['基线', 'baseline'], ratio: ['比值', 'ratio'],
@@ -203,6 +203,14 @@ const UI = {
   ac_pop: ['半径 {r} 海里 · 飞机 {n} 架，其中军机 {m} 架', 'Radius {r} nautical miles · {n} aircraft, {m} military'], ac_pop_t: ['快照 {t}（协调世界时）；adsb.fi', 'Snapshot {t} UTC; adsb.fi'],
   ac_mil_pt: ['军机', 'Military aircraft'],
   layer_vessels: ['海域船数', 'Vessels in key waters'], layer_aircraft: ['上空飞机', 'Aircraft overhead'],
+  layer_ais: ['岸站船位（快照）', 'Ships from shore-station AIS (snapshot)'],
+  ais_note: ['地图上的「岸站船位」图层是日更时收 90 秒岸站船位信号得到的快照，时刻 {t}（世界时），共 {n} 艘，其中航行中 {m} 艘。箭头指向航向，箭头颜色按船型分；灰色圆点是停泊、锚泊或航速不到 1 节的船。船名、目的地、船型由船自己报告，快照时间短，很多船还没发出这些信息。',
+    'The "shore-station AIS" map layer is a 90-second snapshot of shore-station AIS taken during the daily update at {t} UTC: {n} ships, {m} under way. Arrows point along the course and are coloured by ship type; grey dots are ships moored, at anchor or moving under 1 knot. Names, destinations and types are self-reported, and in a short snapshot many ships have not yet sent them.'],
+  ais_none: ['海湾和红海没有岸上接收站，这一层在中东战区是空的。', 'There are no shore receivers in the Gulf or the Red Sea, so this layer is empty in the Middle East.'],
+  ais_src: ['船位数据来自 <a href="https://aisstream.io/" target="_blank" rel="noopener">aisstream.io</a> 的免费岸站船位流。', 'Ship positions from the free <a href="https://aisstream.io/" target="_blank" rel="noopener">aisstream.io</a> shore-station AIS stream.'],
+  ais_pop: ['航速 {s} 节 · 航向 {c}°', 'Speed {s} kn · course {c}°'], ais_nav: ['航行状态', 'Navigation status'], ais_dest: ['目的地', 'Destination'],
+  ais_time: ['定位时间（世界时）', 'Position time (UTC)'], ais_type: ['船型', 'Ship type'], ais_noname: ['（未报船名）', '(no name reported)'], ais_mmsi: ['船舶识别号', 'MMSI'],
+  ais_legend: ['箭头颜色：', 'Arrow colours: '],
   /* 五段联动视图 chain-view.html（2026-09-21） */
   cv_title: ['传导链：五段联动视图', 'Transmission: five-stage linked view'],
   cv_h1: ['五段联动视图', 'Five-stage linked view'],

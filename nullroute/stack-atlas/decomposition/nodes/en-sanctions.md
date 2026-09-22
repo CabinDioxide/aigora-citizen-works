@@ -393,20 +393,3 @@ en-sanctions 是一个条件设定的位置，既不是设备也不是通道：�
 ## 临门检查
 
 本节点尚未提请 Root 拍板，属于定时任务的常规入库，暂不适用交付前十二题检查单。若后续升级为提请拍板的分析结论（例如把"制裁强度由制裁方价格承受力封顶"提为概念卡候选），须先走 `wiki/_research/交付前检查单.md` 全部十二题。
-
-<!-- monitor:begin 由 monitor/build_monitor.py 每日重写，不要手改 -->
-
-## 观测（2026-09-21，自动生成）
-
-今日状态：绿。信号来自战区监测（monitor/atlas_map.py 里这个节点挂的实测序列），证据档 measured；只报偏离，不判断原因。
-
-| 战区 | 信号 | 今天 | 基线 | 比值 | 状态 |
-|---|---|---|---|---|---|
-| 中东 | bandar_abbas_shahid_rajaee_port | 无可见变化 |  |  | green |
-| 中东 | kharg_island_terminal | 无可见结构变化 |  |  | green |
-
-战区关键节点：中东 6 哈尔克岛（伊朗）；乌克兰 5 TurkStream 入境保加利亚（Strandzha 2）
-
-仪表盘：index.html#stack，点这个节点打开抽屉看序列图。
-
-<!-- monitor:end -->

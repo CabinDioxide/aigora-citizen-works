@@ -405,6 +405,7 @@ function buildMap(T) {
   const saLayer = addSupplyAttackLayer(T, map);
   if (saLayer) { saLayer.addTo(map); overlays[t('layer_ua_attacks')] = saLayer; }
   addVesselAirLayers(T, map, overlays);
+  addAisLayer(T, map, overlays);
   L.control.layers(bases, overlays, {collapsed: true}).addTo(map); layersTitle(map);
   map.__overlays = overlays;  // 验收脚本按它遍历默认不显示的图层里的提示与弹窗
 }
@@ -479,7 +480,41 @@ function renderVessels(T) {
     ${rows}</table></div>
   <p class="legend">${t('va_legend')} <span class="vb v-red">&lt; 0.5</span> <span class="vb v-amber">0.5–0.85</span> <span class="vb v-blue">&gt; 1.15</span> · ${t('va_click')}</p>
   <p class="legend va-src">${t('va_src')}</p>
+  ${aisNote(T)}
   </section>`;
+}
+/* 岸站船位快照（aisstream.io）：船型按 AIS 类型码分组，航行状态按 AIS 编码转文字。 */
+const AIS_CAT = code => { const c = Number(code); if (!c) return 'unk'; if (c === 30) return 'fish'; if (c >= 60 && c <= 69) return 'pass'; if (c >= 70 && c <= 79) return 'cargo'; if (c >= 80 && c <= 89) return 'tank'; return 'other'; };
+const AIS_CAT_T = {unk: ['未报', 'not reported'], fish: ['渔船', 'fishing'], pass: ['客船', 'passenger'], cargo: ['货船', 'cargo'], tank: ['油轮', 'tanker'], other: ['其他', 'other']};
+const AIS_COLOR = {unk: '#6e6e73', fish: '#16a085', pass: '#8e44ad', cargo: '#1f6feb', tank: '#d9480f', other: '#8a6d3b'};
+const AIS_NAV = {0: ['用发动机航行', 'under way using engine'], 1: ['锚泊', 'at anchor'], 2: ['失控', 'not under command'], 3: ['操纵能力受限', 'restricted manoeuvrability'],
+  4: ['吃水受限', 'constrained by draught'], 5: ['系泊', 'moored'], 6: ['搁浅', 'aground'], 7: ['捕捞作业', 'engaged in fishing'], 8: ['帆船航行', 'under way sailing'], 15: ['未报', 'not reported']};
+const aisL = pair => pair ? (LANG === 'en' ? pair[1] : pair[0]) : '';
+const aisMoving = s => Number(s.sog) >= 1;
+function aisNote(T) {
+  const A = T.ais; if (!A) return '';
+  const n = (A.ships || []).length, m = (A.ships || []).filter(aisMoving).length;
+  if (!n) return `<p class="legend">${t('ais_none')}</p>`;
+  const leg = ['tank', 'cargo', 'pass', 'fish', 'other', 'unk'].map(k => `<span class="ais-key"><i style="background:${AIS_COLOR[k]}"></i>${esc(aisL(AIS_CAT_T[k]))}</span>`).join(' ');
+  return `<p class="legend">${t('ais_note', {t: esc(vaUtc(A.taken_utc)), n, m})}</p><p class="legend">${t('ais_legend')}${leg}</p><p class="legend va-src">${t('ais_src')}</p>`;
+}
+function aisIcon(s) {
+  const col = AIS_COLOR[AIS_CAT(s.type)];
+  if (!aisMoving(s)) return L.divIcon({className: 'ais-pt', html: '<i class="ais-dot"></i>', iconSize: [8, 8], iconAnchor: [4, 4]});
+  const rot = Number(s.cog) || 0;
+  return L.divIcon({className: 'ais-pt', iconSize: [16, 16], iconAnchor: [8, 8],
+    html: `<svg width="16" height="16" viewBox="0 0 16 16" style="transform:rotate(${rot}deg)"><path d="M8 1 L13 14 L8 11 L3 14 Z" fill="${col}" stroke="#fff" stroke-width="1"/></svg>`});
+}
+function addAisLayer(T, map, overlays) {
+  const A = T.ais; if (!A || !(A.ships || []).length) return;
+  const g = L.layerGroup();
+  A.ships.forEach(s => {
+    const name = String(s.name || '').trim();
+    const nav = AIS_NAV[s.nav_status] ? aisL(AIS_NAV[s.nav_status]) : String(s.nav_status ?? '');
+    const pop = `<b>${name ? vaIdent(name) : esc(t('ais_noname'))}</b><br>${t('ais_mmsi')} ${vaIdent(String(s.mmsi))}<br>${t('ais_pop', {s: s.sog ?? '—', c: s.cog ?? '—'})}<br>${t('ais_nav')}${LANG === 'en' ? ': ' : '：'}${esc(nav)}<br>${t('ais_type')}${LANG === 'en' ? ': ' : '：'}${esc(aisL(AIS_CAT_T[AIS_CAT(s.type)]))}${s.dest ? `<br>${t('ais_dest')}${LANG === 'en' ? ': ' : '：'}${vaIdent(String(s.dest))}` : ''}<br><span class="u">${t('ais_time')}${LANG === 'en' ? ': ' : '：'}${esc(String(s.time_utc || '').slice(0, 19))}</span>`;
+    L.marker([s.lat, s.lon], {icon: aisIcon(s), keyboard: false}).bindTooltip(name ? vaIdent(name) : esc(t('ais_noname')), {direction: 'top', className: 'lbl'}).bindPopup(pop).addTo(g);
+  });
+  g.addTo(map); overlays[t('layer_ais')] = g; (vaLayers[T.key] = vaLayers[T.key] || {}).ais = g;
 }
 /* 点一行：地图上这片海域的框加粗高亮，其余复原，地图移到框上；再点同一行取消。不滚动页面。 */
 function vaPick(key, id) {
