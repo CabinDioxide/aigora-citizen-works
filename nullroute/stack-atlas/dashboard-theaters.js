@@ -76,7 +76,7 @@ function renderBuilt(T) {
   <h2>${esc(tv(T.title))} <small>${t('break_target', {ck: esc(nz(T.break.chokepoint))})}${T.break.date ? t('break_on', {d: T.break.date}) : t('break_none')}</small></h2>
   <div class="reading">${T.reading.map((p, i) => `<p>${tzf(T, 'reading', i)}</p>`).join('')}</div>
   ${T.metro ? `<h2>${t('metro_h2')} <small>${t('metro_sub', {n: T.metro.lines.length})}</small></h2>
-  <div class="kpane" style="grid-template-columns:1fr"><div class="map" id="m_${T.key}" style="height:560px"></div><div class="metro-legend" id="mlegend_${T.key}"></div></div>
+  <div class="kpane" style="grid-template-columns:1fr"><div class="map" id="m_${T.key}" style="height:560px"></div><div class="metro-legend off" id="mlegend_${T.key}"></div><div class="anom-legend" id="alegend_${T.key}">${anomLegend(T)}</div></div>
   <details class="metro-wrap" style="margin-top:12px"><summary style="cursor:pointer;font-size:13px;color:var(--ink2)">${t('metro_schematic')}</summary><svg id="metro_${T.key}" class="metro" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet"></svg></details>` : ''}
   ${T.nodes ? `<h2>${t('nodes_h2')} <small>${t('nodes_sub')}</small></h2>
   <div class="kpane" style="grid-template-columns:1fr">
@@ -151,7 +151,7 @@ function buildMetro(T) {
   leg.innerHTML = T.metro.lines.map(l => `<span class="l" data-line="${l.id}"><i style="border-color:${l.color}"></i>${esc(tv(l.name))}</span>`).join('') + `<span style="margin-left:auto">${t('metro_legend_note')}</span>`;
   leg.querySelectorAll('.l').forEach(sp => sp.addEventListener('click', () => { const on = sp.classList.toggle('on'); leg.querySelectorAll('.l').forEach(o => { if (o !== sp) o.classList.remove('on'); });
     svg.querySelectorAll('.seg').forEach(p => p.classList.toggle('dim', on && p.dataset.line !== sp.dataset.line));
-    (geoLines[T.key] || []).forEach(o => o.pl.setStyle({opacity: (on && o.line !== sp.dataset.line) ? 0.08 : (o.kind === 'bypass' ? 0.9 : 0.95)})); }));
+    if (metroOvs[T.key]) metroOvs[T.key].highlight(on ? sp.dataset.line : null); }));
 }
 /* 援乌武器供应链在欧洲境内遭袭（乌克兰战区，2026-09-21）。数据是 latest.json 的 theaters[ukraine].supply_attacks（monitor/supply_attacks.py）：
  * 事件表人工维护、逐行出处；范围 A 直接针对援乌设施，B 通用设施单列；归因照官方与检方原话分四档，tier 1 最强。英文页取 *_en 字段；
@@ -289,7 +289,7 @@ function renderChains(T) {
   <p class="legend">${t('chains_note')}</p>`;
 }
 
-let modalMap = null, modalCharts = [], nodeMarkers = {}, currentNode = null, geoLines = {};
+let modalMap = null, modalCharts = [], nodeMarkers = {}, currentNode = null, geoLines = {}, metroOvs = {};
 function closeModal() {
   document.querySelectorAll('.kdetail').forEach(d => { d.classList.remove('on'); d.innerHTML = ''; });
   document.querySelectorAll('.node').forEach(c => c.classList.remove('hl', 'dim'));
@@ -378,30 +378,33 @@ function buildMap(T) {
       .bindTooltip(`${n.num} ${tv(n.name)}`, {direction: 'top'}).on('click', e => { L.DomEvent.stopPropagation(e); selectNode(T.key, n.num); }).addTo(nodesLayer);
     nodeMarkers[T.key].push(mk);
   });
-  // 供应链线路：真实航路上的地铁式线
-  const metroLayer = L.layerGroup(); geoLines[T.key] = [];
-  if (T.metro && T.metro.routes) {
-    const lineById = Object.fromEntries(T.metro.lines.map(l => [l.id, l]));
-    const S = T.metro.stations;
-    const stoppedNear = pts_ => pts_.some(p => Object.values(S).some(st => st.status === 'stopped' && st.lat != null && Math.abs(st.lat - p[0]) < 0.05 && Math.abs(st.lon - p[1]) < 0.05));
-    T.metro.routes.forEach((r, ri) => { const l = lineById[r.id]; const off = (ri - 2.5) * 0.09;
-      r.segs.forEach(seg => { const pts_ = seg.pts.map(p => [p[0] + off, p[1]]);
-        L.polyline(pts_, {color: '#fff', weight: 9, opacity: .9, lineCap: 'round', lineJoin: 'round', interactive: false}).addTo(metroLayer);
-        const pl = L.polyline(pts_, {color: l.color, weight: 5, opacity: seg.kind === 'bypass' ? .9 : .95, lineCap: 'round', lineJoin: 'round',
-          dashArray: seg.kind === 'bypass' ? '10 8' : (stoppedNear(seg.pts) ? '1 10' : null)}).bindTooltip(`${tv(l.name)}${seg.kind === 'bypass' ? t('bypass') : ''}`, {sticky: true});
-        pl.addTo(metroLayer); geoLines[T.key].push({pl, line: l.id, kind: seg.kind}); }); });
-    Object.entries(S).forEach(([sid, st]) => { if (st.lat == null) return;
-      const passes = T.metro.lines.filter(l => [...l.route, ...l.bypass].some(([a, b]) => a === sid || b === sid)).length; const xfer = passes > 1;
-      if (st.status) L.circleMarker([st.lat, st.lon], {radius: xfer ? 14 : 10, color: STC[st.status] || STC.unknown, weight: 4, fill: false, interactive: false}).addTo(metroLayer);
-      const c = L.circleMarker([st.lat, st.lon], {radius: xfer ? 8 : 5.5, color: '#1d1d1f', weight: xfer ? 3 : 2, fillColor: st.num ? '#1d1d1f' : '#fff', fillOpacity: 1});
-      c.bindTooltip(`${st.num ? st.num + ' · ' : ''}${tv(st.name)} · ${tv(st.kind)}${st.status ? ' · ' + STZ(st.status) : ''}`, {direction: 'top', className: 'lbl'});
-      if (st.num) c.on('click', e => { L.DomEvent.stopPropagation(e); selectNode(T.key, st.num); });
-      c.addTo(metroLayer);
-      if (st.kind === '咽喉点' || st.kind === '下游' || st.kind === '上游') L.tooltip({permanent: true, direction: st.kind === '下游' ? 'right' : 'top', className: 'lbl', offset: [0, st.kind === '下游' ? 0 : -10]}).setLatLng([st.lat, st.lon]).setContent(tv(st.name)).addTo(metroLayer);
-    });
+  // 卫星影像显著变化：影像判读里受损、局部或整幅变化、热异常的站点（无变化与不可判读的不画），默认显示
+  const s2L = L.layerGroup(); const sp = Object.fromEntries((T.site_points || []).map(p => [p.name, p]));
+  (T.s2_change || []).forEach(r => { const v = r.manual_verdict || r.verdict, rank = VRANK[v] ?? 9, p = sp[r.site];
+    if (rank > 3 || !p) return;
+    const c = {'v-red': '#d70015', 'v-amber': '#ff9500', 'v-blue': '#0071e3'}[VCLASS[v]] || '#8e8e93';
+    L.circleMarker([p.lat, p.lon], {radius: 11, color: c, weight: 3, fillColor: c, fillOpacity: 0.18}).addTo(s2L);
+    L.circleMarker([p.lat, p.lon], {radius: 4, color: '#fff', weight: 1.5, fillColor: c, fillOpacity: 1})
+      .bindTooltip(`${esc(nz(p.name))} · ${esc(tv(v))}`, {direction: 'top', className: 'lbl'})
+      .bindPopup(() => s2Card(r, true), {maxWidth: 380, minWidth: 320}).addTo(s2L); });
+  const anomL = addAnomalyLayer(T);
+  // 供应链依赖关系：地铁图层，叠在最上面，默认不显示，点地图左上角的按钮才出现
+  let metroOv = null;
+  if (T.metro) {
+    const S0 = T.metro.stations, st = {};
+    Object.entries(S0).forEach(([k, v]) => { st[k] = {name: tv(v.name), lat: v.lat, lon: v.lon, status: v.status, num: v.num, kind: v.kind}; });
+    const lines = T.metro.lines.map(l => ({id: l.id, name: tv(l.name), color: l.color, route: l.route, bypass: l.bypass}));
+    metroOv = new MetroOverlay({stations: st, lines, toWord: t('metro_to'), fitOnShow: true,
+      lineTip: (l, kind) => `<b style="color:${l.color}">■</b> ${esc(l.name)}${kind === 'bypass' ? esc(t('bypass')) : ''}`,
+      stationTip: (k, s_, ls) => `<b>${s_.num ? s_.num + ' · ' : ''}${esc(s_.name)}</b><br>${esc(tv(s_.kind))}${s_.status ? ' · ' + esc(STZ(s_.status)) : ''}<br>${t('metro_passes')}${ls.map(id => esc(lines.find(x => x.id === id).name)).join(LANG === 'en' ? ', ' : '、')}`,
+      onStation: (k, s_) => selectNode(T.key, s_.num),
+      onFocus: id => { const leg = document.getElementById('mlegend_' + T.key); if (leg) leg.querySelectorAll('.l').forEach(o => o.classList.toggle('on', o.dataset.line === id)); }});
+    metroOvs[T.key] = metroOv;
+    metroButton(map, metroOv, t('metro_btn'), on => { const leg = document.getElementById('mlegend_' + T.key); if (leg) leg.classList.toggle('off', !on); });
   }
-  if (T.metro) { strat.addTo(map); nodesLayer.addTo(map); metroLayer.addTo(map); } else { pts.addTo(map); gd.addTo(map); uc.addTo(map); strat.addTo(map); infraHit.addTo(map); nodesLayer.addTo(map); }
-  const overlays = {[t('layer_metro')]: metroLayer, [t('layer_nodes')]: nodesLayer, [t('layer_pts')]: pts, [t('layer_strat', {n: nStrat})]: strat, [t('layer_hit', {n: nHit})]: infraHit, [t('layer_rest', {n: nRest})]: infraRest, [t('layer_gdelt')]: gd, [t('layer_ucdp')]: uc, [t('layer_fires')]: fires};
+  s2L.addTo(map); if (anomL) anomL.addTo(map);
+  if (T.metro) { strat.addTo(map); nodesLayer.addTo(map); } else { pts.addTo(map); gd.addTo(map); uc.addTo(map); strat.addTo(map); infraHit.addTo(map); nodesLayer.addTo(map); }
+  const overlays = {...(metroOv ? {[t('layer_metro')]: metroOv} : {}), [t('layer_s2')]: s2L, ...(anomL ? {[t('layer_anom')]: anomL} : {}), [t('layer_nodes')]: nodesLayer, [t('layer_pts')]: pts, [t('layer_strat', {n: nStrat})]: strat, [t('layer_hit', {n: nHit})]: infraHit, [t('layer_rest', {n: nRest})]: infraRest, [t('layer_gdelt')]: gd, [t('layer_ucdp')]: uc, [t('layer_fires')]: fires};
   const saLayer = addSupplyAttackLayer(T, map);
   if (saLayer) { saLayer.addTo(map); overlays[t('layer_ua_attacks')] = saLayer; }
   addVesselAirLayers(T, map, overlays);
@@ -504,6 +507,46 @@ function aisIcon(s) {
   const rot = Number(s.cog) || 0;
   return L.divIcon({className: 'ais-pt', iconSize: [16, 16], iconAnchor: [8, 8],
     html: `<svg width="16" height="16" viewBox="0 0 16 16" style="transform:rotate(${rot}deg)"><path d="M8 1 L13 14 L8 11 L3 14 Z" fill="${col}" stroke="#fff" stroke-width="1"/></svg>`});
+}
+/* 异常航迹（2026-09-22）：数据是 latest.json 的 theaters[].track_anomalies（monitor/fetchers/track_anomalies.py，GFW 逐船航迹，滞后约 4 天）。
+ * 六类各用一种记号；只标算出来的位置与数，不判断原因。 */
+const ANOM_STYLE = {off_lane: {c: '#d9480f', s: 'diamond'}, odd_stops: {c: '#1f6feb', s: 'ring'}, dark_gaps: {c: '#5856d6', s: 'gap'},
+  surges: {c: '#c92a2a', s: 'square'}, on_land: {c: '#111', s: 'x'}, far_from_lanes: {c: '#8a5a00', s: 'tri'}};
+const anomSvg = (st, sz = 14) => { const h = sz / 2, c = st.c;
+  const g = {diamond: `<path d="M${h},1 L${sz - 1},${h} L${h},${sz - 1} L1,${h} Z" fill="${c}" stroke="#fff" stroke-width="1.2"/>`,
+    ring: `<circle cx="${h}" cy="${h}" r="${h - 2}" fill="none" stroke="${c}" stroke-width="2.4"/>`,
+    square: `<rect x="2" y="2" width="${sz - 4}" height="${sz - 4}" fill="none" stroke="${c}" stroke-width="2.4"/>`,
+    x: `<path d="M3,3 L${sz - 3},${sz - 3} M${sz - 3},3 L3,${sz - 3}" stroke="#fff" stroke-width="4"/><path d="M3,3 L${sz - 3},${sz - 3} M${sz - 3},3 L3,${sz - 3}" stroke="${c}" stroke-width="2.2"/>`,
+    tri: `<path d="M${h},2 L${sz - 2},${sz - 2} L2,${sz - 2} Z" fill="none" stroke="${c}" stroke-width="2.2"/>`,
+    gap: `<circle cx="${h}" cy="${h}" r="${h - 3}" fill="#fff" stroke="${c}" stroke-width="2.2"/>`}[st.s];
+  return `<svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}">${g}</svg>`; };
+function anomLegend(T) {
+  const A = T.track_anomalies; if (!A || !A.areas.length) return '';
+  const tot = {}; A.areas.forEach(a => Object.entries(a.counts || {}).forEach(([k, n]) => { tot[k] = (tot[k] || 0) + n; }));
+  const days = [...new Set(A.areas.map(a => a.day))].join(', ');
+  return `<b>${t('layer_anom')}</b>` + Object.keys(ANOM_STYLE).map(k => `<span class="anom-ic">${anomSvg(ANOM_STYLE[k], 12)}${t('anom_' + k)} ${tot[k] ?? 0}</span>`).join('')
+    + `<span class="u">${t('anom_note', {d: esc(days)})}</span>`;
+}
+function addAnomalyLayer(T) {
+  const A = T.track_anomalies; if (!A || !A.items.length) return null;
+  const g = L.layerGroup(), sep = LANG === 'en' ? ': ' : '：';
+  A.items.forEach(x => { const st = ANOM_STYLE[x.cat]; if (!st) return;
+    const who = x.name ? vaIdent(x.name) : (x.mmsi ? `${t('ais_mmsi')} ${vaIdent(x.mmsi)}` : esc(t('ais_noname')));
+    const meta = [x.flag, x.type].filter(Boolean).map(v => vaIdent(v)).join(' · ');
+    let body = '';
+    if (x.cat === 'dark_gaps') {
+      L.polyline([[x.lat, x.lon], [x.lat2, x.lon2]], {color: st.c, weight: 1.2, opacity: .45, dashArray: '4 5', interactive: false}).addTo(g);
+      L.circleMarker([x.lat2, x.lon2], {radius: 4.5, color: st.c, weight: 2, fillColor: st.c, fillOpacity: 1}).bindTooltip(t('anom_gap_on'), {direction: 'top', className: 'lbl'}).addTo(g);
+      body = t('anom_gap_pop', {h: x.hours, km: x.km, t1: esc(x.t1), t2: esc(x.t2)});
+    } else if (x.cat === 'surges') body = t('anom_surge_pop', {vh: x.vh, b: x.base});
+    else if (x.cat === 'odd_stops') body = t('anom_stop_pop', {h: x.hours, b: x.base ?? 0});
+    else body = t('anom_hours_pop', {h: x.hours ?? '—'});
+    const head = x.cat === 'surges' ? `<b>${t('anom_surges')}</b>` : `<b>${who}</b>${meta ? ' · ' + meta : ''}<br>${t('anom_' + x.cat)}`;
+    L.marker([x.lat, x.lon], {icon: L.divIcon({className: 'anom-ic', html: anomSvg(st), iconSize: [14, 14], iconAnchor: [7, 7]}), keyboard: false})
+      .bindTooltip(x.cat === 'surges' ? t('anom_surges') : (x.name ? vaIdent(x.name) : t('anom_' + x.cat)), {direction: 'top', className: 'lbl'})
+      .bindPopup(`${head}<br>${body}<br><span class="u">${t('anom_pop_src', {d: esc(x.day)})}</span>`).addTo(g);
+  });
+  return g;
 }
 function addAisLayer(T, map, overlays) {
   const A = T.ais; if (!A || !(A.ships || []).length) return;

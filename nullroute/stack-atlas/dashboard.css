@@ -148,3 +148,32 @@ a{color:var(--s1)}
 /* 岸站船位快照图层（2026-09-21） */
 .ais-pt{background:none;border:none}.ais-dot{display:block;width:7px;height:7px;border-radius:50%;background:#8e8e93;border:1px solid #fff;box-shadow:0 0 0 .5px rgba(0,0,0,.3)}
 .ais-key{display:inline-flex;align-items:center;margin-right:10px;white-space:nowrap}.ais-key i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px}
+
+/* 供应链地铁图层（metro-overlay.js，2026-09-22）：叠在地图最上面，默认不显示 */
+svg.metro-ov{position:absolute;left:0;top:0;pointer-events:none;z-index:640}
+svg.metro-ov .veil{fill:#fff;opacity:.45;pointer-events:none}
+svg.metro-ov .lead{stroke:#9a9a9a;stroke-width:1}
+svg.metro-ov .lead-dot{fill:#8e8e93}
+svg.metro-ov path.halo{fill:none;stroke:#fff;stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+svg.metro-ov path.ln{fill:none;stroke-linejoin:round;pointer-events:stroke;cursor:pointer;transition:opacity .15s}
+svg.metro-ov .st{pointer-events:all;cursor:default}
+svg.metro-ov .st .dot{fill:#fff;stroke:#1d1d1f;stroke-width:2.2}
+svg.metro-ov .st .dot.xfer{stroke-width:3}
+svg.metro-ov .st .dot.num{fill:#1d1d1f}
+svg.metro-ov .st:has(.dot.num){cursor:pointer}
+svg.metro-ov .st .ring{fill:none;stroke-width:3}
+svg.metro-ov .st .term{fill:#1d1d1f}
+svg.metro-ov .st .term-arrow{fill:none;stroke:#fff;stroke-width:2}
+svg.metro-ov text{font-size:12px;paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round;fill:#1d1d1f}
+svg.metro-ov.fade path.ln:not(.on){opacity:.12}
+svg.metro-ov.fade .st:not(.on){opacity:.35}
+.metro-tip{position:absolute;z-index:1100;background:#fff;border:1px solid var(--line,#d9dee5);border-radius:6px;padding:6px 8px;font-size:12px;line-height:1.45;pointer-events:none;display:none;box-shadow:0 2px 8px rgba(0,0,0,.12);max-width:240px}
+.metro-btn{display:flex;align-items:center;gap:6px;font:600 12px -apple-system,"PingFang SC",sans-serif;background:#fff;color:#1d1d1f;border:2px solid rgba(0,0,0,.2);border-radius:6px;padding:5px 9px;cursor:pointer;background-clip:padding-box}
+.metro-btn i{display:inline-block;width:18px;height:10px;background:linear-gradient(#ff9500 0 3px,transparent 3px 4px,#0071e3 4px 7px,transparent 7px 8px,#34c759 8px 10px);border-radius:2px}
+.metro-btn.on{background:#1d1d1f;color:#fff;border-color:#1d1d1f}
+.metro-legend.off{display:none}
+/* 异常航迹图层的记号 */
+.anom-ic svg{display:block;overflow:visible}
+.anom-legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:12px;color:var(--ink2);padding:8px 4px 2px}
+.anom-legend .anom-ic{display:inline-flex;align-items:center;gap:5px}
+.anom-legend .u{flex-basis:100%;color:var(--ink3,#888)}

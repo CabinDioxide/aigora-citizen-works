@@ -28,7 +28,7 @@ function boot() {
   Object.keys(maps).forEach(k => { maps[k].remove(); delete maps[k]; }); ovMap = null;
   pageCharts.forEach(c => c.destroy()); pageCharts.length = 0;
   Object.keys(viewHooks).forEach(k => delete viewHooks[k]);
-  Object.keys(nodeMarkers).forEach(k => delete nodeMarkers[k]); geoLines = {};
+  Object.keys(nodeMarkers).forEach(k => delete nodeMarkers[k]); geoLines = {}; metroOvs = {};
   nav.innerHTML = ''; root.innerHTML = '';
   applyStatic();
   const bo = document.createElement('button'); bo.textContent = t('nav_overview'); bo.dataset.k = 'overview'; bo.onclick = () => show('overview'); nav.appendChild(bo);
@@ -123,7 +123,7 @@ function buildOverviewMap() {
   map.fitBounds([[2, 15], [58, 150]]);
   // 容器在 boot() 重建时可能还没有尺寸，fitBounds 会按 0 尺寸算出最小缩放；布局稳定后再套一次范围（2026-09-19）
   setTimeout(() => { map.invalidateSize(); map.fitBounds([[2, 15], [58, 150]]); }, 80);
-  const ckL = L.layerGroup(), metroL = L.layerGroup(), siteL = L.layerGroup(), evL = L.layerGroup(), boxL = L.layerGroup();
+  const ckL = L.layerGroup(), siteL = L.layerGroup(), evL = L.layerGroup(), boxL = L.layerGroup();
   // 1. 咽喉点状态环
   D.chokepoints.forEach(c => {
     if (c.lat == null) return;
@@ -135,8 +135,17 @@ function buildOverviewMap() {
     m.addTo(ckL);
     if (c.atlas_id) L.tooltip({permanent: true, direction: 'right', className: 'lbl', offset: [8, 0]}).setLatLng([c.lat, c.lon]).setContent(nz(c.name)).addTo(ckL);
   });
-  // 2. 三个战区的供应链线路（与战区页同一套画法）
-  D.theaters.forEach(T => drawMetro(T, metroL, (num) => selectNode(T.key, num)));
+  // 2. 三个战区的供应链依赖关系：地铁图层（metro-overlay.js），默认不显示，点左上角按钮出现；站与线的编号前加战区键，免得三区同名相撞
+  const mst = {}, mlines = [], mth = {};
+  D.theaters.forEach(T => { if (!T.metro) return;
+    Object.entries(T.metro.stations).forEach(([k, v]) => { mst[T.key + ':' + k] = {name: tv(v.name), lat: v.lat, lon: v.lon, status: v.status, num: v.num, kind: v.kind}; mth[T.key + ':' + k] = T; });
+    T.metro.lines.forEach(l => mlines.push({id: T.key + ':' + l.id, name: tv(l.name), theater: tv(T.title), color: l.color,
+      route: l.route.map(([a, b]) => [T.key + ':' + a, T.key + ':' + b]), bypass: l.bypass.map(([a, b]) => [T.key + ':' + a, T.key + ':' + b])})); });
+  const metroOv = mlines.length ? new MetroOverlay({stations: mst, lines: mlines, toWord: t('metro_to'),
+    lineTip: (l, kind) => `<b style="color:${l.color}">■</b> ${esc(l.theater)} · ${esc(l.name)}${kind === 'bypass' ? esc(t('bypass')) : ''}`,
+    stationTip: (k, s_, ls) => `<b>${esc(tv(mth[k].title))} · ${s_.num ? s_.num + ' · ' : ''}${esc(s_.name)}</b><br>${esc(tv(s_.kind))}${s_.status ? ' · ' + esc(STATUS_T(s_.status)) : ''}<br>${t('metro_passes')}${ls.map(id => esc(mlines.find(x => x.id === id).name)).join(LANG === 'en' ? ', ' : '、')}`,
+    onStation: (k, s_) => selectNode(mth[k].key, s_.num)}) : null;
+  if (metroOv) metroButton(map, metroOv, t('metro_btn'));
   // 3. 战略站点按影像判读着色
   D.theaters.forEach(T => {
     const verdict = {}; (T.s2_change || []).forEach(r => { verdict[r.site] = r.manual_verdict || r.verdict; });
@@ -160,30 +169,10 @@ function buildOverviewMap() {
   D.theaters.forEach(T => {
     L.rectangle(T.bbox, {color: col('--ink3'), weight: 1.5, dashArray: '6 6', fill: true, fillOpacity: 0.02}).bindTooltip(t('box_tip', {t: tv(T.title)}), {sticky: true}).on('click', () => show(T.key)).addTo(boxL);
   });
-  boxL.addTo(map); metroL.addTo(map); ckL.addTo(map); siteL.addTo(map); evL.addTo(map);
-  const overlays = {[t('layer_ck')]: ckL, [t('layer_metro')]: metroL, [t('layer_sites')]: siteL, [t('layer_events')]: evL, [t('layer_boxes')]: boxL};
+  boxL.addTo(map); ckL.addTo(map); siteL.addTo(map); evL.addTo(map);
+  const overlays = {[t('layer_ck')]: ckL, ...(metroOv ? {[t('layer_metro')]: metroOv} : {}), [t('layer_sites')]: siteL, [t('layer_events')]: evL, [t('layer_boxes')]: boxL};
   L.control.layers(bases, overlays, {collapsed: true}).addTo(map); layersTitle(map);
   map.__overlays = overlays;
-}
-
-function drawMetro(T, layer, onStation) {
-  if (!T.metro || !T.metro.routes) return;
-  const lineById = Object.fromEntries(T.metro.lines.map(l => [l.id, l]));
-  const S = T.metro.stations;
-  const stoppedNear = pts_ => pts_.some(p => Object.values(S).some(st => st.status === 'stopped' && st.lat != null && Math.abs(st.lat - p[0]) < 0.05 && Math.abs(st.lon - p[1]) < 0.05));
-  T.metro.routes.forEach((r, ri) => { const l = lineById[r.id]; const off = (ri - 2.5) * 0.09;
-    r.segs.forEach(seg => { const pts_ = seg.pts.map(p => [p[0] + off, p[1]]);
-      L.polyline(pts_, {color: '#fff', weight: 7, opacity: .9, lineCap: 'round', lineJoin: 'round', interactive: false}).addTo(layer);
-      L.polyline(pts_, {color: l.color, weight: 4, opacity: .95, lineCap: 'round', lineJoin: 'round', dashArray: seg.kind === 'bypass' ? '10 8' : (stoppedNear(seg.pts) ? '1 10' : null)})
-        .bindTooltip(`${tv(T.title)} · ${tv(l.name)}${seg.kind === 'bypass' ? t('bypass') : ''}`, {sticky: true}).addTo(layer); }); });
-  Object.entries(S).forEach(([sid, st]) => { if (st.lat == null) return;
-    const passes = T.metro.lines.filter(l => [...l.route, ...l.bypass].some(([a, b]) => a === sid || b === sid)).length; const xfer = passes > 1;
-    if (st.status) L.circleMarker([st.lat, st.lon], {radius: xfer ? 11 : 8, color: STC[st.status] || STC.unknown, weight: 3, fill: false, interactive: false}).addTo(layer);
-    const c = L.circleMarker([st.lat, st.lon], {radius: xfer ? 6 : 4.5, color: '#1d1d1f', weight: xfer ? 2.5 : 1.5, fillColor: st.num ? '#1d1d1f' : '#fff', fillOpacity: 1});
-    c.bindTooltip(`${tv(T.title)} · ${st.num ? st.num + ' · ' : ''}${tv(st.name)} · ${tv(st.kind)}${st.status ? ' · ' + STATUS_T(st.status) : ''}`, {direction: 'top', className: 'lbl'});
-    if (st.num) c.on('click', e => { L.DomEvent.stopPropagation(e); onStation(st.num); });
-    c.addTo(layer);
-  });
 }
 
 function sparkline(canvas, labels, values, color) {
