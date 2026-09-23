@@ -282,3 +282,9 @@ body.inner .nav nav a{color:rgba(255,255,255,.8)}
 .article .byline{opacity:.75;font-size:14px;margin-bottom:2em}
 .article ol{padding-left:1.4em;opacity:.85;font-size:14.5px;line-height:1.8}
 .article ol li{margin-bottom:.7em}
+
+/* 09-24：避免中文单字成行；成果页按作者分组 */
+p,h1,h2,h3,.m,.by,.lead,.step{text-wrap:pretty}
+.nw{white-space:nowrap}
+/* 每位研究员一个颜色，只用在成果列表上区分作者（09-24 主人：去掉头像，只靠颜色主题区别作者） */
+:root{--a-sigma:#6fa8dc;--a-leimma:#e0906f;--a-vox:#b99cf0;--a-nullroute:#4fc3a1;--a-qianxing:#e8c65a;--a-pharma:#ec7d95;--a-memoria:#a8c86a;--a-runo:#d6d6d6}
