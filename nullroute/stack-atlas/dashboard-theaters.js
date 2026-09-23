@@ -168,6 +168,20 @@ function nodePinSvg(num, status, w = 34) {
     <text x="17" y="21.5" text-anchor="middle" font-size="15" font-weight="800" fill="#fff" font-family="-apple-system,'SF Pro Text','Helvetica Neue',Arial,sans-serif">${num}</text></svg>`;
 }
 const nodePinIcon = (n, w = 34) => { const h = Math.round(w * 1.3); return L.divIcon({className: 'anom-ic node-pin', html: nodePinSvg(n.num, n.status, w), iconSize: [w, h], iconAnchor: [w / 2, h - 2], tooltipAnchor: [0, -h + 6]}); };
+/* 关键节点的地图弹窗（2026-09-23 主人「点关键节点能弹卫星图和分析说明吗」）：编号、名称、状态与判定日；「为什么重要」的头两段是分析；
+   该节点下每个有影像的站给结论徽章、前后两景、「受打击意味着」一句；最后一行「详细」打开完整的节点详情。 */
+function nodePopup(T, n) {
+  const ctx = {}; (T.s2_change || []).forEach(r => { ctx[r.site] = r; });
+  const why = (LANG === 'en' && n.why_en && n.why_en.length ? n.why_en : (n.why || [])).slice(0, 2);
+  const imgs = (n.images || []).map(r => { const c = ctx[r.site] || {}; const v = r.manual_verdict || r.verdict;
+    return `<div class="np-site"><div class="l"><b>${esc(nz(r.site))}</b> ${v ? `<span class="vb ${VCLASS[v] || 'v-gray'}">${esc(tv(v))}</span>` : ''}</div>
+      <div class="s2pop-imgs">${r.png_before ? `<div><img src="${r.png_before}"><div class="u">${t('before_scene')} ${esc(r.before_date || '')}</div></div>` : ''}${r.png_after ? `<div><img src="${r.png_after}"><div class="u">${t('after_scene')} ${esc(r.after_date || '')}</div></div>` : ''}</div>
+      ${c.ctx_if_hit ? `<div class="ctx"><div><b>${t('ctx_if_hit')}</b>${tzf(c, 'ctx_if_hit')}</div></div>` : ''}</div>`; }).join('');
+  return `<div class="s2pop nodepop"><div class="l"><span class="np-num" style="background:${NODE_PIN_COLOR[n.status] || NODE_PIN_COLOR.unknown}">${n.num}</span><b>${esc(tv(n.name))}</b> <span class="chip st-${n.status}">${esc(tv(n.status_zh))}</span> <span class="u">${esc(t('st_manual', {d: n.status_date || ''}))}</span></div>
+    <div class="np-why">${why.map(w => `<p>${esc(w)}</p>`).join('')}</div>
+    ${imgs || `<p class="u">${t('no_images')}</p>`}
+    <div class="u"><a href="#" onclick="event.preventDefault();selectNode('${T.key}',${n.num})">${t('np_more')}</a></div></div>`;
+}
 function mkMap(id, opts) {
   const map = L.map(id, Object.assign({zoomControl: false, attributionControl: false}, opts || {}));
   L.control.zoom({zoomInTitle: t('zoom_in'), zoomOutTitle: t('zoom_out')}).addTo(map);
@@ -435,7 +449,10 @@ function buildMap(T) {
   const nodesLayer = L.layerGroup(); nodeMarkers[T.key] = [];
   (T.nodes || []).forEach(n => {
     const mk = L.marker([n.lat, n.lon], {icon: nodePinIcon(n), zIndexOffset: 1000})
-      .bindTooltip(`${n.num} ${tv(n.name)}`, {direction: 'top'}).on('click', e => { L.DomEvent.stopPropagation(e); selectNode(T.key, n.num); }).addTo(nodesLayer);
+      .bindTooltip(`${n.num} ${tv(n.name)}`, {direction: 'top'})
+      .bindPopup(() => nodePopup(T, n), {maxWidth: 340, minWidth: 300, keepInView: true, autoPanPaddingTopLeft: [20, 40], autoPanPaddingBottomRight: [20, 20]})
+      .on('popupopen', () => { (nodeMarkers[T.key] || []).forEach((m2, i) => { const el = m2.getElement(); if (el) el.classList.toggle('hl', i === n.num - 1); }); })
+      .addTo(nodesLayer);
     nodeMarkers[T.key].push(mk);
   });
   // 卫星影像显著变化：影像判读里受损、局部或整幅变化、热异常的站点（无变化与不可判读的不画），默认显示

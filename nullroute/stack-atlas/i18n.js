@@ -112,6 +112,7 @@ const UI = {
   ov_lg_site_note: ['点开进入所在战区，那里有前后两景', 'click to open its theater, where the before/after scenes are'],
   ov_lg_other: ['其他', 'Other'], ov_lg_event: ['Stack Atlas 事件', 'Stack Atlas event'], ov_lg_event_note: ['枚举表里记的争夺事件，点开看摘要', 'a contest event from the enumeration table; click for the summary'],
   ov_lg_box: ['战区范围', 'Theater box'], ov_lg_box_note: ['点框进入那个战区', 'click to open the theater'],
+  np_more: ['详细（证据表、产业链影响、上下游）↓', 'Details (evidence table, chain effects, upstream and downstream) ↓'],
   ctx_where: ['这是哪：', 'Where: '], ctx_what: ['做什么：', 'What it does: '], ctx_if_hit: ['受打击意味着：', 'If it is hit: '],
   focus_label: ['需要关注的站（点一个，地图飞过去并打开它的卫星图）：', 'Sites to watch (click one: the map flies there and opens its satellite images): '],
   layer_s2: ['卫星影像显著变化', 'Significant changes in satellite imagery'], layer_anom: ['异常航迹', 'Anomalous tracks'],
