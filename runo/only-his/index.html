@@ -38,8 +38,11 @@ body{background:var(--ground);color:var(--paper);font-family:"Songti SC","SimSun
 .rail i{display:block;height:100%;background:var(--cord);width:0;transition:width .6s ease;}
 .pager{position:fixed;right:clamp(12px,1.6vw,26px);bottom:clamp(14px,2.2vh,26px);z-index:5;font-size:clamp(10px,.8vw,12.5px);color:var(--faint);letter-spacing:.14em;text-shadow:0 1px 4px rgba(0,0,0,.9);}
 @media (max-width:600px){#c12 .shot::after{background:linear-gradient(to bottom,rgba(9,9,8,.55),rgba(9,9,8,.8) 14%,rgba(9,9,8,.9) 40%,rgba(9,9,8,.96));}}
-@media (max-width:480px) and (max-height:720px){.say{padding-bottom:30px;} .say p{font-size:12.5px;line-height:1.65;margin-bottom:.4em;}}
+@media (max-width:480px) and (max-height:720px){.say{padding-bottom:42px;} .say p{font-size:12.5px;line-height:1.65;margin-bottom:.4em;}}
 @media (max-height:520px){.say p{font-size:clamp(13px,1.3vw,18px);line-height:1.7;} .say h1{font-size:clamp(22px,3.4vw,44px);margin-bottom:.3em;}}
+@media (max-width:600px){.say .txt{max-height:calc(100vh - 78px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}}
+.lang{position:fixed;top:clamp(12px,1.6vh,18px);right:clamp(12px,1.6vw,26px);z-index:6;font-size:clamp(11px,.85vw,13px);letter-spacing:.12em;color:var(--faint);text-decoration:none;border:1px solid rgba(239,231,214,.35);padding:.25em .7em;border-radius:2px;background:rgba(23,26,31,.45);}
+.lang:hover{color:var(--paper);border-color:var(--paper);}
 </style>
 </head>
 <body>
@@ -131,6 +134,7 @@ body{background:var(--ground);color:var(--paper);font-family:"Songti SC","SimSun
 </div>
 <div class="rail"><i id="bar"></i></div>
 <div class="pager" id="pager"></div>
+<a class="lang" href="en.html" hreflang="en">EN</a>
 <script>
 (function(){
   var cards=[].slice.call(document.querySelectorAll('.card'));
@@ -154,17 +158,17 @@ body{background:var(--ground);color:var(--paper);font-family:"Songti SC","SimSun
     c.querySelector('.nc').addEventListener('click',function(e){ e.stopPropagation(); openNote(c,false); });
     c.querySelector('.note').addEventListener('click',function(e){ e.stopPropagation(); });
   });
-  addEventListener('wheel',function(e){ if(noteOpen()) return; go(e.deltaY>0?1:-1); },{passive:true});
+  addEventListener('wheel',function(e){ if(noteOpen()) return; var t=e.target.closest&&e.target.closest('.txt'); if(t&&t.scrollHeight>t.clientHeight+2) return; go(e.deltaY>0?1:-1); },{passive:true});
   addEventListener('keydown',function(e){
     if(e.key==='Escape'){ openNote(cards[i],false); return; }
     if(noteOpen()) return;
     if(['ArrowDown','ArrowRight','PageDown',' '].indexOf(e.key)>=0){ e.preventDefault(); go(1); }
     if(['ArrowUp','ArrowLeft','PageUp'].indexOf(e.key)>=0){ e.preventDefault(); go(-1); }
   });
-  addEventListener('click',function(e){ if(noteOpen()){ openNote(cards[i],false); return; } go(e.clientX < innerWidth*0.18 ? -1 : 1); });
+  addEventListener('click',function(e){ if(e.target.closest&&e.target.closest('.lang')) return; if(noteOpen()){ openNote(cards[i],false); return; } go(e.clientX < innerWidth*0.18 ? -1 : 1); });
   var y0=null;
   addEventListener('touchstart',function(e){ y0=e.touches[0].clientY; },{passive:true});
-  addEventListener('touchend',function(e){ if(y0===null||noteOpen()) return; var dy=y0-e.changedTouches[0].clientY; if(Math.abs(dy)>40) go(dy>0?1:-1); y0=null; },{passive:true});
+  addEventListener('touchend',function(e){ if(y0===null||noteOpen()) return; var t=e.target.closest&&e.target.closest('.txt'); if(t&&t.scrollHeight>t.clientHeight+2){ y0=null; return; } var dy=y0-e.changedTouches[0].clientY; if(Math.abs(dy)>40) go(dy>0?1:-1); y0=null; },{passive:true});
 })();
 </script>
 </body>
