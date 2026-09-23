@@ -23,7 +23,7 @@ const markerPlugin = {id: 'brk', afterDraw(chart, args, opts) {
 Chart.register(markerPlugin);
 
 const nav = document.getElementById('nav'), root = document.getElementById('root');
-const maps = {};
+const maps = {}; window.__maps = maps;  // 调试用：浏览器控制台能拿到各战区的 Leaflet 地图
 const viewHooks = {};  // 非战区视图的懒构建：dashboard.js 登记 {key: fn}
 const pageCharts = [];  // 战区页对齐图的 Chart 实例，整页重绘时销毁
 const STZ = st => ({stopped: t('st_halted'), narrowed: t('st_narrowed'), inuse: t('st_inuse'), damaged: t('st_damaged'), unknown: ''}[st] || '');
@@ -44,7 +44,9 @@ function show(k) {
   if (T) {
     if (T.built && !maps[k]) { buildMap(T); buildCharts(T); if (T.metro) buildMetro(T); }
   } else if (viewHooks[k] && !viewHooks[k].done) { viewHooks[k].fn(); viewHooks[k].done = true; }
-  if (maps[k]) setTimeout(() => maps[k].invalidateSize(), 50);
+  // 2026-09-23：地图在标签切换的同一刻建好并 fitBounds，那时容器还没量出尺寸，缩放算成整个世界，海湾缩成一团、点不到；
+  // 主人「卫星图哪去了」的直接原因。改成量好尺寸后再对准战区一次（只在第一次显示时做，之后保留用户自己的缩放）。
+  if (maps[k]) setTimeout(() => { maps[k].invalidateSize(); if (T && !maps[k]._fitted) { maps[k]._fitted = true; maps[k].fitBounds(focusBounds(T)); } }, 50);
   const anchor = k === 'cost' && window.COST_SEL ? 'cost=' + window.COST_SEL : k;  // 代价视图带上当前那一条链（2026-09-21）
   history.replaceState(null, '', '#' + anchor);
   const a = document.getElementById('langlink'); if (a) a.href = t('lang_href') + '#' + anchor;  // 语言链接带上当前视图
@@ -76,11 +78,11 @@ function renderBuilt(T) {
   <h2>${esc(tv(T.title))} <small>${t('break_target', {ck: esc(nz(T.break.chokepoint))})}${T.break.date ? t('break_on', {d: T.break.date}) : t('break_none')}</small></h2>
   <div class="reading">${T.reading.map((p, i) => `<p>${tzf(T, 'reading', i)}</p>`).join('')}</div>
   ${T.metro ? `<h2>${t('metro_h2')} <small>${t('metro_sub', {n: T.metro.lines.length})}</small></h2>
-  <div class="kpane" style="grid-template-columns:1fr"><div class="map" id="m_${T.key}" style="height:560px"></div><div class="metro-legend off" id="mlegend_${T.key}"></div><div class="anom-legend" id="alegend_${T.key}">${anomLegend(T)}</div></div>
+  <div class="kpane" style="grid-template-columns:1fr"><div class="map" id="m_${T.key}" style="height:640px"></div><div class="map-legend" id="legend_${T.key}"></div><div class="focus-strip" id="focus_${T.key}"></div><div class="metro-legend off" id="mlegend_${T.key}"></div><div class="anom-legend" id="alegend_${T.key}">${anomLegend(T)}</div></div>
   <details class="metro-wrap" style="margin-top:12px"><summary style="cursor:pointer;font-size:13px;color:var(--ink2)">${t('metro_schematic')}</summary><svg id="metro_${T.key}" class="metro" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet"></svg></details>` : ''}
   ${T.nodes ? `<h2>${t('nodes_h2')} <small>${t('nodes_sub')}</small></h2>
   <div class="kpane" style="grid-template-columns:1fr">
-    <div class="nodes" id="nodes_${T.key}" style="flex-direction:row;flex-wrap:wrap;max-height:none">${T.nodes.map(n => `<div class="node s-${n.status}" id="nd_${T.key}_${n.num}" onclick="event.stopPropagation();selectNode('${T.key}',${n.num})"><h3><span class="n">${n.num}</span>${esc(tv(n.name))} <span class="chip st-${n.status}">${esc(tv(n.status_zh))}</span></h3><div class="k">${esc(tv(n.kind))}</div>
+    <div class="nodes" id="nodes_${T.key}" style="flex-direction:row;flex-wrap:wrap;max-height:none">${T.nodes.map(n => `<div class="node s-${n.status}" id="nd_${T.key}_${n.num}" onclick="event.stopPropagation();selectNode('${T.key}',${n.num})"><h3><span class="n">${n.num}</span>${esc(tv(n.name))} <span class="chip st-${n.status}" title="${esc(t('st_manual', {d: n.status_date || ''}))}">${esc(tv(n.status_zh))}</span></h3><div class="k">${esc(tv(n.kind))}</div>
       <div class="e">${n.evidence.slice(0, 3).map(e => `${esc(nz(e.item))}${LANG === 'en' ? ': ' : '：'}${esc(tv(e.value))}`).join('<br>')}</div></div>`).join('')}</div></div>
   <div class="kdetail" id="kd_${T.key}"></div>` : ''}
   <h2>${T.nodes ? t('tiles_h2') : t('map_tiles_h2')} <small>${t('tiles_sub')}</small></h2>
@@ -109,6 +111,50 @@ function renderBuilt(T) {
 function cssid(s) { let h = 0; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return String(s).replace(/[^A-Za-z0-9_]/g, '_') + '_' + h.toString(36); }
 const STC = {stopped: '#ff3b30', narrowed: '#ff9500', inuse: '#34c759', damaged: '#5856d6', unknown: '#c7c7cc'};
 /* 建 Leaflet 地图：缩放钮、图层钮、署名的提示文字按页面语言给（Leaflet 自带的是英文）。 */
+/* 地图打开时对准「有东西的点」：关键节点、影像判读有变化的站、异常航迹，而不是整个战区的框（中东的框从苏丹到印度，海湾只占一角，
+   点根本点不到；2026-09-23 主人「卫星图哪去了」）。没有这些点时退回战区框。 */
+function focusBounds(T) {
+  const pts = [];
+  (T.nodes || []).forEach(n => { if (n.lat != null && n.lon != null) pts.push([n.lat, n.lon]); });
+  const sp = Object.fromEntries((T.site_points || []).map(p => [p.name, p]));
+  (T.s2_change || []).forEach(r => { const v = r.manual_verdict || r.verdict, p = sp[r.site]; if ((VRANK[v] ?? 9) <= 3 && p) pts.push([p.lat, p.lon]); });
+  ((T.track_anomalies || {}).items || []).forEach(a => { if (a.lat != null && a.lon != null) pts.push([a.lat, a.lon]); });
+  return pts.length > 1 ? L.latLngBounds(pts).pad(0.08) : (T.map_bounds || T.bbox);
+}
+/* 图下的统一图例（2026-09-23 主人：「图例不清楚，不知道不同形状的点代表什么」）：地图上每一种记号一行，图标用画地图的同一套函数画。 */
+function anomCounts(T) { const tot = {}; ((T.track_anomalies || {}).areas || []).forEach(a => Object.entries(a.counts || {}).forEach(([k, n]) => { tot[k] = (tot[k] || 0) + n; })); return tot; }
+function mapLegend(T) {
+  const row = (icon, label, note, count) => `<div class="lg-row"><span class="lg-ic">${icon}</span><span class="lg-t"><span class="lg-l">${label}${count != null ? `<span class="lg-n">${count}</span>` : ''}</span>${note ? `<span class="lg-note">${note}</span>` : ''}</span></div>`;
+  const ring = c => `<svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.5"/><circle cx="9" cy="9" r="3" fill="${c}" stroke="#fff" stroke-width="1.2"/></svg>`;
+  const arrow = c => `<svg width="16" height="16" viewBox="0 0 16 16" style="transform:rotate(45deg)"><path d="M8 1 L13 14 L8 11 L3 14 Z" fill="${c}" stroke="#fff" stroke-width="1"/></svg>`;
+  const dot = c => `<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3.5" fill="${c}"/></svg>`;
+  const tot = anomCounts(T);
+  const groups = [];
+  groups.push({h: t('lg_h_sites'), rows: [
+    row(`<span class="nodeicon" style="display:inline-block;width:20px;height:20px;line-height:20px;font-size:11px">1</span>`, t('lg_node'), t('lg_node_note')),
+    row(ring('#d70015'), t('lg_s2_red'), t('lg_s2_note')),
+    row(ring('#ff9500'), t('lg_s2_amber')),
+    row(ring('#0071e3'), t('lg_s2_blue')),
+    row(`<svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="6" fill="${col('--s4')}" fill-opacity=".85" stroke="#7a5200" stroke-width="1"/></svg>`, t('lg_strat'))]});
+  if (T.ais && (T.ais.ships || []).length) groups.push({h: t('lg_h_ais'), rows: [
+    row(arrow('#1f6feb'), t('lg_ais_moving')), row(dot('#1f6feb'), t('lg_ais_still')),
+    `<div class="lg-keys">${['tank', 'cargo', 'pass', 'fish', 'other', 'unk'].map(k => `<span class="ais-key"><i style="background:${AIS_COLOR[k]}"></i>${esc(aisL(AIS_CAT_T[k]))}</span>`).join('')}</div>`]});
+  if (T.track_anomalies && (T.track_anomalies.items || []).length) groups.push({h: t('lg_h_anom'), rows:
+    Object.keys(ANOM_STYLE).map(k => row(anomSvg(ANOM_STYLE[k], 16), t('anom_' + k), t('lg_anom_' + k), tot[k] ?? 0))
+    .concat([row(`<svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" fill="none" stroke="#1f6feb" stroke-width="1.2" stroke-dasharray="3 3"/></svg>`, t('lg_anom_area'))])});
+  if (T.aircraft && T.aircraft.circles && T.aircraft.circles.length) groups.push({h: t('lg_h_air'), rows: [
+    row(`<svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" fill="none" stroke="#5856d6" stroke-width="1.5" stroke-dasharray="4 3"/></svg>`, t('lg_air_circle'))]});
+  return `<div class="lg-head"><span class="lg-title">${t('lg_title')}</span><span class="lg-hint">${t('lg_hint')}</span></div><div class="lg-grid">` + groups.map(g => `<div class="lg-group"><div class="lg-h">${g.h}</div>${g.rows.join('')}</div>`).join('') + `</div>`;
+}
+/* 地图上的卫星图弹窗（2026-09-23 主人：「弹窗太大，不拖动就看不完整」）：只放站名、结论、这是哪／做什么／受打击意味着、前后两景；判读依据与像素统计不进弹窗，
+   要看细节按「详细」跳到下方卡片。 */
+function s2Popup(r) {
+  const v = r.manual_verdict || r.verdict;
+  return `<div class="s2pop"><div class="l"><b>${esc(nz(r.site))}</b> ${r.country ? '· ' + esc(ccT(r.country)) : ''} <span class="vb ${VCLASS[v] || 'v-gray'}">${esc(tv(v))}</span></div>
+    ${r.ctx_where ? `<div class="ctx"><div><b>${t('ctx_where')}</b>${tzf(r, 'ctx_where')}</div><div><b>${t('ctx_what')}</b>${tzf(r, 'ctx_what')}</div><div><b>${t('ctx_if_hit')}</b>${tzf(r, 'ctx_if_hit')}</div></div>` : ''}
+    <div class="s2pop-imgs">${r.png_before ? `<div><img src="${r.png_before}"><div class="u">${t('before_scene')} ${esc(r.before_date || '')}</div></div>` : ''}${r.png_after ? `<div><img src="${r.png_after}"><div class="u">${t('after_scene')} ${esc(r.after_date || '')}</div></div>` : ''}</div>
+    <div class="u"><a href="#" onclick="event.preventDefault();const el=document.getElementById('s2card_${cssid(r.site)}');if(el){el.scrollIntoView({block:'start'});el.classList.add('hl');setTimeout(()=>el.classList.remove('hl'),2500)}">${t('s2pop_more')}</a></div></div>`;
+}
 function mkMap(id, opts) {
   const map = L.map(id, Object.assign({zoomControl: false, attributionControl: false}, opts || {}));
   L.control.zoom({zoomInTitle: t('zoom_in'), zoomOutTitle: t('zoom_out')}).addTo(map);
@@ -244,15 +290,16 @@ function verdictBlock(r) {
   const auto = `<span class="vb ${VCLASS[r.verdict] || 'v-gray'}">${esc(tv(r.verdict))}</span>`;
   const man = r.manual_verdict ? `<span class="vb ${VCLASS[r.manual_verdict] || 'v-gray'}">${t('manual_reading')}${esc(tv(r.manual_verdict))}</span>` : '';
   return `<div class="verdict">${man || auto}${man ? ' <span class="u">' + t('algo') + esc(tv(r.verdict)) + '</span>' : ''}
-    <div class="u" style="margin-top:3px">${tzf(r, 'reason')}</div>
-    ${r.manual_text ? `<div class="mread">${tzf(r, 'manual_text')} <span class="u">${t('manual_date', {d: esc(r.manual_date || '')})}</span></div>` : ''}
+    <details class="basis"><summary>${t('basis_toggle')}</summary><div class="u" style="margin-top:3px">${tzf(r, 'reason')}</div>
+    ${r.manual_text ? `<div class="mread">${tzf(r, 'manual_text')} <span class="u">${t('manual_date', {d: esc(r.manual_date || '')})}</span></div>` : ''}</details>
   </div>`;
 }
 function s2Card(r, compact) {
   const cols = 2 + (r.png_blocks ? 1 : 0) + (r.png_diff && !compact ? 1 : 0);
-  return `<div class="tile" style="padding:8px${compact ? ';margin-bottom:8px' : ''}">
+  return `<div class="tile" id="s2card_${cssid(r.site)}" style="padding:8px${compact ? ';margin-bottom:8px' : ''}">
     <div class="l" style="min-height:auto"><b>${esc(nz(r.site))}</b> ${r.country ? '· ' + esc(ccT(r.country)) : ''}</div>
     ${verdictBlock(r)}
+    ${r.ctx_where ? `<div class="ctx"><div><b>${t('ctx_where')}</b>${tzf(r, 'ctx_where')}</div><div><b>${t('ctx_what')}</b>${tzf(r, 'ctx_what')}</div><div><b>${t('ctx_if_hit')}</b>${tzf(r, 'ctx_if_hit')}</div></div>` : ''}
     <div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:4px;margin:6px 0">
       ${r.png_before ? `<div><img src="${r.png_before}" style="width:100%;border-radius:3px"><div class="u">${t('before_scene')} ${esc(r.before_date || r.date_before || '')}</div></div>` : ''}
       ${r.png_after ? `<div><img src="${r.png_after}" style="width:100%;border-radius:3px"><div class="u">${t('after_scene')} ${esc(r.after_date || r.date_after || '')}</div></div>` : ''}
@@ -314,7 +361,7 @@ function selectNode(tkey, num) {
   const charts = n.series.map((s, i) => `<div class="chart small"><canvas id="mc_${i}"></canvas></div>`).join('');
   const kd = document.getElementById('kd_' + tkey);
   kd.innerHTML = `
-    <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><span class="n" style="display:inline-block;background:var(--hl);color:#0e1116;border-radius:50%;width:24px;height:24px;text-align:center;line-height:24px;font-size:13px;font-weight:700">${n.num}</span><h2 style="margin:0">${esc(tv(n.name))}</h2><span class="chip st-${n.status}">${esc(tv(n.status_zh))}</span><span class="kind">${esc(tv(n.kind))}</span>
+    <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><span class="n" style="display:inline-block;background:var(--hl);color:#0e1116;border-radius:50%;width:24px;height:24px;text-align:center;line-height:24px;font-size:13px;font-weight:700">${n.num}</span><h2 style="margin:0">${esc(tv(n.name))}</h2><span class="chip st-${n.status}">${esc(tv(n.status_zh))}</span><span class="u">${esc(t('st_manual', {d: n.status_date || ''}))}</span><span class="kind">${esc(tv(n.kind))}</span>
       <span style="margin-left:auto" class="legend"><span class="ev ev-measured">${t('ev_measured')}</span>${t('ev_measured_note')} <span class="ev ev-news">${t('ev_news')}</span>${t('ev_news_note')} <span class="ev ev-atlas">${t('ev_atlas')}</span>${t('ev_atlas_note')} · <a href="#" onclick="closeModal();return false">${t('collapse')}</a></span></div>
     <div class="m3" style="margin-top:10px">
       <div class="brief"><h4>${t('why_h')}</h4>${n.why.map((p, i) => `<p>${tzf(n, 'why', i)}</p>`).join('')}
@@ -379,14 +426,27 @@ function buildMap(T) {
     nodeMarkers[T.key].push(mk);
   });
   // 卫星影像显著变化：影像判读里受损、局部或整幅变化、热异常的站点（无变化与不可判读的不画），默认显示
-  const s2L = L.layerGroup(); const sp = Object.fromEntries((T.site_points || []).map(p => [p.name, p]));
+  const s2L = L.layerGroup(); const sp = Object.fromEntries((T.site_points || []).map(p => [p.name, p])); const focusPts = [];
   (T.s2_change || []).forEach(r => { const v = r.manual_verdict || r.verdict, rank = VRANK[v] ?? 9, p = sp[r.site];
     if (rank > 3 || !p) return;
     const c = {'v-red': '#d70015', 'v-amber': '#ff9500', 'v-blue': '#0071e3'}[VCLASS[v]] || '#8e8e93';
     L.circleMarker([p.lat, p.lon], {radius: 11, color: c, weight: 3, fillColor: c, fillOpacity: 0.18}).addTo(s2L);
-    L.circleMarker([p.lat, p.lon], {radius: 4, color: '#fff', weight: 1.5, fillColor: c, fillOpacity: 1})
+    const mk = L.circleMarker([p.lat, p.lon], {radius: 4, color: '#fff', weight: 1.5, fillColor: c, fillOpacity: 1})
       .bindTooltip(`${esc(nz(p.name))} · ${esc(tv(v))}`, {direction: 'top', className: 'lbl'})
-      .bindPopup(() => s2Card(r, true), {maxWidth: 380, minWidth: 320}).addTo(s2L); });
+      .bindPopup(() => s2Popup(r), {maxWidth: 330, minWidth: 300, keepInView: true, autoPanPaddingTopLeft: [20, 40], autoPanPaddingBottomRight: [20, 20]}).addTo(s2L);
+    focusPts.push({rank, color: c, label: nz(p.name), verdict: tv(v), latlng: [p.lat, p.lon], marker: mk}); });
+  // 地图下面一排「需要关注的站」：点一个，地图飞过去并打开它的卫星图（前后两景）。地图打开时对准的是整个战区，
+  // 站点挤在一起点不到，这一排是给主人直接到图的入口（2026-09-23 主人：「如果有需要关注的点，我在地图上点击可以看到卫星图」）。
+  const lg = document.getElementById('legend_' + T.key); if (lg) lg.innerHTML = mapLegend(T);
+  const strip = document.getElementById('focus_' + T.key);
+  if (strip) {
+    focusPts.sort((a, b) => a.rank - b.rank || a.label.localeCompare(b.label));
+    strip.innerHTML = focusPts.length ? `<span class="u">${t('focus_label')}</span>` + focusPts.map((f, i) =>
+      `<button class="focus-btn" data-i="${i}" style="border-color:${f.color}"><i style="background:${f.color}"></i>${esc(f.label)} <span class="u">${esc(f.verdict)}</span></button>`).join('') : '';
+    strip.querySelectorAll('.focus-btn').forEach(b => b.addEventListener('click', () => {
+      const f = focusPts[+b.dataset.i]; map.flyTo(f.latlng, Math.max(map.getZoom(), 8), {duration: 0.8});
+      map.once('moveend', () => f.marker.openPopup()); }));
+  }
   const anomL = addAnomalyLayer(T);
   // 供应链依赖关系：地铁图层，叠在最上面，默认不显示，点地图左上角的按钮才出现
   let metroOv = null;
@@ -524,8 +584,16 @@ function anomLegend(T) {
   const A = T.track_anomalies; if (!A || !A.areas.length) return '';
   const tot = {}; A.areas.forEach(a => Object.entries(a.counts || {}).forEach(([k, n]) => { tot[k] = (tot[k] || 0) + n; }));
   const days = [...new Set(A.areas.map(a => a.day))].join(', ');
-  return `<b>${t('layer_anom')}</b>` + Object.keys(ANOM_STYLE).map(k => `<span class="anom-ic">${anomSvg(ANOM_STYLE[k], 12)}${t('anom_' + k)} ${tot[k] ?? 0}</span>`).join('')
-    + `<span class="u">${t('anom_note', {d: esc(days)})}</span>`;
+  return `<span class="u">${t('anom_note', {d: esc(days)})}</span>` + anomReading(A);
+}
+/* 航迹判读（2026-09-23）：latest.json 的 track_anomalies.reading，我按海域写的判断与依据，跟在图例下面。 */
+function anomReading(A) {
+  const R = A.reading; if (!R) return '';
+  const areaName = k => t('area_' + k) === 'area_' + k ? k : t('area_' + k);
+  const blocks = Object.entries(R.areas).map(([k, a]) => `<div class="read-area"><b>${esc(areaName(k))}</b> ${esc(tzf(a, 'summary'))}
+      <ul>${(LANG === 'en' ? a.items_en : a.items_zh).map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>`).join('');
+  return `<div class="anom-reading"><div class="rh"><b>${t('reading_h')}</b> <span class="u">${t('reading_sub', {d: esc(R.day), w: esc(R.written || '')})}${R.stale ? t('reading_stale') : ''}</span></div>
+    ${blocks}<div class="read-area"><b>${t('reading_concl')}</b> ${esc(tzf(R, 'conclusion'))}</div><div class="u">${t('reading_method')}${esc(tzf(R, 'method'))}</div></div>`;
 }
 function addAnomalyLayer(T) {
   const A = T.track_anomalies; if (!A || !A.items.length) return null;
