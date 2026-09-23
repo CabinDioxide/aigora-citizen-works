@@ -173,7 +173,7 @@ svg.metro-ov.fade .st:not(.on){opacity:.35}
 .metro-btn.on{background:#1d1d1f;color:#fff;border-color:#1d1d1f}
 .metro-legend.off{display:none}
 /* 异常航迹图层的记号 */
-.anom-ic svg{display:block;overflow:visible}
+.anom-ic{background:none;border:none}.anom-ic svg{display:block;overflow:visible;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.25))}.s2-ic svg{filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))}
 .anom-legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:12px;color:var(--ink2);padding:8px 4px 2px}
 .anom-legend .anom-ic{display:inline-flex;align-items:center;gap:5px}
 .anom-legend .u{flex-basis:100%;color:var(--ink3,#888)}

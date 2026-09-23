@@ -125,22 +125,22 @@ function focusBounds(T) {
 function anomCounts(T) { const tot = {}; ((T.track_anomalies || {}).areas || []).forEach(a => Object.entries(a.counts || {}).forEach(([k, n]) => { tot[k] = (tot[k] || 0) + n; })); return tot; }
 function mapLegend(T) {
   const row = (icon, label, note, count) => `<div class="lg-row"><span class="lg-ic">${icon}</span><span class="lg-t"><span class="lg-l">${label}${count != null ? `<span class="lg-n">${count}</span>` : ''}</span>${note ? `<span class="lg-note">${note}</span>` : ''}</span></div>`;
-  const ring = c => `<svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.5"/><circle cx="9" cy="9" r="3" fill="${c}" stroke="#fff" stroke-width="1.2"/></svg>`;
+  const ring = (c, sev) => s2Svg(c, 18, sev);
   const arrow = c => `<svg width="16" height="16" viewBox="0 0 16 16" style="transform:rotate(45deg)"><path d="M8 1 L13 14 L8 11 L3 14 Z" fill="${c}" stroke="#fff" stroke-width="1"/></svg>`;
   const dot = c => `<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3.5" fill="${c}"/></svg>`;
   const tot = anomCounts(T);
   const groups = [];
   groups.push({h: t('lg_h_sites'), rows: [
     row(`<span class="nodeicon" style="display:inline-block;width:20px;height:20px;line-height:20px;font-size:11px">1</span>`, t('lg_node'), t('lg_node_note')),
-    row(ring('#d70015'), t('lg_s2_red'), t('lg_s2_note')),
+    row(ring('#d70015', true), t('lg_s2_red'), t('lg_s2_note')),
     row(ring('#ff9500'), t('lg_s2_amber')),
     row(ring('#0071e3'), t('lg_s2_blue')),
-    row(`<svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="6" fill="${col('--s4')}" fill-opacity=".85" stroke="#7a5200" stroke-width="1"/></svg>`, t('lg_strat'))]});
+    row(`<svg width="18" height="18" viewBox="0 0 20 20"><circle cx="10" cy="10" r="5" fill="#fff" stroke="#8e8e93" stroke-width="1.8"/></svg>`, t('lg_strat'))]});
   if (T.ais && (T.ais.ships || []).length) groups.push({h: t('lg_h_ais'), rows: [
     row(arrow('#1f6feb'), t('lg_ais_moving')), row(dot('#1f6feb'), t('lg_ais_still')),
     `<div class="lg-keys">${['tank', 'cargo', 'pass', 'fish', 'other', 'unk'].map(k => `<span class="ais-key"><i style="background:${AIS_COLOR[k]}"></i>${esc(aisL(AIS_CAT_T[k]))}</span>`).join('')}</div>`]});
   if (T.track_anomalies && (T.track_anomalies.items || []).length) groups.push({h: t('lg_h_anom'), rows:
-    Object.keys(ANOM_STYLE).map(k => row(anomSvg(ANOM_STYLE[k], 16), t('anom_' + k), t('lg_anom_' + k), tot[k] ?? 0))
+    Object.keys(ANOM_STYLE).map(k => row(anomSvg(ANOM_STYLE[k], 18), t('anom_' + k), t('lg_anom_' + k), tot[k] ?? 0))
     .concat([row(`<svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" fill="none" stroke="#1f6feb" stroke-width="1.2" stroke-dasharray="3 3"/></svg>`, t('lg_anom_area'))])});
   if (T.aircraft && T.aircraft.circles && T.aircraft.circles.length) groups.push({h: t('lg_h_air'), rows: [
     row(`<svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" fill="none" stroke="#5856d6" stroke-width="1.5" stroke-dasharray="4 3"/></svg>`, t('lg_air_circle'))]});
@@ -414,8 +414,8 @@ function buildMap(T) {
   let nStrat = 0, nHit = 0, nRest = 0;
   (T.site_points || []).forEach(p => {
     const hit = (p.n || 0) > 0, isStrat = /strategic/.test(p.list || '');
-    const m = L.circleMarker([p.lat, p.lon], {radius: isStrat ? 7 : (hit ? 5 : 3), color: hit ? col('--s8') : (isStrat ? '#7a5200' : '#9a9a9a'), weight: hit ? 2.5 : 1,
-      fillColor: isStrat ? col('--s4') : (hit ? col('--s2') : '#cfcfcf'), fillOpacity: 0.85})
+    const m = L.circleMarker([p.lat, p.lon], {radius: isStrat ? 5 : (hit ? 4 : 3), color: isStrat ? '#8e8e93' : (hit ? col('--s8') : '#9a9a9a'), weight: isStrat ? 1.8 : (hit ? 2 : 1),
+      fillColor: '#fff', fillOpacity: isStrat ? 1 : 0.85})
       .bindPopup(`<b>${esc(nz(p.name))}</b> · ${esc(kindT(p.kind))} · ${esc(ccT(p.country))}<br>${hit ? t('site_hit', {n: p.n, f: esc(p.first)}) : t('site_nohit')}<br><span style="color:#52514e" title="${esc(p.list)}">${esc(listT(p.list))}</span>`);
     if (isStrat) { m.addTo(strat); nStrat++; } else if (hit) { m.addTo(infraHit); nHit++; } else { m.addTo(infraRest); nRest++; }
   });
@@ -430,8 +430,8 @@ function buildMap(T) {
   (T.s2_change || []).forEach(r => { const v = r.manual_verdict || r.verdict, rank = VRANK[v] ?? 9, p = sp[r.site];
     if (rank > 3 || !p) return;
     const c = {'v-red': '#d70015', 'v-amber': '#ff9500', 'v-blue': '#0071e3'}[VCLASS[v]] || '#8e8e93';
-    L.circleMarker([p.lat, p.lon], {radius: 11, color: c, weight: 3, fillColor: c, fillOpacity: 0.18}).addTo(s2L);
-    const mk = L.circleMarker([p.lat, p.lon], {radius: 4, color: '#fff', weight: 1.5, fillColor: c, fillOpacity: 1})
+    const sev = rank === 0, isz = sev ? 26 : 22;
+    const mk = L.marker([p.lat, p.lon], {icon: L.divIcon({className: 'anom-ic s2-ic', html: s2Svg(c, isz, sev), iconSize: [isz, isz], iconAnchor: [isz / 2, isz / 2]}), zIndexOffset: sev ? 600 : 400, keyboard: false})
       .bindTooltip(`${esc(nz(p.name))} · ${esc(tv(v))}`, {direction: 'top', className: 'lbl'})
       .bindPopup(() => s2Popup(r), {maxWidth: 330, minWidth: 300, keepInView: true, autoPanPaddingTopLeft: [20, 40], autoPanPaddingBottomRight: [20, 20]}).addTo(s2L);
     focusPts.push({rank, color: c, label: nz(p.name), verdict: tv(v), latlng: [p.lat, p.lon], marker: mk}); });
@@ -579,16 +579,26 @@ function aisIcon(s) {
 }
 /* 异常航迹（2026-09-22）：数据是 latest.json 的 theaters[].track_anomalies（monitor/fetchers/track_anomalies.py，GFW 逐船航迹，滞后约 4 天）。
  * 六类各用一种记号；只标算出来的位置与数，不判断原因。 */
-const ANOM_STYLE = {off_lane: {c: '#d9480f', s: 'diamond'}, odd_stops: {c: '#1f6feb', s: 'ring'}, dark_gaps: {c: '#5856d6', s: 'gap'},
-  surges: {c: '#c92a2a', s: 'square'}, on_land: {c: '#111', s: 'x'}, far_from_lanes: {c: '#8a5a00', s: 'tri'}};
-const anomSvg = (st, sz = 14) => { const h = sz / 2, c = st.c;
-  const g = {diamond: `<path d="M${h},1 L${sz - 1},${h} L${h},${sz - 1} L1,${h} Z" fill="${c}" stroke="#fff" stroke-width="1.2"/>`,
-    ring: `<circle cx="${h}" cy="${h}" r="${h - 2}" fill="none" stroke="${c}" stroke-width="2.4"/>`,
-    square: `<rect x="2" y="2" width="${sz - 4}" height="${sz - 4}" fill="none" stroke="${c}" stroke-width="2.4"/>`,
-    x: `<path d="M3,3 L${sz - 3},${sz - 3} M${sz - 3},3 L3,${sz - 3}" stroke="#fff" stroke-width="4"/><path d="M3,3 L${sz - 3},${sz - 3} M${sz - 3},3 L3,${sz - 3}" stroke="${c}" stroke-width="2.2"/>`,
-    tri: `<path d="M${h},2 L${sz - 2},${sz - 2} L2,${sz - 2} Z" fill="none" stroke="${c}" stroke-width="2.2"/>`,
-    gap: `<circle cx="${h}" cy="${h}" r="${h - 3}" fill="#fff" stroke="${c}" stroke-width="2.2"/>`}[st.s];
-  return `<svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}">${g}</svg>`; };
+const ANOM_STYLE = {off_lane: {c: '#d9480f', k: 'off_lane'}, odd_stops: {c: '#1f6feb', k: 'odd_stops'}, dark_gaps: {c: '#5856d6', k: 'dark_gaps'},
+  surges: {c: '#c92a2a', k: 'surges'}, on_land: {c: '#1d1d1f', k: 'on_land'}, far_from_lanes: {c: '#8a5a00', k: 'far_from_lanes'}};
+/* 记号图标（2026-09-23 主人「不是图例本身，是那些图标」后重画）：所有点状记号统一为白底圆徽章、彩色细环、环内一个表意的小图形，
+   20 像素画布，地图与图例共用。异常航迹六类各一个图形：偏离常走的路＝拐弯的箭头，异常停留＝锚，信号中断＝被划掉的信号波，
+   船数陡增＝三根上升的柱，停在陆上＝船体压在地平线上，远离一切已知航迹＝虚线圈里一个点。卫星影像判读＝相框加镜头，按结论上色。 */
+const GLYPH = {
+  off_lane: `<path d="M5 15 C5.5 9 10 6 14 6.5" fill="none" stroke="C" stroke-width="2" stroke-linecap="round"/><path d="M11.5 4 L15.5 6.5 L12 9.5" fill="none" stroke="C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+  odd_stops: `<circle cx="10" cy="5" r="1.8" fill="none" stroke="C" stroke-width="1.8"/><path d="M10 7 V16 M6.5 9.5 H13.5 M4.5 12.5 Q10 17.5 15.5 12.5" fill="none" stroke="C" stroke-width="1.8" stroke-linecap="round"/>`,
+  dark_gaps: `<path d="M6.2 12.5 a3.8 3.8 0 0 1 7.6 0 M3.4 12.5 a6.6 6.6 0 0 1 13.2 0" fill="none" stroke="C" stroke-width="1.7" stroke-linecap="round"/><circle cx="10" cy="14.5" r="1.6" fill="C"/><path d="M4.5 16.5 L15.5 4.5" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M4.5 16.5 L15.5 4.5" stroke="C" stroke-width="1.8" stroke-linecap="round"/>`,
+  surges: `<rect x="4" y="11.5" width="3" height="5" rx=".6" fill="C"/><rect x="8.5" y="8" width="3" height="8.5" rx=".6" fill="C"/><rect x="13" y="4" width="3" height="12.5" rx=".6" fill="C"/>`,
+  on_land: `<path d="M3.5 15.5 H16.5" stroke="C" stroke-width="1.8" stroke-linecap="round"/><path d="M5 8.5 H15 L13 13 H7 Z" fill="C"/><path d="M10 5 V8.5" stroke="C" stroke-width="1.8" stroke-linecap="round"/>`,
+  far_from_lanes: `<circle cx="10" cy="10" r="6" fill="none" stroke="C" stroke-width="1.6" stroke-dasharray="2.4 2"/><circle cx="10" cy="10" r="2" fill="C"/>`,
+  imagery: `<rect x="4" y="5.5" width="12" height="9.5" rx="1.8" fill="none" stroke="C" stroke-width="1.8"/><circle cx="10" cy="10.2" r="2.4" fill="none" stroke="C" stroke-width="1.6"/><rect x="12.5" y="3.5" width="3" height="2.2" rx=".6" fill="C"/>`,
+  node: ``,
+};
+/* 徽章：白底圆、彩色环、环内图形。sz 是输出像素，画布固定 20。 */
+const badge = (color, glyph, sz = 20, ring = 2) => `<svg width="${sz}" height="${sz}" viewBox="0 0 20 20"><circle cx="10" cy="10" r="${9 - ring / 2}" fill="#fff" stroke="${color}" stroke-width="${ring}"/>${glyph.split('C"').join(color + '"')}</svg>`;
+const anomSvg = (st, sz = 20) => badge(st.c, GLYPH[st.k] || '', sz);
+/* 卫星影像判读的记号：徽章加相框，按结论上色；受损迹象的环加粗、外圈再套一层淡色光晕，好在一堆点里先看到它 */
+const s2Svg = (color, sz = 22, severe = false) => `<svg width="${sz}" height="${sz}" viewBox="0 0 20 20">${severe ? `<circle cx="10" cy="10" r="9.5" fill="${color}" fill-opacity=".18"/>` : ''}<circle cx="10" cy="10" r="${severe ? 7.4 : 8}" fill="#fff" stroke="${color}" stroke-width="${severe ? 2.6 : 2}"/><g transform="translate(10 10) scale(.78) translate(-10 -10)">${GLYPH.imagery.split('C"').join(color + '"')}</g></svg>`;
 function anomLegend(T) {
   const A = T.track_anomalies; if (!A || !A.areas.length) return '';
   const tot = {}; A.areas.forEach(a => Object.entries(a.counts || {}).forEach(([k, n]) => { tot[k] = (tot[k] || 0) + n; }));
@@ -619,7 +629,7 @@ function addAnomalyLayer(T) {
     else if (x.cat === 'odd_stops') body = t('anom_stop_pop', {h: x.hours, b: x.base ?? 0});
     else body = t('anom_hours_pop', {h: x.hours ?? '—'});
     const head = x.cat === 'surges' ? `<b>${t('anom_surges')}</b>` : `<b>${who}</b>${meta ? ' · ' + meta : ''}<br>${t('anom_' + x.cat)}`;
-    L.marker([x.lat, x.lon], {icon: L.divIcon({className: 'anom-ic', html: anomSvg(st), iconSize: [14, 14], iconAnchor: [7, 7]}), keyboard: false})
+    L.marker([x.lat, x.lon], {icon: L.divIcon({className: 'anom-ic', html: anomSvg(st, 20), iconSize: [20, 20], iconAnchor: [10, 10]}), keyboard: false})
       .bindTooltip(x.cat === 'surges' ? t('anom_surges') : (x.name ? vaIdent(x.name) : t('anom_' + x.cat)), {direction: 'top', className: 'lbl'})
       .bindPopup(`${head}<br>${body}<br><span class="u">${t('anom_pop_src', {d: esc(x.day)})}</span>`).addTo(g);
   });
