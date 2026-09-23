@@ -444,7 +444,9 @@ function buildMap(T) {
     const hit = (p.n || 0) > 0, isStrat = /strategic/.test(p.list || '');
     const m = L.circleMarker([p.lat, p.lon], {radius: isStrat ? 5 : (hit ? 4 : 3), color: isStrat ? '#8e8e93' : (hit ? col('--s8') : '#9a9a9a'), weight: isStrat ? 1.8 : (hit ? 2 : 1),
       fillColor: '#fff', fillOpacity: isStrat ? 1 : 0.85})
-      .bindPopup(`<b>${esc(nz(p.name))}</b> · ${esc(kindT(p.kind))} · ${esc(ccT(p.country))}<br>${hit ? t('site_hit', {n: p.n, f: esc(p.first)}) : t('site_nohit')}<br><span style="color:#52514e" title="${esc(p.list)}">${esc(listT(p.list))}</span>`);
+      .bindPopup(() => `<div class="s2pop"><div class="l"><b>${esc(nz(p.name))}</b> · ${esc(kindT(p.kind))} · ${esc(ccT(p.country))}</div>
+        ${p.ctx_where ? `<div class="ctx"><div><b>${t('ctx_where')}</b>${tzf(p, 'ctx_where')}</div><div><b>${t('ctx_what')}</b>${tzf(p, 'ctx_what')}</div><div><b>${t('ctx_if_hit')}</b>${tzf(p, 'ctx_if_hit')}</div></div>` : ''}
+        <div class="u">${hit ? t('site_hit', {n: p.n, f: esc(p.first)}) : t('site_nohit')} · <span title="${esc(p.list)}">${esc(listT(p.list))}</span></div></div>`, {maxWidth: 330, minWidth: 280, keepInView: true});
     if (isStrat) { m.addTo(strat); nStrat++; } else if (hit) { m.addTo(infraHit); nHit++; } else { m.addTo(infraRest); nRest++; }
   });
   const nodesLayer = L.layerGroup(); nodeMarkers[T.key] = [];
