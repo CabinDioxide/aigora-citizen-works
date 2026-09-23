@@ -144,7 +144,7 @@ function mapLegend(T) {
     .concat([row(`<svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" fill="none" stroke="#1f6feb" stroke-width="1.2" stroke-dasharray="3 3"/></svg>`, t('lg_anom_area'))])});
   if (T.aircraft && T.aircraft.circles && T.aircraft.circles.length) groups.push({h: t('lg_h_air'), rows: [
     row(`<svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" fill="none" stroke="#5856d6" stroke-width="1.5" stroke-dasharray="4 3"/></svg>`, t('lg_air_circle'))]});
-  return `<div class="lg-head"><span class="lg-title">${t('lg_title')}</span><span class="lg-hint">${t('lg_hint')}</span></div><div class="lg-grid">` + groups.map(g => `<div class="lg-group"><div class="lg-h">${g.h}</div>${g.rows.join('')}</div>`).join('') + `</div>`;
+  return `<div class="lg-hint">${t('lg_hint')}</div>` + groups.map(g => `<div class="lg-group"><div class="lg-h">${g.h}</div>${g.rows.join('')}</div>`).join('');
 }
 /* 地图上的卫星图弹窗（2026-09-23 主人：「弹窗太大，不拖动就看不完整」）：只放站名、结论、这是哪／做什么／受打击意味着、前后两景；判读依据与像素统计不进弹窗，
    要看细节按「详细」跳到下方卡片。 */
@@ -437,7 +437,16 @@ function buildMap(T) {
     focusPts.push({rank, color: c, label: nz(p.name), verdict: tv(v), latlng: [p.lat, p.lon], marker: mk}); });
   // 地图下面一排「需要关注的站」：点一个，地图飞过去并打开它的卫星图（前后两景）。地图打开时对准的是整个战区，
   // 站点挤在一起点不到，这一排是给主人直接到图的入口（2026-09-23 主人：「如果有需要关注的点，我在地图上点击可以看到卫星图」）。
-  const lg = document.getElementById('legend_' + T.key); if (lg) lg.innerHTML = mapLegend(T);
+  // 图例放进地图左下角的浮动面板（2026-09-23 主人「图例的 ui 稍微设计一下」「没有任何变化」后改）：可折叠，滚动，宽 270 像素，不占图下版面
+  const LegendCtl = L.Control.extend({onAdd() {
+    const d = L.DomUtil.create('div', 'leaflet-bar map-legend-ctl');
+    d.innerHTML = `<div class="lgc-head"><span class="lgc-title">${t('lg_title')}</span><button class="lgc-toggle" type="button" aria-label="toggle">▾</button></div><div class="lgc-body">${mapLegend(T)}</div>`;
+    L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d);
+    d.querySelector('.lgc-toggle').addEventListener('click', () => { const on = d.classList.toggle('collapsed'); d.querySelector('.lgc-toggle').textContent = on ? '▸' : '▾'; try { localStorage.setItem('sa_legend_collapsed', on ? '1' : '0'); } catch (e) {} });
+    try { if (localStorage.getItem('sa_legend_collapsed') === '1') { d.classList.add('collapsed'); d.querySelector('.lgc-toggle').textContent = '▸'; } } catch (e) {}
+    return d; }});
+  new LegendCtl({position: 'bottomleft'}).addTo(map);
+  const lg = document.getElementById('legend_' + T.key); if (lg) lg.remove();
   const strip = document.getElementById('focus_' + T.key);
   if (strip) {
     focusPts.sort((a, b) => a.rank - b.rank || a.label.localeCompare(b.label));
