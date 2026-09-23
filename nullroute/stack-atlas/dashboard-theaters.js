@@ -124,7 +124,7 @@ function focusBounds(T) {
 /* 图下的统一图例（2026-09-23 主人：「图例不清楚，不知道不同形状的点代表什么」）：地图上每一种记号一行，图标用画地图的同一套函数画。 */
 function anomCounts(T) { const tot = {}; ((T.track_anomalies || {}).areas || []).forEach(a => Object.entries(a.counts || {}).forEach(([k, n]) => { tot[k] = (tot[k] || 0) + n; })); return tot; }
 function mapLegend(T) {
-  const row = (icon, label, note, count) => `<div class="lg-row"><span class="lg-ic">${icon}</span><span class="lg-t"><span class="lg-l">${label}${count != null ? `<span class="lg-n">${count}</span>` : ''}</span>${note ? `<span class="lg-note">${note}</span>` : ''}</span></div>`;
+  const row = lgRow;
   const ring = (c, sev) => s2Svg(c, 18, sev);
   const arrow = c => `<svg width="16" height="16" viewBox="0 0 16 16" style="transform:rotate(45deg)"><path d="M8 1 L13 14 L8 11 L3 14 Z" fill="${c}" stroke="#fff" stroke-width="1"/></svg>`;
   const dot = c => `<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3.5" fill="${c}"/></svg>`;
@@ -438,14 +438,7 @@ function buildMap(T) {
   // 地图下面一排「需要关注的站」：点一个，地图飞过去并打开它的卫星图（前后两景）。地图打开时对准的是整个战区，
   // 站点挤在一起点不到，这一排是给主人直接到图的入口（2026-09-23 主人：「如果有需要关注的点，我在地图上点击可以看到卫星图」）。
   // 图例放进地图左下角的浮动面板（2026-09-23 主人「图例的 ui 稍微设计一下」「没有任何变化」后改）：可折叠，滚动，宽 270 像素，不占图下版面
-  const LegendCtl = L.Control.extend({onAdd() {
-    const d = L.DomUtil.create('div', 'leaflet-bar map-legend-ctl');
-    d.innerHTML = `<div class="lgc-head"><span class="lgc-title">${t('lg_title')}</span><button class="lgc-toggle" type="button" aria-label="toggle">▾</button></div><div class="lgc-body">${mapLegend(T)}</div>`;
-    L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d);
-    d.querySelector('.lgc-toggle').addEventListener('click', () => { const on = d.classList.toggle('collapsed'); d.querySelector('.lgc-toggle').textContent = on ? '▸' : '▾'; try { localStorage.setItem('sa_legend_collapsed', on ? '1' : '0'); } catch (e) {} });
-    try { if (localStorage.getItem('sa_legend_collapsed') === '1') { d.classList.add('collapsed'); d.querySelector('.lgc-toggle').textContent = '▸'; } } catch (e) {}
-    return d; }});
-  new LegendCtl({position: 'bottomleft'}).addTo(map);
+  addLegendControl(map, mapLegend(T));
   const lg = document.getElementById('legend_' + T.key); if (lg) lg.remove();
   const strip = document.getElementById('focus_' + T.key);
   if (strip) {
@@ -592,8 +585,25 @@ const GLYPH = {
   on_land: `<path d="M3.5 15.5 H16.5" stroke="C" stroke-width="1.8" stroke-linecap="round"/><path d="M5 8.5 H15 L13 13 H7 Z" fill="C"/><path d="M10 5 V8.5" stroke="C" stroke-width="1.8" stroke-linecap="round"/>`,
   far_from_lanes: `<circle cx="10" cy="10" r="6" fill="none" stroke="C" stroke-width="1.6" stroke-dasharray="2.4 2"/><circle cx="10" cy="10" r="2" fill="C"/>`,
   imagery: `<rect x="4" y="5.5" width="12" height="9.5" rx="1.8" fill="none" stroke="C" stroke-width="1.8"/><circle cx="10" cy="10.2" r="2.4" fill="none" stroke="C" stroke-width="1.6"/><rect x="12.5" y="3.5" width="3" height="2.2" rx=".6" fill="C"/>`,
+  chokepoint: `<path d="M6.5 3 C4.5 7.5 8 12 6.5 17 M13.5 3 C15.5 7.5 12 12 13.5 17" fill="none" stroke="C" stroke-width="1.9" stroke-linecap="round"/><path d="M8.5 10 H11.5" stroke="C" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="1.2 1.4"/>`,
+  event: `<path d="M10 4.5 V11.5" stroke="C" stroke-width="2.4" stroke-linecap="round"/><circle cx="10" cy="15" r="1.5" fill="C"/>`,
   node: ``,
 };
+/* 咽喉点记号：徽章加「两岸夹一道水」的图形，按通过量状态上色；大的是 Stack Atlas 里有节点的咽喉点 */
+const ckSvg = (color, sz = 20, major = false) => badge(color, GLYPH.chokepoint, sz, major ? 2.6 : 2);
+/* 地图左下角的浮动图例面板：三个战区页与总览共用（2026-09-23）。bodyHtml 是图例正文，折叠状态记在浏览器里。 */
+function addLegendControl(map, bodyHtml) {
+  const Ctl = L.Control.extend({onAdd() {
+    const d = L.DomUtil.create('div', 'leaflet-bar map-legend-ctl');
+    d.innerHTML = `<div class="lgc-head"><span class="lgc-title">${t('lg_title')}</span><button class="lgc-toggle" type="button" aria-label="toggle">▾</button></div><div class="lgc-body">${bodyHtml}</div>`;
+    L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d);
+    d.querySelector('.lgc-toggle').addEventListener('click', () => { const on = d.classList.toggle('collapsed'); d.querySelector('.lgc-toggle').textContent = on ? '▸' : '▾'; try { localStorage.setItem('sa_legend_collapsed', on ? '1' : '0'); } catch (e) {} });
+    try { if (localStorage.getItem('sa_legend_collapsed') === '1') { d.classList.add('collapsed'); d.querySelector('.lgc-toggle').textContent = '▸'; } } catch (e) {}
+    return d; }});
+  new Ctl({position: 'bottomleft'}).addTo(map);
+}
+/* 图例一行：图标 | 名称（可带计数小圆标）| 浅色判据 */
+const lgRow = (icon, label, note, count) => `<div class="lg-row"><span class="lg-ic">${icon}</span><span class="lg-t"><span class="lg-l">${label}${count != null ? `<span class="lg-n">${count}</span>` : ''}</span>${note ? `<span class="lg-note">${note}</span>` : ''}</span></div>`;
 /* 徽章：白底圆、彩色环、环内图形。sz 是输出像素，画布固定 20。 */
 const badge = (color, glyph, sz = 20, ring = 2) => `<svg width="${sz}" height="${sz}" viewBox="0 0 20 20"><circle cx="10" cy="10" r="${9 - ring / 2}" fill="#fff" stroke="${color}" stroke-width="${ring}"/>${glyph.split('C"').join(color + '"')}</svg>`;
 const anomSvg = (st, sz = 20) => badge(st.c, GLYPH[st.k] || '', sz);

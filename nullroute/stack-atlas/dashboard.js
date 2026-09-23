@@ -100,8 +100,6 @@ function renderOverview() {
   <div class="costbanner" role="link" tabindex="0" onclick="show('cost')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();show('cost')}"><span class="cb-tag">${t('cost_banner_tag')}</span><span class="cb-text">${t('cost_banner_text')}</span><span class="cb-cta">${t('cost_banner_cta')}</span></div>
   <div class="ov">
     <div class="mapwrap"><div id="m_overview"></div>
-      <div class="ovlegend"><span><i style="border-color:var(--st-stopped)"></i>${t('st_stopped')}</span><span><i style="border-color:var(--st-narrowed)"></i>${t('st_narrowed')}</span><span><i style="border-color:var(--st-inuse)"></i>${t('st_inuse')}</span><span><i style="border-color:var(--st-unknown)"></i>${t('st_nodata')}</span>
-      <span style="margin-left:10px">${t('sites_legend')}<span class="lv red"></span>${t('site_damaged')} <span class="lv amber"></span>${t('site_thermal')} <span class="lv green"></span>${t('site_nochange')} <span class="lv gray"></span>${t('site_unreadable')}</span><span style="margin-left:10px">${t('click_hint')}</span></div>
     </div>
     <div class="side">${groups}</div>
   </div>
@@ -128,8 +126,9 @@ function buildOverviewMap() {
   D.chokepoints.forEach(c => {
     if (c.lat == null) return;
     const color = STC[c.status] || STC.unknown;
-    L.circleMarker([c.lat, c.lon], {radius: c.atlas_id ? 12 : 9, color, weight: 4, fill: false, interactive: false}).addTo(ckL);
-    const m = L.circleMarker([c.lat, c.lon], {radius: c.atlas_id ? 6 : 4.5, color: '#1d1d1f', weight: 2, fillColor: '#fff', fillOpacity: 1});
+    // 2026-09-23：咽喉点记号改成与战区页同一套徽章（两岸夹一道水的图形），按状态上色；有 Stack Atlas 节点的咽喉点画大一号并常显名字
+    const csz = c.atlas_id ? 26 : 20;
+    const m = L.marker([c.lat, c.lon], {icon: L.divIcon({className: 'anom-ic ck-ic', html: ckSvg(color, csz, !!c.atlas_id), iconSize: [csz, csz], iconAnchor: [csz / 2, csz / 2]}), zIndexOffset: c.atlas_id ? 500 : 300, keyboard: false});
     m.bindTooltip(t('ck_tip', {name: nz(c.name), st: STATUS_T(c.status), r7: c.recent7 ?? '—', b: c.baseline, ratio: c.ratio ?? '—'}) + (c.break_date ? t('ck_tip_break', {d: c.break_date}) : ''), {direction: 'top', className: 'lbl'});
     m.bindPopup(() => { const el = document.createElement('div'); el.style.width = '260px'; el.innerHTML = `<b>${esc(nz(c.name))}</b> <span class="ev measured">${t('ev_measured')}</span><br>${t('ck_pop', {r7: c.recent7 ?? '—', b: c.baseline, ratio: c.ratio ?? '—'})}${c.break_date ? t('ck_pop_break', {d: c.break_date}) : ''}<canvas></canvas>`; setTimeout(() => sparkline(el.querySelector('canvas'), c.series.map(x => x[0]), c.series.map(x => x[1]), color), 0); return el; });
     m.addTo(ckL);
@@ -152,9 +151,12 @@ function buildOverviewMap() {
     (T.site_points || []).forEach(p => {
       if (!/strategic/.test(p.list || '')) return;
       const v = verdict[p.name] || '';
-      const lvl = /受损/.test(v) ? 'red' : /热异常/.test(v) ? 'amber' : /不可判读/.test(v) ? 'gray' : v ? 'green' : ((p.n || 0) > 0 ? 'amber' : 'gray');
-      const colr = {red: col('--st-stopped'), amber: col('--st-narrowed'), green: col('--st-inuse'), gray: col('--st-unknown')}[lvl];
-      L.circleMarker([p.lat, p.lon], {radius: 5, color: '#fff', weight: 1.5, fillColor: colr, fillOpacity: 0.95})
+      // 2026-09-23：站点记号与战区页同一套：有影像变化的画相框徽章（红＝受损迹象，橙＝局部或整幅变化，蓝＝热异常），无变化或不可判读的画小空心灰圈
+      const rank = VRANK[v] ?? 9;
+      const colr = {'v-red': '#d70015', 'v-amber': '#ff9500', 'v-blue': '#0071e3'}[VCLASS[v]];
+      const icon = rank <= 3 && colr ? L.divIcon({className: 'anom-ic s2-ic', html: s2Svg(colr, rank === 0 ? 24 : 20, rank === 0), iconSize: [rank === 0 ? 24 : 20, rank === 0 ? 24 : 20], iconAnchor: [rank === 0 ? 12 : 10, rank === 0 ? 12 : 10]})
+        : L.divIcon({className: 'anom-ic', html: `<svg width="12" height="12" viewBox="0 0 20 20"><circle cx="10" cy="10" r="6" fill="#fff" stroke="#8e8e93" stroke-width="2.2"/></svg>`, iconSize: [12, 12], iconAnchor: [6, 6]});
+      L.marker([p.lat, p.lon], {icon, keyboard: false, zIndexOffset: rank <= 3 ? 400 : 100})
         .bindTooltip(`${nz(p.name)} · ${kindT(p.kind)}${v ? ' · ' + tv(v) : ''}${(p.n || 0) > 0 ? t('fire_days', {n: p.n}) : ''}`, {direction: 'top', className: 'lbl'})
         .on('click', () => show(T.key)).addTo(siteL);
     });
@@ -163,13 +165,24 @@ function buildOverviewMap() {
   (window.ATLAS_EVENTS || []).forEach(ev => {
     const ll = toLatLon(ev.pos);
     const title = LANG === 'en' ? (ev.title_en || ev.title_zh) : ev.title_zh, summary = LANG === 'en' ? (ev.summary_en || ev.summary_zh) : ev.summary_zh;
-    L.marker(ll, {icon: L.divIcon({className: 'nodeicon', html: '!', iconSize: [22, 22]})}).bindPopup(`<b>${esc(title)}</b><br>${esc((summary || '').slice(0, 220))}${ev.link ? `<br><a href="${esc(LANG === 'en' ? ev.link.replace(/^transmission\.html/, 'transmission-en.html') : ev.link)}" target="_blank">${t('ev_topic')}</a>` : ''}<br><span class="ev">${esc(ev.evidence || '')}</span>`).addTo(evL);
+    L.marker(ll, {icon: L.divIcon({className: 'anom-ic', html: badge('#1d1d1f', GLYPH.event, 20), iconSize: [20, 20], iconAnchor: [10, 10]}), keyboard: false}).bindPopup(`<b>${esc(title)}</b><br>${esc((summary || '').slice(0, 220))}${ev.link ? `<br><a href="${esc(LANG === 'en' ? ev.link.replace(/^transmission\.html/, 'transmission-en.html') : ev.link)}" target="_blank">${t('ev_topic')}</a>` : ''}<br><span class="ev">${esc(ev.evidence || '')}</span>`).addTo(evL);
   });
   // 5. 战区框
   D.theaters.forEach(T => {
     L.rectangle(T.bbox, {color: col('--ink3'), weight: 1.5, dashArray: '6 6', fill: true, fillOpacity: 0.02}).bindTooltip(t('box_tip', {t: tv(T.title)}), {sticky: true}).on('click', () => show(T.key)).addTo(boxL);
   });
   boxL.addTo(map); ckL.addTo(map); siteL.addTo(map); evL.addTo(map);
+  // 图例：与战区页同一种左下角浮动面板（2026-09-23 主人「图标这不还是没变吗」：总览一直没换，这次一并换）
+  addLegendControl(map, `<div class="lg-hint">${t('ov_lg_hint')}</div>
+    <div class="lg-group"><div class="lg-h">${t('ov_lg_ck')}</div>
+      ${lgRow(ckSvg(STC.stopped, 18, true), t('st_stopped'), t('ov_lg_ck_stopped'))}${lgRow(ckSvg(STC.narrowed, 18), t('st_narrowed'), t('ov_lg_ck_narrowed'))}${lgRow(ckSvg(STC.inuse, 18), t('st_inuse'), t('ov_lg_ck_inuse'))}${lgRow(ckSvg(STC.unknown, 18), t('st_nodata'), '')}
+      <div class="lg-note" style="margin-left:30px">${t('ov_lg_ck_note')}</div></div>
+    <div class="lg-group"><div class="lg-h">${t('lg_h_sites')}</div>
+      ${lgRow(s2Svg('#d70015', 18, true), t('lg_s2_red'), t('ov_lg_site_note'))}${lgRow(s2Svg('#ff9500', 18), t('lg_s2_amber'), '')}${lgRow(s2Svg('#0071e3', 18), t('lg_s2_blue'), '')}
+      ${lgRow(`<svg width="14" height="14" viewBox="0 0 20 20"><circle cx="10" cy="10" r="6" fill="#fff" stroke="#8e8e93" stroke-width="2.2"/></svg>`, t('lg_strat'), '')}</div>
+    <div class="lg-group"><div class="lg-h">${t('ov_lg_other')}</div>
+      ${lgRow(badge('#1d1d1f', GLYPH.event, 18), t('ov_lg_event'), t('ov_lg_event_note'))}
+      ${lgRow(`<svg width="18" height="18" viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="12" fill="none" stroke="#86868b" stroke-width="1.5" stroke-dasharray="3 2"/></svg>`, t('ov_lg_box'), t('ov_lg_box_note'))}</div>`);
   const overlays = {[t('layer_ck')]: ckL, ...(metroOv ? {[t('layer_metro')]: metroOv} : {}), [t('layer_sites')]: siteL, [t('layer_events')]: evL, [t('layer_boxes')]: boxL};
   L.control.layers(bases, overlays, {collapsed: true}).addTo(map); layersTitle(map);
   map.__overlays = overlays;
