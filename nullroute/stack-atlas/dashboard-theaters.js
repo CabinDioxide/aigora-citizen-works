@@ -76,11 +76,12 @@ function renderBuilt(T) {
   const sec = (T.sec || []).map((r, i) => { const co = rawT(r.company); return `<tr><td title="${esc(co.title)}">${esc(co.text || t('company_n', {n: i + 1}))}</td><td class="num">${r.n}</td><td class="num">${r.rev_bn ?? ''}</td></tr>`; }).join('');
   return `
   <h2>${esc(tv(T.title))} <small>${T.break.date ? t('break_line', {ck: esc(nz(T.break.chokepoint)), d: T.break.date}) : t('break_line_none', {ck: esc(nz(T.break.chokepoint))})}</small></h2>
-  <div class="conclusion">${((LANG === 'en' ? T.conclusion_en : T.conclusion_zh) || []).map(p => `<p>${esc(p)}</p>`).join('') || `<p class="u">${t('conclusion_pending')}</p>`}
-    ${T.conclusion_written ? `<div class="u">${t('conclusion_meta', {w: esc(T.conclusion_written), d: esc(T.conclusion_through || '')})}</div>` : ''}</div>
   ${T.metro ? `<h2>${t('metro_h2')} <small>${t('metro_sub', {n: T.metro.lines.length})}</small></h2>
   <div class="kpane" style="grid-template-columns:1fr"><div class="map" id="m_${T.key}" style="height:640px"></div><div class="map-legend" id="legend_${T.key}"></div><div class="focus-strip" id="focus_${T.key}"></div><div class="metro-legend off" id="mlegend_${T.key}"></div><div class="anom-legend" id="alegend_${T.key}">${anomLegend(T)}</div></div>
   <details class="metro-wrap" style="margin-top:12px"><summary style="cursor:pointer;font-size:13px;color:var(--ink2)">${t('metro_schematic')}</summary><svg id="metro_${T.key}" class="metro" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet"></svg></details>` : ''}
+  <h2>${t('conclusion_h2')}</h2>
+  <div class="conclusion">${((LANG === 'en' ? T.conclusion_en : T.conclusion_zh) || []).map(p => `<p>${esc(p)}</p>`).join('') || `<p class="u">${t('conclusion_pending')}</p>`}
+    ${T.conclusion_written ? `<div class="u">${t('conclusion_meta', {w: esc(T.conclusion_written), d: esc(T.conclusion_through || '')})}</div>` : ''}</div>
   ${T.nodes ? `<h2>${t('nodes_h2')} <small>${t('nodes_sub')}</small></h2>
   <div class="kpane" style="grid-template-columns:1fr">
     <div class="nodes" id="nodes_${T.key}" style="flex-direction:row;flex-wrap:wrap;max-height:none">${T.nodes.map(n => `<div class="node s-${n.status}" id="nd_${T.key}_${n.num}" onclick="event.stopPropagation();selectNode('${T.key}',${n.num})"><h3><span class="n">${n.num}</span>${esc(tv(n.name))} <span class="chip st-${n.status}" title="${esc(t('st_manual', {d: n.status_date || ''}))}">${esc(tv(n.status_zh))}</span></h3><div class="k">${esc(tv(n.kind))}</div>

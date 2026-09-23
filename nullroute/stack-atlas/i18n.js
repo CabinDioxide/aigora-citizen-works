@@ -112,6 +112,7 @@ const UI = {
   ov_lg_other: ['其他', 'Other'], ov_lg_event: ['Stack Atlas 事件', 'Stack Atlas event'], ov_lg_event_note: ['枚举表里记的争夺事件，点开看摘要', 'a contest event from the enumeration table; click for the summary'],
   ov_lg_box: ['战区范围', 'Theater box'], ov_lg_box_note: ['点框进入那个战区', 'click to open the theater'],
   np_more: ['详细（证据表、产业链影响、上下游）↓', 'Details (evidence table, chain effects, upstream and downstream) ↓'],
+  conclusion_h2: ['结论', 'Conclusions'],
   break_line: ['{ck} 断点 {d}', '{ck}, break {d}'], break_line_none: ['{ck} 未触发断点', '{ck}, no break'],
   conclusion_pending: ['本周结论待写。', 'This week\'s conclusion is pending.'], conclusion_meta: ['写于 {w}，数据到 {d}', 'written {w}, data to {d}'],
   fold_data: ['数据与图表（展开）', 'Data and charts (expand)'], pixel_toggle: ['像素统计', 'Pixel statistics'],
