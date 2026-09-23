@@ -75,8 +75,9 @@ function renderBuilt(T) {
   const uc = (T.ucdp || []).map(r => `<tr><td title="${esc(r.country)}">${esc(ccT(r.country))}</td><td class="num">${r.n}</td><td class="num">${r.deaths}</td></tr>`).join('');
   const sec = (T.sec || []).map((r, i) => { const co = rawT(r.company); return `<tr><td title="${esc(co.title)}">${esc(co.text || t('company_n', {n: i + 1}))}</td><td class="num">${r.n}</td><td class="num">${r.rev_bn ?? ''}</td></tr>`; }).join('');
   return `
-  <h2>${esc(tv(T.title))} <small>${t('break_target', {ck: esc(nz(T.break.chokepoint))})}${T.break.date ? t('break_on', {d: T.break.date}) : t('break_none')}</small></h2>
-  <div class="reading">${T.reading.map((p, i) => `<p>${tzf(T, 'reading', i)}</p>`).join('')}</div>
+  <h2>${esc(tv(T.title))} <small>${T.break.date ? t('break_line', {ck: esc(nz(T.break.chokepoint)), d: T.break.date}) : t('break_line_none', {ck: esc(nz(T.break.chokepoint))})}</small></h2>
+  <div class="conclusion">${((LANG === 'en' ? T.conclusion_en : T.conclusion_zh) || []).map(p => `<p>${esc(p)}</p>`).join('') || `<p class="u">${t('conclusion_pending')}</p>`}
+    ${T.conclusion_written ? `<div class="u">${t('conclusion_meta', {w: esc(T.conclusion_written), d: esc(T.conclusion_through || '')})}</div>` : ''}</div>
   ${T.metro ? `<h2>${t('metro_h2')} <small>${t('metro_sub', {n: T.metro.lines.length})}</small></h2>
   <div class="kpane" style="grid-template-columns:1fr"><div class="map" id="m_${T.key}" style="height:640px"></div><div class="map-legend" id="legend_${T.key}"></div><div class="focus-strip" id="focus_${T.key}"></div><div class="metro-legend off" id="mlegend_${T.key}"></div><div class="anom-legend" id="alegend_${T.key}">${anomLegend(T)}</div></div>
   <details class="metro-wrap" style="margin-top:12px"><summary style="cursor:pointer;font-size:13px;color:var(--ink2)">${t('metro_schematic')}</summary><svg id="metro_${T.key}" class="metro" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet"></svg></details>` : ''}
@@ -85,6 +86,10 @@ function renderBuilt(T) {
     <div class="nodes" id="nodes_${T.key}" style="flex-direction:row;flex-wrap:wrap;max-height:none">${T.nodes.map(n => `<div class="node s-${n.status}" id="nd_${T.key}_${n.num}" onclick="event.stopPropagation();selectNode('${T.key}',${n.num})"><h3><span class="n">${n.num}</span>${esc(tv(n.name))} <span class="chip st-${n.status}" title="${esc(t('st_manual', {d: n.status_date || ''}))}">${esc(tv(n.status_zh))}</span></h3><div class="k">${esc(tv(n.kind))}</div>
       <div class="e">${n.evidence.slice(0, 3).map(e => `${esc(nz(e.item))}${LANG === 'en' ? ': ' : '：'}${esc(tv(e.value))}`).join('<br>')}</div></div>`).join('')}</div></div>
   <div class="kdetail" id="kd_${T.key}"></div>` : ''}
+  ${renderS2(T)}
+  ${renderSupplyAttacks(T)}
+  <details class="fold"><summary>${t('fold_data')}</summary>
+  <div class="reading fold-reading">${(T.reading || []).map((p, i) => `<p>${tzf(T, 'reading', i)}</p>`).join('')}</div>
   <h2>${T.nodes ? t('tiles_h2') : t('map_tiles_h2')} <small>${t('tiles_sub')}</small></h2>
   <div class="row">${T.nodes ? '' : `<div class="map" id="m_${T.key}"></div>`}<div class="tiles">${tiles}</div></div>
   <h2>${t('aligned_h2')} <small>${t('aligned_sub')}</small></h2>
@@ -92,9 +97,7 @@ function renderBuilt(T) {
   <h2>${t('ba_h2')} <small>${t('ba_sub')}</small></h2>
   ${ba}
   ${renderVesselsAir(T)}
-  ${renderSupplyAttacks(T)}
   ${renderStrikes(T)}
-  ${renderS2(T)}
   ${renderChains(T)}
   <div class="grid2">
     <div><h2>${t('conflict_h2')} <small>${t('conflict_sub')}</small></h2>
@@ -106,7 +109,8 @@ function renderBuilt(T) {
       <table class="rawsrc"><tr><th>${t('th_company')}</th><th class="num">${t('th_filings')}</th><th class="num">${t('th_revenue')}</th></tr>${sec || `<tr><td colspan="3">${t('none')}</td></tr>`}</table>
       <p class="legend">${t('company_note')}</p>
     </div>
-  </div>`;
+  </div>
+  </details>`;
 }
 function cssid(s) { let h = 0; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return String(s).replace(/[^A-Za-z0-9_]/g, '_') + '_' + h.toString(36); }
 const STC = {stopped: '#ff3b30', narrowed: '#ff9500', inuse: '#34c759', damaged: '#5856d6', unknown: '#c7c7cc'};
@@ -334,8 +338,8 @@ function s2Card(r, compact) {
       ${r.png_blocks ? `<div><img src="${r.png_blocks}" style="width:100%;border-radius:3px"><div class="u">${t('change_blocks')} <i class="sw" style="border-color:#ff2828"></i>${r.blocks ?? 0} · ${t('cloud_blocks')} <i class="sw" style="border-color:#4682ff"></i>${r.cloud_blocks ?? 0}</div></div>` : ''}
       ${r.png_diff && !compact ? `<div><img src="${r.png_diff}" style="width:100%;border-radius:3px"><div class="u">${t('pixel_diff')}</div></div>` : ''}
     </div>
-    ${r.n_clean != null ? `<div class="u">${t('scenes_line', {n: r.n_scenes, c: r.n_clean, b: r.n_clean_before ?? '', z: r.z_mean ?? '—', f: r.fire_anom_days ?? 0})}${r.fire_max_day ? t('max_paren', {d: esc(r.fire_max_day)}) : ''}</div>` : ''}
-    <div class="b">${t('stats_line', {a: fmt(r.dark_frac_before ?? r.dark_before), b: fmt(r.dark_frac_after ?? r.dark_after), c: fmt(r.mean_rgb_before ?? r.mean_before), d: fmt(r.mean_rgb_after ?? r.mean_after), e: fmt(r.mean_abs_diff ?? r.mad)})}</div>
+    <details class="basis"><summary>${t('pixel_toggle')}</summary>${r.n_clean != null ? `<div class="u">${t('scenes_line', {n: r.n_scenes, c: r.n_clean, b: r.n_clean_before ?? '', z: r.z_mean ?? '—', f: r.fire_anom_days ?? 0})}${r.fire_max_day ? t('max_paren', {d: esc(r.fire_max_day)}) : ''}</div>` : ''}
+    <div class="b">${t('stats_line', {a: fmt(r.dark_frac_before ?? r.dark_before), b: fmt(r.dark_frac_after ?? r.dark_after), c: fmt(r.mean_rgb_before ?? r.mean_before), d: fmt(r.mean_rgb_after ?? r.mean_after), e: fmt(r.mean_abs_diff ?? r.mad)})}</div></details>
   </div>`;
 }
 function renderS2(T) {

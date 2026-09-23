@@ -232,3 +232,11 @@ details.basis{margin-top:4px}details.basis>summary{cursor:pointer;color:var(--in
 .nodepop .np-why p{margin:4px 0;font-size:12.5px;line-height:1.5;color:var(--ink)}
 .nodepop .np-site{margin-top:8px;padding-top:6px;border-top:1px solid var(--line)}
 .nodepop .chip{font-size:11px}
+/* 战区页：顶部结论、折叠的数据区（2026-09-23） */
+.conclusion{max-width:900px;margin:6px 0 14px;padding:14px 18px;background:var(--panel);border-radius:12px;box-shadow:var(--shadow)}
+.conclusion p{margin:0 0 10px;font-size:15px;line-height:1.75;color:var(--ink)}
+.conclusion p:last-of-type{margin-bottom:4px}
+details.fold{margin-top:18px;border-top:1px solid var(--line);padding-top:6px}
+details.fold>summary{cursor:pointer;font-size:13px;color:var(--ink3);padding:6px 0}
+details.fold>summary:hover{color:var(--ink)}
+.fold-reading p{font-size:13px;color:var(--ink2)}
