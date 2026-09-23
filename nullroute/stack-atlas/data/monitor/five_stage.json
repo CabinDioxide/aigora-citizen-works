@@ -1,6 +1,6 @@
 {
  "date": "2026-09-23",
- "built": "2026-09-23 07:32",
+ "built": "2026-09-23 19:58",
  "stages": [
   {
    "key": "s1",
@@ -901,14 +901,14 @@
       {
        "label": "巴士拉原油码头",
        "label_en": "Basra oil terminal",
-       "value": "0.00–0.21",
+       "value": "0.00–0.25",
        "value_en": null,
        "unit": "（4–8 月日均出口 ÷ 封锁前基线）",
        "unit_en": "(2026-04–2026-08 daily exports ÷ pre-closure baseline)",
        "evidence": "measured",
        "source": "https://portwatch.imf.org/",
-       "note": "封锁前日均 333 千吨",
-       "note_en": "Pre-closure 333 thousand t per day"
+       "note": "封锁前日均 332 千吨",
+       "note_en": "Pre-closure 332 thousand t per day"
       },
       {
        "label": "杰伊汉（北部管道出口）",
@@ -937,10 +937,10 @@
       {
        "label": "巴士拉码头外海货船数",
        "label_en": "Cargo vessels off the Basra terminal",
-       "value": 0.44,
+       "value": 0.41,
        "value_en": null,
-       "unit": "（最近 7 天货船日均 11.4 ÷ 封锁前 26.1，到 2026-09-18）",
-       "unit_en": "(cargo vessels a day, last 7 days 11.4 ÷ pre-closure 26.1, to 2026-09-18)",
+       "unit": "（最近 7 天货船日均 10.6 ÷ 封锁前 26.1，到 2026-09-19）",
+       "unit_en": "(cargo vessels a day, last 7 days 10.6 ÷ pre-closure 26.1, to 2026-09-19)",
        "evidence": "measured",
        "source": "https://globalfishingwatch.org/our-apis/",
        "note": "全球渔业观察，卫星加岸站船位，货船含油轮，每日重建",
@@ -1086,14 +1086,14 @@
       {
        "label": "朱艾玛（海峡以内）",
        "label_en": "Juaymah (inside the strait)",
-       "value": "0.00–0.09",
+       "value": "0.00–0.10",
        "value_en": null,
        "unit": "（4–8 月日均出口 ÷ 封锁前基线）",
        "unit_en": "(2026-04–2026-08 daily exports ÷ pre-closure baseline)",
        "evidence": "measured",
        "source": "https://portwatch.imf.org/",
-       "note": "封锁前日均 492 千吨",
-       "note_en": "Pre-closure 492 thousand t per day"
+       "note": "封锁前日均 494 千吨",
+       "note_en": "Pre-closure 494 thousand t per day"
       },
       {
        "label": "延布（红海）",
@@ -1110,7 +1110,7 @@
       {
        "label": "富查伊拉（海峡以外）",
        "label_en": "Fujairah (outside the strait)",
-       "value": "0.10–0.65",
+       "value": "0.11–0.65",
        "value_en": null,
        "unit": "（4–8 月日均出口 ÷ 封锁前基线）",
        "unit_en": "(2026-04–2026-08 daily exports ÷ pre-closure baseline)",
@@ -1122,10 +1122,10 @@
       {
        "label": "延布港外货船数",
        "label_en": "Cargo vessels off Yanbu",
-       "value": 0.57,
+       "value": 0.47,
        "value_en": null,
-       "unit": "（最近 7 天货船日均 2.9 ÷ 封锁前 5.1，到 2026-09-18）",
-       "unit_en": "(cargo vessels a day, last 7 days 2.9 ÷ pre-closure 5.1, to 2026-09-18)",
+       "unit": "（最近 7 天货船日均 2.4 ÷ 封锁前 5.1，到 2026-09-19）",
+       "unit_en": "(cargo vessels a day, last 7 days 2.4 ÷ pre-closure 5.1, to 2026-09-19)",
        "evidence": "measured",
        "source": "https://globalfishingwatch.org/our-apis/",
        "note": "全球渔业观察，卫星加岸站船位，货船含油轮，每日重建",
@@ -1134,10 +1134,10 @@
       {
        "label": "富查伊拉锚地货船数",
        "label_en": "Cargo vessels at the Fujairah anchorage",
-       "value": 1.72,
+       "value": 1.73,
        "value_en": null,
-       "unit": "（最近 7 天货船日均 103.6 ÷ 封锁前 60.4，到 2026-09-18）",
-       "unit_en": "(cargo vessels a day, last 7 days 103.6 ÷ pre-closure 60.4, to 2026-09-18)",
+       "unit": "（最近 7 天货船日均 104.3 ÷ 封锁前 60.4，到 2026-09-19）",
+       "unit_en": "(cargo vessels a day, last 7 days 104.3 ÷ pre-closure 60.4, to 2026-09-19)",
        "evidence": "measured",
        "source": "https://globalfishingwatch.org/our-apis/",
        "note": "全球渔业观察，卫星加岸站船位，货船含油轮，每日重建",
