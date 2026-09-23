@@ -118,7 +118,8 @@ function focusBounds(T) {
   (T.nodes || []).forEach(n => { if (n.lat != null && n.lon != null) pts.push([n.lat, n.lon]); });
   const sp = Object.fromEntries((T.site_points || []).map(p => [p.name, p]));
   (T.s2_change || []).forEach(r => { const v = r.manual_verdict || r.verdict, p = sp[r.site]; if ((VRANK[v] ?? 9) <= 3 && p) pts.push([p.lat, p.lon]); });
-  ((T.track_anomalies || {}).items || []).forEach(a => { if (a.lat != null && a.lon != null) pts.push([a.lat, a.lon]); });
+  const bb = T.bbox ? L.latLngBounds(T.bbox) : null;  // 波罗的海挂在乌克兰、马六甲挂在台海（2026-09-23）：框外的异常不参与对准，免得地图缩到看不见战区
+  ((T.track_anomalies || {}).items || []).forEach(a => { if (a.lat != null && a.lon != null && (!bb || bb.contains([a.lat, a.lon]))) pts.push([a.lat, a.lon]); });
   return pts.length > 1 ? L.latLngBounds(pts).pad(0.08) : (T.map_bounds || T.bbox);
 }
 /* 图下的统一图例（2026-09-23 主人：「图例不清楚，不知道不同形状的点代表什么」）：地图上每一种记号一行，图标用画地图的同一套函数画。 */
