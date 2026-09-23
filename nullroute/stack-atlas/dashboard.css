@@ -220,3 +220,10 @@ svg.metro-ov.fade .st:not(.on){opacity:.35}
 .leaflet-popup-content{max-height:400px;overflow:auto;margin:10px 12px}
 details.basis{margin-top:4px}details.basis>summary{cursor:pointer;color:var(--ink3,#888);font-size:12px}
 .tile.hl{box-shadow:0 0 0 3px var(--hl)}
+/* 关键节点定位针（2026-09-23） */
+.node-pin svg{overflow:visible;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
+.node-pin.hl svg path{stroke:var(--hl);stroke-width:3.5}
+.pin-alert .pin-halo{transform-origin:17px 17px;animation:pinhalo 2.2s ease-in-out infinite}
+@keyframes pinhalo{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.35);opacity:.35}}
+@media (prefers-reduced-motion:reduce){.pin-alert .pin-halo{animation:none}}
+.lg-pins{display:inline-flex;gap:1px;align-items:flex-end}

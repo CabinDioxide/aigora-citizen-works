@@ -131,7 +131,8 @@ function mapLegend(T) {
   const tot = anomCounts(T);
   const groups = [];
   groups.push({h: t('lg_h_sites'), rows: [
-    row(`<span class="nodeicon" style="display:inline-block;width:20px;height:20px;line-height:20px;font-size:11px">1</span>`, t('lg_node'), t('lg_node_note')),
+    row(nodePinSvg(1, 'stopped', 16), t('lg_node'), t('lg_node_note')),
+    row(`<span class="lg-pins">${nodePinSvg('', 'stopped', 12)}${nodePinSvg('', 'narrowed', 12)}${nodePinSvg('', 'damaged', 12)}${nodePinSvg('', 'inuse', 12)}</span>`, t('lg_node_colors'), t('lg_node_colors_note')),
     row(ring('#d70015', true), t('lg_s2_red'), t('lg_s2_note')),
     row(ring('#ff9500'), t('lg_s2_amber')),
     row(ring('#0071e3'), t('lg_s2_blue')),
@@ -155,6 +156,18 @@ function s2Popup(r) {
     <div class="s2pop-imgs">${r.png_before ? `<div><img src="${r.png_before}"><div class="u">${t('before_scene')} ${esc(r.before_date || '')}</div></div>` : ''}${r.png_after ? `<div><img src="${r.png_after}"><div class="u">${t('after_scene')} ${esc(r.after_date || '')}</div></div>` : ''}</div>
     <div class="u"><a href="#" onclick="event.preventDefault();const el=document.getElementById('s2card_${cssid(r.site)}');if(el){el.scrollIntoView({block:'start'});el.classList.add('hl');setTimeout(()=>el.classList.remove('hl'),2500)}">${t('s2pop_more')}</a></div></div>`;
 }
+/* 关键节点记号（2026-09-23 主人「关键节点改一下，更突出更警告一点」）：由黑色圆点改成按状态上色的定位针，针身里是编号，
+   中断（红）与受损（紫）的针外面再套一圈同色光晕并缓慢呼吸；针尖落在坐标上。地图与图例共用。 */
+const NODE_PIN_COLOR = {stopped: '#d70015', narrowed: '#ff9500', inuse: '#34c759', damaged: '#5856d6', unknown: '#6e6e73'};
+function nodePinSvg(num, status, w = 34) {
+  const c = NODE_PIN_COLOR[status] || NODE_PIN_COLOR.unknown, alert = status === 'stopped' || status === 'damaged';
+  const h = Math.round(w * 1.3);
+  return `<svg width="${w}" height="${h}" viewBox="0 0 34 44" class="${alert ? 'pin-alert' : ''}">
+    ${alert ? `<circle class="pin-halo" cx="17" cy="17" r="15" fill="${c}" fill-opacity=".22"/>` : ''}
+    <path d="M17 42 C17 42 4 27 4 16 A13 13 0 0 1 30 16 C30 27 17 42 17 42 Z" fill="${c}" stroke="#fff" stroke-width="2.4"/>
+    <text x="17" y="21.5" text-anchor="middle" font-size="15" font-weight="800" fill="#fff" font-family="-apple-system,'SF Pro Text','Helvetica Neue',Arial,sans-serif">${num}</text></svg>`;
+}
+const nodePinIcon = (n, w = 34) => { const h = Math.round(w * 1.3); return L.divIcon({className: 'anom-ic node-pin', html: nodePinSvg(n.num, n.status, w), iconSize: [w, h], iconAnchor: [w / 2, h - 2], tooltipAnchor: [0, -h + 6]}); };
 function mkMap(id, opts) {
   const map = L.map(id, Object.assign({zoomControl: false, attributionControl: false}, opts || {}));
   L.control.zoom({zoomInTitle: t('zoom_in'), zoomOutTitle: t('zoom_out')}).addTo(map);
@@ -379,7 +392,7 @@ function selectNode(tkey, num) {
   modalMap = mkMap('mmap', {preferCanvas: true});
   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {maxZoom: 16, attribution: t('attr_tiles')}).addTo(modalMap);
   const all = [[n.lat, n.lon]];
-  L.marker([n.lat, n.lon], {icon: L.divIcon({className: 'nodeicon', html: String(n.num), iconSize: [26, 26]})}).bindTooltip(tv(n.name)).addTo(modalMap);
+  L.marker([n.lat, n.lon], {icon: nodePinIcon(n, 30)}).bindTooltip(tv(n.name)).addTo(modalMap);
   n.upstream.forEach(u => { all.push([u.lat, u.lon]); L.polyline([[u.lat, u.lon], [n.lat, n.lon]], {color: col('--s3'), weight: 2.5, opacity: .9}).addTo(modalMap); L.circleMarker([u.lat, u.lon], {radius: 5, color: col('--s3'), fillColor: col('--s3'), fillOpacity: .9}).bindTooltip(`${tv(u.name)}${u.chain ? ' · ' + tv(u.chain) : ''}`, {permanent: true, direction: 'right', className: 'lbl'}).addTo(modalMap); });
   n.downstream.forEach(d => { all.push([d.lat, d.lon]); L.polyline([[n.lat, n.lon], [d.lat, d.lon]], {color: col('--s1'), weight: 2, opacity: .8}).addTo(modalMap); L.circleMarker([d.lat, d.lon], {radius: 5, color: col('--s1'), fillColor: col('--s1'), fillOpacity: .9}).bindTooltip(`${tv(d.name)}${d.chain ? ' · ' + tv(d.chain) : ''}`, {permanent: true, direction: 'right', className: 'lbl'}).addTo(modalMap); });
   n.bypass.forEach(b => { b.points.forEach(p => all.push(p)); L.polyline(b.points, {color: col('--s2'), weight: 2.5, dashArray: '6 5'}).bindTooltip(tv(b.name)).addTo(modalMap); });
@@ -421,7 +434,7 @@ function buildMap(T) {
   });
   const nodesLayer = L.layerGroup(); nodeMarkers[T.key] = [];
   (T.nodes || []).forEach(n => {
-    const mk = L.marker([n.lat, n.lon], {icon: L.divIcon({className: 'nodeicon', html: String(n.num), iconSize: [26, 26]}), zIndexOffset: 1000})
+    const mk = L.marker([n.lat, n.lon], {icon: nodePinIcon(n), zIndexOffset: 1000})
       .bindTooltip(`${n.num} ${tv(n.name)}`, {direction: 'top'}).on('click', e => { L.DomEvent.stopPropagation(e); selectNode(T.key, n.num); }).addTo(nodesLayer);
     nodeMarkers[T.key].push(mk);
   });
