@@ -1,6 +1,6 @@
 {
- "date": "2026-09-24",
- "built": "2026-09-24 07:35",
+ "date": "2026-09-25",
+ "built": "2026-09-25 02:01",
  "stages": [
   {
    "key": "s1",
@@ -937,10 +937,10 @@
       {
        "label": "巴士拉码头外海货船数",
        "label_en": "Cargo vessels off the Basra terminal",
-       "value": 0.41,
+       "value": 0.4,
        "value_en": null,
-       "unit": "（最近 7 天货船日均 10.6 ÷ 封锁前 26.1，到 2026-09-19）",
-       "unit_en": "(cargo vessels a day, last 7 days 10.6 ÷ pre-closure 26.1, to 2026-09-19)",
+       "unit": "（最近 7 天货船日均 10.4 ÷ 封锁前 26.1，到 2026-09-20）",
+       "unit_en": "(cargo vessels a day, last 7 days 10.4 ÷ pre-closure 26.1, to 2026-09-20)",
        "evidence": "measured",
        "source": "https://globalfishingwatch.org/our-apis/",
        "note": "全球渔业观察，卫星加岸站船位，货船含油轮，每日重建",
@@ -1122,10 +1122,10 @@
       {
        "label": "延布港外货船数",
        "label_en": "Cargo vessels off Yanbu",
-       "value": 0.47,
+       "value": 0.41,
        "value_en": null,
-       "unit": "（最近 7 天货船日均 2.4 ÷ 封锁前 5.1，到 2026-09-19）",
-       "unit_en": "(cargo vessels a day, last 7 days 2.4 ÷ pre-closure 5.1, to 2026-09-19)",
+       "unit": "（最近 7 天货船日均 2.1 ÷ 封锁前 5.1，到 2026-09-20）",
+       "unit_en": "(cargo vessels a day, last 7 days 2.1 ÷ pre-closure 5.1, to 2026-09-20)",
        "evidence": "measured",
        "source": "https://globalfishingwatch.org/our-apis/",
        "note": "全球渔业观察，卫星加岸站船位，货船含油轮，每日重建",
@@ -1134,10 +1134,10 @@
       {
        "label": "富查伊拉锚地货船数",
        "label_en": "Cargo vessels at the Fujairah anchorage",
-       "value": 1.73,
+       "value": 1.74,
        "value_en": null,
-       "unit": "（最近 7 天货船日均 104.3 ÷ 封锁前 60.4，到 2026-09-19）",
-       "unit_en": "(cargo vessels a day, last 7 days 104.3 ÷ pre-closure 60.4, to 2026-09-19)",
+       "unit": "（最近 7 天货船日均 104.9 ÷ 封锁前 60.4，到 2026-09-20）",
+       "unit_en": "(cargo vessels a day, last 7 days 104.9 ÷ pre-closure 60.4, to 2026-09-20)",
        "evidence": "measured",
        "source": "https://globalfishingwatch.org/our-apis/",
        "note": "全球渔业观察，卫星加岸站船位，货船含油轮，每日重建",
@@ -1292,8 +1292,8 @@
     },
     "s2": {
      "status": "done",
-     "head": "直接针对援乌设施的事件 14 件，近 30 天 4 件；其中 5 件官方或检方已指向俄方",
-     "head_en": "14 scope-A incidents, 4 in the last 30 days; 5 officially attributed or charged as Russian-directed",
+     "head": "直接针对援乌设施的事件 14 件，近 30 天 3 件；其中 5 件官方或检方已指向俄方",
+     "head_en": "14 scope-A incidents, 3 in the last 30 days; 5 officially attributed or charged as Russian-directed",
      "figures": [
       {
        "label": "直接针对援乌设施的事件（2024 年起）",
@@ -1698,7 +1698,7 @@
    "ratio": 0.59,
    "last_date": "2026-09-20",
    "recent7": 54.3,
-   "baseline": 91.9,
+   "baseline": 91.6,
    "fig": {
     "label": "博斯普鲁斯海峡近 7 日通过量 ÷ 基线",
     "label_en": "Bosporus Strait: 7-day transits ÷ baseline",
@@ -1738,7 +1738,7 @@
   "summary": {
    "n_A": 14,
    "n_B": 3,
-   "n_A_last30": 4,
+   "n_A_last30": 3,
    "n_A_last90": 7,
    "by_kind": {
     "军工厂": 9,
