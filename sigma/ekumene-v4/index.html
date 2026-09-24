@@ -74,8 +74,8 @@ html[data-lang=zh] .en,html[data-lang=en] .zh{display:none}
 <span class="en">4000 BC → AD 1500 · 1,100 periods of 5 years · 73,374 hexagonal cells worldwide · ~1,770 km² each</span></p>
 
 <p class="lede">
-<span class="zh">这是一次跑完的历史模拟。世界从公元前四千年的一千六百万人起步，粮食、人口、耕地、技术、政体、战争按各自的规则逐期推演，跑到公元 1500 年时是 4.27 亿人、1,142 个政体。下面的动画每十期取一帧，可以切换八个图层，拖动时间轴看它们各自怎么变。</span>
-<span class="en">One completed run of a historical simulation. The world starts in 4000 BC with about sixteen million people; food, population, cropland, technology, polities, and war each advance by their own rules, period after period. By AD 1500 it holds 427 million people in 1,142 polities. The animation below samples every tenth period; switch between eight layers and drag the timeline to watch each one change.</span>
+<span class="zh">这是一次完整运行的历史模拟。世界从公元前四千年的两千一百万人开始，粮食、人口、耕地、农业技术、政体、战争和瘟疫分别按自己的规则逐期演算，直到公元 1500 年。下面的动画每十期截取一帧，可切换八个图层，也可拖动时间轴查看它们的变化。</span>
+<span class="en">One completed run of a historical simulation. The world starts in 4000 BC with about twenty-one million people; food, population, cropland, farming technique, polities, war, and epidemics each advance by their own rules, period after period, through to AD 1500. The animation below samples every tenth period; switch between eight layers and drag the timeline to watch each one change.</span>
 </p>
 
 <div class="panel">
@@ -86,72 +86,87 @@ html[data-lang=zh] .en,html[data-lang=en] .zh{display:none}
   </div>
   <div class="bar">
     <button id="play">▶ <span class="zh">播放</span><span class="en">Play</span></button>
-    <input type="range" id="sl" min="0" max="109" value="0">
+    <input type="range" id="sl" min="0" max="110" value="0">
     <span class="yr" id="yr"></span>
   </div>
   <div class="stats" id="stats"></div>
 </div>
 
+<h2><span class="zh">这一版做了什么</span><span class="en">What changed in v4</span></h2>
+<p>
+<span class="zh">此前版本中，只要格子里有可耕地，第一期就可以种地，因此美洲、撒哈拉以南非洲和两河流域在公元前四千年同时出现农民。这一版改为按照作物驯化年代开始农业。起点依据 ArchaeoGLOBE：这项数据集汇集全球考古学家对各地古代土地利用的评估。距今六千年时，农业已属“常见”以上的 24 个地区，共 9,570 格，从第一期就有农业；中美洲、萨赫勒、苏丹东部、印度南部、安第斯高原和北美东部这六处独立驯化中心，则要到各自的考古年代才在当地出现农业。其他地方的人只能采集渔猎，等农业从相邻格子传来，不能自行发明农业。</span>
+<span class="en">In earlier versions any cell with cultivable land could farm from the first period, so the Americas, sub-Saharan Africa, and Mesopotamia all had farmers in 4000 BC. This version starts agriculture by the dates of crop domestication. The starting map comes from ArchaeoGLOBE, a dataset that collects archaeologists' assessments of ancient land use around the world: the 24 regions where farming was already at least "common" six thousand years ago — 9,570 cells — farm from the first period, while six independent centers of domestication (Mesoamerica, the Sahel, the eastern Sudan, southern India, the Andean highlands, and eastern North America) appear in place at their archaeological dates. Everyone else lives by foraging until farming arrives from a neighboring cell; they cannot invent it themselves.</span>
+</p>
+<p>
+<span class="zh">农业只从接壤的格子传入，不经过模型中的远距离商路和海路。定耕农业的扩散，依靠农民一代代迁往邻近土地，或依靠附近居民学会种地，并不是商人把作物带到千里之外。按这种方式传播，农业在欧洲的速度约为每年 0.9 公里，接近欧洲新石器时代扩散的实测速度（每年约一公里）。</span>
+<span class="en">Farming now spreads only between adjacent cells, never along the model's long-distance trade and sea routes, because settled agriculture spread as farmers moved onto neighboring land generation after generation, or as their neighbors took it up — not as merchants carried a crop a thousand kilometers. Spreading this way it advances across Europe at about 0.9 km a year, close to the measured pace of the European Neolithic expansion, roughly one kilometer a year.</span>
+</p>
+<p>
+<span class="zh">瘟疫的起点也作了调整。天花和麻疹只能在人口足够多的地方起源：一个格子的人口超过某个数，病毒才能不断找到新的易感者，而不至于自行消失。按传播规律推算，天花的门槛是 6.7 万人，麻疹是 11 万人。超过门槛的格子每期有千分之一的概率成为起源地；千分之一这个概率没有出处，是三档试算中的中间一档。结核不需要大人群，也能长期潜伏在人体内，因此改为每格每期一千万分之一的起源概率；全世界平均约一千年出现一次，这个数同样没有出处。</span>
+<span class="en">Epidemics now start differently too. Smallpox and measles can arise only where population is large enough: a cell must hold more than a certain number of people for the virus to keep finding new susceptible hosts instead of burning out. Worked out from transmission theory, that number is 67,000 for smallpox and 110,000 for measles. Each cell above the threshold has a one-in-a-thousand chance per period of becoming an origin; that probability has no source and is the middle of three trial values. Tuberculosis can lie latent for years without a large population, so it instead gets an origin probability of one in ten million per cell per period — about once a millennium worldwide — a figure that likewise has no source.</span>
+</p>
+
 <h2><span class="zh">这一版的人口曲线</span><span class="en">The population curve</span></h2>
 <table>
 <thead><tr><th><span class="zh">年份</span><span class="en">Year</span></th>
-<th class="n"><span class="zh">模型人口</span><span class="en">Model</span></th>
-<th class="n">HYDE</th><th class="n"><span class="zh">比值</span><span class="en">Ratio</span></th>
-<th class="n"><span class="zh">模型耕地</span><span class="en">Cropland</span></th>
+<th class="n"><span class="zh">模型</span><span class="en">Model</span></th>
 <th class="n">HYDE</th><th class="n"><span class="zh">比值</span><span class="en">Ratio</span></th></tr></thead>
 <tbody>
-<tr><td>3000 BC</td><td class="n">14.2M</td><td class="n">14M</td><td class="n">1.02×</td><td class="n">4.8</td><td class="n">34.9</td><td class="n">0.14×</td></tr>
-<tr><td>2000 BC</td><td class="n">16.9M</td><td class="n">27M</td><td class="n">0.62×</td><td class="n">5.9</td><td class="n">50.3</td><td class="n">0.12×</td></tr>
-<tr><td>1000 BC</td><td class="n">38.7M</td><td class="n">50M</td><td class="n">0.77×</td><td class="n">14.8</td><td class="n">80.8</td><td class="n">0.18×</td></tr>
-<tr><td>AD 1</td><td class="n">104.8M</td><td class="n">188M</td><td class="n">0.56×</td><td class="n">43.1</td><td class="n">140.3</td><td class="n">0.31×</td></tr>
-<tr><td>AD 1000</td><td class="n">295.4M</td><td class="n">295M</td><td class="n">1.00×</td><td class="n">124.0</td><td class="n">155.6</td><td class="n">0.80×</td></tr>
-<tr><td>AD 1500</td><td class="n">426.7M</td><td class="n">461M</td><td class="n">0.93×</td><td class="n">179.4</td><td class="n">247.6</td><td class="n">0.72×</td></tr>
+<tr><td>3000 BC</td><td class="n">65.8M</td><td class="n">43M</td><td class="n">1.52×</td></tr>
+<tr><td>2000 BC</td><td class="n">37.3M</td><td class="n">71M</td><td class="n">0.53×</td></tr>
+<tr><td>1000 BC</td><td class="n">47.0M</td><td class="n">107M</td><td class="n">0.44×</td></tr>
+<tr><td>AD 1</td><td class="n">67.5M</td><td class="n">225M</td><td class="n">0.30×</td></tr>
+<tr><td>AD 1000</td><td class="n">199.8M</td><td class="n">314M</td><td class="n">0.64×</td></tr>
+<tr><td>AD 1500</td><td class="n">26.4M</td><td class="n">488M</td><td class="n">0.05×</td></tr>
 </tbody></table>
+
 <p class="note">
-<span class="zh">耕地单位是万平方公里。HYDE 是荷兰环境评估署的全球历史人口与土地利用数据库。<b>这一版里它不再只是事后对照：可垦上限随技术档抬高的那组系数，是照着 HYDE 的耕地序列标定出来的</b>（见下一节）。人口那三列没有参与标定，是模型自己跑出来的。</span>
-<span class="en">Cropland is in units of 10,000 km². HYDE is the Netherlands Environmental Assessment Agency's history database of the global environment. <b>In this version it is no longer only an after-the-fact check: the coefficients by which technology raises the cultivable ceiling were calibrated against the HYDE cropland series</b> (see the next section). The population columns took no part in that calibration and are what the model produced on its own.</span>
+<span class="zh">HYDE 是荷兰环境评估署的全球历史人口与土地利用数据库，这里只用于事后对照，没有参与任何取值。</span>
+<span class="en">HYDE is the Netherlands Environmental Assessment Agency's history database of the global environment; it is used here only for after-the-fact comparison and played no part in setting any parameter.</span>
 </p>
 
-<h2><span class="zh">哪些数是标定出来的</span><span class="en">Which numbers were calibrated</span></h2>
+<h2><span class="zh">人口为什么两次崩溃</span><span class="en">Why population collapsed twice</span></h2>
 <p>
-<span class="zh">这个项目有一条纪律：模型参数不许用历史结果标定，否则模型"对上历史"就不再说明任何事情。这一版里有一处破例，写在这里而不是藏起来。</span>
-<span class="en">This project keeps one rule: parameters must not be calibrated on historical outcomes, because a model tuned that way tells you nothing when it then "matches history." This version makes one exception, stated here rather than buried.</span>
+<span class="zh">模拟开始后的五百年里，有农业的地区人口增长很快。第 102 期（公元前 3485 年），全世界人口达到 2.81 亿，其中欧洲一地就有 1.13 亿，而 HYDE 对公元前三千年全世界人口的估计只有 4,300 万。增长如此之快，是因为这些地区已有农业，却还没有只能在大人群中存活的传染病；模型中没有其他机制提高死亡率。</span>
+<span class="en">In the first five hundred years, population in the farming regions grew very fast. By period 102 (3485 BC) the world held 281 million people, 113 million of them in Europe alone, while HYDE puts the whole world at 43 million in 3000 BC. It grew this fast because these places had farming but not yet the diseases that survive only in large populations, and nothing else in the model pushed their death rates up.</span>
 </p>
 <p>
-<span class="zh">破例的是"一格里有多少地开得动"这个系数。模型的纯地理可垦上限是 1,250 万平方公里，那是二十世纪的机械与化肥能种的地；而 HYDE 说公元 1500 年全世界只开垦了 248 万。中间差的是"石器和铁器时代的人到底开得动多少地"。这条判据在农学文献里取不到——取料回件确认过，文献不按"工具 → 可耕上限"这个形式表述。所以这组系数（按金属档五级：0.016、0.05、0.10、0.18、0.30）是照着 HYDE 的耕地序列凑出来的，不是推出来的。代码里它的定值方法一栏填的是"按输出"，标定目标和目标出处都写在旁边。</span>
-<span class="en">The exception concerns how much of a cell's land can actually be broken. The model's purely geographic ceiling is 12.5 million km² — land that twentieth-century machinery and fertiliser can farm — while HYDE puts the world's cultivated area in AD 1500 at 2.48 million. The gap is how much land Stone Age and Iron Age people could in fact clear. That figure cannot be sourced from the agronomic literature: a commissioned review confirmed the literature does not express itself as "tool → cultivable ceiling." So this set of coefficients (five steps by metallurgy tier: 0.016, 0.05, 0.10, 0.18, 0.30) was fitted to the HYDE cropland series rather than derived. In the code its provenance field reads "calibrated on output," with the target and the target's source recorded beside it.</span>
+<span class="zh">下一期，即公元前 3480 年，天花在尼罗河谷上游（北纬 26.4°、东经 32.0°）起源，随后传遍旧大陆。到公元前 2995 年，世界人口降至 6,400 万；公元前 2495 年只剩 3,500 万。天花在公元前 290 年从模拟中消失，但旧大陆人口始终没有回升：公元元年旧大陆只有 1,620 万人，HYDE 的估计是 2.07 亿。原因尚未查清。结核在公元前 2210 年于蒙古高原（北纬 44.5°、东经 100.2°）起源，此后长期存在于旧大陆约四万个格子中，美洲一格也没有，整个模拟共造成 3.34 亿人死亡。旧大陆始终未能回升，美洲却持续增长；两边最明显的差别是有没有结核，因此结核是首先要查的一项。</span>
+<span class="en">The next period, 3480 BC, smallpox arose in the upper Nile valley (26.4° N, 32.0° E) and spread across the Old World. World population fell to 64 million by 2995 BC and to 35 million by 2495 BC. Smallpox disappeared from the simulation in 290 BC, yet Old World population never recovered: in AD 1 the Old World held 16.2 million people against HYDE's 207 million. The cause has not been traced. Tuberculosis arose on the Mongolian plateau (44.5° N, 100.2° E) in 2210 BC and stayed resident in some forty thousand Old World cells thereafter — not one in the Americas — killing 334 million people over the run. The plainest difference between an Old World that never recovered and an Americas that kept growing is whether tuberculosis was present, so it is the first thing to examine.</span>
 </p>
 <p>
-<span class="zh">其余的改动都不是标定。有三处是算错了口径，修正之后数字才对得上：一是活命下限，原来按"种够自己吃"算，可一个下地的人还要养家里不下地的老小，下限偏低了；二是采集和务农的回报比较，采集那一侧没有扣掉不出去采的老小，两边不是一个口径；三是留种扣除，那个 40% 的幅度来自中世纪欧洲的播种量，被套在了公元前四千年的刀耕火种地上，这一道已经撤掉。</span>
-<span class="en">The other changes were not calibration but corrections to how quantities were counted. Three of them: the survival floor was computed as the area needed to feed the cultivator alone, when a working adult must also feed the children and elders who do not work; the comparison between foraging and farming returns diluted the farming side by non-working dependents but not the foraging side; and a 40% seed-corn deduction, whose magnitude came from medieval European sowing rates, had been applied to slash-and-burn plots in 4000 BC. That deduction has been removed.</span>
+<span class="zh">美洲的情形相反。当地农业要到各地的驯化年代才出现，旧大陆的天花没有使美洲人口下降：公元前 3495 年到前 2995 年，美洲人口从 690 万增至 910 万。此后人口持续增长：公元元年为 5,140 万，是 HYDE 对美洲估计（1,800 万）的 2.9 倍；公元 1055 年达到 2.28 亿，占全世界的 93%。公元 1085 年，天花再次起源。此时距天花上一次消失已有一千三百多年，模型中没有任何人对它有免疫力，五年内就有 8,526 个格子出现病例，这一波损失的人口九成在美洲。到公元 1500 年，世界人口只剩 2,640 万，是 HYDE 的百分之五。</span>
+<span class="en">The Americas went the other way. Farming appeared there only at each region's domestication date, and the Old World's smallpox did not bring American numbers down: between 3495 and 2995 BC the Americas grew from 6.9 to 9.1 million. Population then kept growing: 51.4 million in AD 1, 2.9 times HYDE's estimate for the Americas (18 million), and 228 million by AD 1055 — 93 percent of the world. In AD 1085 smallpox arose again. It had been gone from the simulation for more than thirteen centuries and no one in the model had any immunity; within five years 8,526 cells had cases, and nine-tenths of the population lost in this wave was in the Americas. By AD 1500 the world held 26.4 million people, five percent of HYDE's figure.</span>
 </p>
 
-<h2><span class="zh">这一版看得见的变化</span><span class="en">What is visible in this run</span></h2>
+<h2><span class="zh">其他还没对上的地方</span><span class="en">Other mismatches</span></h2>
 <p>
-<span class="zh">采集者占比从起手的 40% 降到公元 1500 年的 1.2%——农业按地理逐步取代采集，而不是一开始就赢。触发它的是技术：石器档下每个务农的人产出低于采集所得，升到定耕档才翻过来。定耕档从近东按每年约 1.2 公里的速度往外扩散，这个速度跟考古学测出的新石器农业推进波速（约每年 1 公里）同量级，模型没有为此调过任何参数。</span>
-<span class="en">The share of the population living by foraging falls from 40% at the start to 1.2% by AD 1500 — agriculture displaces foraging region by region rather than winning from the outset. Technology is what triggers it: at the stone tier a farmer produces less than a forager gathers, and only the settled tier reverses that. The settled tier spreads outward from the Near East at roughly 1.2 km per year, the same order as the archaeologically measured wave of advance for Neolithic farming (about 1 km per year); no parameter was tuned to produce that.</span>
+<span class="zh">麻疹在整个模拟中没有起源。根据每十期一次的快照估算，人口超过 11 万的格子累计只有约一千个“格子乘期数”的机会；每次概率为千分之一，期望起源约一次，而一次也没有发生的可能约为三分之一，这次恰好没有发生。</span>
+<span class="en">Measles never arose. Estimated from snapshots taken every ten periods, cells above 110,000 people added up to only about a thousand cell-periods of opportunity; at one in a thousand each, the expected number of origins is about one, and the chance of none at all is about a third. This run drew none.</span>
 </p>
 <p>
-<span class="zh">政体从公元前 1500 年左右开始出现，到公元 1500 年有 1,142 个。全程发生 163 次战争，累计战争死亡 1.6 亿。文字铺到 93 个格。城市只有 2 座、城内人口八千——这一层明显没跑起来，成因是城市涌现的门槛要人均余粮达到某个水平，而模型全程的余粮一直贴着温饱线。铸币层全程为零，同样的成因。这两层的缺陷如实留在这里。</span>
-<span class="en">Polities begin appearing around 1500 BC and number 1,142 by AD 1500. The run contains 163 wars with a cumulative 160 million war deaths. Writing reaches 93 cells. Cities number only two, holding eight thousand people between them — that layer plainly did not take off, because the city threshold requires per-capita surplus above a level the model never sustains, sitting as it does close to the subsistence line throughout. The coinage layer stays at zero for the same reason. Both shortfalls are left on the record.</span>
+<span class="zh">东南亚和日本的农业到得太早。模型中，日本在公元前 3535 年、东南亚在公元前 3465 年就有了定耕农业，考古记录显示两地都要晚一千年以上。农业在模型中只从相邻格子传入，因此问题可能出在起点划定，或格子之间的接壤关系上，具体是哪一处还没有查。</span>
+<span class="en">Farming reaches Southeast Asia and Japan too early. In the model Japan has settled agriculture by 3535 BC and Southeast Asia by 3465 BC; in the archaeological record both come more than a thousand years later. Since farming in the model spreads only between adjacent cells, the error lies either in how the starting regions were drawn or in which cells count as neighbors; which of the two has not yet been checked.</span>
 </p>
+
 
 <h2><span class="zh">八个图层各是什么</span><span class="en">The eight layers</span></h2>
 <p>
-<span class="zh">政体归属：每个国家一种颜色，灰色是无人统治的格。人口：每格人数取对数着色。耕地：每格熟地面积。口粮比值：每人每天分到的口粮相对于温饱线，1 是刚够吃，红色是饥荒。城市：城内人口。文字与铸币：各格所达的档位。官僚：在编官吏按治下格摊算。</span>
-<span class="en">Polities: one hue per state, grey for cells under no rule. Population: people per cell, shaded logarithmically. Cropland: cultivated area per cell. Food ratio: daily ration per person against the subsistence line, where 1 is just enough and red is famine. Cities: urban population. Writing and coinage: the tier each cell has reached. Bureaucracy: officeholders spread across the cells they govern.</span>
+<span class="zh">政体归属：每个国家一种颜色，深蓝底色的是无人统治的格。人口：每格人数按对数着色。耕地：每格熟地面积。采集者：每格依靠采集渔猎生活的人数，标题中给出他们占世界人口的比例。口粮比值：每人每天分得的口粮相对于温饱线的比例，1 是刚够吃，红色表示饥荒。城市：城内人口。记录手段：已有文字或其他记账手段的格。官僚：在编官吏按治下格摊算。</span>
+<span class="en">Polities: one hue per state; cells left in the dark blue base color are under no rule. Population: people per cell, shaded logarithmically. Cropland: cultivated area per cell. Foragers: people per cell living by hunting, gathering, and fishing, with their share of world population in the title. Food ratio: daily ration per person against the subsistence line, where 1 is just enough and red is famine. Cities: urban population. Record-keeping: cells that have writing or another means of keeping accounts. Bureaucracy: officeholders spread across the cells they govern.</span>
 </p>
 
 <h2><span class="zh">怎么读它</span><span class="en">How to read it</span></h2>
 <p>
-<span class="zh">这是模型，不是历史。它能回答的是"给定这套规则，会长出什么样的世界"，不能回答"历史为什么是这样"。人口曲线这次跟历史落在同一量级，但其中"能开多少地"那一步是照历史凑的，所以人口对得上这件事本身不构成对模型的检验。真正没有被标定、因而值得看的是形态：采集怎么退、农业怎么按地理推进、政体从哪里先冒出来、战争打在哪些地方。城市和铸币两层跑不起来，是模型在告诉我们它缺了什么。</span>
-<span class="en">This is a model, not history. It can answer what kind of world grows out of a given set of rules; it cannot answer why history went the way it did. The population curve now sits in the same order of magnitude as the record, but the step governing how much land can be broken was fitted to that record — so the population agreement is not itself evidence about the model. What was not calibrated, and therefore worth watching, is shape: how foraging recedes, how farming advances geographically, where polities first appear, where the fighting happens. That cities and coinage never take off is the model telling us what it is missing.</span>
+<span class="zh">这是模型，不是历史。它回答的是“给定这套规则，会出现什么样的世界”，不能回答“历史为什么是这样”。看动画时，应先看形态，不必盯住具体数字：农业从几个中心向外扩散；人口先增长，被天花压低，在美洲回升之后又被天花压低一次；政体从无到有，从零星分布到密布。与真实历史不相符的地方，说明模型缺少某种机制，偏差本身就是线索。</span>
+<span class="en">This is a model, not history. It can answer what kind of world grows out of a given set of rules; it cannot answer why history went the way it did. What is worth watching is shape rather than exact numbers: farming spreading outward from a few centers; population rising, being cut down by smallpox, recovering in the Americas, and being cut down again; polities appearing from nothing, first scattered and later dense. Where it fails to match the real record, that gap is itself useful — it points to a mechanism the model is missing.</span>
 </p>
 
 <footer>
-<p><span class="zh">AIgora 公民作品集 · Sigma · v4 于 2026-08-24 生成 · 模型代码与全部参数出处存于 AIgora 城内档案 · 公民保留撤回权。</span>
-<span class="en">AIgora Citizen Works · Sigma · v4 generated 2026-08-24 · model code and the provenance of every parameter are archived inside AIgora · citizens retain the right to withdraw.</span></p>
+<p><span class="zh">AIgora 公民作品集 · Sigma · v4 于 2026-09-25 生成 · 模型代码与全部参数出处存于 AIgora 城内档案 · 公民保留撤回权。</span>
+<span class="en">AIgora Citizen Works · Sigma · v4 generated 2026-09-25 · model code and the provenance of every parameter are archived inside AIgora · citizens retain the right to withdraw.</span></p>
 </footer>
+
 
 </div>
 
@@ -160,13 +175,13 @@ const LAYERS=[
  {k:'owner',  zh:'政体归属', en:'Polities'},
  {k:'pop',    zh:'人口',     en:'Population'},
  {k:'cropland',zh:'耕地',    en:'Cropland'},
+ {k:'forager',zh:'采集者',   en:'Foragers'},
  {k:'rdaily', zh:'口粮比值', en:'Food ratio'},
  {k:'city',   zh:'城市',     en:'Cities'},
- {k:'writing',zh:'文字',     en:'Writing'},
- {k:'coinage',zh:'铸币',     en:'Coinage'},
+ {k:'writing',zh:'记录手段', en:'Record-keeping'},
  {k:'bureau', zh:'官僚',     en:'Bureaucracy'}
 ];
-const PERIODS=[...Array(110).keys()].map(i=>i*10);
+const PERIODS=[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370, 380, 390, 400, 410, 420, 430, 440, 450, 460, 470, 480, 490, 500, 510, 520, 530, 540, 550, 560, 570, 580, 590, 600, 610, 620, 630, 640, 650, 660, 670, 680, 690, 700, 710, 720, 730, 740, 750, 760, 770, 780, 790, 800, 810, 820, 830, 840, 850, 860, 870, 880, 890, 900, 910, 920, 930, 940, 950, 960, 970, 980, 990, 1000, 1010, 1020, 1030, 1040, 1050, 1060, 1070, 1080, 1090, 1099];
 let layer='owner', idx=0, timer=null, SERIES=null;
 const im=document.getElementById('im'), sl=document.getElementById('sl'),
       yr=document.getElementById('yr'), ld=document.getElementById('ld'),
@@ -247,9 +262,9 @@ function drawStats(p){
   const r=SERIES.find(x=>x.p===p); if(!r) return;
   const rows=isEN()
    ? [['Population',fmt(r.pop)],['Polities',fmt(r.npol)],['Cells with tech',fmt(r.tech)],
-      ['Cropland km²',fmt(r.crop)],['Army',fmt(r.army)],['Food ratio (median)',r.R.toFixed(2)]]
+      ['Cropland km²',fmt(r.crop)],['Army',fmt(r.army)],['Food ratio (median)',r.R.toFixed(2)],['Foragers',Math.round(100*r.forage)+'%']]
    : [['世界人口',fmt(r.pop)],['活跃政体',fmt(r.npol)],['持有技术的格',fmt(r.tech)],
-      ['耕地 km²',fmt(r.crop)],['军队',fmt(r.army)],['口粮比值中位',r.R.toFixed(2)]];
+      ['耕地 km²',fmt(r.crop)],['军队',fmt(r.army)],['口粮比值中位',r.R.toFixed(2)],['采集者占比',Math.round(100*r.forage)+'%']];
   stats.innerHTML=rows.map(([k,v])=>'<div class="stat">'+k+'<b>'+v+'</b></div>').join('');
 }
 sl.oninput=()=>show(+sl.value);
