@@ -3,10 +3,13 @@
  * 代价（analysis/cost-chain-{taiwan,europe,middle-east,egypt}*.html，同样用 iframe 嵌，视图顶部四个按钮切换，选择写进 #cost=tw|eu|me|eg；中东 2026-09-21 加）。
  * 选中逻辑：selectNode(theater, num) 在战区页内；栈节点 → openDrawer(id)；总览地图上的站、咽喉点、战区框各自跳到对应视图。
  * 中英文：index.html 是中文页、en.html 是英文页，语言由 <html lang> 定（i18n.js 的 LANG）；两页共用本脚本与同一份数据，页头的语言按钮是链接，带着当前视图的锚过去。
+ * 报告（analysis/report-{war-shock,blocs}*.html，2026-09-24 加）：两篇专题分析，同样用 iframe 嵌，两个按钮切换，选择写进 #report=shock|bloc。
  * 传导链页里点节点会以 #sel=type:id 回到本页（target=_top），boot() 末尾按它打开栈抽屉或定位咽喉点；#cost=tw|eu|me|eg 打开代价视图的那一条链。 */
 const COST_PAGES = {tw: 'cost-chain-taiwan', eu: 'cost-chain-europe', me: 'cost-chain-middle-east', eg: 'cost-chain-egypt'};
 const COST_TITLE = {tw: 'cost_iframe_title', eu: 'cost_iframe_title_eu', me: 'cost_iframe_title_me', eg: 'cost_iframe_title_eg'};
 window.COST_SEL = 'tw';
+const REPORT_PAGES = {shock: 'report-war-shock', bloc: 'report-blocs'};
+window.REPORT_SEL = 'shock';
 const A = window.ATLAS_DATA;
 const STATUS_T = st => ({stopped: t('st_stopped'), narrowed: t('st_narrowed'), inuse: t('st_inuse'), nodata: t('st_nodata'), damaged: t('st_damaged'), unknown: t('st_unknown')}[st] || '');
 const LEVEL_T = lv => ({red: t('lv_red'), amber: t('lv_amber'), green: t('lv_green'), gray: t('lv_gray'), info: t('lv_info')}[lv] || '');
@@ -38,6 +41,7 @@ function boot() {
   const bs = document.createElement('button'); bs.textContent = t('nav_stack'); bs.dataset.k = 'stack'; bs.onclick = () => show('stack'); nav.appendChild(bs);
   const bt = document.createElement('button'); bt.textContent = t('nav_transmission'); bt.dataset.k = 'transmission'; bt.onclick = () => show('transmission'); nav.appendChild(bt);
   const bc = document.createElement('button'); bc.textContent = t('nav_cost'); bc.dataset.k = 'cost'; bc.onclick = () => show('cost'); nav.appendChild(bc);
+  const br = document.createElement('button'); br.textContent = t('nav_report'); br.dataset.k = 'report'; br.onclick = () => show('report'); nav.appendChild(br);
   const ss = document.createElement('section'); ss.className = 'theater'; ss.id = 't_stack'; ss.innerHTML = `<p class="legend">${t('built_on_show')}</p>`; root.appendChild(ss);
   const st = document.createElement('section'); st.className = 'theater'; st.id = 't_transmission'; st.innerHTML = `<iframe src="./chain-view${LANG === 'en' ? '-en' : ''}.html" title="${t('iframe_title')}"></iframe>`; root.appendChild(st);
   const cm = /^cost=(tw|eu|me|eg)$/.exec(cur); if (cm) window.COST_SEL = cm[1];
@@ -45,11 +49,17 @@ function boot() {
   sc.innerHTML = `<div class="costpick" role="group" aria-label="${t('cost_pick')}">${['tw', 'eu', 'me', 'eg'].map(k => `<button data-cost="${k}" onclick="pickCost('${k}')">${t('cost_' + k)}</button>`).join('')}</div><iframe id="costframe" title=""></iframe>`;
   root.appendChild(sc);
   pickCost(window.COST_SEL, true);
+  const rm = /^report=(shock|bloc)$/.exec(cur); if (rm) window.REPORT_SEL = rm[1];
+  const sr = document.createElement('section'); sr.className = 'theater'; sr.id = 't_report';
+  sr.innerHTML = `<div class="costpick reportpick" role="group" aria-label="${t('report_pick')}">${['shock', 'bloc'].map(k => `<button data-report="${k}" onclick="pickReport('${k}')">${t('report_' + k)}</button>`).join('')}</div><iframe id="reportframe" title=""></iframe>`;
+  root.appendChild(sr);
+  pickReport(window.REPORT_SEL, true);
+  viewHooks.report = {fn: () => {}, done: false};
   viewHooks.stack = {fn: buildStack, done: false};
   viewHooks.transmission = {fn: () => {}, done: false};
   viewHooks.cost = {fn: () => {}, done: false};
   renderOverview();
-  show(cm ? 'cost' : (document.getElementById('t_' + cur) ? cur : 'overview'));
+  show(cm ? 'cost' : (rm ? 'report' : (document.getElementById('t_' + cur) ? cur : 'overview')));
   if (cur.startsWith('sel=')) openSel(cur);
   window.__lastBootMs = Math.round(performance.now() - t0);
 }
@@ -65,6 +75,17 @@ function pickCost(k, quiet) {
   if (!quiet && document.getElementById('t_cost').classList.contains('on')) show('cost');
 }
 
+/* 报告视图的两篇：换 iframe 的 src，选择写进地址 #report=<shock|bloc>，刷新后保持（2026-09-24）。 */
+function pickReport(k, quiet) {
+  if (!REPORT_PAGES[k]) k = 'shock';
+  window.REPORT_SEL = k;
+  const f = document.getElementById('reportframe'); if (!f) return;
+  const src = `./analysis/${REPORT_PAGES[k]}${LANG === 'en' ? '-en' : ''}.html`;
+  if (f.getAttribute('src') !== src) { f.setAttribute('src', src); f.title = t('report_iframe_title_' + k); }
+  document.querySelectorAll('.reportpick button').forEach(b => { const on = b.dataset.report === k; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+  if (!quiet && document.getElementById('t_report').classList.contains('on')) show('report');
+}
+
 /* 传导链页的深链 #sel=type:id：node / polnode 开栈抽屉，chokepoint 到总览定位，其余到栈。
  * 传导链嵌在本页里时，它的链接指向的是同一份文档（只换锚），浏览器不会重新载入，所以还要听 hashchange。 */
 function openSel(h) {
@@ -77,6 +98,7 @@ window.addEventListener('hashchange', () => {
   const h = (location.hash || '').slice(1);
   if (h.startsWith('sel=')) openSel(h);
   else if (/^cost=(tw|eu|me|eg)$/.test(h)) { pickCost(h.slice(5), true); show('cost'); }
+  else if (/^report=(shock|bloc)$/.test(h)) { pickReport(h.slice(7), true); show('report'); }
   else if (h && document.getElementById('t_' + h) && !document.getElementById('t_' + h).classList.contains('on')) show(h);
 });
 
@@ -98,6 +120,7 @@ function renderOverview() {
   const cks = [...D.chokepoints].sort((a, b) => (a.ratio ?? 9) - (b.ratio ?? 9)).map(c => `<tr><td><span class="lv ${({stopped: 'red', narrowed: 'amber', inuse: 'green', nodata: 'gray'})[c.status]}"></span>${esc(nz(c.name))}</td><td class="num">${c.recent7 ?? ''}</td><td class="num">${c.baseline ?? ''}</td><td class="num">${c.ratio ?? ''}</td><td>${esc(c.break_date || '')}</td><td>${esc(c.last_date)}</td></tr>`).join('');
   sec.innerHTML = `<h2>${t('ov_h2')} <small>${t('ov_sub')}</small></h2>
   <div class="costbanner" role="link" tabindex="0" onclick="show('cost')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();show('cost')}"><span class="cb-tag">${t('cost_banner_tag')}</span><span class="cb-text">${t('cost_banner_text')}</span><span class="cb-cta">${t('cost_banner_cta')}</span></div>
+  <div class="costbanner reportbanner" role="link" tabindex="0" onclick="show('report')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();show('report')}"><span class="cb-tag">${t('report_banner_tag')}</span><span class="cb-text">${t('report_banner_text')}</span><span class="cb-cta">${t('report_banner_cta')}</span></div>
   <div class="ov">
     <div class="mapwrap"><div id="m_overview"></div>
     </div>

@@ -190,6 +190,14 @@ const UI = {
   ev_measured: ['实测', 'measured'], ev_verified: ['已核', 'verified'], 'ev_source-linked': ['有出处', 'source-linked'], 'ev_needs-review': ['待核', 'needs-review'], 'ev_query-designed': ['查询已设计', 'query-designed'], ev_unknown: ['未知', 'unknown'], ev_news: ['新闻', 'news'], ev_atlas: ['枚举表', 'atlas'],
   /* 代价视图的三条链（2026-09-21） */
   cost_pick: ['看哪一条链', 'Chain'], cost_tw: ['台湾', 'Taiwan'], cost_eu: ['欧洲', 'Europe'], cost_me: ['中东', 'Middle East'], cost_eg: ['埃及', 'Egypt'],
+  /* 报告视图（2026-09-24） */
+  nav_report: ['报告', 'Reports'], report_pick: ['看哪一篇', 'Report'],
+  report_shock: ['两场战争的冲击有多大', 'How large was the shock'], report_bloc: ['中美阵营化与供应链迁移', 'US–China blocs and migration'],
+  report_iframe_title_shock: ['俄乌战争和中东动荡对全球供应链的冲击到底有多大', 'How large was the shock from the Russia–Ukraine war and the Middle East turmoil to global supply chains'],
+  report_iframe_title_bloc: ['未来如果中美形成类似冷战的阵营对抗，供应链会如何迁移', 'If the US and China form Cold War–style blocs, how will supply chains migrate'],
+  report_banner_tag: ['报告', 'Reports'],
+  report_banner_text: ['霍尔木兹通行少了 97%，全球 28 个海峡合计只少 2.4%；美国进口的计算机来自中国的比例从 60.2% 降到 4.4%，永磁体却从 61.9% 升到 72.7%', 'Hormuz transit fell 97% while 28 routes together fell only 2.4%; China’s share of US computer imports fell from 60.2% to 4.4%, but of permanent magnets rose from 61.9% to 72.7%'],
+  report_banner_cta: ['看两篇分析 →', 'Read the two analyses →'],
   cost_iframe_title_eu: ['霍尔木兹关闭之后，欧洲多付的钱由谁承担', 'After the Hormuz closure: who bore Europe’s extra energy bill'],
   cost_iframe_title_me: ['霍尔木兹关闭之后的中东：各国出口与代价由谁承担', 'The Middle East after the Hormuz closure: exports and who bore the cost'],
   cost_iframe_title_eg: ['霍尔木兹关闭与以色列断气：埃及的代价由谁承担', 'The Hormuz closure and the Israeli gas cut-off: who bore Egypt’s cost'],

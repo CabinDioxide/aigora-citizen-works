@@ -47,7 +47,7 @@ function show(k) {
   // 2026-09-23：地图在标签切换的同一刻建好并 fitBounds，那时容器还没量出尺寸，缩放算成整个世界，海湾缩成一团、点不到；
   // 主人「卫星图哪去了」的直接原因。改成量好尺寸后再对准战区一次（只在第一次显示时做，之后保留用户自己的缩放）。
   if (maps[k]) setTimeout(() => { maps[k].invalidateSize(); if (T && !maps[k]._fitted) { maps[k]._fitted = true; maps[k].fitBounds(focusBounds(T)); } }, 50);
-  const anchor = k === 'cost' && window.COST_SEL ? 'cost=' + window.COST_SEL : k;  // 代价视图带上当前那一条链（2026-09-21）
+  const anchor = k === 'cost' && window.COST_SEL ? 'cost=' + window.COST_SEL : (k === 'report' && window.REPORT_SEL ? 'report=' + window.REPORT_SEL : k);  // 代价视图带上当前那一条链（2026-09-21），报告视图带上当前那一篇（2026-09-24）
   history.replaceState(null, '', '#' + anchor);
   const a = document.getElementById('langlink'); if (a) a.href = t('lang_href') + '#' + anchor;  // 语言链接带上当前视图
 }
