@@ -205,3 +205,7 @@ table.gaps td:last-child{width:130px;color:var(--ink2)}
  table.gaps td{border-bottom:none;padding:2px 4px}
  table.gaps tr{border-bottom:1px solid var(--line);padding:6px 0}
 }
+
+/* 2026-09-24 主人要求：返回主页链接，图注档字号 */
+#homelink{display:inline-block;font-size:var(--f-caption);line-height:var(--lh-caption);color:#5d6a71;text-decoration:none;margin:0 0 10px}
+#homelink:hover{color:#2f3a40;text-decoration:underline}
