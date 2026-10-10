@@ -11,7 +11,7 @@ const TW_RISK_URL = 'data/monitor/taiwan_strait_risk.json';
 let TWD = null;
 
 const TW_T = {
-  nav: ['台海风险', 'Taiwan Strait'],
+  nav: ['台海风险指数', 'Strait risk index'],
   h2: ['台湾海峡风险指数', 'Taiwan Strait risk index'],
   sub: ['多源公开指标相对自身历史基线的偏离。它不估计开战概率。',
         'Deviation of open-source indicators from their own historical baseline. It does not estimate the probability of war.'],
@@ -93,7 +93,7 @@ if (window.Chart && !Chart.registry.plugins.get('twband')) Chart.register(twBand
 
 /* 视图构建。dashboard.js 的 boot() 把本函数登记成 viewHooks.taiwan，切到这一页时才跑。 */
 function buildTaiwanRisk() {
-  const sec = document.getElementById('t_taiwan');
+  const sec = document.getElementById('t_twrisk');
   if (!sec) return;
   sec.innerHTML = `<p class="legend">${esc(twT('loading'))}</p>`;
   fetch(TW_RISK_URL, {cache: 'no-store'}).then(r => r.json()).then(d => { TWD = d; twRender(sec, d); })
