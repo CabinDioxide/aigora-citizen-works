@@ -42,6 +42,7 @@ function boot() {
   const bt = document.createElement('button'); bt.textContent = t('nav_transmission'); bt.dataset.k = 'transmission'; bt.onclick = () => show('transmission'); nav.appendChild(bt);
   const bc = document.createElement('button'); bc.textContent = t('nav_cost'); bc.dataset.k = 'cost'; bc.onclick = () => show('cost'); nav.appendChild(bc);
   const br = document.createElement('button'); br.textContent = t('nav_report'); br.dataset.k = 'report'; br.onclick = () => show('report'); nav.appendChild(br);
+  const bw = document.createElement('button'); bw.textContent = twT('nav'); bw.dataset.k = 'taiwan'; bw.onclick = () => show('taiwan'); nav.appendChild(bw);  // 台海风险（2026-10-10，taiwan-risk.js，读 data/monitor/taiwan_strait_risk.json）
   const ss = document.createElement('section'); ss.className = 'theater'; ss.id = 't_stack'; ss.innerHTML = `<p class="legend">${t('built_on_show')}</p>`; root.appendChild(ss);
   const st = document.createElement('section'); st.className = 'theater'; st.id = 't_transmission'; st.innerHTML = `<iframe src="./chain-view${LANG === 'en' ? '-en' : ''}.html" title="${t('iframe_title')}"></iframe>`; root.appendChild(st);
   const cm = /^cost=(tw|eu|me|eg)$/.exec(cur); if (cm) window.COST_SEL = cm[1];
@@ -54,6 +55,8 @@ function boot() {
   sr.innerHTML = `<div class="costpick reportpick" role="group" aria-label="${t('report_pick')}">${['shock', 'bloc'].map(k => `<button data-report="${k}" onclick="pickReport('${k}')">${t('report_' + k)}</button>`).join('')}</div><iframe id="reportframe" title=""></iframe>`;
   root.appendChild(sr);
   pickReport(window.REPORT_SEL, true);
+  const sw = document.createElement('section'); sw.className = 'theater'; sw.id = 't_taiwan'; sw.innerHTML = `<p class="legend">${t('built_on_show')}</p>`; root.appendChild(sw);
+  viewHooks.taiwan = {fn: buildTaiwanRisk, done: false};
   viewHooks.report = {fn: () => {}, done: false};
   viewHooks.stack = {fn: buildStack, done: false};
   viewHooks.transmission = {fn: () => {}, done: false};
