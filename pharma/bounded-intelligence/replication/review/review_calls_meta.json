@@ -1,0 +1,90 @@
+{
+ "round2_system_prompt": "You are an independent referee checking economic-theory propositions for a working paper. You see only the model environment and the statements; the authors' proofs are withheld on purpose. For each proposition or lemma in the section: (1) attempt your own proof, written so that an economist can check it line by line; (2) state whether the statement is TRUE as stated, FALSE (give an explicit counterexample with numbers), or TRUE ONLY UNDER AN ADDITIONAL ASSUMPTION (state the assumption precisely); (3) list any ambiguity in definitions, any hidden assumption, any sign or boundary-case problem, and any claim that is weaker or stronger than it should be. Be adversarial and concrete. Do not praise. End with a line VERDICTS: followed by one verdict per numbered item.",
+ "round3_system_prompt": "You are an independent referee checking economic-theory propositions for a working paper. You see only the model environment and the statements; the authors' proofs are withheld on purpose. For each proposition or lemma in the section: (1) attempt your own proof, written so that an economist can check it line by line; (2) state whether the statement is TRUE as stated, FALSE (give an explicit counterexample with numbers), or TRUE ONLY UNDER AN ADDITIONAL ASSUMPTION (state the assumption precisely); (3) list any ambiguity in definitions, any hidden assumption, any sign or boundary-case problem, and any claim that is weaker or stronger than it should be. Be adversarial and concrete. Do not praise. End with a line VERDICTS: followed by one verdict per numbered item.\n\nBudget: think efficiently. Your written report must be at most 1,200 words. Do not show scratch algebra; give for each claim a one-paragraph check, any counterexample with explicit numbers, and end with a VERDICTS: block (TRUE / FALSE / TRUE-WITH-CAVEAT per item).",
+ "meta2": {
+  "A.1": {
+   "model": "claude-sonnet-5",
+   "stop": "end_turn",
+   "err": null,
+   "usage": {
+    "input_tokens": 1885,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 4888,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 0
+    },
+    "output_tokens": 31102,
+    "service_tier": "standard",
+    "inference_geo": "not_available"
+   }
+  },
+  "A.2": {
+   "model": "claude-sonnet-5",
+   "stop": "max_tokens",
+   "err": null,
+   "usage": {
+    "input_tokens": 1577,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 4888,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 0
+    },
+    "output_tokens": 32000,
+    "service_tier": "standard",
+    "inference_geo": "not_available"
+   }
+  },
+  "A.3": {
+   "model": null,
+   "stop": null,
+   "err": "host_call 'llm' failed: llm: model returned an empty response (stop_reason=\"max_tokens\", model=\"claude-sonnet-5\")",
+   "usage": null
+  }
+ },
+ "meta3": {
+  "A.2": {
+   "model": "claude-sonnet-5",
+   "stop": "end_turn",
+   "err": null,
+   "out": 18272
+  },
+  "A.3": {
+   "model": "claude-sonnet-5",
+   "stop": "end_turn",
+   "err": null,
+   "out": 22459
+  },
+  "A.4": {
+   "model": "claude-sonnet-5",
+   "stop": "end_turn",
+   "err": null,
+   "out": 16557
+  },
+  "A.5": {
+   "model": "claude-sonnet-5",
+   "stop": "end_turn",
+   "err": null,
+   "out": 12202
+  },
+  "A.6": {
+   "model": "claude-sonnet-5",
+   "stop": "end_turn",
+   "err": null,
+   "out": 16619
+  },
+  "A.7": {
+   "model": "claude-sonnet-5",
+   "stop": "end_turn",
+   "err": null,
+   "out": 10584
+  },
+  "A.8": {
+   "model": "claude-sonnet-5",
+   "stop": "end_turn",
+   "err": null,
+   "out": 10145
+  }
+ }
+}

@@ -1,0 +1,92 @@
+PASS  P1(i) w(p_c) solves Phi=1 (3 random points)  
+PASS  P1(ii) s_t = 1 - a^s p_c^(1-s) (3 points)  
+PASS  P1(i),(iii) w decreasing in p_c, limit w_bar (sigma<1 grid)  
+PASS  P1 sigma>1: s_c decreasing in p_c (so s_t increasing)  
+PASS  P1(iv) gain/y non-increasing iff tau/y non-increasing (Delta w>0; three tau profiles)  
+PASS  P2 no trade iff min(r_h,k_t) > w (21^3 grid)  
+PASS  P2 P_C is a Bertrand outcome: winner margin >= 0, price <= rival cost and <= w  
+PASS  P2 holders' premium <= k_t whenever there is trade  
+PASS  P2 holders' premium does not rise with w once w >= k_t (so not as p_c falls)  
+PASS  P2 holders' premium -> 0 as k_t -> 0 (r_h = 0, w = 1)  
+PASS  P2 tie r_h = k_t: holders supply (tie rule), price = k_t, premium 0  
+PASS  Lemma1 (E) numerator  
+PASS  Lemma1 (I) numerator  
+PASS  P3(a) p_e=0.450 vs threshold 0.500: EV/y nonincreasing=True  
+PASS  P3(a) p_e=0.550 vs threshold 0.500: EV/y nonincreasing=False  
+PASS  P3(a) absolute EV nondecreasing  
+PASS  P3(a) eta=1: EV/y increasing among entrants  
+PASS  P3(a) needs p_e < P_0: with p_e=3 > P_0=2.5 nobody buys AI, EV/y = 0 (non-increasing) although p_e > (1-eta)R(y_L)  
+PASS  P3(b) verification gradient makes EV/y increase on an interval  
+PASS  P3(c) bias produces strict losers  loser y-range [1.00,1.50]
+PASS  P3(c) losers concentrated at low y (all losers below median y)  
+PASS  P3(c) losing interval matches (R-piL, R-theta piL]  
+PASS  P3(d) n/n*=1.10: EV/y nonincreasing=True  
+PASS  P3(d) n/n*=0.50: EV/y nonincreasing=False  
+PASS  P3(e) set of efficient-but-unbought verification non-empty  
+PASS  P3(c) with pi=0 (v=1) the losing interval is empty  
+PASS  P3(c) interval meets p>=0 iff R - theta*pi*L >= 0 (case R small: no admissible p)  
+PASS  P3(c) boundary R = theta*pi*L: p = 0 is bought and loses, so the left end is closed at 0 when R - pi*L < 0  
+PASS  P3(d)/P5 access fee: n/n*(A)=1.05: EV/y nonincreasing=True  
+PASS  P3(d)/P5 access fee: n/n*(A)=0.90: EV/y nonincreasing=False  
+PASS  P3(e) q=0 and v near v_I: efficient-but-unbought set non-empty  
+PASS  P3(e) q=0 and v far below v_I: set empty (so the claim is existential, not universal)  
+PASS  P4(ii) dw/dD = c1/D^2  
+PASS  P4(ii) dw/dz_A = 1 - z_j  
+PASS  P4(i) z_j = 1: dw/dz_A = 0 (no employed wage falls; wages with z_j < 1 rise)  
+PASS  P4(ii) ratio w_j/w_k decreasing in D (numeric point)  
+PASS  P4(ii) ratio compression on grid  
+PASS  P4(iii) autonomous wage = (1-z_A) z_j, independent of D  
+PASS  P5 linear demand pass-through = 1/2  
+PASS  P5 envelope dPi/dk = -Q(p*)  
+PASS  P6(vi) gap = beta W / kbar  
+PASS  P6(vi) loss = (beta W)^2/(2 kbar)  
+PASS  P6(vi) W(p_c)>0 on grid  
+PASS  P6(vi) gap and loss strictly decreasing in p_c  
+PASS  P6 needs p_c < kbar: with p_c=2 >= kbar=1, a* = a^m (no gap)  
+PASS  P6(vi) closed form beta W/kbar needs p_c + beta W <= kbar (fails at 0.95+0.2)  
+PASS  P6 needs W>0: W=0 gives a* = a^m  
+PASS  P6 corollary m=1: a one-cohort dip in demand is permanent (T stays at a_L)  
+PASS  P6 corollary m=1.2: T_t = min(a_H, m^t a_L), recovery after 2 cohorts  
+PASS  P6 corollary m<1: T declines geometrically whatever demand is  
+PASS  P6 capacity non-binding (m T_{t-1} >= a*) reproduces Prop. 6 rates  
+PASS  P6 corollary (i) chi=1: every T in (0, a] is stationary  
+PASS  P6 corollary (i) chi>1: the only positive stationary share is T = a  
+PASS  P6 corollary (i) chi<1: no positive stationary share  
+PASS  P7(i) risk premium positive and increasing in lambda  
+PASS  P7 needs 0<pi<1 and L>0: pi=0 gives RP identically 0 (not strictly decreasing)  
+PASS  P7 experience-rated pooling: pooled term still slopes with y when pi(y) varies  
+PASS  P7 pooling removes the risk-premium term: self-borne minus pooled = RP - ell*pi*L  
+PASS  P7 calibration: households preferring pooling form a lower interval (if non-empty)  
+PASS  P8 baseline joint economy satisfies C1-C5 and maintained assumptions  {'maint': True, 'C1': True, 'C2': True, 'C3': True, 'C4': True, 'C5': True}
+PASS  P8 baseline: G(y)/y non-increasing pointwise and T does not fall  
+PASS  P8 sufficiency: 127 of 400 random draws satisfy C1-C5; conclusion holds in 127  largest grid increment -4.16e-04
+PASS  P8 time share phi=0.25: baseline conditions hold (H=0.191 < mu) and conclusion holds  share of grid increasing 0.000; T1=0.800
+PASS  P8 time share phi=0.5: baseline conditions hold (H=0.127 < mu) and conclusion holds  share of grid increasing 0.000; T1=0.800
+PASS  P8 time share phi=0.75: baseline conditions hold (H=0.064 < mu) and conclusion holds  share of grid increasing 0.000; T1=0.800
+PASS  P8 weak necessity -- C1 fails: tau(y) proportional to y^2: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.007; T1=0.800)  
+PASS  P8 weak necessity -- C2 fails: no intermediated verification offered: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.637; T1=0.800)  
+PASS  P8 weak necessity -- C3 fails (autonomy): AI becomes autonomous; only z_A changes: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.129; T1=0.960)  
+PASS  P8 weak necessity -- C3 fails (C(D) >= s_min): low-z holders unemployed before; only D changes: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.059; T1=0.960)  
+PASS  P8 weak necessity -- C3 fails (z(y) decreasing): only z_A changes: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.763; T1=0.960)  
+PASS  P8 weak necessity -- C4 fails: access fee A=30 pushes n below n*(A): others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.054; T1=0.800)  
+PASS  P8 weak necessity -- C5 fails: no apprenticeship subsidy: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.000; T1=0.672)  
+PASS  P8 weak necessity -- C5 fails: mentor capacity m=0.9 < 1: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.000; T1=0.720)  
+RECORD  P8 weak necessity at phi=0.25 (holdings rule) -- C1 fails: tau(y) proportional to y^2: others hold=True, target fails=True, conclusion breaks=False (share of grid increasing 0.000; largest increment -2.9e-04; T1=0.800; H=0.502)  [record only: not judged, not counted]
+PASS  P8 weak necessity at phi=0.25 (holdings rule) -- C2 fails: no intermediated verification offered: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.632; largest increment 3.5e-02; T1=0.800; H=0.191)  
+PASS  P8 weak necessity at phi=0.25 (holdings rule) -- C3 fails (autonomy): AI becomes autonomous; only z_A changes: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.129; largest increment 3.7e-03; T1=0.960; H=2.126)  
+PASS  P8 weak necessity at phi=0.25 (holdings rule) -- C3 fails (C(D) >= s_min): low-z holders unemployed before; only D changes: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.059; largest increment 1.4e-04; T1=0.960; H=2.547)  
+PASS  P8 weak necessity at phi=0.25 (holdings rule) -- C3 fails (z(y) decreasing): only z_A changes: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.763; largest increment 5.5e-04; T1=0.960; H=12.736)  
+PASS  P8 weak necessity at phi=0.25 (holdings rule) -- C4 fails: access fee A=30 pushes n below n*(A): others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.054; largest increment 5.6e-03; T1=0.800; H=0.191)  
+PASS  P8 weak necessity at phi=0.25 (holdings rule) -- C5 fails: no apprenticeship subsidy: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.000; largest increment -3.4e-04; T1=0.672; H=0.191)  
+PASS  P8 weak necessity at phi=0.25 (holdings rule) -- C5 fails: mentor capacity m=0.9 < 1: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.000; largest increment -3.4e-04; T1=0.720; H=0.191)  
+PASS  P8 weak necessity at phi=0.75 (holdings rule) -- C1 fails: tau(y) proportional to y^2: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.054; largest increment 6.8e-03; T1=0.800; H=0.502)  
+PASS  P8 weak necessity at phi=0.75 (holdings rule) -- C2 fails: no intermediated verification offered: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.641; largest increment 3.5e-02; T1=0.800; H=0.064)  
+PASS  P8 weak necessity at phi=0.75 (holdings rule) -- C3 fails (autonomy): AI becomes autonomous; only z_A changes: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.129; largest increment 3.7e-03; T1=0.960; H=2.126)  
+PASS  P8 weak necessity at phi=0.75 (holdings rule) -- C3 fails (C(D) >= s_min): low-z holders unemployed before; only D changes: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.059; largest increment 1.4e-04; T1=0.960; H=2.547)  
+PASS  P8 weak necessity at phi=0.75 (holdings rule) -- C3 fails (z(y) decreasing): only z_A changes: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.763; largest increment 5.5e-04; T1=0.960; H=12.736)  
+PASS  P8 weak necessity at phi=0.75 (holdings rule) -- C4 fails: access fee A=30 pushes n below n*(A): others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.055; largest increment 5.6e-03; T1=0.800; H=0.064)  
+PASS  P8 weak necessity at phi=0.75 (holdings rule) -- C5 fails: no apprenticeship subsidy: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.000; largest increment -3.3e-04; T1=0.672; H=0.064)  
+PASS  P8 weak necessity at phi=0.75 (holdings rule) -- C5 fails: mentor capacity m=0.9 < 1: others hold=True, target fails=True, conclusion breaks=True (share of grid increasing 0.000; largest increment -3.3e-04; T1=0.720; H=0.064)  
+COVERAGE (checks per result): P1: 5, P2: 6, Lemma1: 2, P3: 19, P4: 6, P5: 2, P6: 14, P7: 5, P8: 29
+NOT CHECKED SYMBOLICALLY OR NUMERICALLY: P2(iii) (cited result of Brynjolfsson & Hitzig); P5 beyond linear demand; P3(d) and P8 are checked on parameter grids and random draws, which illustrates but does not prove them. P8 random draws and weak-necessity constructions use the baseline time share phi = 0.5; phi = 0.25, 0.75 are checked at the baseline and, for the weak-necessity constructions, under the holdings rule.
+CHECKS 88/88 COMPLETE

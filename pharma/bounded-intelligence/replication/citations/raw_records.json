@@ -1,0 +1,1869 @@
+{
+ "agrawal2026volume": {
+  "bib": {
+   "editor": "Agrawal, Ajay and Brynjolfsson, Erik and Korinek, Anton",
+   "title": "The Economics of Transformative {AI}",
+   "series": "National Bureau of Economic Research Conference Report",
+   "publisher": "University of Chicago Press",
+   "address": "Chicago",
+   "year": "2026",
+   "isbn": "9780226854083",
+   "doi": "10.7208/chicago/9780226854090.001.0001",
+   "ID": "agrawal2026volume",
+   "type": "book"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.7208/chicago/9780226854090.001.0001",
+  "record": {
+   "title": "The Economics of Transformative AI",
+   "authors": [
+    "Agrawal",
+    "Brynjolfsson",
+    "Korinek"
+   ],
+   "editors": [],
+   "venue": "University of Chicago Press",
+   "publisher": "University of Chicago Press",
+   "year": "2026",
+   "volume": "",
+   "issue": "",
+   "pages": "",
+   "type": "monograph",
+   "DOI": "10.7208/chicago/9780226854090.001.0001"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match"
+  },
+  "note": ""
+ },
+ "garicano2026comment": {
+  "bib": {
+   "author": "Garicano, Luis",
+   "title": "Comment on ``Genius on Demand: The Value of Transformative Artificial Intelligence''",
+   "booktitle": "The Economics of Transformative {AI}",
+   "editor": "Agrawal, Ajay and Brynjolfsson, Erik and Korinek, Anton",
+   "publisher": "University of Chicago Press",
+   "address": "Chicago",
+   "year": "2026",
+   "pages": "32--36",
+   "ID": "garicano2026comment",
+   "type": "incollection"
+  },
+  "source": "Crossref query.bibliographic",
+  "link": "https://doi.org/10.3386/w34316",
+  "record": {
+   "title": "Genius on Demand: The Value of Transformative Artificial Intelligence",
+   "authors": [
+    "Agrawal",
+    "Gans",
+    "Goldfarb"
+   ],
+   "editors": [],
+   "venue": "National Bureau of Economic Research",
+   "publisher": "National Bureau of Economic Research",
+   "year": "2025",
+   "volume": "",
+   "issue": "",
+   "pages": "",
+   "type": "report",
+   "DOI": "10.3386/w34316"
+  },
+  "compare": {
+   "authors": "MISMATCH",
+   "authors_detail": "bib=['garicano'] record=['agrawal', 'gans', 'goldfarb']",
+   "title_sim": 0.925,
+   "title": "match",
+   "year": "MISMATCH (record 2025)",
+   "pages": "not in record"
+  },
+  "note": ""
+ },
+ "jones2026rd": {
+  "bib": {
+   "author": "Jones, Benjamin F.",
+   "title": "Artificial Intelligence in Research and Development",
+   "booktitle": "The Economics of Transformative {AI}",
+   "editor": "Agrawal, Ajay and Brynjolfsson, Erik and Korinek, Anton",
+   "publisher": "University of Chicago Press",
+   "address": "Chicago",
+   "year": "2026",
+   "pages": "37--61",
+   "ID": "jones2026rd",
+   "type": "incollection"
+  },
+  "source": "Crossref query.bibliographic",
+  "link": "https://doi.org/10.1142/9781800618053_0001",
+  "record": {
+   "title": "Artificial Intelligence (AI), Machine Learning (ML), and Deep Learning (DL)",
+   "authors": [],
+   "editors": [],
+   "venue": "Artificial Intelligence in Organizations: Transformative Technologies, Applications, and Impacts",
+   "publisher": "WORLD SCIENTIFIC (EUROPE)",
+   "year": "2026",
+   "volume": "",
+   "issue": "",
+   "pages": "1-17",
+   "type": "book-chapter",
+   "DOI": "10.1142/9781800618053_0001"
+  },
+  "compare": {
+   "authors": "n/a in record",
+   "title_sim": 0.695,
+   "title": "MISMATCH",
+   "year": "match",
+   "pages": "MISMATCH (record 1-17)"
+  },
+  "note": ""
+ },
+ "hall2026comment": {
+  "bib": {
+   "author": "Hall, Bronwyn H.",
+   "title": "Comment on ``Artificial Intelligence in Research and Development''",
+   "booktitle": "The Economics of Transformative {AI}",
+   "editor": "Agrawal, Ajay and Brynjolfsson, Erik and Korinek, Anton",
+   "publisher": "University of Chicago Press",
+   "address": "Chicago",
+   "year": "2026",
+   "pages": "62--66",
+   "ID": "hall2026comment",
+   "type": "incollection"
+  },
+  "source": "Crossref query.bibliographic",
+  "link": "https://doi.org/10.2139/ssrn.5292967",
+  "record": {
+   "title": "Comment on 2025 National Artificial Intelligence (AI) Research and Development (R&amp;amp;D) Strategic Plan",
+   "authors": [
+    "Navani"
+   ],
+   "editors": [],
+   "venue": "Elsevier BV",
+   "publisher": "Elsevier BV",
+   "year": "2025",
+   "volume": "",
+   "issue": "",
+   "pages": "",
+   "type": "posted-content",
+   "DOI": "10.2139/ssrn.5292967"
+  },
+  "compare": {
+   "authors": "MISMATCH",
+   "authors_detail": "bib=['hall'] record=['navani']",
+   "title_sim": 0.739,
+   "title": "close",
+   "year": "MISMATCH (record 2025)",
+   "pages": "not in record"
+  },
+  "note": ""
+ },
+ "athey2026competition": {
+  "bib": {
+   "author": "Athey, Susan and Scott Morton, Fiona",
+   "title": "Artificial Intelligence, Competition, and Welfare",
+   "booktitle": "The Economics of Transformative {AI}",
+   "editor": "Agrawal, Ajay and Brynjolfsson, Erik and Korinek, Anton",
+   "publisher": "University of Chicago Press",
+   "address": "Chicago",
+   "year": "2026",
+   "pages": "95--114",
+   "ID": "athey2026competition",
+   "type": "incollection"
+  },
+  "source": "Crossref query.bibliographic",
+  "link": "https://doi.org/10.3386/w34444",
+  "record": {
+   "title": "Artificial Intelligence, Competition, and Welfare",
+   "authors": [
+    "Athey",
+    "Scott Morton"
+   ],
+   "editors": [],
+   "venue": "National Bureau of Economic Research",
+   "publisher": "National Bureau of Economic Research",
+   "year": "2025",
+   "volume": "",
+   "issue": "",
+   "pages": "",
+   "type": "report",
+   "DOI": "10.3386/w34444"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "MISMATCH (record 2025)",
+   "pages": "not in record"
+  },
+  "note": ""
+ },
+ "chatterji2026firms": {
+  "bib": {
+   "author": "Chatterji, Aaron and Rock, Daniel and Talamas, Eduard",
+   "title": "Transformative {AI} and Firms",
+   "booktitle": "The Economics of Transformative {AI}",
+   "editor": "Agrawal, Ajay and Brynjolfsson, Erik and Korinek, Anton",
+   "publisher": "University of Chicago Press",
+   "address": "Chicago",
+   "year": "2026",
+   "pages": "173--188",
+   "ID": "chatterji2026firms",
+   "type": "incollection"
+  },
+  "source": "Crossref query.bibliographic",
+  "link": "",
+  "record": null,
+  "compare": {},
+  "note": "no Crossref record with similar title"
+ },
+ "manning2026adaptable": {
+  "bib": {
+   "author": "Manning, Sam and Aguirre, Tomas",
+   "title": "How Adaptable Are {American} Workers to {AI}-Induced Job Displacement?",
+   "booktitle": "The Economics of Transformative {AI}",
+   "editor": "Agrawal, Ajay and Brynjolfsson, Erik and Korinek, Anton",
+   "publisher": "University of Chicago Press",
+   "address": "Chicago",
+   "year": "2026",
+   "pages": "197--218",
+   "ID": "manning2026adaptable",
+   "type": "incollection"
+  },
+  "source": "Crossref query.bibliographic",
+  "link": "https://doi.org/10.3386/w34705",
+  "record": {
+   "title": "How Adaptable Are American Workers to AI-Induced Job Displacement?",
+   "authors": [
+    "Manning",
+    "Aguirre"
+   ],
+   "editors": [],
+   "venue": "National Bureau of Economic Research",
+   "publisher": "National Bureau of Economic Research",
+   "year": "2026",
+   "volume": "",
+   "issue": "",
+   "pages": "",
+   "type": "report",
+   "DOI": "10.3386/w34705"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "pages": "not in record"
+  },
+  "note": ""
+ },
+ "stevenson2026fear": {
+  "bib": {
+   "author": "Stevenson, Betsey",
+   "title": "What Is There to Fear in a Post-{AGI} World?",
+   "booktitle": "The Economics of Transformative {AI}",
+   "editor": "Agrawal, Ajay and Brynjolfsson, Erik and Korinek, Anton",
+   "publisher": "University of Chicago Press",
+   "address": "Chicago",
+   "year": "2026",
+   "pages": "251--268",
+   "ID": "stevenson2026fear",
+   "type": "incollection"
+  },
+  "source": "Crossref query.bibliographic",
+  "link": "",
+  "record": null,
+  "compare": {},
+  "note": "no Crossref record with similar title"
+ },
+ "ludwig2026reflective": {
+  "bib": {
+   "author": "Ludwig, Jens and Mullainathan, Sendhil and Pink, Sophia L. and Rambachan, Ashesh",
+   "title": "Algorithms as a Vehicle to Reflective Equilibrium: Behavioral Economics 2.0",
+   "booktitle": "The Economics of Transformative {AI}",
+   "editor": "Agrawal, Ajay and Brynjolfsson, Erik and Korinek, Anton",
+   "publisher": "University of Chicago Press",
+   "address": "Chicago",
+   "year": "2026",
+   "pages": "275--293",
+   "ID": "ludwig2026reflective",
+   "type": "incollection"
+  },
+  "source": "Crossref query.bibliographic",
+  "link": "",
+  "record": null,
+  "compare": {},
+  "note": "no Crossref record with similar title"
+ },
+ "brynjolfsson2026hayek": {
+  "bib": {
+   "author": "Brynjolfsson, Erik and Hitzig, Zo{\\\"e}",
+   "title": "{AI}'s Use of Knowledge in Society",
+   "booktitle": "The Economics of Transformative {AI}",
+   "editor": "Agrawal, Ajay and Brynjolfsson, Erik and Korinek, Anton",
+   "publisher": "University of Chicago Press",
+   "address": "Chicago",
+   "year": "2026",
+   "pages": "301--330",
+   "ID": "brynjolfsson2026hayek",
+   "type": "incollection"
+  },
+  "source": "Crossref query.bibliographic",
+  "link": "",
+  "record": null,
+  "compare": {},
+  "note": "no Crossref record with similar title"
+ },
+ "stiglitz2026information": {
+  "bib": {
+   "author": "Stiglitz, Joseph E. and Ventura-Bolet, Maxim",
+   "title": "The Impact of {AI} and Digital Platforms on the Information Ecosystem",
+   "booktitle": "The Economics of Transformative {AI}",
+   "editor": "Agrawal, Ajay and Brynjolfsson, Erik and Korinek, Anton",
+   "publisher": "University of Chicago Press",
+   "address": "Chicago",
+   "year": "2026",
+   "pages": "367--389",
+   "ID": "stiglitz2026information",
+   "type": "incollection"
+  },
+  "source": "Crossref query.bibliographic",
+  "link": "https://doi.org/10.3386/w34318",
+  "record": {
+   "title": "The Impact of AI and Digital Platforms on the Information Ecosystem",
+   "authors": [
+    "Stiglitz",
+    "Ventura-Bolet"
+   ],
+   "editors": [],
+   "venue": "National Bureau of Economic Research",
+   "publisher": "National Bureau of Economic Research",
+   "year": "2025",
+   "volume": "",
+   "issue": "",
+   "pages": "",
+   "type": "report",
+   "DOI": "10.3386/w34318"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "MISMATCH (record 2025)",
+   "pages": "not in record"
+  },
+  "note": ""
+ },
+ "korinek2026publicfinance": {
+  "bib": {
+   "author": "Korinek, Anton and Lockwood, Lee M.",
+   "title": "Public Finance in the Age of {AI}: A Primer",
+   "booktitle": "The Economics of Transformative {AI}",
+   "editor": "Agrawal, Ajay and Brynjolfsson, Erik and Korinek, Anton",
+   "publisher": "University of Chicago Press",
+   "address": "Chicago",
+   "year": "2026",
+   "pages": "397--425",
+   "ID": "korinek2026publicfinance",
+   "type": "incollection"
+  },
+  "source": "Crossref query.bibliographic",
+  "link": "https://doi.org/10.3386/w34873",
+  "record": {
+   "title": "Public Finance in the Age of AI: A Primer",
+   "authors": [
+    "Korinek",
+    "Lockwood"
+   ],
+   "editors": [],
+   "venue": "National Bureau of Economic Research",
+   "publisher": "National Bureau of Economic Research",
+   "year": "2026",
+   "volume": "",
+   "issue": "",
+   "pages": "",
+   "type": "report",
+   "DOI": "10.3386/w34873"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "pages": "not in record"
+  },
+  "note": ""
+ },
+ "brynjolfsson2025work": {
+  "bib": {
+   "author": "Brynjolfsson, Erik and Li, Danielle and Raymond, Lindsey",
+   "title": "Generative {AI} at Work",
+   "journal": "Quarterly Journal of Economics",
+   "year": "2025",
+   "volume": "140",
+   "number": "2",
+   "pages": "889--942",
+   "doi": "10.1093/qje/qjae044",
+   "note": "Numbers cited from NBER Working Paper 31161, revised November 2023",
+   "ID": "brynjolfsson2025work",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1093/qje/qjae044",
+  "record": {
+   "title": "Generative AI at Work",
+   "authors": [
+    "Brynjolfsson",
+    "Li",
+    "Raymond"
+   ],
+   "editors": [],
+   "venue": "The Quarterly Journal of Economics",
+   "publisher": "Oxford University Press (OUP)",
+   "year": "2025",
+   "volume": "140",
+   "issue": "2",
+   "pages": "889-942",
+   "type": "journal-article",
+   "DOI": "10.1093/qje/qjae044"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "otis2026uneven": {
+  "bib": {
+   "author": "Otis, Nicholas G. and Clarke, Rowan and Delecourt, Sol{\\`e}ne and Holtz, David and Koning, Rembrand",
+   "title": "The Uneven Impact of Generative Artificial Intelligence on Entrepreneurial Performance: Evidence from a Field Experiment in {Kenya}",
+   "journal": "Management Science",
+   "year": "2026",
+   "doi": "10.1287/mnsc.2024.06909",
+   "note": "Articles in advance. Numbers cited from OSF preprint osf.io/hdjpk (file version 3)",
+   "ID": "otis2026uneven",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1287/mnsc.2024.06909",
+  "record": {
+   "title": "The Uneven Impact of Generative Artificial Intelligence on Entrepreneurial Performance: Evidence from a Field Experiment in Kenya",
+   "authors": [
+    "Otis",
+    "Clarke",
+    "Delecourt",
+    "Holtz",
+    "Koning"
+   ],
+   "editors": [],
+   "venue": "Management Science",
+   "publisher": "Institute for Operations Research and the Management Sciences (INFORMS)",
+   "year": "2026",
+   "volume": "",
+   "issue": "",
+   "pages": "",
+   "type": "journal-article",
+   "DOI": "10.1287/mnsc.2024.06909"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match"
+  },
+  "note": ""
+ },
+ "cruces2026narrow": {
+  "bib": {
+   "author": "Cruces, Guillermo and Fern{\\'a}ndez Meijide, Diego and Galiani, Sebastian and G{\\'a}lvez, Ramiro and Lombardi, Mar{\\'i}a",
+   "title": "Does Generative {AI} Narrow Education-Based Productivity Gaps? {Evidence} from a Randomized Experiment",
+   "year": "2026",
+   "howpublished": "arXiv:2608.04198v1 [econ.GN], 4 August 2026",
+   "ID": "cruces2026narrow",
+   "type": "misc"
+  },
+  "source": "arXiv API",
+  "link": "https://arxiv.org/abs/2608.04198v1",
+  "record": {
+   "title": "Does generative AI narrow education-based productivity gaps? Evidence from a randomized experiment",
+   "authors": [
+    "Cruces",
+    "Meijide",
+    "Galiani",
+    "Galvez",
+    "Lombardi"
+   ],
+   "year": "2026",
+   "venue": "arXiv",
+   "arxiv_published": "2026-08-04T19:56:49Z",
+   "arxiv_updated": "2026-08-04T19:56:49Z"
+  },
+  "compare": {
+   "authors": "order/subset differs",
+   "authors_detail": "bib=['cruces', 'fernandez meijide', 'galiani', 'galvez', 'lombardi'] record=['cruces', 'meijide', 'galiani', 'galvez', 'lombardi']",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match"
+  },
+  "note": ""
+ },
+ "korom2025penda": {
+  "bib": {
+   "author": "Korom, Robert and Kiptinness, Sarah and Adan, Najib and Said, Kassim and Ithuli, Catherine and Rotich, Oliver and Kimani, Boniface and King'ori, Irene and Kamau, Stellah and Atemba, Elizabeth and Aden, Muna and Bowman, Preston and Sharman, Michael and Hicks, Rebecca Soskin and Distler, Rebecca and Heidecke, Johannes and Arora, Rahul K. and Singhal, Karan",
+   "title": "{AI}-Based Clinical Decision Support for Primary Care: A Real-World Study",
+   "year": "2025",
+   "howpublished": "arXiv:2507.16947v1 [cs.CL], 22 July 2025",
+   "ID": "korom2025penda",
+   "type": "misc"
+  },
+  "source": "arXiv API",
+  "link": "https://arxiv.org/abs/2507.16947v1",
+  "record": {
+   "title": "AI-based Clinical Decision Support for Primary Care: A Real-World Study",
+   "authors": [
+    "Korom",
+    "Kiptinness",
+    "Adan",
+    "Said",
+    "Ithuli",
+    "Rotich",
+    "Kimani",
+    "King'ori",
+    "Kamau",
+    "Atemba",
+    "Aden",
+    "Bowman",
+    "Sharman",
+    "Hicks",
+    "Distler",
+    "Heidecke",
+    "Arora",
+    "Singhal"
+   ],
+   "year": "2025",
+   "venue": "arXiv",
+   "arxiv_published": "2025-07-22T18:37:33Z",
+   "arxiv_updated": "2025-07-22T18:37:33Z"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match"
+  },
+  "note": ""
+ },
+ "brynjolfsson2025canaries": {
+  "bib": {
+   "author": "Brynjolfsson, Erik and Chandar, Bharat and Chen, Ruyu",
+   "title": "Canaries in the Coal Mine? {Six} Facts about the Recent Employment Effects of Artificial Intelligence",
+   "year": "2025",
+   "howpublished": "Stanford Digital Economy Lab working paper. First version August 2025; version cited: August 2026",
+   "url": "https://digitaleconomy.stanford.edu/app/uploads/2026/08/Canaries_August2026.pdf",
+   "ID": "brynjolfsson2025canaries",
+   "type": "misc"
+  },
+  "source": "Stanford Digital Economy Lab",
+  "link": "https://digitaleconomy.stanford.edu/app/uploads/2026/08/Canaries_August2026.pdf",
+  "record": {
+   "web": {
+    "http": 200,
+    "found": {
+     "Canaries in the Coal Mine": true,
+     "Brynjolfsson": true,
+     "Chandar": true,
+     "Chen": true
+    }
+   }
+  },
+  "compare": {
+   "web": {
+    "http": 200,
+    "found": {
+     "Canaries in the Coal Mine": true,
+     "Brynjolfsson": true,
+     "Chandar": true,
+     "Chen": true
+    }
+   }
+  },
+  "note": ""
+ },
+ "hosseini2025seniority": {
+  "bib": {
+   "author": "Hosseini Maasoum, Seyed Mahdi and Lichtinger, Guy",
+   "title": "Generative {AI} as Seniority-Biased Technological Change: Evidence from {U.S.} R{\\'e}sum{\\'e} and Job Posting Data",
+   "year": "2025",
+   "howpublished": "SSRN Working Paper 5425555. First version 31 August 2025; version cited: 6 June 2026",
+   "doi": "10.2139/ssrn.5425555",
+   "ID": "hosseini2025seniority",
+   "type": "misc"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.2139/ssrn.5425555",
+  "record": {
+   "title": "Generative AI as Seniority-Biased Technological Change: Evidence from U.S. Résumé and Job Posting Data",
+   "authors": [
+    "Hosseini Maasoum",
+    "Lichtinger"
+   ],
+   "editors": [],
+   "venue": "Elsevier BV",
+   "publisher": "Elsevier BV",
+   "year": "2025",
+   "volume": "",
+   "issue": "",
+   "pages": "",
+   "type": "posted-content",
+   "DOI": "10.2139/ssrn.5425555"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match"
+  },
+  "note": ""
+ },
+ "ide2025automation": {
+  "bib": {
+   "author": "Ide, Enrique",
+   "title": "Automation, {AI}, and the Intergenerational Transmission of Knowledge",
+   "year": "2025",
+   "howpublished": "arXiv:2507.16078v9 [econ.GN], 8 June 2026 (v1: 21 July 2025)",
+   "ID": "ide2025automation",
+   "type": "misc"
+  },
+  "source": "arXiv API",
+  "link": "https://arxiv.org/abs/2507.16078v9",
+  "record": {
+   "title": "Automation, AI, and the Intergenerational Transmission of Knowledge",
+   "authors": [
+    "Ide"
+   ],
+   "year": "2025",
+   "venue": "arXiv",
+   "arxiv_published": "2025-07-21T21:28:38Z",
+   "arxiv_updated": "2026-06-08T00:02:47Z"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match"
+  },
+  "note": ""
+ },
+ "kogan2023displacement": {
+  "bib": {
+   "author": "Kogan, Leonid and Papanikolaou, Dimitris and Schmidt, Lawrence D. W. and Seegmiller, Bryan",
+   "title": "Technology and Labor Displacement: Evidence from Linking Patents with Worker-Level Data",
+   "institution": "National Bureau of Economic Research",
+   "type": "techreport",
+   "number": "31846",
+   "year": "2023",
+   "note": "Revised November 2025",
+   "doi": "10.3386/w31846",
+   "ID": "kogan2023displacement"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.3386/w31846",
+  "record": {
+   "title": "Technology and Labor Displacement: Evidence from Linking Patents with Worker-Level Data",
+   "authors": [
+    "Kogan",
+    "Papanikolaou",
+    "Schmidt",
+    "Seegmiller"
+   ],
+   "editors": [],
+   "venue": "National Bureau of Economic Research",
+   "publisher": "National Bureau of Economic Research",
+   "year": "2023",
+   "volume": "",
+   "issue": "",
+   "pages": "",
+   "type": "report",
+   "DOI": "10.3386/w31846"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "number": "not in record"
+  },
+  "note": ""
+ },
+ "dube2025policing": {
+  "bib": {
+   "author": "Dube, Oeindrila and MacArthur, Sandy Jo and Shah, Anuj K.",
+   "title": "A Cognitive View of Policing",
+   "journal": "Quarterly Journal of Economics",
+   "year": "2025",
+   "volume": "140",
+   "number": "1",
+   "pages": "745--791",
+   "doi": "10.1093/qje/qjae039",
+   "note": "Numbers cited from NBER Working Paper 31651 (September 2023)",
+   "ID": "dube2025policing",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1093/qje/qjae039",
+  "record": {
+   "title": "A Cognitive View of Policing",
+   "authors": [
+    "Dube",
+    "MacArthur",
+    "Shah"
+   ],
+   "editors": [],
+   "venue": "The Quarterly Journal of Economics",
+   "publisher": "Oxford University Press (OUP)",
+   "year": "2024",
+   "volume": "140",
+   "issue": "1",
+   "pages": "745-791",
+   "type": "journal-article",
+   "DOI": "10.1093/qje/qjae039"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "MISMATCH (record 2024)",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "acemoglu2020tax": {
+  "bib": {
+   "author": "Acemoglu, Daron and Manera, Andrea and Restrepo, Pascual",
+   "title": "Does the {US} Tax Code Favor Automation?",
+   "journal": "Brookings Papers on Economic Activity",
+   "year": "2020",
+   "volume": "2020",
+   "number": "1",
+   "pages": "231--300",
+   "doi": "10.1353/eca.2020.0003",
+   "note": "Numbers cited from NBER Working Paper 27052 (April 2020)",
+   "ID": "acemoglu2020tax",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1353/eca.2020.0003",
+  "record": {
+   "title": "Does the US Tax Code Favor Automation?",
+   "authors": [
+    "Acemoglu",
+    "Manera",
+    "Restrepo"
+   ],
+   "editors": [],
+   "venue": "Brookings Papers on Economic Activity",
+   "publisher": "Project MUSE",
+   "year": "2020",
+   "volume": "2020",
+   "issue": "1",
+   "pages": "231-300",
+   "type": "journal-article",
+   "DOI": "10.1353/eca.2020.0003"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "steyvers2025know": {
+  "bib": {
+   "author": "Steyvers, Mark and Tejeda, Heliodoro and Kumar, Aakriti and Belem, Catarina and Karny, Sheer and Hu, Xinyue and Mayer, Lukas W. and Smyth, Padhraic",
+   "title": "What Large Language Models Know and What People Think They Know",
+   "journal": "Nature Machine Intelligence",
+   "year": "2025",
+   "volume": "7",
+   "number": "2",
+   "pages": "221--231",
+   "doi": "10.1038/s42256-024-00976-7",
+   "note": "Cited from arXiv:2401.13835v2",
+   "ID": "steyvers2025know",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1038/s42256-024-00976-7",
+  "record": {
+   "title": "What large language models know and what people think they know",
+   "authors": [
+    "Steyvers",
+    "Tejeda",
+    "Kumar",
+    "Belem",
+    "Karny",
+    "Hu",
+    "Mayer",
+    "Smyth"
+   ],
+   "editors": [],
+   "venue": "Nature Machine Intelligence",
+   "publisher": "Springer Science and Business Media LLC",
+   "year": "2025",
+   "volume": "7",
+   "issue": "2",
+   "pages": "221-231",
+   "type": "journal-article",
+   "DOI": "10.1038/s42256-024-00976-7"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "agarwal2023radiology": {
+  "bib": {
+   "author": "Agarwal, Nikhil and Moehring, Alex and Rajpurkar, Pranav and Salz, Tobias",
+   "title": "Combining Human Expertise with Artificial Intelligence: Experimental Evidence from Radiology",
+   "institution": "National Bureau of Economic Research",
+   "type": "techreport",
+   "number": "31422",
+   "year": "2023",
+   "note": "Revised August 2026",
+   "doi": "10.3386/w31422",
+   "ID": "agarwal2023radiology"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.3386/w31422",
+  "record": {
+   "title": "Combining Human Expertise with Artificial Intelligence: Experimental Evidence from Radiology",
+   "authors": [
+    "Agarwal",
+    "Moehring",
+    "Rajpurkar",
+    "Salz"
+   ],
+   "editors": [],
+   "venue": "National Bureau of Economic Research",
+   "publisher": "National Bureau of Economic Research",
+   "year": "2023",
+   "volume": "",
+   "issue": "",
+   "pages": "",
+   "type": "report",
+   "DOI": "10.3386/w31422"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "number": "not in record"
+  },
+  "note": ""
+ },
+ "fishbane2020nudges": {
+  "bib": {
+   "author": "Fishbane, Alissa and Ouss, Aurelie and Shah, Anuj K.",
+   "title": "Behavioral Nudges Reduce Failure to Appear for Court",
+   "journal": "Science",
+   "year": "2020",
+   "volume": "370",
+   "number": "6517",
+   "pages": "eabb6591",
+   "doi": "10.1126/science.abb6591",
+   "note": "Full text not obtained; cited only as reported in Ludwig et al. (2026)",
+   "ID": "fishbane2020nudges",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1126/science.abb6591",
+  "record": {
+   "title": "Behavioral nudges reduce failure to appear for court",
+   "authors": [
+    "Fishbane",
+    "Ouss",
+    "Shah"
+   ],
+   "editors": [],
+   "venue": "Science",
+   "publisher": "American Association for the Advancement of Science (AAAS)",
+   "year": "2020",
+   "volume": "370",
+   "issue": "6517",
+   "pages": "",
+   "type": "journal-article",
+   "DOI": "10.1126/science.abb6591"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "not in record",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "hayek1945use": {
+  "bib": {
+   "author": "Hayek, F. A.",
+   "title": "The Use of Knowledge in Society",
+   "journal": "American Economic Review",
+   "year": "1945",
+   "volume": "35",
+   "number": "4",
+   "pages": "519--530",
+   "ID": "hayek1945use",
+   "type": "article"
+  },
+  "source": "Crossref query.bibliographic",
+  "link": "https://doi.org/10.1016/b978-0-7506-9749-1.50005-3",
+  "record": {
+   "title": "The Use of Knowledge in Society",
+   "authors": [
+    "HAYEK"
+   ],
+   "editors": [],
+   "venue": "Knowledge Management and Organisational Design",
+   "publisher": "Elsevier",
+   "year": "1996",
+   "volume": "",
+   "issue": "",
+   "pages": "7-15",
+   "type": "book-chapter",
+   "DOI": "10.1016/b978-0-7506-9749-1.50005-3"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "MISMATCH (record 1996)",
+   "volume": "not in record",
+   "pages": "MISMATCH (record 7-15)",
+   "number": "not in record"
+  },
+  "note": ""
+ },
+ "arrow1962learning": {
+  "bib": {
+   "author": "Arrow, Kenneth J.",
+   "title": "The Economic Implications of Learning by Doing",
+   "journal": "Review of Economic Studies",
+   "year": "1962",
+   "volume": "29",
+   "number": "3",
+   "pages": "155--173",
+   "doi": "10.2307/2295952",
+   "ID": "arrow1962learning",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.2307/2295952",
+  "record": {
+   "title": "The Economic Implications of Learning by Doing",
+   "authors": [
+    "Arrow"
+   ],
+   "editors": [],
+   "venue": "The Review of Economic Studies",
+   "publisher": "Oxford University Press (OUP)",
+   "year": "1962",
+   "volume": "29",
+   "issue": "3",
+   "pages": "155",
+   "type": "journal-article",
+   "DOI": "10.2307/2295952"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "MISMATCH (record 155)",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "becker1962investment": {
+  "bib": {
+   "author": "Becker, Gary S.",
+   "title": "Investment in Human Capital: A Theoretical Analysis",
+   "journal": "Journal of Political Economy",
+   "year": "1962",
+   "volume": "70",
+   "number": "5, Part 2",
+   "pages": "9--49",
+   "doi": "10.1086/258724",
+   "ID": "becker1962investment",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1086/258724",
+  "record": {
+   "title": "Investment in Human Capital: A Theoretical Analysis",
+   "authors": [
+    "Becker"
+   ],
+   "editors": [],
+   "venue": "Journal of Political Economy",
+   "publisher": "University of Chicago Press",
+   "year": "1962",
+   "volume": "70",
+   "issue": "5, Part 2",
+   "pages": "9-49",
+   "type": "journal-article",
+   "DOI": "10.1086/258724"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "acemoglu1998train": {
+  "bib": {
+   "author": "Acemoglu, Daron and Pischke, J{\\\"o}rn-Steffen",
+   "title": "Why Do Firms Train? {Theory} and Evidence",
+   "journal": "Quarterly Journal of Economics",
+   "year": "1998",
+   "volume": "113",
+   "number": "1",
+   "pages": "79--119",
+   "doi": "10.1162/003355398555531",
+   "ID": "acemoglu1998train",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1162/003355398555531",
+  "record": {
+   "title": "Why Do Firms Train? Theory and Evidence",
+   "authors": [
+    "Acemoglu",
+    "Pischke"
+   ],
+   "editors": [],
+   "venue": "The Quarterly Journal of Economics",
+   "publisher": "Oxford University Press (OUP)",
+   "year": "1998",
+   "volume": "113",
+   "issue": "1",
+   "pages": "79-119",
+   "type": "journal-article",
+   "DOI": "10.1162/003355398555531"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "acemoglu1999becker": {
+  "bib": {
+   "author": "Acemoglu, Daron and Pischke, J{\\\"o}rn-Steffen",
+   "title": "Beyond {Becker}: Training in Imperfect Labour Markets",
+   "journal": "Economic Journal",
+   "year": "1999",
+   "volume": "109",
+   "number": "453",
+   "pages": "F112--F142",
+   "doi": "10.1111/1468-0297.00405",
+   "ID": "acemoglu1999becker",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1111/1468-0297.00405",
+  "record": {
+   "title": "Beyond Becker: Training in Imperfect Labour Markets",
+   "authors": [
+    "Acemoglu",
+    "Pischke"
+   ],
+   "editors": [],
+   "venue": "The Economic Journal",
+   "publisher": "Oxford University Press (OUP)",
+   "year": "1999",
+   "volume": "109",
+   "issue": "453",
+   "pages": "112-142",
+   "type": "journal-article",
+   "DOI": "10.1111/1468-0297.00405"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "MISMATCH (record 112-142)",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "kremer1993oring": {
+  "bib": {
+   "author": "Kremer, Michael",
+   "title": "The {O}-Ring Theory of Economic Development",
+   "journal": "Quarterly Journal of Economics",
+   "year": "1993",
+   "volume": "108",
+   "number": "3",
+   "pages": "551--575",
+   "doi": "10.2307/2118400",
+   "ID": "kremer1993oring",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.2307/2118400",
+  "record": {
+   "title": "The O-Ring Theory of Economic Development",
+   "authors": [
+    "Kremer"
+   ],
+   "editors": [],
+   "venue": "The Quarterly Journal of Economics",
+   "publisher": "Oxford University Press (OUP)",
+   "year": "1993",
+   "volume": "108",
+   "issue": "3",
+   "pages": "551-575",
+   "type": "journal-article",
+   "DOI": "10.2307/2118400"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "garicano2000hierarchies": {
+  "bib": {
+   "author": "Garicano, Luis",
+   "title": "Hierarchies and the Organization of Knowledge in Production",
+   "journal": "Journal of Political Economy",
+   "year": "2000",
+   "volume": "108",
+   "number": "5",
+   "pages": "874--904",
+   "doi": "10.1086/317671",
+   "ID": "garicano2000hierarchies",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1086/317671",
+  "record": {
+   "title": "Hierarchies and the Organization of Knowledge in Production",
+   "authors": [
+    "Garicano"
+   ],
+   "editors": [],
+   "venue": "Journal of Political Economy",
+   "publisher": "University of Chicago Press",
+   "year": "2000",
+   "volume": "108",
+   "issue": "5",
+   "pages": "874-904",
+   "type": "journal-article",
+   "DOI": "10.1086/317671"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "ide2025knowledge": {
+  "bib": {
+   "author": "Ide, Enrique and Talam{\\`a}s, Eduard",
+   "title": "Artificial Intelligence in the Knowledge Economy",
+   "journal": "Journal of Political Economy",
+   "year": "2025",
+   "volume": "133",
+   "number": "12",
+   "pages": "3762--3800",
+   "doi": "10.1086/737233",
+   "ID": "ide2025knowledge",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1086/737233",
+  "record": {
+   "title": "Artificial Intelligence in the Knowledge Economy",
+   "authors": [
+    "Ide",
+    "Talamàs"
+   ],
+   "editors": [],
+   "venue": "Journal of Political Economy",
+   "publisher": "University of Chicago Press",
+   "year": "2025",
+   "volume": "133",
+   "issue": "12",
+   "pages": "3762-3800",
+   "type": "journal-article",
+   "DOI": "10.1086/737233"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "acemoglu2018race": {
+  "bib": {
+   "author": "Acemoglu, Daron and Restrepo, Pascual",
+   "title": "The Race between Man and Machine: Implications of Technology for Growth, Factor Shares, and Employment",
+   "journal": "American Economic Review",
+   "year": "2018",
+   "volume": "108",
+   "number": "6",
+   "pages": "1488--1542",
+   "doi": "10.1257/aer.20160696",
+   "ID": "acemoglu2018race",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1257/aer.20160696",
+  "record": {
+   "title": "The Race between Man and Machine: Implications of Technology for Growth, Factor Shares, and Employment",
+   "authors": [
+    "Acemoglu",
+    "Restrepo"
+   ],
+   "editors": [],
+   "venue": "American Economic Review",
+   "publisher": "American Economic Association",
+   "year": "2018",
+   "volume": "108",
+   "issue": "6",
+   "pages": "1488-1542",
+   "type": "journal-article",
+   "DOI": "10.1257/aer.20160696"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "acemoglu2019tasks": {
+  "bib": {
+   "author": "Acemoglu, Daron and Restrepo, Pascual",
+   "title": "Automation and New Tasks: How Technology Displaces and Reinstates Labor",
+   "journal": "Journal of Economic Perspectives",
+   "year": "2019",
+   "volume": "33",
+   "number": "2",
+   "pages": "3--30",
+   "doi": "10.1257/jep.33.2.3",
+   "ID": "acemoglu2019tasks",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1257/jep.33.2.3",
+  "record": {
+   "title": "Automation and New Tasks: How Technology Displaces and Reinstates Labor",
+   "authors": [
+    "Acemoglu",
+    "Restrepo"
+   ],
+   "editors": [],
+   "venue": "Journal of Economic Perspectives",
+   "publisher": "American Economic Association",
+   "year": "2019",
+   "volume": "33",
+   "issue": "2",
+   "pages": "3-30",
+   "type": "journal-article",
+   "DOI": "10.1257/jep.33.2.3"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "grossman1986costs": {
+  "bib": {
+   "author": "Grossman, Sanford J. and Hart, Oliver D.",
+   "title": "The Costs and Benefits of Ownership: A Theory of Vertical and Lateral Integration",
+   "journal": "Journal of Political Economy",
+   "year": "1986",
+   "volume": "94",
+   "number": "4",
+   "pages": "691--719",
+   "doi": "10.1086/261404",
+   "ID": "grossman1986costs",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1086/261404",
+  "record": {
+   "title": "The Costs and Benefits of Ownership: A Theory of Vertical and Lateral Integration",
+   "authors": [
+    "Grossman",
+    "Hart"
+   ],
+   "editors": [],
+   "venue": "Journal of Political Economy",
+   "publisher": "University of Chicago Press",
+   "year": "1986",
+   "volume": "94",
+   "issue": "4",
+   "pages": "691-719",
+   "type": "journal-article",
+   "DOI": "10.1086/261404"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "hart1990property": {
+  "bib": {
+   "author": "Hart, Oliver and Moore, John",
+   "title": "Property Rights and the Nature of the Firm",
+   "journal": "Journal of Political Economy",
+   "year": "1990",
+   "volume": "98",
+   "number": "6",
+   "pages": "1119--1158",
+   "doi": "10.1086/261729",
+   "ID": "hart1990property",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1086/261729",
+  "record": {
+   "title": "Property Rights and the Nature of the Firm",
+   "authors": [
+    "Hart",
+    "Moore"
+   ],
+   "editors": [],
+   "venue": "Journal of Political Economy",
+   "publisher": "University of Chicago Press",
+   "year": "1990",
+   "volume": "98",
+   "issue": "6",
+   "pages": "1119-1158",
+   "type": "journal-article",
+   "DOI": "10.1086/261729"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "weyl2013passthrough": {
+  "bib": {
+   "author": "Weyl, E. Glen and Fabinger, Michal",
+   "title": "Pass-Through as an Economic Tool: Principles of Incidence under Imperfect Competition",
+   "journal": "Journal of Political Economy",
+   "year": "2013",
+   "volume": "121",
+   "number": "3",
+   "pages": "528--583",
+   "doi": "10.1086/670401",
+   "ID": "weyl2013passthrough",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1086/670401",
+  "record": {
+   "title": "Pass-Through as an Economic Tool: Principles of Incidence under Imperfect Competition",
+   "authors": [
+    "Weyl",
+    "Fabinger"
+   ],
+   "editors": [],
+   "venue": "Journal of Political Economy",
+   "publisher": "University of Chicago Press",
+   "year": "2013",
+   "volume": "121",
+   "issue": "3",
+   "pages": "528-583",
+   "type": "journal-article",
+   "DOI": "10.1086/670401"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "pratt1964risk": {
+  "bib": {
+   "author": "Pratt, John W.",
+   "title": "Risk Aversion in the Small and in the Large",
+   "journal": "Econometrica",
+   "year": "1964",
+   "volume": "32",
+   "number": "1/2",
+   "pages": "122--136",
+   "doi": "10.2307/1913738",
+   "ID": "pratt1964risk",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.2307/1913738",
+  "record": {
+   "title": "Risk Aversion in the Small and in the Large",
+   "authors": [
+    "Pratt"
+   ],
+   "editors": [],
+   "venue": "Econometrica",
+   "publisher": "JSTOR",
+   "year": "1964",
+   "volume": "32",
+   "issue": "1/2",
+   "pages": "122",
+   "type": "journal-article",
+   "DOI": "10.2307/1913738"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "MISMATCH (record 122)",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "ahmadpoor2019decoding": {
+  "bib": {
+   "author": "Ahmadpoor, Mohammad and Jones, Benjamin F.",
+   "title": "Decoding Team and Individual Impact in Science and Invention",
+   "journal": "Proceedings of the National Academy of Sciences",
+   "year": "2019",
+   "volume": "116",
+   "number": "28",
+   "pages": "13885--13890",
+   "doi": "10.1073/pnas.1812341116",
+   "ID": "ahmadpoor2019decoding",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1073/pnas.1812341116",
+  "record": {
+   "title": "Decoding team and individual impact in science and invention",
+   "authors": [
+    "Ahmadpoor",
+    "Jones"
+   ],
+   "editors": [],
+   "venue": "Proceedings of the National Academy of Sciences",
+   "publisher": "National Academy of Sciences",
+   "year": "2019",
+   "volume": "116",
+   "issue": "28",
+   "pages": "13885-13890",
+   "type": "journal-article",
+   "DOI": "10.1073/pnas.1812341116"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "moore2008overconfidence": {
+  "bib": {
+   "author": "Moore, Don A. and Healy, Paul J.",
+   "title": "The Trouble with Overconfidence",
+   "journal": "Psychological Review",
+   "year": "2008",
+   "volume": "115",
+   "number": "2",
+   "pages": "502--517",
+   "doi": "10.1037/0033-295X.115.2.502",
+   "ID": "moore2008overconfidence",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1037/0033-295X.115.2.502",
+  "record": {
+   "title": "The trouble with overconfidence.",
+   "authors": [
+    "Moore",
+    "Healy"
+   ],
+   "editors": [],
+   "venue": "Psychological Review",
+   "publisher": "American Psychological Association (APA)",
+   "year": "2008",
+   "volume": "115",
+   "issue": "2",
+   "pages": "502-517",
+   "type": "journal-article",
+   "DOI": "10.1037/0033-295x.115.2.502"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match",
+   "number": "match"
+  },
+  "note": ""
+ },
+ "akin2026apprenticeship": {
+  "bib": {
+   "author": "Akin, Mustafa Seref",
+   "title": "The Apprenticeship Externality: Generative {AI}, Entry-Level Work, and the Future Supply of Expertise",
+   "year": "2026",
+   "howpublished": "SSRN Working Paper 6809082",
+   "doi": "10.2139/ssrn.6809082",
+   "note": "Full text not obtained",
+   "ID": "akin2026apprenticeship",
+   "type": "misc"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.2139/ssrn.6809082",
+  "record": {
+   "title": "The Apprenticeship Externality: Generative AI, Entry-Level Work, and the Future Supply of Expertise",
+   "authors": [
+    "Akin"
+   ],
+   "editors": [],
+   "venue": "Elsevier BV",
+   "publisher": "Elsevier BV",
+   "year": "2026",
+   "volume": "",
+   "issue": "",
+   "pages": "",
+   "type": "posted-content",
+   "DOI": "10.2139/ssrn.6809082"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match"
+  },
+  "note": ""
+ },
+ "singh2026apprenticeship": {
+  "bib": {
+   "author": "Singh, Preet Deep",
+   "title": "Generative {AI} and the Collapse of Apprenticeship Labor Markets",
+   "year": "2026",
+   "howpublished": "SSRN Working Paper 6779239",
+   "doi": "10.2139/ssrn.6779239",
+   "note": "Full text not obtained",
+   "ID": "singh2026apprenticeship",
+   "type": "misc"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.2139/ssrn.6779239",
+  "record": {
+   "title": "Generative AI and the Collapse of Apprenticeship Labor Markets",
+   "authors": [
+    "Singh"
+   ],
+   "editors": [],
+   "venue": "Elsevier BV",
+   "publisher": "Elsevier BV",
+   "year": "2026",
+   "volume": "",
+   "issue": "",
+   "pages": "",
+   "type": "posted-content",
+   "DOI": "10.2139/ssrn.6779239"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match"
+  },
+  "note": ""
+ },
+ "eu2024pld": {
+  "bib": {
+   "author": "{European Parliament and Council of the European Union}",
+   "title": "Directive ({EU}) 2024/2853 of the {European} {Parliament} and of the {Council} of 23 {October} 2024 on Liability for Defective Products and Repealing {Council} {Directive} 85/374/{EEC}",
+   "year": "2024",
+   "howpublished": "Official Journal of the European Union, CELEX 32024L2853",
+   "ID": "eu2024pld",
+   "type": "misc"
+  },
+  "source": "Publications Office (CELEX)",
+  "link": "http://publications.europa.eu/resource/celex/32024L2853",
+  "record": {
+   "web": {
+    "http": 200,
+    "found": {
+     "2024/2853": false,
+     "23 October 2024": false,
+     "liability for defective products": false,
+     "85/374/EEC": false
+    }
+   }
+  },
+  "compare": {
+   "web": {
+    "http": 200,
+    "found": {
+     "2024/2853": false,
+     "23 October 2024": false,
+     "liability for defective products": false,
+     "85/374/EEC": false
+    }
+   }
+  },
+  "note": ""
+ },
+ "sweden1996patient": {
+  "bib": {
+   "author": "{Sveriges riksdag}",
+   "title": "Patientskadelag (1996:799) [{Patient} Injury Act]",
+   "year": "1996",
+   "howpublished": "Svensk f{\\\"o}rfattningssamling SFS 1996:799",
+   "url": "https://www.riksdagen.se/sv/dokument-och-lagar/dokument/svensk-forfattningssamling/patientskadelag-1996799_sfs-1996-799/",
+   "ID": "sweden1996patient",
+   "type": "misc"
+  },
+  "source": "riksdagen.se",
+  "link": "https://www.riksdagen.se/sv/dokument-och-lagar/dokument/svensk-forfattningssamling/patientskadelag-1996799_sfs-1996-799/",
+  "record": {
+   "web": {
+    "http": 200,
+    "found": {
+     "Patientskadelag": true,
+     "1996:799": true
+    }
+   }
+  },
+  "compare": {
+   "web": {
+    "http": 200,
+    "found": {
+     "Patientskadelag": true,
+     "1996:799": true
+    }
+   }
+  },
+  "note": ""
+ },
+ "cms2023pfs": {
+  "bib": {
+   "author": "{Centers for Medicare \\& Medicaid Services}",
+   "title": "Medicare and {Medicaid} Programs; {CY} 2024 Payment Policies under the Physician Fee Schedule and Other Changes to {Part B} Payment and Coverage Policies; Medicare Shared Savings Program Requirements; Medicare Advantage; Medicare and Medicaid Provider and Supplier Enrollment Policies; and Basic Health Program",
+   "year": "2023",
+   "howpublished": "Federal Register 88 (16 November 2023): 78818--80047, Document 2023-24184",
+   "ID": "cms2023pfs",
+   "type": "misc"
+  },
+  "source": "Federal Register API",
+  "link": "https://www.federalregister.gov/documents/2023/11/16/2023-24184/medicare-and-medicaid-programs-cy-2024-payment-policies-under-the-physician-fee-schedule-and-other",
+  "record": {
+   "title": "Medicare and Medicaid Programs; CY 2024 Payment Policies Under the Physician Fee Schedule and Other Changes to Part B Payment and Coverage Policies; Medicare Shared Savings Program Requirements; Medicare Advantage; Medicare and Medicaid Provider and Supplier Enrollment Policies; and Basic Health Program",
+   "year": "2023",
+   "pages": "78818-80047",
+   "volume": "88",
+   "publication_date": "2023-11-16",
+   "document_number": "2023-24184"
+  },
+  "compare": {
+   "authors": "n/a in record",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match"
+  },
+  "note": ""
+ },
+ "utah2020so15": {
+  "bib": {
+   "author": "{Utah Supreme Court}",
+   "title": "Utah Supreme Court Standing Order No. 15 (Pilot Legal Regulatory Sandbox and Office of Legal Services Innovation)",
+   "year": "2020",
+   "howpublished": "Effective 14 August 2020. Text read in Utah Supreme Court Ad Hoc Committee on Regulatory Reform, meeting materials, 23 May 2025, utcourts.gov",
+   "ID": "utah2020so15",
+   "type": "misc"
+  },
+  "source": "utcourts.gov",
+  "link": "https://www.utcourts.gov/content/dam/committees/regulatory_reform/agendas/May%2023,%202025%20Regulatory%20Reform%20Committee%20Meeting%20Materials.pdf",
+  "record": {
+   "web": {
+    "http": 200,
+    "found": {
+     "Standing Order No. 15": true,
+     "Office of Legal Services Innovation": true,
+     "August 14, 2020": true
+    }
+   }
+  },
+  "compare": {
+   "web": {
+    "http": 200,
+    "found": {
+     "Standing Order No. 15": true,
+     "Office of Legal Services Innovation": true,
+     "August 14, 2020": true
+    }
+   }
+  },
+  "note": ""
+ },
+ "agarwal2024longtail": {
+  "bib": {
+   "author": "Agarwal, Nikhil and Huang, Ray and Moehring, Alex and Rajpurkar, Pranav and Salz, Tobias and Yu, Feiyang",
+   "title": "Comparative Advantage of Humans versus {AI} in the Long Tail",
+   "journal": "AEA Papers and Proceedings",
+   "year": "2024",
+   "volume": "114",
+   "pages": "618--622",
+   "doi": "10.1257/pandp.20241071",
+   "ID": "agarwal2024longtail",
+   "type": "article"
+  },
+  "source": "Crossref works/{doi}",
+  "link": "https://doi.org/10.1257/pandp.20241071",
+  "record": {
+   "title": "Comparative Advantage of Humans versus AI in the Long Tail",
+   "authors": [
+    "Agarwal",
+    "Huang",
+    "Moehring",
+    "Rajpurkar",
+    "Salz",
+    "Yu"
+   ],
+   "editors": [],
+   "venue": "AEA Papers and Proceedings",
+   "publisher": "American Economic Association",
+   "year": "2024",
+   "volume": "114",
+   "issue": "",
+   "pages": "618-622",
+   "type": "journal-article",
+   "DOI": "10.1257/pandp.20241071"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "match",
+   "volume": "match",
+   "pages": "match"
+  },
+  "note": ""
+ },
+ "kandpal2023longtail": {
+  "bib": {
+   "author": "Kandpal, Nikhil and Deng, Haikang and Roberts, Adam and Wallace, Eric and Raffel, Colin",
+   "title": "Large Language Models Struggle to Learn Long-Tail Knowledge",
+   "booktitle": "Proceedings of the 40th International Conference on Machine Learning",
+   "series": "Proceedings of Machine Learning Research",
+   "volume": "202",
+   "pages": "15696--15707",
+   "year": "2023",
+   "ID": "kandpal2023longtail",
+   "type": "inproceedings"
+  },
+  "source": "arXiv API (title search)",
+  "link": "https://arxiv.org/abs/2211.08411v2",
+  "record": {
+   "title": "Large Language Models Struggle to Learn Long-Tail Knowledge",
+   "authors": [
+    "Kandpal",
+    "Deng",
+    "Roberts",
+    "Wallace",
+    "Raffel"
+   ],
+   "year": "2022",
+   "venue": "arXiv (PMLR version not in Crossref)"
+  },
+  "compare": {
+   "authors": "match",
+   "title_sim": 1.0,
+   "title": "match",
+   "year": "MISMATCH (record 2022)",
+   "volume": "not in record",
+   "pages": "not in record"
+  },
+  "note": "no Crossref record with similar title"
+ }
+}

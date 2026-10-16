@@ -1,0 +1,12 @@
+BASELINE: conditions {'maint': True, 'C1': True, 'C2': True, 'C3': True, 'C4': True, 'C5': True}; G/y non-increasing pointwise = True; T0 = 0.800, T1 = 0.800
+SUFFICIENCY: 127 of 400 random draws satisfy C1-C5; conclusion holds in 127
+TIME SHARE: phi=0.25: conditions hold=True, conclusion holds=True; phi=0.5: conditions hold=True, conclusion holds=True; phi=0.75: conditions hold=True, conclusion holds=True
+C1 fails: tau(y) proportional to y^2: others hold=True, target fails=True, monotone=False (share increasing 0.007), T1=0.800 -> OK
+C2 fails: no intermediated verification offered: others hold=True, target fails=True, monotone=False (share increasing 0.637), T1=0.800 -> OK
+C3 fails (autonomy): AI becomes autonomous; only z_A changes: others hold=True, target fails=True, monotone=False (share increasing 0.129), T1=0.960 -> OK
+C3 fails (C(D) >= s_min): low-z holders unemployed before; only D changes: others hold=True, target fails=True, monotone=False (share increasing 0.059), T1=0.960 -> OK
+C3 fails (z(y) decreasing): only z_A changes: others hold=True, target fails=True, monotone=False (share increasing 0.763), T1=0.960 -> OK
+C4 fails: access fee A=30 pushes n below n*(A): others hold=True, target fails=True, monotone=False (share increasing 0.054), T1=0.800 -> OK
+C5 fails: no apprenticeship subsidy: others hold=True, target fails=True, monotone=True (share increasing 0.000), T1=0.672 -> OK
+C5 fails: mentor capacity m=0.9 < 1: others hold=True, target fails=True, monotone=True (share increasing 0.000), T1=0.720 -> OK
+NECESSITY CHECKS PASS

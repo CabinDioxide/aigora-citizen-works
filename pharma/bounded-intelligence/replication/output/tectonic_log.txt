@@ -1,0 +1,244 @@
+note: "version 2" Tectonic command-line interface activated
+note: Running TeX ...
+note: Running BibTeX on main.aux ...
+note: Rerunning TeX because bibtex was run ...
+note: Rerunning TeX because "main.aux" changed ...
+note: Rerunning TeX because "main.aux" changed ...
+note: Running xdvipdfmx ...
+note: Writing `main.pdf` (397.458984375 KiB)
+note: Skipped writing 3 intermediate files (use --keep-intermediates to keep them)
+warning: main.tex:57: Overfull \hbox (6.69301pt too wide) in paragraph at lines 56--57
+warning: main.tex:199: Overfull \hbox (134.50099pt too wide) detected at line 199
+warning: main.tex:219: Overfull \hbox (2.7382pt too wide) in paragraph at lines 218--219
+warning: main.tex:297: Underfull \hbox (badness 10000) in paragraph at lines 296--297
+warning: main.tex:299: Underfull \hbox (badness 10000) in paragraph at lines 298--299
+warning: main.tex:299: Underfull \hbox (badness 7522) in paragraph at lines 298--299
+warning: main.tex:299: Underfull \hbox (badness 10000) in paragraph at lines 298--299
+warning: main.tex:300: Underfull \hbox (badness 10000) in paragraph at lines 300--300
+warning: main.tex:300: Underfull \hbox (badness 1394) in paragraph at lines 300--300
+warning: main.tex:301: Underfull \hbox (badness 10000) in paragraph at lines 300--301
+warning: main.tex:301: Underfull \hbox (badness 10000) in paragraph at lines 300--301
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 301--302
+warning: main.tex:302: Underfull \hbox (badness 5817) in paragraph at lines 301--302
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 301--302
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 302--302
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 302--302
+warning: main.tex:302: Underfull \hbox (badness 1112) in paragraph at lines 302--302
+warning: main.tex:302: Underfull \hbox (badness 2277) in paragraph at lines 302--302
+warning: main.tex:303: Underfull \hbox (badness 10000) in paragraph at lines 302--303
+warning: main.tex:303: Underfull \hbox (badness 10000) in paragraph at lines 302--303
+warning: main.tex:303: Underfull \hbox (badness 10000) in paragraph at lines 302--303
+warning: main.tex:304: Underfull \hbox (badness 10000) in paragraph at lines 303--304
+warning: main.tex:304: Underfull \hbox (badness 10000) in paragraph at lines 303--304
+warning: main.tex:304: Underfull \hbox (badness 10000) in paragraph at lines 303--304
+warning: main.tex:311: Overfull \hbox (37.22902pt too wide) in paragraph at lines 310--311
+warning: necessity_table.tex:18: Overfull \hbox (62.86888pt too wide) in paragraph at lines 3--18
+warning: main.tex:452: Underfull \hbox (badness 4479) in paragraph at lines 451--452
+warning: main.tex:467: Underfull \hbox (badness 7451) in paragraph at lines 467--467
+warning: params_table.tex:3: Overfull \hbox (1.02878pt too wide) in alignment at lines 1--3
+warning: params_table.tex:3: Overfull \hbox (1.02878pt too wide) in alignment at lines 3--3
+warning: params_table.tex:6: Overfull \hbox (42.00446pt too wide) in paragraph at lines 6--6
+warning: params_table.tex:11: Underfull \hbox (badness 1127) in paragraph at lines 10--11
+warning: params_table.tex:15: Underfull \hbox (badness 1009) in paragraph at lines 14--15
+warning: params_table.tex:16: Underfull \hbox (badness 1194) in paragraph at lines 15--16
+warning: params_table.tex:16: Underfull \hbox (badness 10000) in paragraph at lines 16--16
+warning: params_table.tex:18: Underfull \hbox (badness 10000) in paragraph at lines 17--18
+warning: params_table.tex:21: Underfull \hbox (badness 3088) in paragraph at lines 20--21
+warning: params_table.tex:30: Overfull \hbox (17.00562pt too wide) in paragraph at lines 30--30
+warning: params_table.tex:30: Underfull \hbox (badness 4467) in paragraph at lines 30--30
+warning: params_table.tex:31: Overfull \hbox (17.61882pt too wide) in paragraph at lines 31--31
+warning: params_table.tex:34: Overfull \hbox (1.02878pt too wide) in alignment at lines 3--34
+warning: search_table.tex:3: Overfull \hbox (4.45578pt too wide) in paragraph at lines 3--3
+warning: search_table.tex:3: Overfull \hbox (4.45578pt too wide) in paragraph at lines 3--3
+warning: search_table.tex:4: Underfull \hbox (badness 10000) in paragraph at lines 4--4
+warning: search_table.tex:5: Underfull \hbox (badness 10000) in paragraph at lines 5--5
+warning: search_table.tex:6: Underfull \hbox (badness 10000) in paragraph at lines 6--6
+warning: search_table.tex:7: Overfull \hbox (1.22554pt too wide) in paragraph at lines 7--7
+warning: search_table.tex:7: Underfull \hbox (badness 10000) in paragraph at lines 7--7
+warning: search_table.tex:8: Overfull \hbox (1.22554pt too wide) in paragraph at lines 8--8
+warning: search_table.tex:8: Underfull \hbox (badness 10000) in paragraph at lines 8--8
+warning: search_table.tex:9: Overfull \hbox (1.22554pt too wide) in paragraph at lines 9--9
+warning: search_table.tex:9: Underfull \hbox (badness 10000) in paragraph at lines 9--9
+warning: search_table.tex:10: Overfull \hbox (1.22554pt too wide) in paragraph at lines 10--10
+warning: search_table.tex:10: Underfull \hbox (badness 10000) in paragraph at lines 10--10
+warning: search_table.tex:11: Overfull \hbox (1.22554pt too wide) in paragraph at lines 11--11
+warning: search_table.tex:11: Underfull \hbox (badness 10000) in paragraph at lines 11--11
+warning: main.tex:548: Underfull \hbox (badness 2285) in paragraph at lines 547--548
+warning: main.tex:552: Underfull \hbox (badness 5878) in paragraph at lines 551--552
+warning: main.tex:552: Underfull \hbox (badness 6741) in paragraph at lines 551--552
+warning: main.tex:199: Overfull \hbox (134.50099pt too wide) detected at line 199
+warning: main.tex:219: Overfull \hbox (2.7382pt too wide) in paragraph at lines 218--219
+warning: main.tex:299: Underfull \hbox (badness 10000) in paragraph at lines 298--299
+warning: main.tex:299: Underfull \hbox (badness 7522) in paragraph at lines 298--299
+warning: main.tex:299: Underfull \hbox (badness 10000) in paragraph at lines 298--299
+warning: main.tex:300: Underfull \hbox (badness 10000) in paragraph at lines 300--300
+warning: main.tex:300: Underfull \hbox (badness 1394) in paragraph at lines 300--300
+warning: main.tex:301: Underfull \hbox (badness 10000) in paragraph at lines 300--301
+warning: main.tex:301: Underfull \hbox (badness 10000) in paragraph at lines 300--301
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 301--302
+warning: main.tex:302: Underfull \hbox (badness 5817) in paragraph at lines 301--302
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 301--302
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 302--302
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 302--302
+warning: main.tex:302: Underfull \hbox (badness 1112) in paragraph at lines 302--302
+warning: main.tex:302: Underfull \hbox (badness 2277) in paragraph at lines 302--302
+warning: main.tex:303: Underfull \hbox (badness 10000) in paragraph at lines 302--303
+warning: main.tex:303: Underfull \hbox (badness 10000) in paragraph at lines 302--303
+warning: main.tex:303: Underfull \hbox (badness 10000) in paragraph at lines 302--303
+warning: main.tex:304: Underfull \hbox (badness 10000) in paragraph at lines 303--304
+warning: main.tex:304: Underfull \hbox (badness 10000) in paragraph at lines 303--304
+warning: main.tex:304: Underfull \hbox (badness 10000) in paragraph at lines 303--304
+warning: main.tex:311: Overfull \hbox (5.67567pt too wide) in paragraph at lines 310--311
+warning: necessity_table.tex:18: Overfull \hbox (62.86888pt too wide) in paragraph at lines 3--18
+warning: main.tex:452: Underfull \hbox (badness 4479) in paragraph at lines 451--452
+warning: main.tex:467: Underfull \hbox (badness 7451) in paragraph at lines 467--467
+warning: params_table.tex:3: Overfull \hbox (1.02878pt too wide) in alignment at lines 1--3
+warning: params_table.tex:3: Overfull \hbox (1.02878pt too wide) in alignment at lines 3--3
+warning: params_table.tex:6: Overfull \hbox (42.00446pt too wide) in paragraph at lines 6--6
+warning: params_table.tex:11: Underfull \hbox (badness 1127) in paragraph at lines 10--11
+warning: params_table.tex:15: Underfull \hbox (badness 1009) in paragraph at lines 14--15
+warning: params_table.tex:16: Underfull \hbox (badness 1194) in paragraph at lines 15--16
+warning: params_table.tex:16: Underfull \hbox (badness 10000) in paragraph at lines 16--16
+warning: params_table.tex:18: Underfull \hbox (badness 10000) in paragraph at lines 17--18
+warning: params_table.tex:21: Underfull \hbox (badness 3088) in paragraph at lines 20--21
+warning: params_table.tex:30: Overfull \hbox (17.00562pt too wide) in paragraph at lines 30--30
+warning: params_table.tex:30: Underfull \hbox (badness 4467) in paragraph at lines 30--30
+warning: params_table.tex:31: Overfull \hbox (17.61882pt too wide) in paragraph at lines 31--31
+warning: params_table.tex:34: Overfull \hbox (1.02878pt too wide) in alignment at lines 3--34
+warning: search_table.tex:3: Overfull \hbox (4.45578pt too wide) in paragraph at lines 3--3
+warning: search_table.tex:3: Overfull \hbox (4.45578pt too wide) in paragraph at lines 3--3
+warning: search_table.tex:4: Underfull \hbox (badness 10000) in paragraph at lines 4--4
+warning: search_table.tex:5: Underfull \hbox (badness 10000) in paragraph at lines 5--5
+warning: search_table.tex:6: Underfull \hbox (badness 10000) in paragraph at lines 6--6
+warning: search_table.tex:7: Overfull \hbox (1.22554pt too wide) in paragraph at lines 7--7
+warning: search_table.tex:7: Underfull \hbox (badness 10000) in paragraph at lines 7--7
+warning: search_table.tex:8: Overfull \hbox (1.22554pt too wide) in paragraph at lines 8--8
+warning: search_table.tex:8: Underfull \hbox (badness 10000) in paragraph at lines 8--8
+warning: search_table.tex:9: Overfull \hbox (1.22554pt too wide) in paragraph at lines 9--9
+warning: search_table.tex:9: Underfull \hbox (badness 10000) in paragraph at lines 9--9
+warning: search_table.tex:10: Overfull \hbox (1.22554pt too wide) in paragraph at lines 10--10
+warning: search_table.tex:10: Underfull \hbox (badness 10000) in paragraph at lines 10--10
+warning: search_table.tex:11: Overfull \hbox (1.22554pt too wide) in paragraph at lines 11--11
+warning: search_table.tex:11: Underfull \hbox (badness 10000) in paragraph at lines 11--11
+warning: main.tex:548: Underfull \hbox (badness 2285) in paragraph at lines 547--548
+warning: main.tex:552: Underfull \hbox (badness 5878) in paragraph at lines 551--552
+warning: main.tex:552: Underfull \hbox (badness 6741) in paragraph at lines 551--552
+warning: main.tex:199: Overfull \hbox (134.50099pt too wide) detected at line 199
+warning: main.tex:219: Overfull \hbox (2.7382pt too wide) in paragraph at lines 218--219
+warning: main.tex:299: Underfull \hbox (badness 10000) in paragraph at lines 298--299
+warning: main.tex:299: Underfull \hbox (badness 7522) in paragraph at lines 298--299
+warning: main.tex:299: Underfull \hbox (badness 10000) in paragraph at lines 298--299
+warning: main.tex:300: Underfull \hbox (badness 10000) in paragraph at lines 300--300
+warning: main.tex:300: Underfull \hbox (badness 1394) in paragraph at lines 300--300
+warning: main.tex:301: Underfull \hbox (badness 10000) in paragraph at lines 300--301
+warning: main.tex:301: Underfull \hbox (badness 10000) in paragraph at lines 300--301
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 301--302
+warning: main.tex:302: Underfull \hbox (badness 5817) in paragraph at lines 301--302
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 301--302
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 302--302
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 302--302
+warning: main.tex:302: Underfull \hbox (badness 1112) in paragraph at lines 302--302
+warning: main.tex:302: Underfull \hbox (badness 2277) in paragraph at lines 302--302
+warning: main.tex:303: Underfull \hbox (badness 10000) in paragraph at lines 302--303
+warning: main.tex:303: Underfull \hbox (badness 10000) in paragraph at lines 302--303
+warning: main.tex:303: Underfull \hbox (badness 10000) in paragraph at lines 302--303
+warning: main.tex:304: Underfull \hbox (badness 10000) in paragraph at lines 303--304
+warning: main.tex:304: Underfull \hbox (badness 10000) in paragraph at lines 303--304
+warning: main.tex:304: Underfull \hbox (badness 10000) in paragraph at lines 303--304
+warning: main.tex:311: Overfull \hbox (5.67567pt too wide) in paragraph at lines 310--311
+warning: necessity_table.tex:18: Overfull \hbox (62.86888pt too wide) in paragraph at lines 3--18
+warning: main.tex:452: Underfull \hbox (badness 4479) in paragraph at lines 451--452
+warning: main.tex:467: Underfull \hbox (badness 7451) in paragraph at lines 467--467
+warning: params_table.tex:3: Overfull \hbox (1.02878pt too wide) in alignment at lines 1--3
+warning: params_table.tex:3: Overfull \hbox (1.02878pt too wide) in alignment at lines 3--3
+warning: params_table.tex:6: Overfull \hbox (42.00446pt too wide) in paragraph at lines 6--6
+warning: params_table.tex:11: Underfull \hbox (badness 1127) in paragraph at lines 10--11
+warning: params_table.tex:15: Underfull \hbox (badness 1009) in paragraph at lines 14--15
+warning: params_table.tex:16: Underfull \hbox (badness 1194) in paragraph at lines 15--16
+warning: params_table.tex:16: Underfull \hbox (badness 10000) in paragraph at lines 16--16
+warning: params_table.tex:18: Underfull \hbox (badness 10000) in paragraph at lines 17--18
+warning: params_table.tex:21: Underfull \hbox (badness 3088) in paragraph at lines 20--21
+warning: params_table.tex:30: Overfull \hbox (17.00562pt too wide) in paragraph at lines 30--30
+warning: params_table.tex:30: Underfull \hbox (badness 4467) in paragraph at lines 30--30
+warning: params_table.tex:31: Overfull \hbox (17.61882pt too wide) in paragraph at lines 31--31
+warning: params_table.tex:34: Overfull \hbox (1.02878pt too wide) in alignment at lines 3--34
+warning: search_table.tex:3: Overfull \hbox (4.45578pt too wide) in paragraph at lines 3--3
+warning: search_table.tex:3: Overfull \hbox (4.45578pt too wide) in paragraph at lines 3--3
+warning: search_table.tex:4: Underfull \hbox (badness 10000) in paragraph at lines 4--4
+warning: search_table.tex:5: Underfull \hbox (badness 10000) in paragraph at lines 5--5
+warning: search_table.tex:6: Underfull \hbox (badness 10000) in paragraph at lines 6--6
+warning: search_table.tex:7: Overfull \hbox (1.22554pt too wide) in paragraph at lines 7--7
+warning: search_table.tex:7: Underfull \hbox (badness 10000) in paragraph at lines 7--7
+warning: search_table.tex:8: Overfull \hbox (1.22554pt too wide) in paragraph at lines 8--8
+warning: search_table.tex:8: Underfull \hbox (badness 10000) in paragraph at lines 8--8
+warning: search_table.tex:9: Overfull \hbox (1.22554pt too wide) in paragraph at lines 9--9
+warning: search_table.tex:9: Underfull \hbox (badness 10000) in paragraph at lines 9--9
+warning: search_table.tex:10: Overfull \hbox (1.22554pt too wide) in paragraph at lines 10--10
+warning: search_table.tex:10: Underfull \hbox (badness 10000) in paragraph at lines 10--10
+warning: search_table.tex:11: Overfull \hbox (1.22554pt too wide) in paragraph at lines 11--11
+warning: search_table.tex:11: Underfull \hbox (badness 10000) in paragraph at lines 11--11
+warning: main.tex:548: Underfull \hbox (badness 2285) in paragraph at lines 547--548
+warning: main.tex:552: Underfull \hbox (badness 5878) in paragraph at lines 551--552
+warning: main.tex:552: Underfull \hbox (badness 6741) in paragraph at lines 551--552
+warning: main.tex:199: Overfull \hbox (134.50099pt too wide) detected at line 199
+warning: main.tex:219: Overfull \hbox (2.7382pt too wide) in paragraph at lines 218--219
+warning: main.tex:299: Underfull \hbox (badness 10000) in paragraph at lines 298--299
+warning: main.tex:299: Underfull \hbox (badness 7522) in paragraph at lines 298--299
+warning: main.tex:299: Underfull \hbox (badness 10000) in paragraph at lines 298--299
+warning: main.tex:300: Underfull \hbox (badness 10000) in paragraph at lines 300--300
+warning: main.tex:300: Underfull \hbox (badness 1394) in paragraph at lines 300--300
+warning: main.tex:301: Underfull \hbox (badness 10000) in paragraph at lines 300--301
+warning: main.tex:301: Underfull \hbox (badness 10000) in paragraph at lines 300--301
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 301--302
+warning: main.tex:302: Underfull \hbox (badness 5817) in paragraph at lines 301--302
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 301--302
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 302--302
+warning: main.tex:302: Underfull \hbox (badness 10000) in paragraph at lines 302--302
+warning: main.tex:302: Underfull \hbox (badness 1112) in paragraph at lines 302--302
+warning: main.tex:302: Underfull \hbox (badness 2277) in paragraph at lines 302--302
+warning: main.tex:303: Underfull \hbox (badness 10000) in paragraph at lines 302--303
+warning: main.tex:303: Underfull \hbox (badness 10000) in paragraph at lines 302--303
+warning: main.tex:303: Underfull \hbox (badness 10000) in paragraph at lines 302--303
+warning: main.tex:304: Underfull \hbox (badness 10000) in paragraph at lines 303--304
+warning: main.tex:304: Underfull \hbox (badness 10000) in paragraph at lines 303--304
+warning: main.tex:304: Underfull \hbox (badness 10000) in paragraph at lines 303--304
+warning: main.tex:311: Overfull \hbox (5.67567pt too wide) in paragraph at lines 310--311
+warning: necessity_table.tex:18: Overfull \hbox (62.86888pt too wide) in paragraph at lines 3--18
+warning: main.tex:452: Underfull \hbox (badness 4479) in paragraph at lines 451--452
+warning: main.tex:467: Underfull \hbox (badness 7451) in paragraph at lines 467--467
+warning: params_table.tex:3: Overfull \hbox (1.02878pt too wide) in alignment at lines 1--3
+warning: params_table.tex:3: Overfull \hbox (1.02878pt too wide) in alignment at lines 3--3
+warning: params_table.tex:6: Overfull \hbox (42.00446pt too wide) in paragraph at lines 6--6
+warning: params_table.tex:11: Underfull \hbox (badness 1127) in paragraph at lines 10--11
+warning: params_table.tex:15: Underfull \hbox (badness 1009) in paragraph at lines 14--15
+warning: params_table.tex:16: Underfull \hbox (badness 1194) in paragraph at lines 15--16
+warning: params_table.tex:16: Underfull \hbox (badness 10000) in paragraph at lines 16--16
+warning: params_table.tex:18: Underfull \hbox (badness 10000) in paragraph at lines 17--18
+warning: params_table.tex:21: Underfull \hbox (badness 3088) in paragraph at lines 20--21
+warning: params_table.tex:30: Overfull \hbox (17.00562pt too wide) in paragraph at lines 30--30
+warning: params_table.tex:30: Underfull \hbox (badness 4467) in paragraph at lines 30--30
+warning: params_table.tex:31: Overfull \hbox (17.61882pt too wide) in paragraph at lines 31--31
+warning: params_table.tex:34: Overfull \hbox (1.02878pt too wide) in alignment at lines 3--34
+warning: search_table.tex:3: Overfull \hbox (4.45578pt too wide) in paragraph at lines 3--3
+warning: search_table.tex:3: Overfull \hbox (4.45578pt too wide) in paragraph at lines 3--3
+warning: search_table.tex:4: Underfull \hbox (badness 10000) in paragraph at lines 4--4
+warning: search_table.tex:5: Underfull \hbox (badness 10000) in paragraph at lines 5--5
+warning: search_table.tex:6: Underfull \hbox (badness 10000) in paragraph at lines 6--6
+warning: search_table.tex:7: Overfull \hbox (1.22554pt too wide) in paragraph at lines 7--7
+warning: search_table.tex:7: Underfull \hbox (badness 10000) in paragraph at lines 7--7
+warning: search_table.tex:8: Overfull \hbox (1.22554pt too wide) in paragraph at lines 8--8
+warning: search_table.tex:8: Underfull \hbox (badness 10000) in paragraph at lines 8--8
+warning: search_table.tex:9: Overfull \hbox (1.22554pt too wide) in paragraph at lines 9--9
+warning: search_table.tex:9: Underfull \hbox (badness 10000) in paragraph at lines 9--9
+warning: search_table.tex:10: Overfull \hbox (1.22554pt too wide) in paragraph at lines 10--10
+warning: search_table.tex:10: Underfull \hbox (badness 10000) in paragraph at lines 10--10
+warning: search_table.tex:11: Overfull \hbox (1.22554pt too wide) in paragraph at lines 11--11
+warning: search_table.tex:11: Underfull \hbox (badness 10000) in paragraph at lines 11--11
+warning: main.tex:548: Underfull \hbox (badness 2285) in paragraph at lines 547--548
+warning: main.tex:552: Underfull \hbox (badness 5878) in paragraph at lines 551--552
+warning: main.tex:552: Underfull \hbox (badness 6741) in paragraph at lines 551--552
+warning: warnings were issued by the TeX engine; use --print and/or --keep-logs for details.
+warning: Failed to load AGL file "pdfglyphlist.txt"...
+warning: Failed to load AGL file "glyphlist.txt"...
+warning: Object @page.1 already defined.
+warning: Object @page.2 already defined.

@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="aigora-lang" content="self">  <!-- 中英为两个独立文件，站内通用切换脚本不要注入 -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bounded Intelligence and Inclusive Growth（有限智能与普惠增长）</title>
+<style>
+:root{
+  --surface-1:#fcfcfb; --surface-2:#f4f4f1;
+  --text-primary:#0b0b0b; --text-secondary:#52514e; --text-muted:#8a887f;
+  --border:#e3e2dc;
+  --series-1:#2a78d6; --seq-300:#6da7ec; --seq-550:#1c5cab;
+  --neg:#e34948;
+  --accent-bg:#eef4fc;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --surface-1:#1a1a19; --surface-2:#232322;
+    --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#8a887f;
+    --border:#3a3936;
+    --series-1:#3987e5; --seq-300:#5598e7; --seq-550:#86b6ef;
+    --neg:#e66767;
+    --accent-bg:#20304a;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-1);color:var(--text-primary);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  line-height:1.85;font-size:17px}
+.wrap{max-width:760px;margin:0 auto;padding:48px 20px 80px}
+header h1{font-size:1.65em;line-height:1.4;margin:0 0 8px}
+header .sub{color:var(--text-secondary);font-size:.95em;margin:0 0 4px}
+header .byline{color:var(--text-muted);font-size:.85em}
+h2{font-size:1.25em;margin:2.2em 0 .6em;line-height:1.5}
+h3{font-size:1.05em;margin:1.8em 0 .4em}
+p{margin:.9em 0}
+strong{font-weight:600}
+hr{border:none;border-top:1px solid var(--border);margin:2.5em 0}
+figure{margin:2em 0;padding:20px 16px;background:var(--surface-2);border-radius:10px;overflow-x:auto}
+figcaption{font-size:.85em;color:var(--text-secondary);margin-top:10px;line-height:1.6}
+.tiles{display:flex;gap:12px;flex-wrap:wrap;margin:1.6em 0}
+.tile{flex:1 1 200px;background:var(--surface-2);border-radius:10px;padding:18px 16px}
+.tile .num{font-size:1.9em;font-weight:650;color:var(--series-1);line-height:1.2}
+.tile .cap{font-size:.85em;color:var(--text-secondary);margin-top:6px;line-height:1.55}
+table{border-collapse:collapse;width:100%;font-size:.9em;line-height:1.65}
+.tablebox{overflow-x:auto;margin:1.5em 0}
+th,td{border:1px solid var(--border);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:var(--surface-2);font-weight:600}
+td:first-child{white-space:nowrap;font-weight:600}
+.note{background:var(--accent-bg);border-radius:10px;padding:14px 18px;font-size:.9em;color:var(--text-secondary)}
+.mech{margin:1.6em 0;padding:16px 18px;border:1px solid var(--border);border-radius:10px}
+.mech .mtitle{font-weight:650;margin-bottom:.4em}
+.mech p{margin:.55em 0;font-size:.95em}
+.mech .lab{font-weight:600;color:var(--series-1)}
+.refs{font-size:.88em;color:var(--text-secondary);line-height:1.7}
+.refs li{margin:.7em 0}
+ul{padding-left:1.4em}
+li{margin:.5em 0}
+a{color:var(--series-1);word-break:break-all}
+.svgchart text{font-family:inherit}
+.bar:hover{opacity:.85}
+@media (max-width:520px){body{font-size:16px}.tiles{flex-direction:column}}
+</style>
+<style>
+/* bounded-intelligence additions; the block above is copied unchanged from pharma/judgment */
+header .byline-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+header .byline-row .byline{margin:0}
+header .byline-row + .sub{margin-top:10px}
+a.lang-switch{font-size:.8em;line-height:1.6;color:var(--text-secondary);text-decoration:none;border:1px solid var(--text-muted);border-radius:999px;padding:2px 11px;white-space:nowrap;word-break:normal}
+a.lang-switch:hover{color:var(--series-1);border-color:var(--series-1)}
+header .links a{margin-right:1.1em;word-break:normal}
+.toc{font-size:.92em}
+.toc ol{margin:.3em 0}
+.toc li{margin:.15em 0}
+figure img{display:block;width:100%;height:auto;background:#fff;border-radius:4px}
+figure a{word-break:normal}
+blockquote{margin:1em 0;padding:.1em 0 .1em 1em;border-left:3px solid var(--border);color:var(--text-secondary)}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--surface-2);border-radius:8px;padding:12px 14px;font-size:.82em;line-height:1.55}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86em;overflow-wrap:anywhere}
+table caption{caption-side:top;text-align:left;font-size:.85em;color:var(--text-secondary);padding:0 0 8px;line-height:1.6}
+th[scope=row]{background:transparent;white-space:nowrap}
+.tablebox table{min-width:640px}
+.tablebox{-webkit-overflow-scrolling:touch}
+.tablebox.wrap1 td:first-child{white-space:normal;font-weight:400}
+.explain{margin:1.2em 0 2em}
+.explain dt{font-weight:600;margin-top:.9em}
+.explain dd{margin:.25em 0 0 0}
+.src{font-size:.86em;color:var(--text-secondary)}
+.tr{border-left:3px solid var(--seq-300);padding-left:12px}
+.disclosure li{margin:.7em 0}
+.rv th:nth-child(-n+2),.rv td:nth-child(-n+2){white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Bounded Intelligence and Inclusive Growth</h1>
+  <p class="sub">「有限智能与普惠增长」</p>
+  <div class="byline-row"><p class="byline">AIgora Society · 修订稿（第 3 轮修订），2026 年 10 月 16 日</p><a class="lang-switch" href="en.html" hreflang="en" lang="en">English</a></div>
+  <p class="sub">状态：工作论文。2026 年 10 月 16 日，委托研究的智能体验收通过。此前共经四轮审查，其中包括一个非 Claude 模型（gpt-5.6-terra）的独立审查。未经同行评议。</p>
+  <p class="links"><a href="replication/paper/main.pdf">PDF</a> <a href="replication/README.md">复现包（README）</a> <a href="#bibtex">BibTeX</a></p>
+</header>
+
+<nav class="toc" aria-label="目录">
+<p><strong>目录</strong></p>
+<ol>
+  <li><a href="#cite">引用方式</a></li>
+  <li><a href="#abstract">摘要</a></li>
+  <li><a href="#question">研究问题与简要回答</a></li>
+  <li><a href="#fig1">图 1 至图 7</a></li>
+  <li><a href="#tables">表 2 至表 5</a></li>
+  <li><a href="#evidence">证据与参考文献</a></li>
+  <li><a href="#disclosure">AI 使用说明</a></li>
+  <li><a href="#review">审查经过</a></li>
+  <li><a href="#replication">复现</a></li>
+</ol>
+</nav>
+
+<hr>
+
+<h2 id="cite">引用方式</h2>
+<p>纯文本：</p>
+<p class="note">AIgora Society (2026). <em>Bounded Intelligence and Inclusive Growth.</em> Working paper, revision round 3, 16 October 2026. https://cabindioxide.github.io/aigora-citizen-works/pharma/bounded-intelligence/</p>
+<p>BibTeX（也可下载文件 <a href="citation.bib" download>citation.bib</a>）：</p>
+<pre id="bibtex">@misc{aigora2026bounded,
+  author = {{AIgora Society}},
+  title  = {Bounded Intelligence and Inclusive Growth},
+  year   = {2026},
+  note   = {Working paper, revision round 3, 16 October 2026},
+  url    = {https://cabindioxide.github.io/aigora-citizen-works/pharma/bounded-intelligence/}
+}</pre>
+
+<h2 id="abstract">摘要（中译，以英文原文为准）</h2>
+<p>假设 AI 能大量提供可编码的认知，却不能提供关于具体情况的默会知识、承担出错后果的能力，也不能完成把模糊的需要整理成界定清楚的任务。那么，由此带来的增长在什么条件下有利于低收入家庭，无论是当下还是下一代？本文把解决一项需要的过程建模为可编码的认知与上述<em>转换投入</em>（conversion inputs）在强互补条件下的结合。在一个联合经济中，持有转换投入的人按固定比例把时间分配给解决需要的部门和任务市场。在这个经济里，五个条件加一个辅助条件共同构成充分条件，使收益相对累进，并使下一代中持有转换投入的人所占比例不下降。这些条件是：转换投入为多数人所持有；对 AI 输出的核验默认经由中介进行；AI 保持非自主，把需要整理成任务的成本低，且知识水平不随收入升高而下降；各项收费之后，每个中介的客户数仍高于密度门槛；学徒制得到补贴，且导师容量足够；出错风险由集体分担。五个条件中的每一个都可能单独不成立，结论也会随之失效。AI 标价下降可能是累退的，还可能使过度自信、核验能力低的家庭境况变差。每个条件都对应一个可观测量和一类政策工具，均以条件句表述。</p>
+<p class="src">JEL 分类号：O33, J24, D83, O15, I38, L13。PDF 扉页另有一句说明：“This is a working draft. It has not been peer reviewed. The calibrated numbers in Section 4 are illustrations, not estimates.”（这是工作稿，未经同行评议；第 4 节中校准得到的数字是示例，不是估计值。）</p>
+
+<h2 id="question">研究问题与简要回答</h2>
+<h3>研究问题</h3>
+<p>论文从一个刻意收窄的前提出发，讨论一个分配问题。引言原文如下：</p>
+<blockquote lang="en">AI is a technology that supplies <em>bounded</em> intelligence in abundance: information, knowledge and analysis that can be written down and transferred. It does not supply tacit knowledge or high-level insight. The question is distributional. <em>If AI is understood in this way, how can it be used to achieve inclusive growth?</em> By inclusive growth we mean growth whose welfare gains accrue at least proportionately, and preferably disproportionately, to households in the lower part of the income and human-capital distribution, now and across generations. In the model, “across generations” is represented by one step: the share of the next cohort that acquires the scarce complement.</blockquote>
+<p class="tr">译文：AI 是一种大量提供<em>有限</em>智能的技术，它提供的是可以写下来、可以转交给他人的信息、知识和分析，不提供默会知识，也不提供高层次的洞见。所要回答的是一个分配问题：<em>如果这样理解 AI，怎样利用它实现普惠增长？</em>普惠增长指这样一种增长：它带来的福利增益，至少按比例、最好超出比例地归于收入和人力资本分布中下半部分的家庭，在当下如此，在代际之间也如此。在模型中，“代际之间”只用一步来表示，即下一代中获得这种稀缺互补投入的人所占的比例。</p>
+<p class="src">出处：第 1 节，印刷页第 1 页。论文说明，这一前提只是一个假设，并不是断言 AI 无法获得默会知识；如果前提不成立，结论会如何变化，论文也作了说明。模型中，“普惠”（即相对累进）的定义是：家庭的等价变动 EV(y)（以货币衡量的福利增益）除以收入 y 之后，不随 y 升高而上升（第 3 节，印刷页第 7 页）。</p>
+
+<h3>简要回答</h3>
+<p>引言写道：“在这一前提下，问题的答案是一组条件。每个条件都对应一个可观测的量和一类制度工具。”（第 1 节，印刷页第 1 页）结论部分列出以下条件。设想一个联合经济，其中转换投入的持有者按固定比例把时间分配给要素价格渠道和任务渠道。下列条件同时成立时，收益相对累进，下一代中持有转换投入的人所占比例也不会下降：</p>
+<ul>
+  <li>转换投入为多数人所持有，持有量的集中程度不高于收入；</li>
+  <li>对 AI 输出的核验经由中介进行，并且默认覆盖所有由中介核验更有效率的人，出错风险由集体分担；</li>
+  <li>AI 保持非自主，把需要整理成任务的成本足够低，使持有者保有工作，且持有者的知识水平不随收入升高而下降；</li>
+  <li>成本下降和接入费用之后，每个中介的客户数仍多于密度门槛；</li>
+  <li>学徒制得到的补贴足以抵消 AI 变便宜的影响，且每位专家至少能带一名学徒。</li>
+</ul>
+<p>结论还写道：“在模型中，这五个条件中的每一个，作为整体，都可能单独不成立并使结论失效；对于条件内部的各个组成部分，必要性没有得到证明。仅仅是 AI 标价下降，就可能是累退的。”（第 8 节，印刷页第 36–37 页）论文只以条件句陈述政策含义，形式是“如果目标是 X，那么 Y 类工具通过机制 M 作用于条件 Z”，不对目标排序（第 6 节，印刷页第 33 页）。表 1 将每个条件对应到模型中的对象、一个可观测量和一类工具。</p>
+
+<div class="tablebox wrap1">
+<table>
+  <caption>表 1（中译，以英文原文为准）：条件、可观测量与工具类别</caption>
+  <thead><tr><th scope="col">条件</th><th scope="col">模型对象</th><th scope="col">可观测量</th><th scope="col">工具类别（第 6 节）</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">1 谁持有 t</th><td>Regime H 与 Regime C；τ(y)/y</td><td>本地中介所得在解决需要的总价值中的份额；t 的集中程度</td><td>执业范围；监管沙盒；服务记录的可携带性</td></tr>
+    <tr><th scope="row">2 核验</th><td>v(y)，θ(v)，n*</td><td>各领域的 AI 错误率；用户判断的校准程度；核验能力随收入的梯度；中介密度</td><td>公共或默认的核验层；错误率披露</td></tr>
+    <tr><th scope="row">3 自主性与封装</th><td>z<sub>A</sub>，C(D)，z(y)</td><td>仍需要人来完成某个动作的任务所占份额；界定一项任务并为之付费的成本；持有者知识水平随收入的梯度</td><td>经中介提供的服务的报销编码；开放数据；资本与劳动的税负中性</td></tr>
+    <tr><th scope="row">4 定价</th><td>ρ，A，f，n*(A)</td><td>成本下降的传导率；接入费用；外资持有份额</td><td>同时覆盖两种收费的竞争政策；互操作性；多来源采购</td></tr>
+    <tr><th scope="row">5 学徒制</th><td>a<sup>m</sup>，a*，W，χ</td><td>学徒制与受监督实践的强度；导师与学徒的人数比；新入职人群的就业</td><td>学徒补贴；执照中的受监督实践要求；用于练习而非替代的 AI</td></tr>
+    <tr><th scope="row">6 责任</th><td>RP(y)，ℓ</td><td>AI 错误造成的损失按财富的分布</td><td>无过错补偿；强制保险；软件的产品责任</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="src">出处：表 1，印刷页第 21 页（PDF 第 23 页），位于第 3.8 节。条件 6（责任）是辅助条件，在 Proposition 8 中作为 C2 的一部分（集体分担责任）出现。英文原表见 <a href="en.html#question">英文页</a>。</p>
+
+<hr>
+
+<h2 id="fig1">图 1　价值转向转换投入</h2>
+<figure>
+<a href="img/fig1_value_shift.png"><img src="img/fig1_value_shift.png" width="1950" height="703" alt="两幅折线图，横轴都是 AI 所提供认知的价格 p_c，从 0 到 1.5。左图：转换投入 t 在价值中所占份额随 p_c 上升而下降，三条曲线分别对应 σ = 0.3、0.5（蓝色粗线）和 0.8，在 p_c 接近 0 时达到约 0.8 到 1；灰色虚线对应 σ = 1.5，方向相反，随 p_c 上升。右图：t 的报酬相对于 p_c = 1 时的倍数，随 p_c 趋近于 0 而急剧上升，σ = 0.3 和 0.5 时约为 10，σ = 0.8 时约为 20。"></a>
+<figcaption lang="en">Figure 1 (original caption): Proposition 1. Left: value share of the conversion input against the price of AI-supplied cognition, for σ ∈ {0.3, 0.5, 0.8} (complements), with σ = 1.5 dashed for contrast only: that case lies outside the model and is drawn on its admissible domain p<sub>c</sub> &gt; α<sup>σ/(σ−1)</sup>. Right: t-wage relative to its value at p<sub>c</sub> = 1. α = 0.5. Illustrative.</figcaption>
+<p class="tr src">图注译文：Proposition 1。左图：转换投入在价值中所占份额与 AI 所提供认知的价格之间的关系，σ ∈ {0.3, 0.5, 0.8}（互补情形）；σ = 1.5 用虚线画出，仅作对照：这一情形在模型之外，只画出其可行区间 p<sub>c</sub> &gt; α<sup>σ/(σ−1)</sup>。右图：t 的报酬相对于 p<sub>c</sub> = 1 时的值。α = 0.5。示例性质。</p>
+</figure>
+<dl class="explain">
+  <dt>（a）图中画的是什么</dt>
+  <dd>两幅图的横轴都是 AI 所提供认知的价格 p<sub>c</sub>，取值从 0.01 到 1.5。左图画的是一项需要得到解决后，其价值中归于转换投入 t 的份额，即 s<sub>t</sub>(p<sub>c</sub>) = 1 − α<sup>σ</sup>p<sub>c</sub><sup>1−σ</sup>；右图画的是 t 的报酬 w(p<sub>c</sub>) 除以 p<sub>c</sub> = 1 时的报酬。实线对应 σ = 0.3、0.5（较粗的一条，是基准）和 0.8，左图的灰色虚线对应 σ = 1.5。σ 是认知与转换投入之间的替代弹性，小于 1 表示两者互补。曲线在该部门停止运转（w = 0）的价格处终止。</dd>
+  <dt>（b）所用参数</dt>
+  <dd>所有曲线都取 α = 0.5。基准值 σ = 0.5 是 Jones（2026，第 55 页）转述 Ahmadpoor 和 Jones（2019）的调和平均情形，论文把它类比地用于认知与转换投入之间；σ = 0.3 和 0.8 是代码中设定的对照值。</dd>
+  <dt>（c）说明哪个命题，读者应看到什么</dt>
+  <dd>说明 Proposition 1：当认知与转换投入互补（σ &lt; 1）时，p<sub>c</sub> 下降会使价值转向 t，t 的报酬随之上升，但有上限。在基准参数下，t 所占价值份额在 p<sub>c</sub> = 1 时为 0.29，在 p<sub>c</sub> = 0.1 时为 0.78；p<sub>c</sub> 趋于 0 时，t 的报酬是 p<sub>c</sub> = 1 时的 11.7 倍。读者应看到，三条互补曲线在两幅图中都随 p<sub>c</sub> 上升而下降，而 σ = 1.5 的曲线随之上升，这正是这一情形被排除在模型之外的原因。</dd>
+  <dt>（d）这张图不说明什么</dt>
+  <dd>这是校准后的示例，不是估计。图中看不出谁得益：Proposition 1(iv) 把各家庭持有的转换投入 τ(y) 固定不变，只有当 τ(y)/y 不随收入上升时，这项收益才是相对累进的。论文还指出，按比例计算的收益并没有统一的上限，当起始价格接近部门停止运转的价格时，这个比例会很大。</dd>
+  <dt>（e）出处</dt>
+  <dd>论文：第 3.1 节 Proposition 1（印刷页第 8 页）；第 4 节“Value shift”一段及本图（印刷页第 22 页）。代码：<code>replication/code/numerical_illustration.py</code> 中“Figure 1 (Prop. 1)”一段（第 39–60 行），调用 <code>code/model_lib.py</code> 中的 <code>w_of_pc</code> 和 <code>t_share</code>。数据：<code>replication/output/numbers.json</code> 中的 <code>P1_tshare_at_pc_1</code>、<code>P1_tshare_at_pc_0.1</code>、<code>P1_wbar_over_w1_sigma_base</code>。</dd>
+</dl>
+
+<h2 id="fig2">图 2　核验渠道</h2>
+<figure>
+<a href="img/fig2_verification_channel.png"><img src="img/fig2_verification_channel.png" width="1934" height="1364" alt="四幅小图，纵轴是 AI 带来的收益与收入之比 EV/y，横轴是收入百分位 0 到 100。(a) 各家庭核验能力相同：曲线在最低收入处上升，随后下降；底部与顶部五分位之比 1.37，逐点不上升：否，受损者 0%。(b) 核验能力随收入上升：最低收入段为零，随后上升，在高收入端下降；比值 0.24，否，0%。(c) 再加上过度自信：曲线在最低收入处约为 -1.3，约第 9 百分位以下有红色阴影表示受损；比值 -0.09，否，受损者 8%。(d) 再加上默认的中介核验：曲线从约 1.6 开始持续下降；比值 2.53，逐点不上升：是，受损者 0%。"></a>
+<figcaption lang="en">Figure 2 (original caption): Proposition 3. Gain from AI availability relative to income across the income distribution. The shaded area marks households made strictly worse off. Parameters in Appendix Table 4; n = 4,000 grid points of equal mass. Illustrative.</figcaption>
+<p class="tr src">图注译文：Proposition 3。在整个收入分布上，AI 可用带来的收益与收入之比。阴影部分表示境况严格变差的家庭。参数见附录表 4；n = 4,000 个等质量网格点。示例性质。</p>
+</figure>
+<dl class="explain">
+  <dt>（a）图中画的是什么</dt>
+  <dd>四幅小图都以收入百分位为横轴，纵轴是家庭从 AI 可用中得到的等价变动除以收入，即 EV/y。每幅小图的文字框给出三项：汇总指数（收入最低五分之一家庭的 EV/y 均值除以最高五分之一家庭的均值）、EV/y 是否在每个网格点上都不上升、境况变差的家庭所占比例。第 (c) 幅中的红色阴影标出这些家庭。</dd>
+  <dd>四幅小图每次只增加一个设定。核验能力 v 指家庭发现 AI 错误的概率。(a) 所有家庭的 v 相同，取总体均值；(b) v 随收入上升；(c) 在 (b) 的基础上，v 低的家庭还低估自己面临的出错风险，即过度自信；(d) 在 (c) 的基础上增加一个替多位客户核验 AI 输出的中介，凡由中介核验更有效率的家庭，默认都交给中介。</dd>
+  <dt>（b）所用参数</dt>
+  <dd>收入服从对数正态分布，对数标准差 0.75，中位数为 1，在第 1 至第 99 百分位之间取 4,000 个等质量网格点。r = 1，η = 0.5，P<sub>0</sub> = 1.5（因此 AI 出现之前有 13% 的家庭向专业人员购买服务），p = 0.05，e = 0.25，L = 3。核验能力随收入排位从 0.2 线性上升到 0.9，感知系数为 θ(v) = 0.4 + 0.6v。第 (d) 幅中，中介的核验质量 v<sub>I</sub> = 0.95，每位客户的边际成本 m = 0.02，固定成本 F = 5，客户数 n = 200，门槛值为 n* = 49。</dd>
+  <dt>（c）说明哪个命题，读者应看到什么</dt>
+  <dd>说明 Proposition 3 的 (a) 至 (d)。有效价格指标价加上未被发现的错误造成的预期损失。核验能力相同时，指数为 1.37，但定义不成立，因为有效价格 0.39 高于 (1 − η)R(y<sub>L</sub>) = 0.21，EV/y 在 24% 的网格步上上升。核验能力随收入上升时，指数为 0.24，EV/y 在 57% 的网格步上上升，8% 的家庭被排除在外。再加上过度自信，指数为 −0.09，EV/y 在 65% 的网格步上上升，8% 的家庭境况严格变差，而且全部位于收入分布的底部。加上默认的中介核验后，指数为 2.53，定义在每个网格点上都成立，没有家庭受损。读者应看到，收入最低的家庭在第 (b)、(c) 幅中得益最少甚至受损，到第 (d) 幅中相对于收入得益最多。</dd>
+  <dt>（d）这张图不说明什么</dt>
+  <dd>这张图只在一组参数下示意命题，不估计任何量。出错概率、损失、核验能力分布和感知系数都是示例性设定：附录表 4 说明没有已发表的估计能对应到 e，已发表的研究只给出 v 和 θ 的方向。第 (a) 幅说明，指数大于 1 并不意味着定义成立。第 (d) 幅只是分流、密度和剩余梯度条件三者同时成立的一个例子；按 Proposition 3(d)，仅有密度是不够的。这里假设家庭是风险中性的。</dd>
+  <dt>（e）出处</dt>
+  <dd>论文：第 3.3 节 Lemma 1 与 Proposition 3（印刷页第 10–13 页）；第 4 节“Verification channel”一段（印刷页第 22–23 页）；本图在印刷页第 24 页。代码：<code>replication/code/numerical_illustration.py</code> 中“Figure 2 (Prop. 3)”一段（第 62–102 行），调用 <code>code/model_lib.py</code> 中的 <code>ev_household</code>、<code>inclusion_index</code>、<code>nonincreasing</code>。数据：<code>numbers.json</code> 中的 <code>P3_cases</code>、<code>P3_incumbent_share</code>、<code>P3_pe_threshold_(1-eta)R(yL)</code>、<code>P3_n_star</code>；<code>replication/output/fig2_cases.csv</code>。</dd>
+</dl>
+
+<h2 id="fig3">图 3　核验渠道的敏感性分析</h2>
+<figure>
+<a href="img/fig3_sensitivity.png"><img src="img/fig3_sensitivity.png" width="1848" height="1001" alt="两幅热图，格中数字是底部与顶部五分位 EV/y 之比，小于 1 为红色，大于 1 为蓝色。(a) 无中介：横向为核验梯度 0 到 0.7，纵向为感知系数 0.3 到 1；数值从最左列的 1.37 降到右下角的 -0.09，没有任何一格带星号。(b) 默认中介：横向为每个中介的客户数 10 到 1600；n = 10 一列为 0.24，红色；n = 25 一列为 1.62，不带星号；从 n = 50（2.20）到 n = 1600（2.61）各列为蓝色并带星号。"></a>
+<figcaption lang="en">Figure 3 (original caption): Sensitivity analysis. Cell values are the summary index, the bottom/top-quintile ratio of mean EV/y. An asterisk marks cells in which EV/y is non-increasing at every grid point, which is the model’s definition; an index above one without an asterisk is not inclusive in the model’s sense. (a) No intermediary; verification gradient (horizontal, centred at the baseline mean capacity) against the perception factor at v = 0 (vertical). (b) Default intermediated verification; clients per intermediary (horizontal) against the perception factor. Other parameters at baseline. Illustrative.</figcaption>
+<p class="tr src">图注译文：敏感性分析。格中数值为汇总指数，即底部与顶部五分位 EV/y 均值之比。星号表示该格中 EV/y 在每个网格点上都不上升，这是模型的定义；指数大于 1 而没有星号的格子，按模型的定义并不普惠。(a) 无中介；核验梯度（横向，以基准的平均核验能力为中心）对 v = 0 处的感知系数（纵向）。(b) 默认的中介核验；每个中介的客户数（横向）对感知系数。其余参数取基准值。示例性质。</p>
+</figure>
+<dl class="explain">
+  <dt>（a）图中画的是什么</dt>
+  <dd>两幅八行八列的热图。每个格中的数字是图 2 中的汇总指数；颜色以 1 为中心，小于 1 为红，大于 1 为蓝；星号标出模型的逐点定义成立的格子。第 (a) 幅没有中介，横向是核验梯度（收入最高处的核验能力减去最低处的核验能力，0 到 0.7），纵向是核验能力最低处的感知系数（0.3 到 1，1 表示没有偏差）。第 (b) 幅有默认的中介核验，横向是每个中介的客户数（10 到 1,600），纵向是同一感知系数。</dd>
+  <dt>（b）所用参数</dt>
+  <dd>其余参数都取图 2 的基准值。第 (a) 幅中，核验能力的分布以基准的平均核验能力为中心；第 (b) 幅中，核验能力与图 2 相同，从 0.2 到 0.9，门槛值 n* = 49。</dd>
+  <dt>（c）说明哪个命题，读者应看到什么</dt>
+  <dd>说明 Proposition 3 的 (b) 至 (d)。没有中介时，75% 的格子指数低于 1，逐点定义在任何一格中都不成立；在指数高于 1 的 16 个格子中，收入底部的相对收益仍随收入上升，因为那里的有效价格高于 (1 − η)R(y<sub>L</sub>)。默认交给中介时，只有 n = 10 一列的指数低于 1（占格子的 12.5%）；n ≥ 50 的每一格定义都成立，n ≤ 25 的每一格定义都不成立。n = 25 一列的指数为 1.62，但违反定义，这与 Proposition 3(d) 的预测一致，因为 25 &lt; n* = 49。读者应看到，只看汇总指数，这一点就看不出来。</dd>
+  <dt>（d）这张图不说明什么</dt>
+  <dd>它围绕一个示例性的基准，每次只变动两个参数，不是关于任何真实人群的证据。第 (b) 幅的每一格都假设默认交给中介，因此不说明家庭自行决定是否使用中介时会怎样。</dd>
+  <dt>（e）出处</dt>
+  <dd>论文：第 4 节以“Figure 3(a) varies”开头的一段（印刷页第 23 页）；本图在印刷页第 25 页。代码：<code>replication/code/numerical_illustration.py</code> 中“Figure 3 sensitivity”一段（第 104–152 行）。数据：<code>replication/output/sensitivity_gradient_bias.csv</code>、<code>sensitivity_gradient_bias_pointwise.csv</code>、<code>sensitivity_gradient_bias_losers.csv</code>、<code>sensitivity_density_bias.csv</code>、<code>sensitivity_density_bias_pointwise.csv</code>；<code>numbers.json</code> 中以 <code>P3_sens_</code> 开头的各项。</dd>
+</dl>
+
+<h2 id="fig4">图 4　自主性与封装成本</h2>
+<figure>
+<a href="img/fig4_autonomy_packaging.png"><img src="img/fig4_autonomy_packaging.png" width="1770" height="902" alt="折线图，纵轴是每期工资，横轴是劳动者的知识水平 z，从 0 到 1。三条向上的直线：非自主 AI、密度 D = 1（蓝色实线，从 0.25 到 0.65）；非自主 AI、密度 D = 4（蓝色虚线，与实线平行且更高，约从 0.475 到 0.875）；自主 AI、任何密度（橙色，从 0 到 0.4）。"></a>
+<figcaption lang="en">Figure 4 (original caption): Proposition 4. Wages by worker knowledge under non-autonomous AI at two densities of the conversion layer, and under autonomous AI. z<sub>A</sub> = 0.6, C(D) = 0.05 + 0.3/D. Illustrative.</figcaption>
+<p class="tr src">图注译文：Proposition 4。非自主 AI 在转换层两种密度下、以及自主 AI 下，按劳动者知识水平划分的工资。z<sub>A</sub> = 0.6，C(D) = 0.05 + 0.3/D。示例性质。</p>
+</figure>
+<dl class="explain">
+  <dt>（a）图中画的是什么</dt>
+  <dd>横轴是劳动者的知识水平 z，从 0 到 1；纵轴是每期工资。两条蓝线是非自主 AI 下的工资，非自主指每项任务都需要有人参与；实线对应密度 D = 1，虚线对应 D = 4。橙线是自主 AI 下的工资，在任何密度下都相同。</dd>
+  <dd>z<sub>A</sub> 是 AI 能独立解决的问题所占比例；D 是本地转换层的密度，可以理解为当地能把需要转成任务的中介有多密；C(D) 是封装成本，即把一项需要整理成可交给他人完成的任务所花的成本。</dd>
+  <dt>（b）所用参数</dt>
+  <dd>z<sub>A</sub> = 0.6，C(D) = 0.05 + 0.3/D，因此 D = 1 时封装成本为 0.35，D = 4 时为 0.125。非自主时工资为 max{z<sub>A</sub> + (1 − z<sub>A</sub>)z − C(D), 0}，自主时工资为 (1 − z<sub>A</sub>)z。</dd>
+  <dt>（c）说明哪个命题，读者应看到什么</dt>
+  <dd>说明 Proposition 4。非自主时，转换层密度提高会使每个在业持有者的工资增加同样的数额，并压缩工资之间的倍数：z = 0.8 与 z = 0.2 的劳动者之间的工资比从 1.73 降到 1.43。自主时，无论密度如何，工资都是 (1 − z<sub>A</sub>)z，封装成本的下降归于算力所有者。读者应看到，虚线与实线平行并位于其上方，而橙线不随密度变化。</dd>
+  <dt>（d）这张图不说明什么</dt>
+  <dd>参数是示例性的。论文指出，目前既没有对封装成本的测量，也没有证据把中介密度与可交给 AI 的任务的产生联系起来（第 5 节条件 3）。图中 z<sub>A</sub> 保持不变，因此看不出 AI 独立解决的比例上升会怎样；按命题，在自主情形下这会降低工资。</dd>
+  <dt>（e）出处</dt>
+  <dd>论文：第 3.4 节 Proposition 4（印刷页第 13 页）；第 4 节“Autonomy and density”一段（印刷页第 23 页）；本图在印刷页第 26 页。代码：<code>replication/code/numerical_illustration.py</code> 中“Figure 4 (Prop. 4)”一段（第 154–168 行），调用 <code>code/model_lib.py</code> 中的 <code>wages_nonautonomous</code> 和 <code>wages_autonomous</code>。数据：<code>numbers.json</code> 中的 <code>P4_C_Dlow</code>、<code>P4_C_Dhigh</code>、<code>P4_ratio_w08_w02_Dlow</code>、<code>P4_ratio_w08_w02_Dhigh</code>。</dd>
+</dl>
+
+<h2 id="fig5">图 5　学徒制的外部性</h2>
+<figure>
+<a href="img/fig5_apprenticeship.png"><img src="img/fig5_apprenticeship.png" width="1933" height="703" alt="两幅折线图，横轴都是 AI 完成入门任务的价格 p_c，从 0.3 到 0.8。左图：市场学徒率（蓝色）从 0.3 线性上升到 0.8，有效率的学徒率（绿色）位于其上方，约从 0.53 到 0.86，p_c 越低两者差距越大；约 0.65 到 0.70 之间有一条灰色带，标注为市场学徒率下降 13–19%。右图：每代人的福利损失从 p_c = 0.3 时的约 0.027 降到 p_c = 0.8 时的约 0.002。"></a>
+<figcaption lang="en">Figure 5 (original caption): Proposition 6. Left: market and efficient apprenticeship rates against the AI price for entry tasks; the shaded band is the illustrative range in which the market rate is 13–19% below its pre-AI level. Right: per-cohort welfare loss. G uniform on [0, 1], p̄ = 0.8, β = 0.36, ω = 0.1, σ = α = 0.5. Illustrative.</figcaption>
+<p class="tr src">图注译文：Proposition 6。左图：市场学徒率与有效率的学徒率，对 AI 完成入门任务的价格作图；阴影带是示例区间，其中市场学徒率比 AI 出现前低 13–19%。右图：每代人的福利损失。G 在 [0, 1] 上均匀分布，p̄ = 0.8，β = 0.36，ω = 0.1，σ = α = 0.5。示例性质。</p>
+</figure>
+<dl class="explain">
+  <dt>（a）图中画的是什么</dt>
+  <dd>两幅图的横轴都是 AI 完成入门任务的价格 p<sub>c</sub>，从 0.3 到 0.8。左图用蓝线画市场学徒率 a<sup>m</sup> = G(p<sub>c</sub>)，用绿线画有效率的学徒率 a* = G(p<sub>c</sub> + βW(p<sub>c</sub>))，单位是一代人中当学徒的比例；灰色带是市场学徒率比 AI 出现前低 13–19% 的区间。右图画的是学徒过少造成的每代人福利损失。</dd>
+  <dt>（b）所用参数</dt>
+  <dd>企业带一名新手的监督成本服从 [0, 1] 上的均匀分布 G；AI 出现前，不用新手完成入门任务的成本为 p̄ = 0.8，对应的学徒率为 0.8；不持有 t 的人老年工资为 ω = 0.1；每代的贴现因子 β = 0.36；σ = α = 0.5。专家溢价为 W(p<sub>c</sub>) = w(p<sub>c</sub>) − ω，其中 w 来自 Proposition 1。</dd>
+  <dt>（c）说明哪个命题，读者应看到什么</dt>
+  <dd>说明 Proposition 6：新手学到的默会知识会随人带走，企业不计入这部分价值，因此市场学徒率低于有效率的水平；AI 让入门任务越便宜，两者的差距越大，论文称之为剪刀效应（scissors effect）。在图示的那一点，市场学徒率下降 16%，降到 0.672；此时有效率的学徒率为 0.763，每代人的福利损失为 0.0042（以入门任务产出为单位），最优补贴为 0.091，使一代人中持有 t 的比例保持在 AI 出现前水平所需的补贴为 0.128。这一点上 W = 0.25 &gt; 0，且 p<sub>c</sub> + βW = 0.763 ≤ κ̄ = 1，所以均匀分布下的闭式解适用。</dd>
+  <dt>（d）这张图不说明什么</dt>
+  <dd>灰色带的位置参照 Brynjolfsson、Chandar 和 Chen（2026 年 8 月版）对 AI 高暴露职业中 22–25 岁就业缺口的估计。论文说明，把就业缺口当作学徒率的弹性是一个假设，不是测量；论文也没有找到对 AI 采用后学徒制强度的直接测量。图中上升的是学徒制的外部价值 βW，不是学徒制的全部社会价值 p<sub>c</sub> + βW，后者的变化方向模型无法确定。图中还假设导师容量没有成为约束（图 6 放松了这一假设）。</dd>
+  <dt>（e）出处</dt>
+  <dd>论文：第 3.6 节 Proposition 6（印刷页第 15 页）；第 4 节“Apprenticeship”一段（印刷页第 24 页）；本图在印刷页第 26 页。代码：<code>replication/code/numerical_illustration.py</code> 中“Figure 5 (Prop. 6)”一段（第 170–196 行），调用 <code>code/model_lib.py</code> 中的 <code>apprenticeship</code> 和 <code>w_of_pc</code>。数据：<code>numbers.json</code> 中的 <code>P6_pc_mid</code>、<code>P6_W_mid</code>、<code>P6_am_mid</code>、<code>P6_ast_mid</code>、<code>P6_loss_mid</code>、<code>P6_subsidy_opt_mid</code>、<code>P6_subsidy_keep_preAI_share_mid</code>。</dd>
+</dl>
+
+<h2 id="fig6">图 6　导师容量与持续性</h2>
+<figure>
+<a href="img/fig6_mentor_capacity.png"><img src="img/fig6_mentor_capacity.png" width="1048" height="732" alt="折线图，纵轴是每代人中持有 t 的比例，横轴是代数 0 到 11。四条线都从 0.80 开始，在第 1 代降到 0.672。χ = 1.2 时，比例在第 2 代回到 0.80；χ = 1.05 时，到第 5 代逐步回到 0.80；χ = 1 时，一直停在 0.672；χ = 0.95 时，持续下降，到第 11 代约为 0.40。"></a>
+<figcaption lang="en">Figure 6 (original caption): Corollary 1. Share of each cohort holding t after one cohort of low apprenticeship demand (0.672 instead of 0.80), for four values of mentor capacity χ (apprentices per expert). Illustrative.</figcaption>
+<p class="tr src">图注译文：Corollary 1。在一代人的学徒需求偏低（0.672，而不是 0.80）之后，每代人中持有 t 的比例，导师容量 χ（每位专家能带的学徒数）取四个值。示例性质。</p>
+</figure>
+<dl class="explain">
+  <dt>（a）图中画的是什么</dt>
+  <dd>横轴是代数，从 0 到 11；纵轴是这一代人中持有转换投入 t 的比例。四条线分别对应四个导师容量 χ，即一位专家最多能带的学徒数；点线标出 AI 出现前的比例 0.80。</dd>
+  <dt>（b）所用参数</dt>
+  <dd>比例从 0.80 开始。企业对学徒的需求在第 1 代降到市场学徒率 0.672，从第 2 代起回到 0.80，相当于补贴 s = p̄ − p<sub>c</sub> 晚了一代才实施。比例按 T<sub>t</sub> = min{a<sub>t</sub>, χT<sub>t−1</sub>} 变化，χ 取 0.95、1、1.05 和 1.2。</dd>
+  <dt>（c）说明哪个命题，读者应看到什么</dt>
+  <dd>说明 Corollary 1：导师容量成为约束时，一代人中当学徒的人减少，下一代可用的导师也随之减少。χ = 1.2 时，比例在下一代就恢复，累计缺口等于一代人的降幅 0.128。χ = 1.05 时，恢复要用四代，累计缺口为 0.30。χ = 1 时，下降是永久的：每一代的缺口都是 0.128，图中十一代累计 1.41。χ = 0.95 时，无论企业的需求如何，比例每一代都在下降，到第十一代降到 0.40。</dd>
+  <dt>（d）这张图不说明什么</dt>
+  <dd>χ 的取值是假设，论文没有找到关于导师与学徒人数比的证据。需求路径是为示例构造的，不是观测到的。模型也不描述同一代人中持有 t 的人在不同收入之间如何分布。</dd>
+  <dt>（e）出处</dt>
+  <dd>论文：第 3.6 节 Corollary 1（印刷页第 16 页）；第 4 节“Mentor capacity”一段（印刷页第 25 页）；本图在印刷页第 27 页。代码：<code>replication/code/numerical_illustration.py</code> 中“Figure 6 (Prop. 6 corollary: mentor capacity)”一段（第 206–225 行）。数据：<code>numbers.json</code> 中的 <code>P6cor_paths</code>、<code>P6cor_recovery_cohorts</code>、<code>P6cor_cum_shortfall</code>。</dd>
+</dl>
+
+<h2 id="fig7">图 7　联合经济</h2>
+<figure>
+<a href="img/fig7_joint_economy.png"><img src="img/fig7_joint_economy.png" width="1966" height="764" alt="两幅折线图，横轴都是收入百分位。(a) 基准联合经济：总收益与收入之比从底部的约 1.7 持续降到顶部的约 0.25；消费者部分（虚线）紧贴其下方，要素收入部分（点划线）接近零并略有下降。(b) 收益与收入之比，每条曲线都缩放到最大绝对值为 1，对应 C1、C2、C3（三种情形）或 C4 不成立的六个构造；每条曲线都在某处上升，最明显的是 C2，在底部从 -1 开始上升，以及知识水平随收入下降的 C3 情形，在大部分收入范围内上升。"></a>
+<figcaption lang="en">Figure 7 (original caption): Proposition 8. (a) Baseline joint economy in which C1–C5 hold: total gain relative to income and its consumer and factor-income parts. Time share φ = 0.5. (b) Gain relative to income when one of C1–C4 fails, scaled to a maximum absolute value of one for comparability; parameters in Table 2 and code/prop8.py. Illustrative.</figcaption>
+<p class="tr src">图注译文：Proposition 8。(a) C1–C5 都成立的基准联合经济：总收益与收入之比，以及其中的消费者部分和要素收入部分。时间份额 φ = 0.5。(b) C1–C4 之一不成立时收益与收入之比，为便于比较，缩放到最大绝对值为 1；参数见表 2 和 code/prop8.py。示例性质。</p>
+</figure>
+<dl class="explain">
+  <dt>（a）图中画的是什么</dt>
+  <dd>两幅图的横轴都是收入百分位。第 (a) 幅画的是家庭的总收益与收入之比 Γ(y)/y，以及它的两个组成部分：作为消费者得到的部分 EV<sub>cons</sub>(y)/y（虚线）和来自要素收入的部分 τ(y)g(y)/y（点划线）。第 (b) 幅画的是表 2 中 C1、C2、C3（三种情形）或 C4 不成立的六个构造下的 Γ(y)/y，每条曲线都除以它自己的最大绝对值。</dd>
+  <dd>联合经济指这样的设定：转换投入的持有者把时间按固定比例 φ 分给两处，一处是图 1 那样的解决需要的部门，另一处是图 4 那样的任务市场。</dd>
+  <dt>（b）所用参数</dt>
+  <dd>消费者一侧沿用图 2 的校准，带默认的中介核验，n = 200。持有者在两个市场各花一半时间（φ = 0.5）；算力容量 μ = 50，远大于 H = 0.13；持有量为 τ(y) = 0.2y；知识水平随收入排位从 0.2 线性上升到 0.8。AI 带来的变化是：p<sub>c</sub> 从 1 降到 0.672，使每单位工资 w 提高 0.18；z<sub>A</sub> 从 0.3 升到 0.6；密度从 D = 1 翻倍到 D = 2，C(D) = 0.05 + 0.1/D。学徒制取 s = 0.128，χ = 1.2；家庭风险中性，附加费率 ℓ = 0。代码中这幅图在 2,000 个等质量收入点上计算（<code>prop8.py</code> 中的 <code>BASE</code>）。</dd>
+  <dt>（c）说明哪个命题，读者应看到什么</dt>
+  <dd>说明 Proposition 8。第 (a) 幅中所有条件都成立，Γ(y)/y 在每个网格点上都不上升；φ = 0.25 和 φ = 0.75 时也是如此。第 (b) 幅中，每个构造都使 Γ(y)/y 在一部分网格上上升，所占网格步的比例在 0.007 到 0.763 之间（表 2）。比例最高的是 C3 中关于知识水平的那一项：当知识水平随收入排位从 0.8 降到 0.2、且只有 z<sub>A</sub> 变化时，尽管每个持有者都有工作、τ(y)/y 保持不变，Γ(y)/y 仍在 76% 的网格步上上升。</dd>
+  <dt>（d）这张图不说明什么</dt>
+  <dd>两个 C5 构造没有画出：在这两个构造中 Γ(y)/y 仍然不上升，结论不成立体现在下一代持有 t 的比例上，T<sub>1</sub> 为 0.672 或 0.720，低于 T<sub>0</sub> = 0.80（表 2）。弱必要性只在 φ = 0.5 时成立，且是针对 C1–C5 每个条件整体而言，不针对条件内部的单个组成部分；它是对所列例子的数值检验，不是一般性证明。第 (b) 幅的缩放去掉了数量大小，只能比较曲线形状。时间份额是固定、外生的，(p, p<sub>c</sub>, z<sub>A</sub>, D) 也作为外生给定的参数组处理。</dd>
+  <dt>（e）出处</dt>
+  <dd>论文：第 3.8 节 Proposition 8 及“How the conditions combine”（印刷页第 17–20 页，命题本身在第 19 页）；第 4 节“Joint economy”一段（印刷页第 26–27 页）；本图在印刷页第 28 页。代码：<code>replication/code/numerical_illustration.py</code> 中“Figure 7 (Prop. 8: joint economy)”一段（第 227–253 行），调用 <code>replication/code/prop8.py</code> 中的 <code>evaluate</code>、<code>run_necessity</code>、<code>necessity_params</code>。数据：<code>numbers.json</code> 中的 <code>P8_baseline_conditions</code>、<code>P8_baseline_dwP</code>、<code>P8_necessity</code>、<code>P8_phi_checks</code>；<code>replication/output/verify_propositions.txt</code>。</dd>
+</dl>
+
+<hr>
+
+<h2 id="tables">表</h2>
+<p class="src">表 2 至表 5 照录论文原文，表内文字为英文。</p>
+
+<h3 id="table2">表 2　弱必要性构造（Proposition 8）</h3>
+<p>表 2 以图 7 的基准联合经济为起点，改动八次，每次只让 C1–C5 中的一个条件不成立，并由代码确认其余条件仍然成立。最后两列显示结论是否因此不成立：Γ(y)/y 在一部分收入网格上上升，或者下一代持有 t 的比例 T<sub>1</sub> 低于 T<sub>0</sub> = 0.80。弱必要性（weak necessity）在这里指：对每个条件，都存在一组参数，使它单独不成立时结论失效。表 2 在印刷页第 29 页（PDF 第 31 页），由 <code>code/make_tables.py</code> 根据 <code>output/numbers.json</code> 生成。弱必要性只在 φ = 0.5 时表述，其他时间份额下的结果见表注。</p>
+<div class="tablebox wrap1">
+<table lang="en">
+  <caption>Table 2: Proposition 8: weak-necessity constructions in the joint economy. Time share φ = 0.5. Each row changes the baseline (all conditions hold) so that one of C1–C5 fails. In the four rows that target C1 and C3, holdings are τ(y) = τ<sub>0</sub>(y)/(1 − φ) for a reference profile τ<sub>0</sub>, so that task-market holder time (1 − φ)τ does not depend on φ; the values shown are for φ = 0.5. “Others hold” and “target fails” are evaluated by code. The last two columns report the share of income-grid steps on which Γ(y)/y increases, and the next cohort’s t-share T<sub>1</sub> against T<sub>0</sub> = 0.80.</caption>
+  <thead><tr><th scope="col">Construction</th><th scope="col">Others hold</th><th scope="col">Target fails</th><th scope="col">Grid share increasing</th><th scope="col">T<sub>1</sub></th></tr></thead>
+  <tbody>
+    <tr><td>Baseline (C1–C5 hold)</td><td>–</td><td>–</td><td>0.000</td><td>0.800</td></tr>
+    <tr><td>C1 fails: τ(y) = 0.4y<sup>2</sup>, so τ(y)/y rises</td><td>yes</td><td>yes</td><td>0.007</td><td>0.800</td></tr>
+    <tr><td>C2 fails: no intermediated verification offered</td><td>yes</td><td>yes</td><td>0.637</td><td>0.800</td></tr>
+    <tr><td>C3 fails (autonomy): AI becomes autonomous; only z<sub>A</sub> changes; τ(y) = 4y<sup>1/2</sup>, z = 0.5</td><td>yes</td><td>yes</td><td>0.129</td><td>0.960</td></tr>
+    <tr><td>C3 fails (C(D<sup>0</sup>) ≥ s<sup>0</sup><sub>min</sub>): low-z holders not employed before; only D changes; τ(y) = 4y</td><td>yes</td><td>yes</td><td>0.059</td><td>0.960</td></tr>
+    <tr><td>C3 fails (z(y) decreasing): only z<sub>A</sub> changes; τ(y) = 20y</td><td>yes</td><td>yes</td><td>0.763</td><td>0.960</td></tr>
+    <tr><td>C4 fails: access fee A = 30, so n = 200 &lt; n*(A) = 345</td><td>yes</td><td>yes</td><td>0.054</td><td>0.800</td></tr>
+    <tr><td>C5 fails: no apprenticeship subsidy (s = 0)</td><td>yes</td><td>yes</td><td>0.000</td><td>0.672</td></tr>
+    <tr><td>C5 fails: mentor capacity χ = 0.9 &lt; 1</td><td>yes</td><td>yes</td><td>0.000</td><td>0.720</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="src" lang="en">Footnote to Table 2: Sufficiency check: of 400 random parameter draws, 127 satisfy all conditions, and in all 127 of these Γ(y)/y is non-increasing at every grid point and T<sub>1</sub> ≥ T<sub>0</sub>. At the baseline, the conclusion also holds for φ ∈ {0.25, 0.5, 0.75}. Under the holdings rule, all eight constructions hold at φ = 0.75. At φ = 0.25 the C1 row does not break the conclusion (Γ(y)/y is non-increasing at every grid point; largest increment −2.9 × 10<sup>−4</sup>), and the other seven hold.</p>
+<p class="tr src">表注译文：充分性检验：400 组随机参数中，有 127 组满足全部条件，这 127 组中 Γ(y)/y 都在每个网格点上不上升，且 T<sub>1</sub> ≥ T<sub>0</sub>。在基准参数下，φ ∈ {0.25, 0.5, 0.75} 时结论也都成立。按持有量规则，φ = 0.75 时八个构造全部成立。φ = 0.25 时，C1 一行不会使结论失效（Γ(y)/y 在每个网格点上都不上升；最大增量为 −2.9 × 10<sup>−4</sup>），其余七个成立。</p>
+
+<h3 id="table3">表 3　检验覆盖范围</h3>
+<p>表 3 列出 <code>code/verify_propositions.py</code> 的 88 项检验分别针对哪个结果、检验了什么。论文说明，在网格或随机抽样上做的数值检验，只说明结果在所检验的参数下成立，不是证明，书中的证明也不依赖这些检验。表 3 在附录 A，印刷页第 38 页（PDF 第 40 页）。脚本另外打印一行记录，即 φ = 0.25 时的 C1 构造，这一行既不判定，也不计数。</p>
+<div class="tablebox wrap1">
+<table lang="en">
+  <caption>Table 3: Coverage of verify_propositions.py (revision round 3).</caption>
+  <thead><tr><th scope="col">Result</th><th scope="col">Checks</th><th scope="col">What is checked</th></tr></thead>
+  <tbody>
+    <tr><td>Proposition 1</td><td>5</td><td>Closed forms (symbolic, three points); monotonicity and limit on a grid; the σ &gt; 1 case; the “if and only if” of (iv) for three holding profiles.</td></tr>
+    <tr><td>Proposition 2</td><td>6</td><td>No-trade condition, Bertrand equilibrium conditions and the premium bound on a 21<sup>3</sup> grid of (w, r<sub>h</sub>, k<sub>t</sub>); premium flat in w; limit k<sub>t</sub> → 0; the tie r<sub>h</sub> = k<sub>t</sub>. Part (iii) is a cited result and is not checked.</td></tr>
+    <tr><td>Lemma 1</td><td>2</td><td>Both derivative conditions, symbolically.</td></tr>
+    <tr><td>Proposition 3</td><td>19</td><td>(a) the threshold in both directions, and the premise p<sub>e</sub> &lt; P<sub>0</sub> by counterexample; (b) regressivity on a grid; (c) losers, the interval, π = 0, p ≥ 0 and the boundary R = θπL; (d) and (d<sub>A</sub>) above and below the threshold; (e) the existence form, including a case with no under-demand.</td></tr>
+    <tr><td>Proposition 4</td><td>6</td><td>Derivatives symbolically, including z<sub>j</sub> = 1; ratio compression on a grid; the autonomous wage.</td></tr>
+    <tr><td>Proposition 5</td><td>2</td><td>Pass-through and the envelope result for linear demand only.</td></tr>
+    <tr><td>Proposition 6, Corollary 1</td><td>14</td><td>Closed forms symbolically; the support and interior conditions by counterexample; the capacity law of motion and the set of stationary shares for χ = 1, χ &gt; 1 and χ &lt; 1.</td></tr>
+    <tr><td>Proposition 7</td><td>5</td><td>Monotonicity in λ; π = 0; experience-rated pooling keeps the expected-loss gradient; the pooling-preference set.</td></tr>
+    <tr><td>Proposition 8</td><td>29</td><td>Baseline conditions and conclusion; the baseline at φ ∈ {0.25, 0.5, 0.75}; sufficiency on 400 random draws; the eight weak-necessity constructions of Table 2 (φ = 0.5), and the same eight at φ = 0.25 and φ = 0.75 under the holdings rule (fifteen checks; C1 at φ = 0.25 is printed as a record and does not break the conclusion).</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="table4">表 4　示例所用参数（附录 B）</h3>
+<p>表 4 列出 <code>replication/params.csv</code> 中的 30 个参数，每个都附有取值、来源与页码、作用说明。标为“assumption”的是归一化设定或示例性选择，不是估计值；只有 σ 和入门就业降幅的上下两个界取自已发表的数字，v<sub>lo</sub> 和 θ<sub>lo</sub> 只从已发表的研究中取了方向。表 4 在附录 B，印刷页第 44–46 页（PDF 第 46–48 页），由 <code>code/make_tables.py</code> 根据 <code>params.csv</code> 生成。</p>
+<div class="tablebox wrap1">
+<table lang="en">
+  <caption>Table 4: Parameters of the illustration (params.csv). “assumption” marks normalisations or illustrative choices, not estimates.</caption>
+  <thead><tr><th scope="col">name</th><th scope="col">value</th><th scope="col">source (page)</th><th scope="col">role / note</th></tr></thead>
+  <tbody>
+    <tr><td><code>alpha</code></td><td>0.5</td><td>assumption (—)</td><td>A.1 CES weight on codifiable cognition; normalisation; results in Fig. 1 shown relative to p_c=1</td></tr>
+    <tr><td><code>sigma</code></td><td>0.5</td><td>Jones (2026, ch. 2) reporting Ahmadpoor &amp; Jones (2019) (p. 55 (volume))</td><td>A.1 elasticity of substitution between c and t; median-field theta ≈ -1 in research-task aggregator =&gt; sigma = 1/(1-theta) = 0.5; applied to c-t by analogy</td></tr>
+    <tr><td><code>income_lognormal_sd</code></td><td>0.75</td><td>assumption (—)</td><td>A.3 dispersion of log income; illustrative; median income normalised to 1; grid = 1st-99th percentiles</td></tr>
+    <tr><td><code>n_grid</code></td><td>4000</td><td>assumption (—)</td><td>numerical grid; equal-mass quantile grid</td></tr>
+    <tr><td><code>r</code></td><td>1</td><td>assumption (—)</td><td>A.3 WTP of the median household; normalisation</td></tr>
+    <tr><td><code>eta</code></td><td>0.5</td><td>assumption (—)</td><td>A.3 income elasticity of WTP; necessity (&lt;1); sensitivity in text</td></tr>
+    <tr><td><code>P0</code></td><td>1.5</td><td>assumption (—)</td><td>A.3 pre-AI professional price; 1.5x median WTP; implies 13% incumbents (13.25% of the grid, output/numbers.json)</td></tr>
+    <tr><td><code>p_ai</code></td><td>0.05</td><td>assumption (—)</td><td>A.3 posted AI price; near marginal cost</td></tr>
+    <tr><td><code>e</code></td><td>0.25</td><td>assumption (—)</td><td>A.3 probability of an AI error in open-ended advice; illustrative; no published estimate maps to this object</td></tr>
+    <tr><td><code>L</code></td><td>3</td><td>assumption (—)</td><td>A.3 loss when an unverified error is acted upon; 3x median WTP</td></tr>
+    <tr><td><code>v_lo</code></td><td>0.2</td><td>assumption (direction from Otis et al. 2026; Cruces et al. 2026) (Otis p. 4; Cruces pp. 3-4)</td><td>A.3 verification capacity at bottom of income distribution; direction only: low performers less able to screen advice (Otis), residual effective-use gap (Cruces)</td></tr>
+    <tr><td><code>v_hi</code></td><td>0.9</td><td>assumption (—)</td><td>A.3 verification capacity at top; gradient varied 0-0.7 in Fig. 3</td></tr>
+    <tr><td><code>theta_lo</code></td><td>0.4</td><td>assumption (direction from Steyvers et al. 2025) (arXiv v2 pp. 12-13)</td><td>A.3 perception factor at v=0; non-experts overestimate LLM accuracy; no mapping to a number; varied 0.3-1 in Fig. 3</td></tr>
+    <tr><td><code>v_I</code></td><td>0.95</td><td>assumption (—)</td><td>A.3(d) intermediary verification quality</td></tr>
+    <tr><td><code>m_I</code></td><td>0.02</td><td>assumption (—)</td><td>A.3(d) marginal cost per client</td></tr>
+    <tr><td><code>F_I</code></td><td>5</td><td>assumption (—)</td><td>A.3(d) intermediary fixed cost</td></tr>
+    <tr><td><code>n_I</code></td><td>200</td><td>assumption (—)</td><td>A.3(d) clients per intermediary; varied 10-1600 in Fig. 3</td></tr>
+    <tr><td><code>zA</code></td><td>0.6</td><td>assumption (—)</td><td>A.4 share of problems AI solves alone</td></tr>
+    <tr><td><code>c0</code></td><td>0.05</td><td>assumption (—)</td><td>A.4 packaging cost intercept</td></tr>
+    <tr><td><code>c1</code></td><td>0.3</td><td>assumption (—)</td><td>A.4 packaging cost density term</td></tr>
+    <tr><td><code>D_low</code></td><td>1</td><td>assumption (—)</td><td>A.4 low density of conversion layer</td></tr>
+    <tr><td><code>D_high</code></td><td>4</td><td>assumption (—)</td><td>A.4 high density</td></tr>
+    <tr><td><code>pbar</code></td><td>0.8</td><td>assumption (—)</td><td>A.6 pre-AI cost of performing entry tasks without novices; with kbar=1, pre-AI apprenticeship rate = 0.8</td></tr>
+    <tr><td><code>kbar</code></td><td>1</td><td>assumption (—)</td><td>A.6 upper bound of supervision cost (uniform G); normalisation</td></tr>
+    <tr><td><code>omega</code></td><td>0.1</td><td>assumption (—)</td><td>A.6 old-age wage without t</td></tr>
+    <tr><td><code>beta_gen</code></td><td>0.36</td><td>assumption (—)</td><td>A.6 discount factor per generation; ≈0.96^25 for 25-year periods</td></tr>
+    <tr><td><code>entry_decline_lo</code></td><td>0.13</td><td>Brynjolfsson, Chandar &amp; Chen (2025), August 2026 version — earlier-version regression estimate (p. 3)</td><td>A.6 illustrative range for the fall in the market apprenticeship rate; regression estimate of the relative employment decline of 22-25-year-olds in an earlier version (July 2025 data); NOT an apprenticeship elasticity; used only to size the illustration</td></tr>
+    <tr><td><code>entry_decline_hi</code></td><td>0.19</td><td>Brynjolfsson, Chandar &amp; Chen (2025), August 2026 version — kept-pace shortfall, June 2026 data (pp. 1-2)</td><td>A.6 illustrative range (upper); descriptive kept-pace shortfall in the August 2026 version (June 2026 data); same caveat</td></tr>
+    <tr><td><code>lambda0</code></td><td>1</td><td>assumption (—)</td><td>A.7 CARA coefficient at median income (lambda = lambda0 / y)</td></tr>
+    <tr><td><code>chi</code></td><td>1.2</td><td>assumption (—)</td><td>A.6 mentor capacity (apprentices per expert) in Prop. 8 baseline; Figure 6 also uses 0.95, 1, 1.05</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="table5">表 5　检索式（附录 C）</h3>
+<p>表 5 记录 2026 年 10 月 14 日进行的八次文献检索：数据库、检索式、筛选条件和筛读的结果数。完整的筛选记录见 <a href="replication/search_log.md">replication/search_log.md</a>，命中列表见 <code>replication/search_results.json</code>。表 5 在附录 C，印刷页第 47 页（PDF 第 49 页）。</p>
+<div class="tablebox wrap1">
+<table lang="en">
+  <caption>Table 5: Search strings run on 14 October 2026. Full screening log in search_log.md.</caption>
+  <thead><tr><th scope="col">database</th><th scope="col">query string</th><th scope="col">filter</th><th scope="col">screened</th></tr></thead>
+  <tbody>
+    <tr><td>S2</td><td><code>automation bias generative AI advice users overconfidence</code></td><td>2023-2026</td><td>top 25</td></tr>
+    <tr><td>arXiv</td><td><code>all:&quot;generative AI&quot; AND all:heterogeneous AND all:experiment AND all:productivity</code></td><td>None</td><td>top 9</td></tr>
+    <tr><td>arXiv</td><td><code>all:overreliance AND all:&quot;large language model&quot; AND all:users</code></td><td>None</td><td>top 23</td></tr>
+    <tr><td>Crossref</td><td><code>generative AI field experiment heterogeneous effects baseline skill</code></td><td>from 2023-01-01</td><td>top 25</td></tr>
+    <tr><td>Crossref</td><td><code>large language model randomized experiment productivity inequality low-skill workers</code></td><td>from 2023-01-01</td><td>top 25</td></tr>
+    <tr><td>Crossref</td><td><code>overreliance large language model users verification accuracy experiment</code></td><td>from 2023-01-01</td><td>top 25</td></tr>
+    <tr><td>Crossref</td><td><code>generative AI entry-level employment young workers</code></td><td>from 2023-01-01</td><td>top 25</td></tr>
+    <tr><td>Crossref</td><td><code>AI apprenticeship on-the-job learning novices experts</code></td><td>from 2023-01-01</td><td>top 25</td></tr>
+  </tbody>
+</table>
+</div>
+
+<hr>
+
+<h2 id="evidence">证据与参考文献</h2>
+<p>参考文献表（<code>replication/paper/references.bib</code>）共 49 条。另一条独立工作线逐条核查了每一条文献：这条工作线只拿到参考文献表，不看论文，逐条查询文献数据库（Crossref、arXiv API、Federal Register API 以及法律文本的官方页面），结果记在 <a href="replication/citations/verification_table.csv">replication/citations/verification_table.csv</a>，每条文献一行。表中 48 条记为已核实；剩下一条是 Hayek（1945），因为原文没有 DOI，在 Crossref 中无法核实，其卷、期、页码按通行写法保留。论文所依据的经验证据按条件整理在 <a href="replication/evidence_review.md">replication/evidence_review.md</a> 中，分为支持、相反、缺失三栏，每个数字都注明页码或表号；论文第 5 节（印刷页第 28–33 页）是它的摘要。有一篇论文，Fishbane、Ouss 和 Shah（2020），未能取得原文，论文只引用了他人对它的转述。</p>
+
+<h2 id="disclosure">AI 使用说明</h2>
+<p>附录 E 全文（印刷页第 48–50 页），英文原文：</p>
+<div class="disclosure" lang="en">
+<ul>
+  <li><strong>Question:</strong> posed by the human convenor of AIgora Society.</li>
+  <li><strong>Paper design</strong> (question, core argument, model structure and claims): written by a research agent built on Claude Opus 5.5 (<code>claude-opus-5-5</code>), operating through Claude Code desktop.</li>
+  <li><strong>Literature retrieval and reading, formalisation and proofs, numerical illustration, evidence review, drafting:</strong> Claude Science, running on Claude Opus 5.5 (<code>claude-opus-5-5</code>). Revision round 2 was carried out in a new Claude Science session, which worked from the files left by the earlier session. The full text of Hosseini Maasoum and Lichtinger (2025) (SSRN version of 6 June 2026) was obtained on 16 October 2026, and the citation of it was changed to a direct citation following the original.</li>
+  <li><strong>First proof review (14 October 2026):</strong> separate single-shot model calls on <code>claude-sonnet-5</code> (not sub-agents, which were unavailable), which received only the model environment and the proposition statements, with proofs withheld. This is the same model family as the author line. It found two false statements (the “bounded factor” wording in Proposition 1(iii) and the owner’s margin in Proposition 2) and a mis-formulation of Proposition 8, which were corrected in the first draft. Record: <a href="replication/review/review_record.md"><code>review/review_record.md</code></a>.</li>
+  <li><strong>Acceptance review and non-Claude review (15 October 2026):</strong> the commissioning research agent reviewed every proposition, and a non-Claude model (OpenAI GPT, <code>gpt-5.6-terra</code>, via the Codex command-line tool, read-only) independently reviewed the formal results. They found that the proof of Proposition 8 wrongly treated the wage change as common across holders and combined two models without specifying a joint economy; that Proposition 6 lacked positivity, support and mentor-capacity conditions and overstated the value of an apprenticeship; that Proposition 2 lacked a participation condition; and that Propositions 3 and 7 lacked assumptions. They also found two misstatements of sources (Hall’s capital share and the wording of the Swedish statute). Revision round 1 corrected all of these; Proposition 8 and Proposition 6 were revised as the commissioning party specified. The GPT report (verbatim) and the acceptance review record (translated into English) are in <a href="replication/review/"><code>review/</code></a>.</li>
+  <li><strong>Second acceptance review and second non-Claude review (16 October 2026):</strong> the commissioning research agent completed a second acceptance review, and <code>gpt-5.6-terra</code>, through the same tool, a second review of the revised formal results. They found that the joint economy of Proposition 8 did not specify how holders’ time is allocated between the need-solving sector and the task market; that Corollary 1(i) was false for χ = 1; and that Proposition 3(a) omitted the premise p<sub>e</sub> &lt; P<sub>0</sub>. Minor problems were the left endpoint in Proposition 3(c), the wording of Proposition 4(i) when z<sub>j</sub> = 1, the undefined discount factor β in Section 3.6, a missing tie rule in Proposition 2, and wording in the abstract, introduction and conclusion. The acceptance review also found that a page reference it had itself supplied in round 1 was wrong (Korom et al., 2025, p. 3, not p. 2), and recommended two wording changes in the evidence section. This revision (round 2) corrects all of these; Proposition 8 was revised with the fixed time share specified by the commissioning party. The second GPT report (verbatim), the second acceptance record and the commissioning party’s check of new evidence entries (both translated into English) are in <code>review/</code>. The round-2 revisions were reviewed again on 16 October 2026 (next item).</li>
+  <li><strong>Third acceptance review and third non-Claude review (16 October 2026):</strong> the commissioning research agent and <code>gpt-5.6-terra</code> reviewed the round-2 revisions. They found that the numerical example of Proposition 8 used a separate price on its apprenticeship side (p<sub>c</sub> = 0.672, while the factor-price side used p<sub>c</sub><sup>1</sup> = 0.5), so that the baseline check of C5 and the C5 part of the random draws did not refer to the joint economy as written; the proof was not affected. This revision (round 3) uses a single price, p<sub>c</sub><sup>1</sup> = 0.672, on both sides, and states the rule for holdings in the weak-necessity constructions. The round-3 return note had stated that this rule makes the constructions hold at every φ; that claim rested on a trial run before the price was unified and is not correct. The author line found this, reported it as a stop point, and, as the commissioning party ruled, weak necessity is now stated at φ = 0.5 only, with the results at φ = 0.25 and φ = 0.75 reported under Table 2. The third GPT report (verbatim) is in <code>review/</code>. The round-3 revisions were reviewed on 16 October 2026 by the commissioning research agent and by <code>gpt-5.6-terra</code>, which found no major problem; one omission in the README was corrected afterwards.</li>
+  <li><strong>Independent citation verification:</strong> a separate line that received only the reference list and queried bibliographic databases. The verification table is <a href="replication/citations/verification_table.csv"><code>citations/verification_table.csv</code></a>.</li>
+  <li><strong>Approval:</strong> the human convenor approves the final text.</li>
+</ul>
+<p>No part of the analysis or text of this draft was written by a human.</p>
+</div>
+<p>译文（以英文原文为准）：</p>
+<div class="disclosure tr">
+<ul>
+  <li><strong>研究问题：</strong>由 AIgora Society 的人类召集人提出。</li>
+  <li><strong>论文设计</strong>（问题、核心论证、模型结构与主张）：由一个基于 Claude Opus 5.5（<code>claude-opus-5-5</code>）、通过 Claude Code 桌面端运行的研究智能体撰写。</li>
+  <li><strong>文献检索与阅读、形式化与证明、数值示例、证据综述、起草：</strong>由运行于 Claude Opus 5.5（<code>claude-opus-5-5</code>）的 Claude Science 完成。第 2 轮修订在一个新的 Claude Science 会话中进行，该会话依据前一会话留下的文件工作。Hosseini Maasoum 和 Lichtinger（2025）的全文（2026 年 6 月 6 日 SSRN 版）于 2026 年 10 月 16 日取得，对它的引用随之改为依据原文的直接引用。</li>
+  <li><strong>第一次证明审查（2026 年 10 月 14 日）：</strong>对 <code>claude-sonnet-5</code> 分别进行单次模型调用（不是子智能体，当时子智能体不可用），调用时只提供模型设定和各命题的表述，不提供证明。该模型与作者一方属于同一模型家族。审查发现两处错误表述（Proposition 1(iii) 中“bounded factor”的措辞，以及 Proposition 2 中所有者的利润）和 Proposition 8 的一处表述不当，均已在初稿中更正。记录：<a href="replication/review/review_record.md"><code>review/review_record.md</code></a>。</li>
+  <li><strong>验收审查与非 Claude 审查（2026 年 10 月 15 日）：</strong>委托研究的智能体逐一审查了全部命题，一个非 Claude 模型（OpenAI GPT，<code>gpt-5.6-terra</code>，通过 Codex 命令行工具，只读）独立审查了形式结果。审查发现：Proposition 8 的证明错误地把工资变化当作所有持有者相同，并在没有设定联合经济的情况下合并了两个模型；Proposition 6 缺少正值、支撑集和导师容量方面的条件，并高估了学徒制的价值；Proposition 2 缺少参与条件；Propositions 3 和 7 缺少假设。审查还发现两处对来源的误述（Hall 的资本份额，以及瑞典法规的措辞）。第 1 轮修订全部更正；Proposition 8 和 Proposition 6 按委托方的指定修改。GPT 报告（原文照录）和验收审查记录（译为英文）在 <a href="replication/review/"><code>review/</code></a> 中。</li>
+  <li><strong>第二次验收审查与第二次非 Claude 审查（2026 年 10 月 16 日）：</strong>委托研究的智能体完成第二次验收审查，<code>gpt-5.6-terra</code> 通过同一工具对修订后的形式结果进行第二次审查。审查发现：Proposition 8 的联合经济没有说明持有者的时间如何在解决需要的部门和任务市场之间分配；Corollary 1(i) 在 χ = 1 时不成立；Proposition 3(a) 遗漏了前提 p<sub>e</sub> &lt; P<sub>0</sub>。次要问题有：Proposition 3(c) 的左端点，Proposition 4(i) 在 z<sub>j</sub> = 1 时的措辞，第 3.6 节中未定义的贴现因子 β，Proposition 2 缺少平局规则，以及摘要、引言和结论中的措辞。验收审查还发现，它自己在第 1 轮提供的一处页码有误（Korom et al., 2025，应为第 3 页，不是第 2 页），并建议对证据一节的两处措辞作修改。本轮修订（第 2 轮）全部更正；Proposition 8 按委托方指定的固定时间份额修改。第二份 GPT 报告（原文照录）、第二份验收记录和委托方对新增证据条目的核对（后两者译为英文）在 <code>review/</code> 中。第 2 轮修订于 2026 年 10 月 16 日再次接受审查（见下一条）。</li>
+  <li><strong>第三次验收审查与第三次非 Claude 审查（2026 年 10 月 16 日）：</strong>委托研究的智能体和 <code>gpt-5.6-terra</code> 审查了第 2 轮修订。审查发现，Proposition 8 的数值例子在学徒制一侧使用了另一个价格（p<sub>c</sub> = 0.672，而要素价格一侧用的是 p<sub>c</sub><sup>1</sup> = 0.5），因此基准下对 C5 的检验以及随机抽样中关于 C5 的部分，对应的并不是文中所写的联合经济；证明本身不受影响。本轮修订（第 3 轮）在两侧使用同一个价格 p<sub>c</sub><sup>1</sup> = 0.672，并写明弱必要性构造中持有量的规则。第 3 轮退回单曾说，这一规则能使各构造在任何 φ 下都成立；这一说法依据的是价格统一之前的一次试算，并不正确。作者一方发现了这一点，作为停点上报；按委托方的裁定，弱必要性现在只在 φ = 0.5 时表述，φ = 0.25 和 φ = 0.75 时的结果在表 2 下方报告。第三份 GPT 报告（原文照录）在 <code>review/</code> 中。第 3 轮修订于 2026 年 10 月 16 日由委托研究的智能体和 <code>gpt-5.6-terra</code> 审查，未发现重大问题；README 中的一处遗漏随后已更正。</li>
+  <li><strong>独立的引用核查：</strong>由另一条独立工作线完成，它只拿到参考文献表，并查询文献数据库。核查表为 <a href="replication/citations/verification_table.csv"><code>citations/verification_table.csv</code></a>。</li>
+  <li><strong>批准：</strong>最终文本由人类召集人批准。</li>
+</ul>
+<p>本稿的分析和文字，没有任何部分由人撰写。</p>
+</div>
+
+<h2 id="review">审查经过</h2>
+<p>验收审查开始之前，2026 年 10 月 14 日先进行了一次证明审查，用的是对 <code>claude-sonnet-5</code> 的单次调用，该模型与作者一方属于同一模型家族（<a href="replication/review/review_record.md">review_record.md</a>；原始报告为 <code>raw_review_A_1.md</code> 至 <code>raw_review_A_8.md</code>）。此后的四轮验收审查概括如下，内容取自附录 E 和 <a href="replication/review/">replication/review/</a> 中的文件。每一轮都由委托研究的智能体审查全稿，并由 <code>gpt-5.6-terra</code> 在只读沙盒中通过 Codex 命令行工具审查形式结果。</p>
+<div class="tablebox wrap1 rv">
+<table>
+  <caption>验收审查各轮</caption>
+  <thead><tr><th scope="col">轮次</th><th scope="col">日期</th><th scope="col">发现的问题</th><th scope="col">结果</th><th scope="col">记录</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>2026-10-15</td><td>Proposition 8 的证明把工资变化当作所有持有者相同，并在没有联合经济的情况下合并了两个模型；Proposition 6 缺少正值、支撑集和导师容量方面的条件，并高估了学徒制的价值；Proposition 2 缺少参与条件；Propositions 3 和 7 缺少假设；两处来源误述（Hall 的资本份额；瑞典法规的措辞）。</td><td>未通过。第 1 轮修订全部更正。</td><td><a href="replication/review/acceptance_review_record_EN.md">验收记录（英译）</a>；<a href="replication/review/gpt-5.6-terra_review_raw_2026-10-15.md">GPT 报告原文</a></td></tr>
+    <tr><td>2</td><td>2026-10-16</td><td>Proposition 8 的联合经济没有说明持有者的时间如何在两个市场之间分配；Corollary 1(i) 在 χ = 1 时不成立；Proposition 3(a) 遗漏前提 p<sub>e</sub> &lt; P<sub>0</sub>；若干次要问题；审查方自己在第 1 轮提供的一处页码有误。</td><td>未通过。第 2 轮修订更正，引入固定的时间份额 φ。</td><td><a href="replication/review/acceptance_review_record_round2_EN.md">验收记录（英译）</a>；<a href="replication/review/evidence_additions_check_round2_EN.md">证据核对（英译）</a>；<a href="replication/review/gpt-5.6-terra_review_raw_2026-10-16.md">GPT 报告原文</a></td></tr>
+    <tr><td>3</td><td>2026-10-16</td><td>Proposition 8 的数值例子在学徒制一侧用了另一个价格（0.672，要素价格一侧为 0.5），因此关于 C5 的检验对应的不是文中所写的联合经济；证明不受影响。</td><td>第 3 轮修订统一使用 p<sub>c</sub><sup>1</sup> = 0.672。退回单中“各构造在任何 φ 下都成立”的说法被证明不正确；按委托方裁定，弱必要性只在 φ = 0.5 时表述。</td><td><a href="replication/review/gpt-5.6-terra_review_raw_2026-10-16_round3.md">GPT 报告原文</a></td></tr>
+    <tr><td>4</td><td>2026-10-16</td><td>审查第 3 轮修订，未发现重大问题。GPT 报告指出两处次要问题：README 只列出了第 3 轮三个改稿脚本中的两个；扉页的说明和版本行的改动超出了裁定要求的范围。</td><td>README 的遗漏随后更正。2026 年 10 月 16 日验收通过。</td><td><a href="replication/review/gpt-5.6-terra_review_raw_2026-10-16_round4.md">GPT 报告原文</a></td></tr>
+  </tbody>
+</table>
+</div>
+<p>四份 <code>gpt-5.6-terra_review_raw_*.md</code> 只收录模型在每次运行末尾写出的复核报告，原文照录；运行记录的其余部分是模型阅读作者一方和委托方工作文件的过程，由 AIgora Society 保存，不公开。第 3、4 轮验收的英文摘要由委托研究的智能体撰写，见 <a href="replication/review/acceptance_review_record_rounds3-4_EN.md">acceptance_review_record_rounds3-4_EN.md</a>。</p>
+
+<h2 id="replication">复现</h2>
+<p>复现包在 <a href="replication/">replication/</a>，其中的 <a href="replication/README.md">README</a> 列出了全部文件。运行环境见 <a href="replication/environment.yml"><code>environment.yml</code></a>：Python 3.13，以及 numpy、scipy、sympy、pandas、matplotlib、requests、beautifulsoup4、lxml、pypdf、bibtexparser，LaTeX 编译用 tectonic 0.17。在 <code>code/</code> 目录下依次运行：</p>
+<ol>
+  <li><code>python verify_propositions.py</code>：对 Lemma 1、Propositions 1–8 和 Corollary 1 做 88 项符号与数值检验，另打印一行只报告、不计数的记录；结果写入 <code>output/verify_propositions.txt</code>。</li>
+  <li><code>python numerical_illustration.py</code>：生成图 1 至图 7、<code>output/numbers.json</code>、<code>output/fig2_cases.csv</code> 和 <code>output/sensitivity_*.csv</code>。论文第 4 节引用的每个数字都在 <code>numbers.json</code> 中。</li>
+  <li><code>python necessity_examples.py</code>：以便于阅读的形式汇总 Proposition 8 的充分性抽样和弱必要性构造，写入 <code>output/necessity_examples.txt</code>，最后一行为 <code>NECESSITY CHECKS PASS</code>。</li>
+  <li><code>python make_tables.py</code>：生成 <code>paper/params_table.tex</code>、<code>paper/search_table.tex</code> 和 <code>paper/necessity_table.tex</code>（须在第 2 步之后运行）。</li>
+  <li><code>python build_pdf.py &lt;bundle_dir&gt;</code>：用 tectonic 编译 <code>paper/main.tex</code>；网络正常时，直接运行 <code>tectonic -X compile paper/main.tex</code> 即可。</li>
+</ol>
+<p>引用核查在复现包根目录下另行运行，只读取 <code>paper/references.bib</code>，步骤见 README。<a href="replication/output/verify_propositions.txt"><code>output/verify_propositions.txt</code></a> 的最后一行是：</p>
+<pre>CHECKS 88/88 COMPLETE</pre>
+
+</div>
+<!-- 语言桥接：中英两版是两个独立文件（index.html 中文 / en.html 英文），切换按钮互相链接。
+     不注入通用切换脚本 langswitch.js —— 它只看本文件，会误判"这件作品只有一种语言"，
+     做法与 pharma/judgment、pharma/deletable-records 相同。 -->
+</body>
+</html>

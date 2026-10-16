@@ -1,0 +1,27 @@
+<!-- Reviewer: claude-sonnet-5 single-shot call (not a sub-agent), round 3, stop=end_turn, output tokens=16619 -->
+
+# Referee Report: Proposition 6 (Apprenticeship Externality)
+
+**General note on the standing definitions.** The "inclusive gains" definition (EV(y)/y non-increasing in y) is never invoked anywhere in this section — Prop. 6 works entirely in aggregate rates (a^m, a*, T), with no income-indexed analysis. By the paper's own "across generations" criterion (share of each cohort holding t must not fall), part (i) is a direct demonstration that the market outcome is *not* inclusive across generations. The proposition should say this explicitly rather than leave the connection implicit; as written it reads as disconnected from the definitions it supposedly operationalizes.
+
+**(i) a^m(p_c) = G(p_c).** The result requires an unstated equilibrium selection: the novice wage w_N must be pinned at the floor w_N = 0 for *every* firm, not merely the marginal one. That only follows if the supply of young agents willing to apprentice strictly (weakly) exceeds firms' demand for novices at every relevant threshold, so competition among novices (not firms) sets the wage at its floor. This is plausible given "mass 1 each generation" but is never stated as an assumption — without it, the marginal firm's wage would instead be bid toward p_c − κ_j, changing the threshold. Given the assumption holds, the comparative static (G increasing, G(p̄) > G(p_c)) is correct.
+
+**(ii) a*(p_c) = G(p_c+βW(p_c)).** The efficiency criterion silently assumes W(p_c) is *exogenous to the stock of experts* — i.e., the wage premium is pinned purely by the price of AI, with perfectly elastic demand for expert labor, so raising today's apprenticeship rate does not depress tomorrow's W. Nothing in the stated environment rules out W depending on T (the standard case in assignment/Roy models with downward-sloping demand for expert services). If W = W(T,p_c), the efficient rule is not a static threshold but a fixed-point condition, and the formula as given is wrong in general. This needs to be stated as an explicit maintained assumption ("Proposition 1's wage function is invariant to the equilibrium mass of experts"), not left implicit.
+
+**(iii) T^m = G(p_c), T* = G(p_c+βW(p_c)).** This is only a restatement of (i)–(ii) under a steady-state assumption that p_c is time-invariant and that the mapping a(p_c) ↦ T is a *fixed point*, not merely a one-shot evaluation. If W genuinely depends on T (see (ii)), then T* must solve T* = G(p_c + βW(T*,p_c)) — existence and uniqueness of such a fixed point are not addressed, and the displayed formula implicitly assumes W is independent of T, begging the question. As stated this is circular unless the hidden assumption in (ii) is granted.
+
+**(iv) Δ(p_c) = ∫_{p_c}^{p_c+βW}(p_c+βW−κ)dG(κ) > 0.** I re-derived this integral directly: for κ ∈ (p_c, p_c+βW), the social gain from apprenticeship over AI is (p_c−κ)+βW, which is exactly the integrand, and it is strictly positive on the open interval, zero at the upper limit — so the inequality is correct as a Harberger-triangle identity, treating wages as pure transfers (valid only under transferable-utility/utilitarian welfare, not stated explicitly). It inherits the same W(p_c)-exogeneity caveat as (ii).
+
+**(v) Subsidy implementation.** The mechanics (s shifts the firm's effective threshold from κ_j ≤ p_c to κ_j ≤ p_c+s) are correct arithmetic, and s* = βW(p_c) exactly closes the gap identified in (ii)–(iv), so it is a legitimate Pigouvian result conditional on that gap being computed correctly. Two further unstated assumptions: (a) the subsidy is lump-sum financed (no distortionary tax interaction — "restores the optimum" is too strong if financed otherwise); (b) raising the threshold to p_c+s does not push apprenticeship demand above available novice supply (G(p_c+s) < 1 slack), since the wage-floor logic of (i) requires continued excess supply. The second claim, s = p̄ − p_c to hold T at its pre-AI level, follows immediately from strict monotonicity of G (g>0 guarantees invertibility) — this part is unobjectionable algebra.
+
+**(vi) Uniform-distribution scissors.** I verified both closed forms directly: with G(κ)=κ/κ̄, a*−a^m = [G(p_c+βW)−G(p_c)] = βW/κ̄, and Δ = ∫₀^{βW}(βW−x)/κ̄ dx = (βW)²/(2κ̄) — both match. Monotonicity in p_c follows mechanically from W(p_c) being positive and strictly decreasing (a maintained premise from Prop. 1, not re-derived here): d(βW/κ̄)/dp_c < 0 and d[(βW)²/(2κ̄)]/dp_c = β²WW'/κ̄ < 0. The algebra is correct, but the result is only as good as (i)–(ii), whose hidden assumptions it inherits wholesale.
+
+**Other flags.** (a) No lower-bound restriction p_c ≥ 0 is stated alongside the upper bound p_c+βW<κ̄ needed for the uniform closed forms to stay in-support. (b) F2's "w_N ≥ 0" is asserted as a credit-market friction but the model never explains why firms couldn't instead charge an explicit upfront training fee (a one-time negative transfer rather than a wage) — if such instruments are permitted, the externality could be privately internalized even under w_N ≥ 0, undermining the entire inefficiency result. This possibility is not foreclosed by the stated frictions and should be addressed.
+
+VERDICTS:
+(i) TRUE-WITH-CAVEAT
+(ii) TRUE-WITH-CAVEAT
+(iii) TRUE-WITH-CAVEAT
+(iv) TRUE-WITH-CAVEAT
+(v) TRUE-WITH-CAVEAT
+(vi) TRUE-WITH-CAVEAT

@@ -1,0 +1,34 @@
+\small\begin{longtable}{p{0.14\textwidth}p{0.07\textwidth}p{0.33\textwidth}p{0.36\textwidth}}
+\caption{Parameters of the illustration (\texttt{params.csv}). ``assumption'' marks normalisations or illustrative choices, not estimates.}\label{tab:params}\\
+\toprule name & value & source (page) & role / note\\ \midrule\endfirsthead\toprule name & value & source (page) & role / note\\ \midrule\endhead
+alpha & 0.5 & assumption (—) & A.1 CES weight on codifiable cognition; normalisation; results in Fig. 1 shown relative to p\_c=1\\
+sigma & 0.5 & Jones (2026, ch. 2) reporting Ahmadpoor \& Jones (2019) (p. 55 (volume)) & A.1 elasticity of substitution between c and t; median-field theta $\approx$ -1 in research-task aggregator => sigma = 1/(1-theta) = 0.5; applied to c-t by analogy\\
+income\_lognormal\_sd & 0.75 & assumption (—) & A.3 dispersion of log income; illustrative; median income normalised to 1; grid = 1st-99th percentiles\\
+n\_grid & 4000 & assumption (—) & numerical grid; equal-mass quantile grid\\
+r & 1 & assumption (—) & A.3 WTP of the median household; normalisation\\
+eta & 0.5 & assumption (—) & A.3 income elasticity of WTP; necessity (<1); sensitivity in text\\
+P0 & 1.5 & assumption (—) & A.3 pre-AI professional price; 1.5x median WTP; implies 13\% incumbents (13.25\% of the grid, output/numbers.json)\\
+p\_ai & 0.05 & assumption (—) & A.3 posted AI price; near marginal cost\\
+e & 0.25 & assumption (—) & A.3 probability of an AI error in open-ended advice; illustrative; no published estimate maps to this object\\
+L & 3 & assumption (—) & A.3 loss when an unverified error is acted upon; 3x median WTP\\
+v\_lo & 0.2 & assumption (direction from Otis et al. 2026; Cruces et al. 2026) (Otis p. 4; Cruces pp. 3-4) & A.3 verification capacity at bottom of income distribution; direction only: low performers less able to screen advice (Otis), residual effective-use gap (Cruces)\\
+v\_hi & 0.9 & assumption (—) & A.3 verification capacity at top; gradient varied 0-0.7 in Fig. 3\\
+theta\_lo & 0.4 & assumption (direction from Steyvers et al. 2025) (arXiv v2 pp. 12-13) & A.3 perception factor at v=0; non-experts overestimate LLM accuracy; no mapping to a number; varied 0.3-1 in Fig. 3\\
+v\_I & 0.95 & assumption (—) & A.3(d) intermediary verification quality\\
+m\_I & 0.02 & assumption (—) & A.3(d) marginal cost per client\\
+F\_I & 5 & assumption (—) & A.3(d) intermediary fixed cost\\
+n\_I & 200 & assumption (—) & A.3(d) clients per intermediary; varied 10-1600 in Fig. 3\\
+zA & 0.6 & assumption (—) & A.4 share of problems AI solves alone\\
+c0 & 0.05 & assumption (—) & A.4 packaging cost intercept\\
+c1 & 0.3 & assumption (—) & A.4 packaging cost density term\\
+D\_low & 1 & assumption (—) & A.4 low density of conversion layer\\
+D\_high & 4 & assumption (—) & A.4 high density\\
+pbar & 0.8 & assumption (—) & A.6 pre-AI cost of performing entry tasks without novices; with kbar=1, pre-AI apprenticeship rate = 0.8\\
+kbar & 1 & assumption (—) & A.6 upper bound of supervision cost (uniform G); normalisation\\
+omega & 0.1 & assumption (—) & A.6 old-age wage without t\\
+beta\_gen & 0.36 & assumption (—) & A.6 discount factor per generation; $\approx$0.96\^{}25 for 25-year periods\\
+entry\_decline\_lo & 0.13 & Brynjolfsson, Chandar \& Chen (2025), August 2026 version — earlier-version regression estimate (p. 3) & A.6 illustrative range for the fall in the market apprenticeship rate; regression estimate of the relative employment decline of 22-25-year-olds in an earlier version (July 2025 data); NOT an apprenticeship elasticity; used only to size the illustration\\
+entry\_decline\_hi & 0.19 & Brynjolfsson, Chandar \& Chen (2025), August 2026 version — kept-pace shortfall, June 2026 data (pp. 1-2) & A.6 illustrative range (upper); descriptive kept-pace shortfall in the August 2026 version (June 2026 data); same caveat\\
+lambda0 & 1 & assumption (—) & A.7 CARA coefficient at median income (lambda = lambda0 / y)\\
+chi & 1.2 & assumption (—) & A.6 mentor capacity (apprentices per expert) in Prop. 8 baseline; Figure 6 also uses 0.95, 1, 1.05\\
+\bottomrule\end{longtable}

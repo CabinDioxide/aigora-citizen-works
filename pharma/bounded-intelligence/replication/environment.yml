@@ -1,0 +1,20 @@
+name: bigrowth
+channels:
+  - conda-forge
+dependencies:
+  - python=3.13
+  - numpy=2.5.4
+  - scipy=1.18.1
+  - sympy=1.14.0
+  - pandas=3.0.6
+  - matplotlib=3.11.2
+  - requests=2.34.2
+  - beautifulsoup4=4.15.0
+  - lxml
+  - pypdf=6.20.1
+  - pytest
+  - tectonic=0.17.0
+  - pip
+  - pip:
+      - bibtexparser==2.1.0
+      - pypdfium2

@@ -1,0 +1,33 @@
+<!-- Reviewer: claude-sonnet-5 single-shot call (not a sub-agent), round 3, stop=end_turn, output tokens=10145 -->
+
+# Review: Proposition 8 (Synthesis, §3.8)
+
+The section contains one proposition with an attached "weak individual necessity" sub-claim. I treat these as two items. Proofs are withheld, so what follows is my own reconstruction and check.
+
+## Item 1 — Proposition 8 (joint sufficiency)
+
+**Reconstructed proof.** G(y)/y = EV_cons(y)/y + Δw(y)τ(y)/y. If each summand is non-increasing in y, their sum is non-increasing — this step is pure algebra and is correct. C1 directly supplies "Δw(y)τ(y)/y non-increasing." The first summand's monotonicity is *not* supplied in this text: C2 only says "the effective-price schedule satisfies Lemma 1," and Lemma 1 itself is not reproduced. The proposition therefore rests on an unstated bridge lemma ("Lemma 1 / (d1)–(d3) of Prop 3 ⟹ EV_cons(y)/y non-increasing") that I cannot verify from the materials given. This is the single largest gap: the "proof" of the headline conclusion is, as presented, two cross-references plus one line of algebra, and the actual content is hidden two propositions upstream.
+
+**A genuine bug, not just a gap.** C1's parenthetical — "in the special case of a common Δw... this reduces to τ(y)/y non-increasing" — silently assumes Δw > 0. Dividing a non-increasing function by a positive constant preserves monotonicity, but dividing by a negative one reverses it. C3 explicitly contemplates Δw_j ≤ 0 under autonomy, so the reduction is false in exactly the regime the proposition itself flags. Concrete counterexample: let τ(1)/1 = 1 and τ(2)/2 = 0.5 (τ(y)/y non-increasing, as required). With Δw = −1 (constant, autonomous case), Δw·τ(y)/y equals −1 at y=1 and −0.5 at y=2 — that sequence is *strictly increasing*, not non-increasing. So "common Δw ⟹ reduces to τ/y non-increasing" is false whenever Δw < 0; the claimed equivalence tacitly requires Δw ≥ 0, which is precisely C3's content, not an independent "special case" of C1. The cross-reference conflates two conditions that the proposition lists as separate.
+
+**Definitional looseness.** The standing definition of "inclusive" only constrains the *ratio* EV(y)/y, not the sign of EV(y). A world in which every household loses, with losses falling (in share of income) as income rises, satisfies "inclusive" under this definition. That may be intended, but it is worth flagging explicitly since the word "gains" is used throughout as if positivity were implied. Also: G(y)/y is undefined at y = 0; if the model admits zero-income households this needs a stated convention (limit, or exclusion) that is not given.
+
+**Sign of Δw(y) in general (not just common-Δw case).** C1 states the sufficient condition as "Δw(y)τ(y)/y non-increasing," with no sign restriction on Δw(y) in the general (non-common) case. C3 restricts Δw_j ≥ 0 pointwise for all holders under non-autonomy, which does make Δw(y) (an average) non-negative, so in the regime C3 actually describes, the bridge works pointwise without sign flips. Taken together with C3, C1's general statement is internally consistent; it is only the explicit "reduces to" parenthetical for the autonomous case that is wrong as written.
+
+**Assessment.** Granting (a) that the withheld Lemma 1 does deliver EV_cons(y)/y non-increasing under C2, and (b) that C1 is read with Δw(y) ≥ 0 (i.e., effectively presupposing C3, not independent of it), the arithmetic for the first conclusion goes through. The second conclusion ("T does not fall") is just a restatement of C5 with no connecting argument shown — C5's hypothesis (s ≥ p̄ − p_c) is simply asserted to be "the pre-AI level of T," so this half of Prop 8 is not proved here at all, merely relabeled.
+
+## Item 2 — Weak individual necessity
+
+**The claim.** For each Ck, there exists a parameterisation satisfying all *other* conditions under which dropping Ck alone breaks one of the two conclusions.
+
+**Problem.** Given the proof structure above, C1 and (C2 ⟹ EV ratio non-increasing) jointly and *by themselves* already force G(y)/y non-increasing, by the trivial sum argument — no reference to C3 or C4 is used in that algebra. So if C1 is held true exactly as stated (which "holding all other conditions" must mean, since C1 is one of the five listed conditions), then violating C3 *cannot* make G(y)/y increase anywhere: the conclusion follows from C1+C2 regardless of C3's truth value. The only way C3's failure could matter is if C3's failure is used to *force* C1 to fail as well — but then the necessity example is not isolating C3, it is showing C1 fails, contradicting "holding all other conditions." The proposition's own list treats C1–C5 as five symmetric, separately checkable hypotheses; the "weak necessity" claim needs them to be asymmetric (C3, C4 as primitives that *generate* C1/C2 via upstream propositions) for the examples to make sense. These two framings are incompatible as written. The same objection applies to C4 vis-à-vis C2.
+
+**Second problem.** No argument is offered for why a failure of C1–C4 (all about the first conclusion, G(y)/y) would make T fall, or why a failure of C5 (about T) would make G(y)/y increase. The "or" in the weak-necessity statement bundles two logically separate conclusions without showing any cross-channel. Absent that, the claim as stated is broader than anything demonstrated in this excerpt; the referenced numerical file is not something I can inspect here, so I cannot confirm it resolves the inconsistency rather than merely computing examples under a reading of the conditions that differs from their stated form.
+
+**Assessment.** As stated, the necessity claim is internally inconsistent for C3 and C4 given the (trivial) sufficiency proof for the main conclusion, and unsupported for the cross-conclusion claims generally.
+
+---
+
+VERDICTS:
+1. Proposition 8 (joint sufficiency): TRUE-WITH-CAVEAT — holds only if (i) Lemma 1/C2 is read as directly implying EV_cons(y)/y non-increasing (not shown here), (ii) C1's "common Δw" reduction is corrected to require Δw ≥ 0 (as written it is FALSE for Δw<0, demonstrated by explicit counterexample above), and (iii) the "T does not fall" half is accepted as a restatement of C5 rather than a proved implication.
+2. Weak individual necessity: FALSE AS STATED — the claimed independent necessity of C3 and C4 contradicts the trivial sufficiency of C1+C2 for the first conclusion, and no mechanism is given for either conclusion to depend on the "wrong" set of conditions (C1–C4 affecting T, or C5 affecting G(y)/y).

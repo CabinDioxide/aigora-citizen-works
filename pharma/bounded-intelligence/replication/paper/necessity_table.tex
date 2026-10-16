@@ -1,0 +1,19 @@
+\begin{table}[t]\centering\small
+\caption{Proposition~\ref{prop:synthesis}: weak-necessity constructions in the joint economy. Time share $\varphi=0.5$. Each row changes the baseline (all conditions hold) so that one of C1--C5 fails. In the four rows that target C1 and C3, holdings are $\tau(y)=\tau_0(y)/(1-\varphi)$ for a reference profile $\tau_0$, so that task-market holder time $(1-\varphi)\tau$ does not depend on $\varphi$; the values shown are for $\varphi=0.5$. ``Others hold'' and ``target fails'' are evaluated by code. The last two columns report the share of income-grid steps on which $\Gamma(y)/y$ increases, and the next cohort's $t$-share $T_1$ against $T_0=0.80$.}\label{tab:necessity}
+\begin{tabular}{p{0.50\textwidth}cccc}
+\toprule
+Construction & Others hold & Target fails & Grid share increasing & $T_1$\\
+\midrule
+Baseline (C1--C5 hold) & -- & -- & 0.000 & 0.800\\
+C1 fails: $\tau(y)=0.4y^2$, so $\tau(y)/y$ rises & yes & yes & 0.007 & 0.800\\
+C2 fails: no intermediated verification offered & yes & yes & 0.637 & 0.800\\
+C3 fails (autonomy): AI becomes autonomous; only $z_A$ changes; $\tau(y)=4y^{1/2}$, $z=0.5$ & yes & yes & 0.129 & 0.960\\
+C3 fails ($C(D^0)\ge s^0_{\min}$): low-$z$ holders not employed before; only $D$ changes; $\tau(y)=4y$ & yes & yes & 0.059 & 0.960\\
+C3 fails ($z(y)$ decreasing): only $z_A$ changes; $\tau(y)=20y$ & yes & yes & 0.763 & 0.960\\
+C4 fails: access fee $A=30$, so $n=200<n^*(A)=345$ & yes & yes & 0.054 & 0.800\\
+C5 fails: no apprenticeship subsidy ($s=0$) & yes & yes & 0.000 & 0.672\\
+C5 fails: mentor capacity $\chi=0.9<1$ & yes & yes & 0.000 & 0.720\\
+\bottomrule
+\end{tabular}
+\par\smallskip\raggedright\footnotesize Sufficiency check: of 400 random parameter draws, 127 satisfy all conditions, and in all 127 of these $\Gamma(y)/y$ is non-increasing at every grid point and $T_1\ge T_0$. At the baseline, the conclusion also holds for $\varphi\in\{0.25,0.5,0.75\}$. Under the holdings rule, all eight constructions hold at $\varphi=0.75$. At $\varphi=0.25$ the C1 row does not break the conclusion ($\Gamma(y)/y$ is non-increasing at every grid point; largest increment $-2.9\times10^{-4}$), and the other seven hold.
+\end{table}
