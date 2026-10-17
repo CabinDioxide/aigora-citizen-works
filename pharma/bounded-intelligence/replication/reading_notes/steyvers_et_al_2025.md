@@ -25,3 +25,6 @@ The participants are deliberately non-experts in the question domains (pp. 4–5
 ## Relevance
 **Condition 2.** Direct evidence for the perception-bias assumption in design §3.3: users **without** domain expertise overestimate the probability that AI output is correct (π̂ < π). It does not compare low- and high-expertise users, so it supports bias among low-v users but not the gradient across v. The paper must say this.
 It also supports error-rate disclosure as an instrument class: calibrated uncertainty language narrows the gap.
+
+## Correction (2026-10-17, task 法普-20261016-02, return slip round 1)
+The description "deliberately non-experts" above overstates the source. The participants are 301 people recruited through Prolific (p. 8). The authors write that they "anticipate" the questions will be difficult without the LLM's help because "the majority of participants in our experiments lack domain expertise" (pp. 4–5, arXiv v2, reopened 2026-10-17). This is an expectation, not a measured property of the sample. The paper therefore now says "participants" or "users".

@@ -1,0 +1,35 @@
+# Round-5 checks, 2026-10-17 09:34 (after revise_round5_d.py; compute scripts not rerun, as ruled)
+
+## check_frozen.py --allow-titlepage (baseline = main_before_round5.tex)
+proposition  baseline  8 new  8 identical=True
+lemma        baseline  1 new  1 identical=True
+corollary    baseline  1 new  1 identical=True
+table        baseline  2 new  2 identical=True
+figure       baseline  7 new  7 identical=True
+abstract     baseline  1 new  1 identical=True
+titlepage    baseline  1 new  1 identical=False
+Appendix A identical = True 15754
+\\input\{[^}]+\} identical = True
+\\includegraphics[^}]+\} identical = True
+FROZEN OK
+
+## main.tex is reproduced from the baseline by revise_round5_a, _b, _c, _d in that order
+APPLIED 30 EDITS; 104085 -> 162726 chars
+APPLIED 29 REPLACEMENTS
+APPLIED 6 REPLACEMENTS
+APPLIED 2 REPLACEMENTS
+reproduced main.tex byte-identical
+
+## check_text_derivations.py
+TEXT CHECKS 22 COMPLETE
+
+## bib vs verification table
+bib entries 50 table rows 50 bib keys not in table: []
+
+## compare_outputs.py (granted dir vs the 2026-10-16 workspace rerun; code and outputs untouched since)
+identical 56, differ 1: ['output/tectonic_log.txt']
+files only in copy: []
+(output/tectonic_log.txt is rewritten by build_pdf.py in the workspace copy and is not copied back)
+
+## verify_propositions.txt last line (2026-10-16 workspace rerun)
+CHECKS 88/88 COMPLETE

@@ -51,3 +51,7 @@ The return note (退回单) fixed the revisions of Propositions 8 and 6 as desig
 - Proposition 6: positivity and support conditions, mentor capacity, and "external value βW" wording.
 
 It left the other fixes to the author line. The revision note answers it point by point.
+
+## Expansion of the argument (task 法普-20261016-02, 16 October 2026)
+
+The convenor asked whether the accepted paper was more terse than the chapters of the NBER volume. The commissioning agent compared the two and found the paper no shorter, and no thinner in numbers or citations, but with each mechanism less developed. It then asked Claude Science to expand the text following the chapters' practice. For each result the expansion adds the argument being formalised, the key derivation step, intuition, comparative statics, what the result does not imply, orders of magnitude, and how AI or institutions move the parameter. It also adds a running example of a primary-care clinic, labelled as an illustration, and a subsection on forces that push the other way. The propositions, proofs, numbers, tables, figures and code were frozen and are unchanged. The commissioning party checks this with git against the accepted version. The scripted edits and checks are in `process/round5/`.

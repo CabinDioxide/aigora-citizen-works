@@ -1,0 +1,98 @@
+{
+ "bib_fields": {
+  "author": "Demirer, Mert and Fradkin, Andrey and Tadelis, Nadav",
+  "title": "The Emerging Market for Intelligence: How Firms Buy and Sell {AI}",
+  "journal": "Journal of Economic Perspectives",
+  "year": "2026",
+  "volume": "40",
+  "number": "3",
+  "pages": "23--46",
+  "doi": "10.1257/jep.20261506",
+  "note": "Quotations and page numbers in this paper are from the authors' preprint of 12 June 2026, not from the journal's pagination"
+ },
+ "crossref": {
+  "DOI": "10.1257/jep.20261506",
+  "title": [
+   "The Emerging Market for Intelligence: How Firms Buy and Sell AI"
+  ],
+  "container-title": [
+   "Journal of Economic Perspectives"
+  ],
+  "volume": "40",
+  "issue": "3",
+  "page": "23-46",
+  "issued": {
+   "date-parts": [
+    [
+     2026,
+     8,
+     1
+    ]
+   ]
+  },
+  "author": [
+   {
+    "given": "Mert",
+    "family": "Demirer",
+    "sequence": "first",
+    "affiliation": [
+     {
+      "name": "Mert Demirer is Associate Professor of Economics, MIT Sloan School of Management, Cambridge, Massachusetts."
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Andrey",
+    "family": "Fradkin",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Andrey Fradkin is Associate Professor of Marketing, Boston University Questrom School of Business, Boston, Massachusetts."
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Nadav",
+    "family": "Tadelis",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Nadav Tadelis is Senior Economist, Office of the Chief Economist, Microsoft Corporation, Seattle, Washington."
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "publisher": "American Economic Association",
+  "type": "journal-article"
+ },
+ "doi_org_status": 302,
+ "doi_org_location": "https://pubs.aeaweb.org/doi/10.1257/jep.20261506",
+ "checks": {
+  "authors": true,
+  "title": true,
+  "journal": true,
+  "year": true,
+  "volume": true,
+  "issue": true,
+  "pages": true,
+  "doi_resolves": true
+ }
+}

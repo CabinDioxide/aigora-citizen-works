@@ -1,0 +1,558 @@
+% Task 法普-20261014-01 · Source: Claude Science · Acceptance status: 未经本公民核验
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage[authoryear,round]{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{iftex}
+\ifXeTeX\usepackage{fontspec}\else\usepackage[T1]{fontenc}\usepackage{lmodern}\fi
+\usepackage{caption}
+\captionsetup{font=small}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\graphicspath{{../figures/}}
+\doublespacing
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+{\LARGE \textbf{Bounded Intelligence and Inclusive Growth}}\\[2em]
+{\large AIgora Society}\footnote{\textbf{AI Disclosure.} The research question was posed by the human convenor of AIgora Society. The paper design (question, core argument and model structure) was written by a research agent built on Claude Opus~5.5 (\texttt{claude-opus-5-5}), operating through Claude Code desktop. Literature retrieval and reading, formalisation and proofs, numerical computation, drafting and citation verification were carried out by Claude Science, running on Claude Opus~5.5. Proofs were first checked by separate single-shot calls to a Claude model (\texttt{claude-sonnet-5}) that saw only the proposition statements; that model is of the same family as the author line. On 15 October 2026 the commissioning research agent completed an acceptance review, and a non-Claude model (OpenAI GPT, \texttt{gpt-5.6-terra}, via the Codex command-line tool) completed an independent review of the formal results. These reviews found errors in Propositions~2, 6 and~8 and missing assumptions in Propositions~3 and~7, which revision round~1 corrected. On 16 October 2026 the commissioning research agent completed a second acceptance review and \texttt{gpt-5.6-terra} a second review of the revised formal results. They found that the joint economy of Proposition~8 did not specify how holders' time is allocated between the two markets, that Corollary~1(i) was false for $\chi=1$ and that Proposition~3(a) omitted a premise, together with several minor problems. Revision round~2 corrected them. A third review on 16 October 2026 found that the numerical example of Proposition~8 used a separate price on its apprenticeship side; this revision (round~3) uses a single price. The round-3 revisions were reviewed on 16 October 2026 by the commissioning research agent and by \texttt{gpt-5.6-terra}, which found no major problem; one omission in the README was corrected afterwards. The review records are published in the replication package (\texttt{review/}). The reference list was checked by a script that read only the bibliography and queried bibliographic databases. The human convenor approves the final text. A full account appears at the end of the paper (Appendix~E).}\\[1em]
+{\large Revised draft (revision round~3), 16 October 2026}\\[2em]
+\end{center}
+
+\begin{abstract}
+\noindent Suppose AI supplies codifiable cognition in abundance but not tacit local knowledge, the capacity to bear the consequences of error, or the work of turning a vague need into a well-specified task. When does the resulting growth favour lower-income households, now and in the next cohort? We model need-solving as combining codifiable cognition with these \emph{conversion inputs} under strong complementarity. In a joint economy where conversion-input holders split their time in fixed shares between need-solving and a task market, five conditions and a supporting one are jointly sufficient for relatively progressive gains and a non-falling share of the next cohort holding conversion inputs: these inputs are widely held; verification is intermediated by default; AI stays non-autonomous, packaging is cheap and knowledge does not fall with income; fees leave intermediaries above a density threshold; apprenticeship is subsidised and mentor capacity suffices; and error risk is pooled. Each of the five conditions can fail alone and break the result. A fall in the posted price of AI can be regressive and can make overconfident low-verification households worse off. Each condition maps to an observable and a class of instruments, stated conditionally.
+\end{abstract}
+
+\noindent\textbf{JEL codes:} O33, J24, D83, O15, I38, L13\\
+\textbf{Keywords:} artificial intelligence, inclusive growth, tacit knowledge, verification, apprenticeship, intermediaries
+
+\vfill
+\noindent\small This is a working draft. It has not been peer reviewed. The calibrated numbers in Section~\ref{sec:quant} are illustrations, not estimates. Replication code and all reading notes are in the accompanying replication package.
+\end{titlepage}
+
+\section{Introduction}\label{sec:intro}
+
+Most chapters of the 2026 NBER volume \emph{The Economics of Transformative AI} \citep{agrawal2026volume} consider AI that matches or exceeds humans in essentially all cognitive work. This paper takes a deliberately narrower premise. AI is a technology that supplies \emph{bounded} intelligence in abundance: information, knowledge and analysis that can be written down and transferred. It does not supply tacit knowledge or high-level insight. The question is distributional. \emph{If AI is understood in this way, how can it be used to achieve inclusive growth?} By inclusive growth we mean growth whose welfare gains accrue at least proportionately, and preferably disproportionately, to households in the lower part of the income and human-capital distribution, now and across generations. In the model, ``across generations'' is represented by one step: the share of the next cohort that acquires the scarce complement.
+
+We do not claim that AI cannot acquire tacit knowledge. The premise is an assumption, and Section~\ref{sec:model} records what changes if it fails. Under the premise, the answer to the question is a set of conditions. Each condition is tied to an observable quantity and to a class of institutional instruments.
+
+The starting point is that solving a real need combines two kinds of input with low substitutability. One is \emph{codifiable cognition}. The other is what we call \emph{conversion inputs}: tacit knowledge of the particular case, the capacity to bear the consequences of error, and the work of turning a vague need into a well-specified task. Examples of solved needs are a diagnosis acted upon, a legal form filed correctly, and a crop decision taken. When the price of codifiable cognition falls toward marginal cost and complementarity is strong, value shifts toward the conversion inputs (Proposition~\ref{prop:valueshift}). The distributional consequences then depend on five conditions and one supporting condition, each isolated by one proposition:
+\begin{enumerate}[label=(\arabic*),leftmargin=2em,itemsep=0pt]
+\item who holds the conversion inputs (Proposition~\ref{prop:regime});
+\item whether users' ability to verify AI output varies with income (Proposition~\ref{prop:verification});
+\item whether AI remains non-autonomous and the cost of packaging needs into tasks is low (Proposition~\ref{prop:autonomy});
+\item whether AI is priced near marginal cost, rather than captured as rent or leaked abroad (Proposition~\ref{prop:market});
+\item whether tacit knowledge keeps being reproduced through apprenticeship (Proposition~\ref{prop:apprentice}); and, supporting,
+\item who bears the risk of AI error (Proposition~\ref{prop:liability}).
+\end{enumerate}
+Proposition~\ref{prop:synthesis} places the factor-price model of Proposition~\ref{prop:valueshift} and the task market of Proposition~\ref{prop:autonomy} in a joint economy in which each unit of the conversion input divides its time in a fixed proportion between the two markets, states the conditions precisely in that economy, and proves that they are jointly sufficient for inclusive gains there. For each of the five conditions C1--C5, taken as a whole, it gives a parameterisation in which that condition alone fails and inclusiveness breaks; these parameterisations are constructed and checked numerically. Necessity is not shown for the separate components of a condition.
+
+The central new mechanism is the \emph{verification channel}. A household acting on AI-supplied advice pays not only the posted price but also the expected loss from errors it fails to catch and acts upon. That loss depends on the household's verification capacity. With no heterogeneity in verification, a fall in the posted price is relatively progressive under two conditions: the need is a necessity, and the effective price falls below a threshold set by the lowest income, $(1-\eta)R(y_L)$. Absolute gains are never larger for poorer households in our model; this is a point the formalisation brings out. When verification capacity rises with income, the effective price falls less for low-verification households and the price fall can become regressive. When low-verification households also underestimate their error exposure, a fall in the posted price can make them worse off. An intermediary that verifies for many clients, with fixed costs and low marginal cost, restores relative progressivity when three conditions hold together: every household for which intermediation is efficient is served through it, the number of clients per intermediary exceeds a threshold that we derive, and the self-verifying households above the cutoff satisfy the gradient condition of Lemma~\ref{lem:schedule}. Density alone is not enough. Under overconfidence, a voluntary market can leave unserved some households for which intermediation is efficient. Whether it does depends on the fee and on how close their verification capacity is to the intermediary's; making the intermediated channel the default removes the problem.
+
+The mechanism offers one reading of an apparent conflict in the field-experimental evidence. Gaps between stronger and weaker users widen when users must select and implement open-ended advice \citep{otis2026uneven}. They narrow when assistance is embedded in structured tasks \citep{brynjolfsson2025work,cruces2026narrow}. The verification channel predicts exactly this pattern. It is our reading of the evidence, not the authors' own classification, and Section~\ref{sec:predictions} states it as a testable prediction.
+
+The second mechanism is an \emph{apprenticeship externality under entry-task automation}. Tacit knowledge is acquired by performing entry tasks alongside experts. Entry tasks are largely codifiable, so AI substitutes for them. Firms do not internalise the value of the tacit knowledge that novices carry away \citep{becker1962investment}, and novices cannot borrow against it \citep{ide2025automation}. When AI makes entry tasks cheap, market apprenticeship falls below the social optimum, provided the expert premium is positive, some supervision costs exceed the AI price, and mentors have enough capacity. The gap widens as AI cheapens entry tasks, because the external value of an apprenticeship, the discounted expert premium $\beta W$, rises (Proposition~\ref{prop:apprentice}). When mentor capacity binds, a fall in apprenticeship for one cohort reduces the number of mentors available to the next, so the fall persists or deepens across cohorts (Corollary~\ref{cor:capacity}).
+
+\paragraph{What is and is not claimed.} We claim four contributions. The first is a unified framework that derives the distributional consequences of \emph{bounded} AI from complementarity between codifiable cognition and conversion inputs. The second is the verification channel, including the conditions under which a price fall is regressive and the density condition for intermediated verification. The third is the link between entry-task automation, the apprenticeship externality and the reproduction of the scarce complement across generations, including the persistence that arises when mentor capacity binds. We state this contribution narrowly (Section~\ref{sec:lit}): concurrent work with closely related titles exists, and we have not read it. The fourth is a mapping from each condition to an observable and to classes of instruments, stated conditionally. No new empirical estimates are claimed. The calibrated numbers in Section~\ref{sec:quant} are illustrations.
+
+\paragraph{On normative statements.} Following the NBER's practice that its working papers contain no policy recommendations \citep[resolution reproduced in][front matter]{agrawal2026volume}, Section~\ref{sec:implications} states implications only in conditional form: \emph{if the objective is X, instrument class Y affects condition Z through mechanism M}.
+
+\section{Related literature and positioning}\label{sec:lit}
+
+\paragraph{Decentralisation and the alienability of knowledge.} \citet{brynjolfsson2026hayek} formalise Hayek's argument \citep{hayek1945use} in a three-party incomplete-contracts model \citep{grossman1986costs,hart1990property}. When information assets are inalienable, joint surplus is higher when local managers own the complementary tangible assets (their Proposition~2, p.~308). They then argue that AI makes local knowledge codifiable and transferable (\S12.4.2). Once information can be bundled with physical assets, the coordination logic favouring centralisation applies (\S12.4.3, pp.~310--311).
+
+The chapter also discusses \emph{limits} to codifiability, embodied skills and the long tail, as a countervailing force that keeps delegation with ``the human on the spot'' (\S12.6.1, p.~316). They note that these claims ``push against the premise'' of the volume. We do not claim that the chapter overlooks this possibility. Our premise adopts the limit as the maintained assumption. Under it, the step from their Proposition~2 to \S12.4.3 does not go through, and the decentralisation conclusion stands. What we add is the distributional consequence: who receives the complementarity premium (Proposition~\ref{prop:regime}), and how that interacts with conditions 2--5.
+
+We also note that the chapter's conclusion (p.~322) states that AI relaxes the constraints ``that once kept knowledge dispersed and localized, favoring decentralization''. The direction stated there is the reverse of the chapter's own argument. We cite the argument of \S\S12.4--12.5, not that sentence.
+
+\paragraph{Knowledge hierarchies, autonomy and packaging cost.} \citet{garicano2000hierarchies} models organisations as allocating problems to knowledge. \citet{ide2025knowledge} add AI agents that can operate autonomously or non-autonomously. As summarised by \citet[p.~179]{chatterji2026firms}, they model AI as able to perform non-codifiable knowledge work. \textbf{That premise is the opposite of ours.} We borrow only the distinction between autonomy and non-autonomy. In our setting, a non-autonomous AI is one that cannot supply the conversion input, so every task needs a person holding it.
+
+\citet[pp.~33--35]{garicano2026comment} extends the Ide--Talamàs framework by endogenising the stock of addressable opportunities, which are created at unit cost $C$. He interprets $C$ as the ``packaging cost'' of turning a messy need into a clean task, including ``verifying the result''. With autonomous AI, entry expands when $C$ is below AI's stand-alone value. With non-autonomous AI and a compute glut, the result is ``wage compression, not collapse''. Proposition~\ref{prop:autonomy} adds the dependence of $C$ on the density of the local conversion layer and contrasts who receives the gains from lower $C$ in the two regimes.
+
+A typographical point: the printed statement of part~2 of Garicano's Proposition reads ``If $C<z_{AI}$ (Entry is unprofitable)''. The accompanying proof makes clear that $C\ge z_{AI}$ is meant (p.~35).
+
+\paragraph{Complementarity.} \citet[p.~55]{jones2026rd} reports estimates by \citet{ahmadpoor2019decoding} that the task-aggregator parameter in research production is negative in essentially all fields, with $\theta\approx-1$ for the median field. This is the harmonic-mean case, an elasticity of substitution of one half. \citet{kremer1993oring} implies $\theta\le0$ whenever failure on any sub-task means overall failure. \citet[pp.~63--64]{hall2026comment} reports that the capital share of business R\&D, averaged over the OECD countries with data, fell from about 15\% (1981--2011) to about 10\%, and that in the United States it was 8.25\% in 2021 (Table~2C.1, p.~64). She concludes that a capital share of about 10\% is more appropriate than one-third, which strengthens the bottleneck arithmetic. We apply complementarity between codifiable cognition and conversion inputs by analogy and say so.
+
+\paragraph{Market power.} \citet{athey2026competition} show that upstream market power in AI with two-part tariffs can blunt pass-through, leak rents abroad and harm unskilled workers. They also show that a cap on one fee shifts extraction to the other (pp.~106, 110). We cite rather than rebuild these results. Proposition~\ref{prop:market} only maps pass-through and access fees into our distributional conditions, using standard pass-through tools \citep{weyl2013passthrough}.
+
+\paragraph{Verification and reliance.} \citet[p.~383]{stiglitz2026information} note that users ``are not constantly verifying everything they consume with AI''. \citet{steyvers2025know} document a calibration gap: non-expert users overestimate the accuracy of LLM answers, and longer explanations raise confidence without raising accuracy. \citet{agarwal2023radiology} study an experiment with professional radiologists. In their model, a user who over-weights the AI signal (automation bias) makes a worse decision with AI assistance than without it for some signal realisations (p.~28 and appendix Proposition~1), whereas the radiologists in their sample under-weight AI predictions (abstract). \citet{moore2008overconfidence} review overconfidence more generally. \citet[p.~277, fn.~6]{ludwig2026reflective} note a trade-off between cognitive economy and agency in delegating reflection to algorithms.
+
+\paragraph{Training, apprenticeship and entry-level work.} General training is not financed by firms in competitive labour markets \citep{becker1962investment}; \citet{acemoglu1998train,acemoglu1999becker} show when imperfect labour markets change this. \citet{arrow1962learning} is the classic statement of learning by doing.
+
+\citet{ide2025automation} builds a task-based overlapping-generations model. In it, novices acquire tacit knowledge by working alongside experts, and knowledge-transfer contracts are incomplete because tacit knowledge is non-verifiable and cannot serve as collateral. Entry-level automation can then lower growth and welfare by reallocating novices toward less skilled mentors, even without fewer entry jobs (his Propositions~4--5, pp.~26--27). Our Proposition~\ref{prop:apprentice} shares Ide's friction but isolates a different margin, the \emph{level} of apprenticeship. It adds a ``scissors'' property: the gap between the market and the efficient rate widens as AI cheapens entry tasks, because the external value $\beta W$ of an apprenticeship rises. It also adds mentor capacity, which makes a fall in apprenticeship persist across cohorts. Ide notes (fn.~18, p.~27) that his model captures the hands-on-experience channel only through novice unemployment.
+
+\textbf{Concurrent work.} Two 2026 SSRN working papers with closely related titles appear in our search: \citet{akin2026apprenticeship} and \citet{singh2026apprenticeship}. Their full texts were not obtainable through open channels during this draft, and we have not read them. We therefore do not claim to be first to identify an apprenticeship externality from generative AI. Our claim is limited to the specific connection, within one model, between this externality, the verification channel and the cross-generation distribution of the scarce complement.
+
+\paragraph{Empirical work on displacement.} \citet{kogan2023displacement} link patents to worker records. They find that even labour-augmenting technologies lower incumbents' earnings while new entrants gain. \citet[August 2026 version]{brynjolfsson2025canaries} document descriptive declines in the employment of young workers in AI-exposed occupations. \citet{manning2026adaptable} measure adaptive capacity across occupations.
+
+\section{Model}\label{sec:model}
+
+We build one model in stages. Each stage adds one mechanism, and each proposition isolates one condition. Proofs are in Appendix~\ref{app:proofs}. Throughout, gains are \emph{inclusive} (relatively progressive) if the equivalent variation $EV(y)$ divided by income $y$ is non-increasing in $y$. We report absolute gains alongside. Across generations, inclusiveness means that the share of each new cohort that acquires the scarce complement does not fall.
+
+\subsection{Technology of need-solving}\label{sec:tech}
+
+A solved need $S$ combines codifiable cognition $c$ and a conversion input $t$:
+\begin{equation}
+S=\big[\alpha c^{(\sigma-1)/\sigma}+(1-\alpha)t^{(\sigma-1)/\sigma}\big]^{\sigma/(\sigma-1)},\qquad \alpha\in(0,1),\ \sigma\in(0,1).
+\end{equation}
+Markets are competitive with constant returns. The price of $S$ is normalised to one, a small-sector assumption. AI supplies $c$ perfectly elastically at price $p_c$, and holders of $t$ earn $w$. Zero profit requires $\alpha^\sigma p_c^{1-\sigma}+(1-\alpha)^\sigma w^{1-\sigma}=1$.
+
+\begin{proposition}[Value shifts to the conversion input]\label{prop:valueshift}
+Let $\sigma<1$ and $p_c<\alpha^{-\sigma/(1-\sigma)}$.
+\begin{enumerate}[label=(\roman*),itemsep=0pt]
+\item The return to $t$ is $w(p_c)=\big[(1-\alpha^\sigma p_c^{1-\sigma})/(1-\alpha)^\sigma\big]^{1/(1-\sigma)}$, which is strictly decreasing in $p_c$.
+\item The share of value accruing to $t$ is $s_t(p_c)=1-\alpha^\sigma p_c^{1-\sigma}$, which is strictly decreasing in $p_c$ and tends to one as $p_c\to0$.
+\item As $p_c\to0$, $w(p_c)\to(1-\alpha)^{-\sigma/(1-\sigma)}<\infty$.
+\item Let utility be quasilinear in a numeraire, so that changes in income are money-metric, and hold $\tau(y)\ge0$ fixed. A household holding $\tau(y)$ units of $t$ gains $[w(p_c^1)-w(p_c^0)]\tau(y)$ from a strict price fall $p_c^1<p_c^0$, and under quasilinearity with the price of $S$ fixed this is its exact equivalent variation. Because $w(p_c^1)-w(p_c^0)>0$, this gain relative to income is non-increasing in $y$ if and only if $\tau(y)/y$ is non-increasing.
+\end{enumerate}
+For $p_c\ge\alpha^{-\sigma/(1-\sigma)}$ the sector does not operate and $w=0$. The case $\sigma>1$, in which $t$ is inessential, is outside the model (see the proof).
+\end{proposition}
+
+Part~(iii) is the analogue in this setting of Jones's bottleneck: even free cognition raises the return to the conversion input only to a bounded level, $\bar w$. The proportional gain $\bar w/w(p_c^0)$ is not uniformly bounded: it is large when the starting price is close to the shutdown price (in the calibration of Section~\ref{sec:quant}, $\bar w/w(1)=11.66$). Part~(iv) is static: it holds the distribution of $t$ fixed, and Section~\ref{sec:apprentice} lets $\tau$ respond. Part~(iv) shows where the distribution is decided. It is decided by who holds $t$.
+
+\subsection{Who holds the conversion input (condition 1)}\label{sec:regime}
+
+Consider two regimes. In Regime~H (Hayek; our premise), $t$ is inalienable and embodied in a dispersed population. In Regime~C (codified), the situation of \citet[\S12.4.3]{brynjolfsson2026hayek}, $t$ can be codified into a protected asset owned by a central firm and reproduced at marginal cost $k_t\ge0$. Holders supply $t$-services at opportunity cost $r_h\ge0$, and the two sources are perfect substitutes.
+
+\begin{proposition}[The premise decides who receives the premium]\label{prop:regime}
+In Regime~H, dispersed holders receive $w(p_c)\tau(y)$, which rises as $p_c$ falls. In Regime~C, let the holders and a single owner of the codified asset compete in prices (Bertrand) to supply $t$-services that users value at $w(p_c)$ per unit.
+\begin{enumerate}[label=(\roman*),itemsep=0pt]
+\item If $\min\{r_h,k_t\}>w(p_c)$, no $t$-services are traded.
+\item If $\min\{r_h,k_t\}\le w(p_c)$, the price is $P_C=\min\{w(p_c),\max\{r_h,k_t\}\}$. If $r_h\le k_t$, holders supply (a tie $r_h=k_t$ is resolved in favour of holders), and their premium over opportunity cost is $\min\{w(p_c),k_t\}-r_h\le k_t$ per unit. If $k_t<r_h$, the owner supplies and earns $\min\{w(p_c),r_h\}-k_t$ per unit, and holders earn no premium.
+\item In either case holders' premium does not rise as $p_c$ falls once $w(p_c)\ge k_t$, and it vanishes as $k_t\to0$, whatever $p_c$ is.
+\end{enumerate}
+\end{proposition}
+
+Combined with Brynjolfsson and Hitzig's Proposition~2, and with the standard property-rights premise that residual control translates into bargaining power, the premise places both decision rights and the complementarity premium on the dispersed side. The observable for condition~1 is the concentration of conversion-input holdings relative to income, $\tau(y)/y$. Its proxies include the share of need-solving value earned by local intermediaries, community workers and households themselves.
+
+\subsection{Demand and verification (condition 2)}\label{sec:verification}
+
+\paragraph{Environment.} Households have incomes $y\in[y_L,y_H]$ and one indivisible need each, with reservation value $R(y)=ry^\eta$, $\eta\in[0,1)$. The parameter $\eta$ is the income elasticity of willingness to pay; $\eta<1$ means the need is a necessity.
+
+Before AI, a professional solves the need without error at price $P_0$. Households with $R(y)\ge P_0$ buy; we call them incumbents. The rest are rationed at a corner.
+
+With AI the posted price is $p<P_0$. An AI error occurs with probability $e$. A household with verification capacity $v\in[0,1]$ catches it with probability $v$, so with probability $\pi(v)=e(1-v)$ the error is acted upon and causes loss $L$. Verification capacity rises with income, $v=v(y)$, $v'\ge0$. The \emph{effective price} is
+\begin{equation}
+p_e(y)=p+e\,(1-v(y))\,L .
+\end{equation}
+Households perceive $\hat p_e(y)=p+\theta(v)e(1-v)L$, where $\theta\in(0,1]$ is non-decreasing in $v$; $\theta<1$ is overconfidence. They choose among \{nothing, professional, AI\} on perceived prices, and welfare is evaluated at true prices. Households are risk neutral here; risk enters in Section~\ref{sec:liability}.
+
+\begin{lemma}[Progressivity of an effective-price schedule]\label{lem:schedule}
+Suppose every household buys and faces a continuous, non-increasing, piecewise-$C^1$ effective-price schedule $\tilde p(y)$. Then $EV(y)/y$ is non-increasing if and only if two conditions hold at every point of differentiability:
+\[
+\tilde p(y)+y\,|\tilde p'(y)|\le(1-\eta)R(y)\ \text{for entrants }(R<P_0),\qquad y\,|\tilde p'(y)|\le P_0-\tilde p(y)\ \text{for incumbents}.
+\]
+\end{lemma}
+
+\begin{proposition}[Verification channel]\label{prop:verification}
+\begin{enumerate}[label=(\alph*),itemsep=1pt]
+\item \emph{Common verification capacity.} Suppose $p_e<P_0$. Absolute gains are non-decreasing in income. If some households are rationed before AI, relative gains are non-increasing over the whole distribution \emph{if and only if} $p_e\le(1-\eta)R(y_L)$. (Were $\eta\ge1$, which the maintained assumption $\eta<1$ excludes, no positive effective price would satisfy it.)
+\item \emph{Verification rising with income, no bias.} Let $v$ be continuous and piecewise $C^1$ with $v'\ge0$, so that $p_e(y)$ is continuous, non-increasing and piecewise $C^1$, as Lemma~\ref{lem:schedule} requires. On any interval of incomes at which all households buy, relative gains are locally regressive if the verification gradient $eL\,y\,v'(y)$ exceeds $(1-\eta)R(y)-p_e(y)$ for entrants, or $P_0-p_e(y)$ for incumbents who switch to AI (those with $p_e(y)\le P_0$; incumbents with $p_e(y)>P_0$ keep the professional and gain zero). Households with $R(y)<p_e(y)$ are excluded, and exclusion concentrates at low $v$.
+\item \emph{Overconfidence.} For an entrant $y$ with $\theta(v(y))<1$ and $\pi(y)=e(1-v(y))>0$, every posted price in the non-empty interval $\big(R(y)-\pi(y)L,\,R(y)-\theta\pi(y)L\big]$ leads the household to buy, and leaves it strictly worse off than without AI. The interval contains admissible prices $p\ge0$ if and only if $R(y)\ge\theta\pi(y)L$; its admissible part is $\big(R(y)-\pi(y)L,\,R(y)-\theta\pi(y)L\big]$ if $R(y)-\pi(y)L\ge0$, and $\big[0,\,R(y)-\theta\pi(y)L\big]$ if $R(y)-\pi(y)L<0$. The interval's length $(1-\theta)\pi L$ is non-increasing in $v$.
+\item \emph{Intermediated verification.} An intermediary verifies with quality $v_I$, incurs a fixed cost $F$ and marginal cost $m$ per client, and serves $n$ clients at the zero-profit fee $q=m+F/n$. A household routed to it faces the effective price $p_I\equiv p+q+e(1-v_I)L$. Suppose the lowest-income household is rationed before AI, $R(y_L)\le P_0$, and the denominator of $n^*$ below is positive. Relative gains are non-increasing over the whole distribution if three conditions hold together: (d1)~every household for which intermediation is efficient, $q\le eL(v_I-v)$, is served through it; (d2)~$p_I\le(1-\eta)R(y_L)$, that is $p+m+F/n+e(1-v_I)L\le(1-\eta)R(y_L)$, equivalently
+\[
+n\ \ge\ n^*\equiv\frac{F}{(1-\eta)R(y_L)-p-m-e(1-v_I)L};
+\]
+and (d3)~the conditions of Lemma~\ref{lem:schedule} hold for the self-verifying households above the cutoff.
+\item \emph{Under-demand under overconfidence.} Intermediation is efficient for household $y$ if and only if $q\le b(y)\equiv eL(v_I-v)$. A household that scales its own error rate by $\theta$ buys it only if $q\le\hat b(y)\equiv eL[\theta(1-v)-(1-v_I)]$, and $\hat b(y)<b(y)$ whenever $\theta<1$ and $v<1$. Households for which intermediation is efficient but not bought exist if and only if $\hat b(y)<q\le b(y)$ for some household. Two sufficient conditions are: (e1)~the fee lies between some household's perceived and true benefit; or (e2)~$q=0$ and some household has $v(y)<v_I$ and $\theta(v)(1-v)<1-v_I$, which holds for $v$ close enough to $v_I$ whenever $\theta(v_I)<1$. When such households exist, (d1) fails in a voluntary market. It holds if intermediation is the default channel for every household with $q\le b(y)$.
+\end{enumerate}
+\end{proposition}
+
+Part~(a) qualifies the intuition that the consumer surplus from a new good accrues mainly to previously rationed households. In relative terms it does, provided the need is a necessity and the effective price is low enough. In absolute terms incumbents gain $P_0-p_e$, which is at least the $R-p_e$ that entrants gain.
+
+Parts~(b)--(c) are the regressive cases. Part~(d) states the joint conditions (routing, density and the residual gradient) under which intermediation restores progressivity. Part~(e) states when a voluntary market for verification falls short under overconfidence. It is an existence result: with $q=0$ and verification capacities far below $v_I$, every household for which intermediation is efficient buys it.
+
+The observables for condition~2 are the gradient of verification capacity with income, the error rate of AI in the relevant domain, the size of losses from acted-upon errors, the calibration of users' beliefs about AI accuracy, and the density of intermediaries.
+
+\subsection{Autonomy and packaging cost (condition 3)}\label{sec:autonomy}
+
+Following \citet{garicano2026comment}, a mass $H$ of holders of $t$ have knowledge $z_j\in[0,1]$. Entrepreneurs create addressable opportunities at unit cost $C(D)=c_0+c_1/D$, where $D$ is the density of the local conversion layer. A solved opportunity is worth one. AI alone solves a fraction $z_A$ of problems; working with AI, human $j$ solves $s_j=z_A+(1-z_A)z_j$. Each human handles one opportunity per period. Compute capacity $\mu$ exceeds $H$, so it can staff every human-assisted opportunity and leave capacity for opportunities completed by AI alone. Under non-autonomy every opportunity needs a human. Under autonomy an opportunity can also be completed by AI alone. Entrepreneurs observe $z_j$ and compete for each holder, so zero profit holds type by type. Agents are risk-neutral and non-employed holders earn zero.
+
+\begin{proposition}[Packaging cost and autonomy]\label{prop:autonomy}
+\begin{enumerate}[label=(\roman*),itemsep=0pt]
+\item With non-autonomous AI, $r^*=0$ and $w_j=\max\{s_j-C(D),0\}$. A higher density $D$ raises the wage of every holder who remains employed by $c_1/D^2$ (a local statement: at the employment threshold the wage schedule has a kink), expands employment, and compresses wage ratios among the employed. A higher $z_A$ raises the wage of employed holder $j$ by $(1-z_j)$ per unit of $z_A$: no employed wage falls, wages of employed holders with $z_j<1$ rise, low-knowledge wages most, and the change differs across holders.
+\item With autonomous AI and $C(D)<z_A$, compute becomes scarce with rental $r^*=z_A-C(D)$, and $w_j=(1-z_A)z_j$. Wages do not depend on $D$. A lower packaging cost accrues to compute owners, and a higher $z_A$ lowers wages. Every holder with $z_j>0$ is employed.
+\end{enumerate}
+\end{proposition}
+
+The observables for condition~3 are the share of AI-assisted tasks that still require a human act (non-autonomy), the cost of specifying, verifying and paying for a new task, and the density of local intermediaries.
+
+\subsection{Market power in AI supply (condition 4)}\label{sec:market}
+
+Let an upstream supplier with marginal cost $k$ face the intermediated demand of Proposition~\ref{prop:verification}(d). A share $f$ of the supplier is foreign-owned. Under log-concave demand its optimal price has pass-through $\rho=dp^*/dk\in(0,1]$.
+
+\begin{proposition}[Pass-through, leakage and access fees]\label{prop:market}
+After a small cost decline $dk<0$, to first order in $dk$ (terms of order $o(|dk|)$ omitted), households gain $\rho Q|dk|$, the supplier gains $Q|dk|$, and domestic welfare rises by $[\rho+(1-f)]Q|dk|$. The progressivity condition (d2) is relaxed by $\rho|dk|$. Let $A$ be an access fee charged to each intermediary as a fixed amount per period, not per client. The intermediary's zero-profit fee becomes $q_A=m+(F+A)/n$, and (d2) becomes
+\[
+\text{(d2}_A\text{)}\qquad p+m+\frac{F+A}{n}+e(1-v_I)L\le(1-\eta)R(y_L),\quad\text{equivalently}\quad n\ \ge\ n^*(A)\equiv\frac{F+A}{(1-\eta)R(y_L)-p-m-e(1-v_I)L},
+\]
+so low-density catchments lose the guarantee of Proposition~\ref{prop:verification}(d). This comparative static holds the usage price $p$ fixed and requires a positive denominator. If the supplier sets $(p,A)$ jointly and lowers $p$ when it raises $A$, the net effect on $n^*$ is ambiguous.
+\end{proposition}
+
+The observables for condition~4 are pass-through of AI cost declines into end-user prices, access-fee structures faced by intermediaries, and the foreign-owned share of AI supply.
+
+\subsection{Apprenticeship and the reproduction of tacit knowledge (condition 5)}\label{sec:apprentice}
+
+In a two-period overlapping-generations economy, the young acquire $t$ only by performing an entry task alongside an expert. When old, experts earn $\omega+W(p_c)$, where $W(p_c)=w(p_c)-\omega$ falls with $p_c$ by Proposition~\ref{prop:valueshift}; non-experts earn $\omega$. Earnings in old age are discounted by the factor $\beta\in(0,1)$ per generation; the strict inequalities in Proposition~\ref{prop:apprentice} require $\beta>0$.
+
+Entry tasks are codifiable, so a firm can have the task done by a novice or by AI at price $p_c$. Supervising a novice costs the firm $\kappa_j\sim G$ on $[0,\bar\kappa]$. Two frictions apply. First, $t$ is general and portable \citep{becker1962investment}. Second, novices cannot pledge future earnings, so their wage $w_N\ge0$ \citep{ide2025automation}. Before AI, the alternative way to perform entry tasks costs $\bar p>p_c$. Novices are in excess supply, so $w_N=0$, and they cannot pay upfront training fees. The expert premium $W$ depends on $p_c$ but not on the stock of experts, as in the small-sector structure of Section~\ref{sec:tech}; if $W$ fell with the stock, $a^*$ would solve a fixed point. The subsidy is lump-sum financed. We assume $W(p_c)>0$, so that holding $t$ pays, and $p_c<\bar\kappa$, so that some supervision costs exceed the AI price; $G$ has a density $g>0$ on $[0,\bar\kappa]$.
+
+Apprentices learn alongside an expert of the previous cohort, and each expert can supervise at most $\chi$ apprentices. Let $T_{t-1}$ be the share of the previous cohort that holds $t$. At most $\chi T_{t-1}$ novices of cohort $t$ can be apprenticed, so the share of cohort $t$ that acquires $t$ is
+\begin{equation}\label{eq:capacity}
+T_t=\min\{a_t,\ \chi T_{t-1}\},
+\end{equation}
+where $a_t$ is firms' demand for apprentices.
+
+\begin{proposition}[Apprenticeship externality]\label{prop:apprentice}
+Suppose mentor capacity does not bind, $\chi T_{t-1}\ge a^*$. Market apprenticeship is $a^m=G(p_c)$, which falls from $G(\bar p)$ before AI to $G(p_c)$ after. The efficient rate is $a^*=G(p_c+\beta W(p_c))>a^m$, and the share of cohort $t$ holding $t$ equals the apprenticeship rate. The per-cohort welfare loss is $\int_{p_c}^{\min\{p_c+\beta W,\bar\kappa\}}(p_c+\beta W-\kappa)\,dG(\kappa)>0$. A per-apprentice subsidy $s^*=\beta W(p_c)$ restores the optimum. A subsidy $s=\bar p-p_c$ keeps the cohort share of $t$-holders at its pre-AI level $G(\bar p)$, provided $\chi T_{t-1}\ge G(\bar p)$. If $G$ is uniform on $[0,\bar\kappa]$ and $p_c+\beta W(p_c)\le\bar\kappa$, then the gap $a^*-a^m=\beta W/\bar\kappa$ and the loss $(\beta W)^2/(2\bar\kappa)$ both rise as $p_c$ falls.
+\end{proposition}
+
+The proposition shows that the \emph{external} value of an apprenticeship, the discounted premium $\beta W(p_c)$ that the novice carries away, rises as AI cheapens entry tasks. It does not say that the total social value $p_c+\beta W(p_c)$ of an apprenticeship rises: that requires $1+\beta W'(p_c)<0$, a condition on how steeply the expert premium responds to the AI price, which the model does not pin down.
+
+When capacity binds, \eqref{eq:capacity} links cohorts.
+
+\begin{corollary}[Mentor capacity and persistence]\label{cor:capacity}
+Let $T_t=\min\{a_t,\chi T_{t-1}\}$.
+\begin{enumerate}[label=(\roman*),itemsep=0pt]
+\item Let demand be constant at $a>0$. A positive stationary share requires $\chi\ge1$. If $\chi>1$, the stationary share is unique and equals $a$. If $\chi=1$, every $T\in(0,a]$ is stationary, and the share stays at $\min\{a,T_0\}$, the level set by its initial value; this is the permanence in~(ii).
+\item Suppose $\chi\ge1$, $T_0=a_H$, demand falls to $a_L<a_H$ for cohort~1 and returns to $a_H$ from cohort~2 on. Then $T_t=\min\{a_H,\,\chi^{t-1}a_L\}$ for $t\ge1$. With $\chi=1$ the fall is permanent. With $\chi>1$ the share returns to $a_H$ after $\lceil\ln(a_H/a_L)/\ln\chi\rceil$ further cohorts.
+\item In (ii), the cumulative shortfall $\sum_{t\ge1}(a_H-T_t)$ exceeds the one-cohort fall $a_H-a_L$ if and only if $\chi a_L<a_H$.
+\item With $\chi<1$, $T_t\le\chi^tT_0$, so the share declines geometrically whatever firms' demand.
+\end{enumerate}
+\end{corollary}
+
+Part~(iii) is the cross-generation amplification. One cohort's lost apprenticeships remove mentors for the next cohort, so a temporary fall in demand has a cumulative cost larger than its direct cost whenever capacity is tight. Proposition~\ref{prop:apprentice} and the subsidy result require capacity to be slack. Where capacity binds, a subsidy that restores demand restores the share only gradually, at the rate $\chi$.
+
+The observables for condition~5 are apprenticeship and supervised-practice intensity in AI-exposed occupations, employment of entry cohorts, and the wage premium for tacit expertise.
+
+\subsection{Liability (supporting condition)}\label{sec:liability}
+
+Let households have CARA risk aversion $\lambda(y)>0$, decreasing in income. An acted-upon error occurs with probability $\pi\in(0,1)$ and causes loss $L>0$; neither depends on the liability regime. A household that bears its own error risk pays, on top of $\pi L$, the risk premium
+\[
+RP(y)=\lambda(y)^{-1}\ln\!\big(1-\pi+\pi e^{\lambda(y)L}\big)-\pi L .
+\]
+Under pooled liability the household pays a premium $(1+\ell)\pi L$, with loading $\ell\ge0$, and bears no risk. The premium is experience-rated: it is charged at the household's own error probability.
+
+\begin{proposition}[Liability]\label{prop:liability}
+\begin{enumerate}[label=(\roman*),itemsep=0pt]
+\item For given $(\pi,L)$, $RP(y)$ is positive and strictly decreasing in $y$. It adds a downward-sloping term to the effective-price schedule and, by Lemma~\ref{lem:schedule}, pushes toward regressivity.
+\item A household weakly prefers pooling if and only if $RP(y)\ge\ell\pi L$. With $\pi$ common to all households, the set of households that prefer pooling is, if non-empty, an interval at the bottom of the income distribution.
+\item Pooling removes the risk-premium term from the effective-price schedule. Where the error probability varies with income, $\pi(y)=e(1-v(y))$, the pooled premium $(1+\ell)\pi(y)L$ keeps the income gradient of the expected loss. That gradient is the verification channel of Proposition~\ref{prop:verification}, scaled by $1+\ell$, and is handled there.
+\end{enumerate}
+\end{proposition}
+
+Part~(iii) states what pooling does and does not do. It removes the part of the regressive term that comes from risk aversion. It does not remove the part that comes from unequal verification capacity, unless premiums were charged at the population-average error probability; we do not assume that, because a community-rated premium would weaken the incentive to verify, which the model does not represent.
+
+\subsection{Synthesis in a joint economy}\label{sec:synthesis}
+
+Propositions~\ref{prop:valueshift} and~\ref{prop:autonomy} describe two markets for the services of conversion-input holders. To combine them we place them in a joint economy in which holders divide their time between the two markets in a fixed proportion.
+
+\paragraph{The joint economy.} Household $y$ holds $\tau(y)\ge0$ units of $t$. Each unit embodies knowledge $z(y)\in[0,1]$, the same for all units a household holds, and has one unit of time per period. Time is allocated in an exogenously fixed proportion $\varphi\in(0,1)$. The share $\varphi$ supplies conversion services to the need-solving sector of Section~\ref{sec:tech}, which pays $w(p_c)$ per unit of time (Proposition~\ref{prop:valueshift}), so a unit of $t$ earns $\varphi\,w(p_c)$ there. The share $1-\varphi$ is spent in the task market of Section~\ref{sec:autonomy}: the unit handles $1-\varphi$ opportunities at the wage $w_j$ per opportunity, with $z_j=z(y)$ (Proposition~\ref{prop:autonomy}), and earns $(1-\varphi)\,w_j$. The mass of holder time in the task market, the counterpart of $H$ in Proposition~\ref{prop:autonomy}, is $H=(1-\varphi)\int\tau(y)\,dF(y)$, where $F$ is the income distribution, and we maintain $\mu>H$.
+
+This allocation is feasible without changing either market. In Proposition~\ref{prop:valueshift}, $w(p_c)$ is fixed by the zero-profit condition and does not depend on the quantity of $t$ supplied, so moving part of each unit's time to the task market changes the scale of the need-solving sector but not its wage. In Proposition~\ref{prop:autonomy}, wages are set opportunity by opportunity and do not depend on how many opportunities a holder handles, and $\mu>H$ keeps compute slack. Three points are assumed rather than derived. First, $(p,p_c,z_A,D)$ is an exogenously given parameter vector: we do not model how one AI improvement moves its components together, nor any relation between the density $D$ and holdings $\tau$; $D$ is set by how the intermediary layer is established. Second, holders do not choose $\varphi$; that case is not treated. Third, the fixed allocation remains a modelling simplification, not a general-equilibrium treatment of the two markets. It lets the factor-price channel and the task channel act on the same holdings.
+
+\paragraph{The AI change.} The AI change is the move from a pre-AI state $(p_c^0,z_A^0,D^0)$, in which households have no AI service, to a post-AI state $(p_c^1,z_A^1,D^1)$ with $p_c^1\le p_c^0$, $z_A^1\ge z_A^0$ and $D^1\ge D^0$, in which households can buy the AI service of Section~\ref{sec:verification} at posted price $p$. The improvement can therefore be a fall in the price of codifiable cognition, a rise in what AI solves alone, a denser conversion layer, or any combination. Household $y$'s gain is
+\begin{equation}\label{eq:G}
+\Gamma(y)=EV_{\text{cons}}(y)+\tau(y)\,g(y),\qquad g(y)=\varphi\,\underbrace{\big[w(p_c^1)-w(p_c^0)\big]}_{\Delta w_P}+(1-\varphi)\,\underbrace{\big[w_T^1(z(y))-w_T^0(z(y))\big]}_{\Delta w_T(y)},
+\end{equation}
+where $EV_{\text{cons}}$ is the consumer gain of Proposition~\ref{prop:verification} and $w_T^k$ is the task-market wage in state $k$. The two shocks enter differently. A fall in $p_c$ changes the need-solving wage per unit of time by the same amount $\Delta w_P\ge0$ for every holder. A rise in $z_A$ changes the task wage by $(1-z(y))\Delta z_A$, which differs across holders (Proposition~\ref{prop:autonomy}(i)). A rise in $D$ changes it by $C(D^0)-C(D^1)$, the same for every holder who is employed in both states. The next cohort's share of $t$-holders is $T_1=\min\{G(p_c+s),\,\chi T_0\}$, with $T_0=G(\bar p)$ (equation~\eqref{eq:capacity}).
+
+\begin{proposition}[Joint sufficiency; weak individual necessity]\label{prop:synthesis}
+In the joint economy with time share $\varphi\in(0,1)$ and $\mu>H$, suppose $R(y_L)\le P_0$ and $(1-\eta)R(y_L)-p-m-e(1-v_I)L>0$, and:
+\begin{itemize}[itemsep=0pt]
+\item[] (C1) Regime~H holds, $\tau(y)\ge0$ and $\tau(y)/y$ is non-increasing;
+\item[] (C2) intermediated verification is offered; (d1) and (d3) of Proposition~\ref{prop:verification}(d) hold; intermediation is the default channel if $\theta<1$; and liability is pooled (Proposition~\ref{prop:liability});
+\item[] (C3) AI is non-autonomous in both states; $C(D^0)<s^0_{\min}\equiv z_A^0+(1-z_A^0)\min_y z(y)$; and knowledge $z(y)$ is non-decreasing in income;
+\item[] (C4) after pass-through and access fees, (d2$_A$) of Proposition~\ref{prop:market} holds, that is $n\ge n^*(A)$, in every catchment;
+\item[] (C5) the apprenticeship subsidy satisfies $s\ge\bar p-p_c$, and mentor capacity satisfies $\chi\ge1$.
+\end{itemize}
+With pooled liability at loading $\ell$, the conditions (d1)--(d3) and (d2$_A$) are read with $L$ replaced by $(1+\ell)L$.
+Then $\Gamma(y)/y$ is non-increasing in $y$, and $T_1\ge T_0$: the next cohort's share of $t$-holders does not fall. Conversely, for each of C1--C5 there is a parameterisation of the joint economy with $\varphi=0.5$ in which the maintained assumptions and all other conditions hold, that condition fails, and either $\Gamma(y)/y$ increases on an interval or $T_1<T_0$. The conditions are not individually necessary in every parameterisation.
+\end{proposition}
+
+\paragraph{How the conditions combine.} The consumer part and the factor-income part are handled separately. For the consumer part, C2 supplies (d1) and (d3), C4 supplies (d2$_A$), and Proposition~\ref{prop:verification}(d) gives $EV_{\text{cons}}(y)/y$ non-increasing. For the factor-income part, the first two items of C3 keep every holder employed in both states, so the task wage is linear in knowledge and $\Delta w_T(y)=(1-z(y))\Delta z_A+[C(D^0)-C(D^1)]$. The third item of C3 makes $1-z(y)$ non-increasing in income. With $\Delta w_P\ge0$, $\Delta z_A\ge0$ and $C(D^0)\ge C(D^1)$, the per-unit gain $g(y)=\varphi\Delta w_P+(1-\varphi)\Delta w_T(y)$ is therefore non-negative and non-increasing, because $\varphi$ and $1-\varphi$ are positive constants. C1 makes $\tau(y)/y$ non-negative and non-increasing. The product of two non-negative, non-increasing functions is non-increasing, and so is the sum of the two parts.
+
+The third item of C3 is needed because a rise in $z_A$ raises low-knowledge wages most. If knowledge fell with income, a rise in $z_A$ would raise the wages of richer holders most, and the factor-income part could become regressive even with $\tau(y)/y$ constant. Section~\ref{sec:quant} constructs such a case. The second item is needed because holders who are not employed before the change gain less from a denser conversion layer than those who are. The first is needed because, under autonomy, a rise in $z_A$ lowers holders' wages (Proposition~\ref{prop:autonomy}(ii)), and a negative per-unit gain multiplied by a decreasing $\tau(y)/y$ is increasing.
+
+For the next cohort, C5 gives $G(p_c+s)\ge G(\bar p)=T_0$ and $\chi T_0\ge T_0$, so $T_1\ge T_0$. The distribution of $t$ within the next cohort across incomes is not modelled.
+
+The sufficiency part is proved in Appendix~\ref{app:proofs}. The weak-necessity parameterisations are constructed in the code and reported in Section~\ref{sec:quant} (Table~\ref{tab:necessity}). Each is checked by evaluating every condition and the conclusion on an income grid, which is a numerical verification of the stated examples, not a general proof. Weak necessity is shown for each of C1--C5 as a whole, not for the separate items within a condition. In particular, no construction makes default routing or pooled liability fail alone within C2, and in the calibration of Section~\ref{sec:quant} voluntary routing does not break the conclusion.
+
+\begin{table}[t]\centering\small
+\caption{Conditions, observables and instrument classes}\label{tab:conditions}
+\begin{tabular}{p{0.16\textwidth}p{0.24\textwidth}p{0.27\textwidth}p{0.22\textwidth}}
+\toprule
+Condition & Model object & Observable & Instrument class (\S\ref{sec:implications})\\
+\midrule
+1 Holders of $t$ & Regime H vs C; $\tau(y)/y$ & Share of need-solving value earned by local intermediaries; concentration of $t$ & Scope of practice; regulatory sandboxes; portability of service records\\
+2 Verification & $v(y)$, $\theta(v)$, $n^*$ & AI error rates by domain; user calibration; verification gradient; intermediary density & Public or default verification layers; error-rate disclosure\\
+3 Autonomy, packaging & $z_A$, $C(D)$, $z(y)$ & Share of tasks needing a human act; cost of specifying and paying for a task; knowledge gradient of holders by income & Reimbursement codes for intermediated services; open data; capital--labour tax neutrality\\
+4 Pricing & $\rho$, $A$, $f$, $n^*(A)$ & Pass-through; access fees; foreign-owned share & Competition policy covering both fees; interoperability; multi-source procurement\\
+5 Apprenticeship & $a^m$, $a^*$, $W$, $\chi$ & Apprenticeship and supervised-practice intensity; mentor-to-apprentice ratios; entry-cohort employment & Apprenticeship subsidies; supervised-practice requirements; practice-oriented AI\\
+6 Liability & $RP(y)$, $\ell$ & Incidence of AI-error losses by wealth & No-fault compensation; mandatory insurance; product liability for software\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Quantitative illustration}\label{sec:quant}
+
+This section illustrates the propositions numerically. \textbf{It does not estimate anything.} Most parameters are normalisations or illustrative choices, marked ``assumption'' in Appendix Table~\ref{tab:params}. Where a published number guides a value, the table gives its source and page. Replication code is in \texttt{code/} of the replication package; \texttt{python numerical\_illustration.py} reproduces every number and figure below.
+
+\paragraph{Value shift.} With $\sigma=0.5$, the harmonic-mean case of \citet[p.~55]{jones2026rd}, and $\alpha=0.5$, the conversion input's share of value is 0.29 at $p_c=1$ and 0.78 at $p_c=0.1$ (Figure~\ref{fig:valueshift}). The $t$-wage at $p_c\to0$ is 11.7 times its value at $p_c=1$. That bound is finite, as Proposition~\ref{prop:valueshift}(iii) states.
+
+\begin{figure}[t]\centering
+\includegraphics[width=\textwidth]{fig1_value_shift.pdf}
+\caption{Proposition~\ref{prop:valueshift}. Left: value share of the conversion input against the price of AI-supplied cognition, for $\sigma\in\{0.3,0.5,0.8\}$ (complements), with $\sigma=1.5$ dashed for contrast only: that case lies outside the model and is drawn on its admissible domain $p_c>\alpha^{\sigma/(\sigma-1)}$. Right: $t$-wage relative to its value at $p_c=1$. $\alpha=0.5$. Illustrative.}\label{fig:valueshift}
+\end{figure}
+
+\paragraph{Verification channel.} Incomes are lognormal, with log standard deviation 0.75 and median one, on an equal-mass grid from the 1st to the 99th percentile. The parameters are $r=1$, $\eta=0.5$, $P_0=1.5$ (so 13\% of households are incumbents), $p=0.05$, $e=0.25$, $L=3$. Verification capacity rises linearly in the income rank from 0.2 to 0.9, and the perception factor is $\theta(v)=0.4+0.6v$.
+
+Figure~\ref{fig:verification} reports four cases, each with two measures. The model's definition of inclusive gains is pointwise: $EV(y)/y$ must be non-increasing at every income. We check it at every point of the grid. We also report a summary index, the ratio of mean $EV/y$ in the bottom quintile to that in the top quintile. An index above one does not imply that the definition holds.
+\begin{itemize}[itemsep=0pt]
+\item \emph{Common verification capacity} (set at the population mean): index 1.37, but the definition fails. The effective price, 0.39, exceeds $(1-\eta)R(y_L)=0.21$, so relative gains rise with income near the bottom, as Proposition~\ref{prop:verification}(a) states; $EV/y$ increases on 24\% of grid steps.
+\item \emph{Verification rising with income}: index 0.24; $EV/y$ increases on 57\% of grid steps; 8\% of households are excluded.
+\item \emph{Verification rising with income plus overconfidence}: index $-0.09$, meaning the bottom quintile loses on average; $EV/y$ increases on 65\% of grid steps; 8\% of households, all at the bottom of the distribution, are strictly worse off.
+\item \emph{Plus default intermediated verification}, with $n=200$ clients against the threshold $n^*=49$: index 2.53, the definition holds at every grid point, and there are no losers.
+\end{itemize}
+
+Figure~\ref{fig:sensitivity}(a) varies the verification gradient and the degree of overconfidence without an intermediary. The index falls below one in 75\% of the cells, and the pointwise definition holds in none of them. In the 16 cells with an index above one, relative gains still rise with income near the bottom, because the effective price there exceeds $(1-\eta)R(y_L)$. Figure~\ref{fig:sensitivity}(b) varies the number of clients per intermediary under default routing. The index is below one only in the column with the fewest clients ($n=10$; 12.5\% of cells). The pointwise definition holds in every cell with $n\ge50$ and fails in every cell with $n\le25$. The column $n=25$ has an index of 1.62 but violates the definition, as Proposition~\ref{prop:verification}(d) predicts, because $25<n^*=49$. The summary index alone would not have shown this.
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.92\textwidth]{fig2_verification_channel.pdf}
+\caption{Proposition~\ref{prop:verification}. Gain from AI availability relative to income across the income distribution. The shaded area marks households made strictly worse off. Parameters in Appendix Table~\ref{tab:params}; $n=4{,}000$ grid points of equal mass. Illustrative.}\label{fig:verification}
+\end{figure}
+
+\begin{figure}[t]\centering
+\includegraphics[width=\textwidth]{fig3_sensitivity.pdf}
+\caption{Sensitivity analysis. Cell values are the summary index, the bottom/top-quintile ratio of mean $EV/y$. An asterisk marks cells in which $EV/y$ is non-increasing at every grid point, which is the model's definition; an index above one without an asterisk is not inclusive in the model's sense. (a) No intermediary; verification gradient (horizontal, centred at the baseline mean capacity) against the perception factor at $v=0$ (vertical). (b) Default intermediated verification; clients per intermediary (horizontal) against the perception factor. Other parameters at baseline. Illustrative.}\label{fig:sensitivity}
+\end{figure}
+
+\paragraph{Autonomy and density.} Take $z_A=0.6$ and $C(D)=0.05+0.3/D$. Raising density from $D=1$ to $D=4$ lowers the packaging cost from 0.35 to 0.125. Under non-autonomy this raises the wage of every employed holder, and lowers the wage ratio between workers with $z=0.8$ and $z=0.2$ from 1.73 to 1.43 (Figure~\ref{fig:autonomy}). Under autonomy, wages are $(1-z_A)z$ whatever the density.
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.55\textwidth]{fig4_autonomy_packaging.pdf}
+\caption{Proposition~\ref{prop:autonomy}. Wages by worker knowledge under non-autonomous AI at two densities of the conversion layer, and under autonomous AI. $z_A=0.6$, $C(D)=0.05+0.3/D$. Illustrative.}\label{fig:autonomy}
+\end{figure}
+
+\paragraph{Apprenticeship.} $G$ is uniform on $[0,1]$, $\bar p=0.8$ (a pre-AI apprenticeship rate of 0.8), $\omega=0.1$, and $\beta=0.36$ per generation. The size of the fall in apprenticeship is anchored, for illustration only, to the range of estimates for 22--25-year-olds in AI-exposed occupations in \citet[August 2026 version, pp.~2--3]{brynjolfsson2025canaries}: the regression estimates of 13\% and 16\% headlined in earlier versions, and the descriptive shortfall of 19\% in the August 2026 version. We place $p_c$ so that market apprenticeship falls by 16\%, to 0.672. That anchoring treats an employment gap as if it were an apprenticeship elasticity. It is an assumption, not a measurement.
+
+At this point, the efficient rate is 0.763 and the per-cohort welfare loss is 0.0042 (in units of entry-task output). The optimal subsidy is 0.091. The subsidy that keeps the cohort share of $t$-holders at its pre-AI level is 0.128. Figure~\ref{fig:apprentice} shows the scissors effect: as $p_c$ falls, the market rate falls and the gap to the efficient rate widens. At the illustrated point $W=0.25>0$ and $p_c+\beta W=0.763\le\bar\kappa=1$, so the uniform closed forms of Proposition~\ref{prop:apprentice} apply.
+
+\begin{figure}[t]\centering
+\includegraphics[width=\textwidth]{fig5_apprenticeship.pdf}
+\caption{Proposition~\ref{prop:apprentice}. Left: market and efficient apprenticeship rates against the AI price for entry tasks; the shaded band is the illustrative range in which the market rate is 13--19\% below its pre-AI level. Right: per-cohort welfare loss. $G$ uniform on $[0,1]$, $\bar p=0.8$, $\beta=0.36$, $\omega=0.1$, $\sigma=\alpha=0.5$. Illustrative.}\label{fig:apprentice}
+\end{figure}
+
+\paragraph{Mentor capacity.} Figure~\ref{fig:capacity} applies Corollary~\ref{cor:capacity}. Starting from the pre-AI share of 0.80, demand falls to the market rate 0.672 for one cohort and then returns to 0.80, as it would if the subsidy $s=\bar p-p_c$ were introduced one cohort late. With $\chi=1.2$ apprentices per expert, the share recovers in the next cohort and the cumulative shortfall equals the one-cohort fall, 0.128. With $\chi=1.05$, recovery takes four cohorts and the cumulative shortfall is 0.30. With $\chi=1$ the fall is permanent: the shortfall is 0.128 in every cohort, 1.41 over the eleven cohorts shown. With $\chi=0.95$ the share declines in every cohort, to 0.40 by the eleventh, whatever firms' demand.
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.58\textwidth]{fig6_mentor_capacity.pdf}
+\caption{Corollary~\ref{cor:capacity}. Share of each cohort holding $t$ after one cohort of low apprenticeship demand (0.672 instead of 0.80), for four values of mentor capacity $\chi$ (apprentices per expert). Illustrative.}\label{fig:capacity}
+\end{figure}
+
+\paragraph{Joint economy.} The baseline of Proposition~\ref{prop:synthesis} uses the consumer calibration above, with default intermediated verification and $n=200$, and adds the factor side. Holders spend half their time in each market, $\varphi=0.5$, and compute capacity $\mu=50$ is well above $H=0.13$. Holdings are $\tau(y)=0.2y$, so $\tau(y)/y$ is constant. Knowledge rises linearly in the income rank from 0.2 to 0.8. The AI change lowers $p_c$ from 1 to 0.672, which raises the per-unit wage $w$ by 0.18; it raises $z_A$ from 0.3 to 0.6; and it doubles density from $D=1$ to $D=2$, with $C(D)=0.05+0.1/D$. Apprenticeship is as above, with $s=0.128$ and $\chi=1.2$. The fall in $p_c$ in the joint economy is taken to 0.672, the value used in the apprenticeship illustration (a 16\% fall in market apprenticeship), so that the factor-price side and the apprenticeship side use the same price; $s=0.128=\bar p-p_c$ then meets C5 exactly. Households are risk neutral and the loading is $\ell=0$, so pooling changes nothing in the consumer calibration. All conditions hold, and $\Gamma(y)/y$ is non-increasing at every grid point (Figure~\ref{fig:joint}a). The same holds with $\varphi=0.25$ and with $\varphi=0.75$.
+
+Table~\ref{tab:necessity} reports eight constructions in which one of C1--C5 fails. In the four that target C1 and C3, holdings are $\tau_0(y)/(1-\varphi)$ for a reference profile $\tau_0$, so that the holder time spent in the task market, $(1-\varphi)\tau$, does not depend on $\varphi$ and the factor part is not dominated by the consumer part. In each, the code checks that the maintained assumptions and the other conditions hold. Two results stand out. First, the knowledge item of C3 matters. With knowledge falling from 0.8 to 0.2 across the income rank and only $z_A$ changing (holdings $\tau(y)=20y$), $\Gamma(y)/y$ rises on 76\% of grid steps, although every holder is employed and $\tau(y)/y$ is constant. Second, the default item of C2 did not matter in this calibration. With the intermediary offered only as a voluntary purchase, under-demand arises only for households with $v$ close to $v_I$, who are at the top of the distribution, and the definition still holds. The C2 failure in the table is therefore the absence of intermediated verification. Among 400 random parameter draws at $\varphi=0.5$, 127 satisfy every condition, and in each of them the conclusion holds.
+
+\begin{figure}[t]\centering
+\includegraphics[width=\textwidth]{fig7_joint_economy.pdf}
+\caption{Proposition~\ref{prop:synthesis}. (a) Baseline joint economy in which C1--C5 hold: total gain relative to income and its consumer and factor-income parts. Time share $\varphi=0.5$. (b) Gain relative to income when one of C1--C4 fails, scaled to a maximum absolute value of one for comparability; parameters in Table~\ref{tab:necessity} and \texttt{code/prop8.py}. Illustrative.}\label{fig:joint}
+\end{figure}
+
+\input{necessity_table.tex}
+
+
+
+\paragraph{Liability.} With $\lambda(y)=1/y$ and the baseline error exposure $\pi(y)=e(1-v(y))$, the average risk premium is 1.94 in the bottom income decile and 0.06 in the top decile, in units of the median household's willingness to pay. With $\pi$ held at its population mean, as in Proposition~\ref{prop:liability}(i), the averages are 2.02 and 0.17. This is the downward-sloping term of Proposition~\ref{prop:liability}.
+
+\section{Evidence}\label{sec:evidence}
+
+This section organises existing evidence by condition, separating evidence that supports the model's predictions, evidence that runs against them, and evidence that is absent. No new estimation is claimed. Every number below was read in the full text of the version stated (Appendix~\ref{app:versions}). The complete three-column review, with page or table locations for every entry, is in \texttt{evidence\_review.md} of the replication package.
+
+\paragraph{Condition 1.} In support, \citet[Proposition~2, p.~308]{brynjolfsson2026hayek} show that inalienable local information favours decentralised ownership. The same chapter (\S12.6.1, p.~316) lists embodied skills and the long tail as limits to codifiability. Against the premise, the chapter's \S12.4.2 (pp.~308--310) gives examples of AI capturing tacit know-how, including call-centre practice, and \citet[p.~33]{garicano2026comment} states that AI ``can acquire tacit knowledge''. If such capture is general, Regime~C applies. \emph{Absent:} no study we read measures how conversion-input holdings are distributed across income.
+
+\paragraph{Condition 2.} \emph{Gaps widen when users select open-ended advice.} In \citet{otis2026uneven}, 640 Kenyan entrepreneurs (p.~3) were randomised to a GPT-4 business assistant. Among below-median baseline performers the effect on a standardised performance index was $-0.08$~SD (s.e.\ 0.03); among above-median performers it was $+0.16$~SD (s.e.\ 0.09); the interaction was $+0.23$~SD (s.e.\ 0.09) (OSF preprint, Table~1). The authors trace the difference to which pieces of advice were selected and implemented, not to the questions asked (pp.~3--4). In the model this is a gradient in verification capacity: the low performers' effective price was higher because they were less able to screen the advice they received.
+
+\emph{Gaps narrow in structured settings.} In \citet{cruces2026narrow}, with 1,174 participants, the education gap on a self-contained business task fell from 0.548~SD without AI to 0.139~SD with it, closing 75\% of the gap (Table~1; p.~15). The assistant was preloaded with the task's report (p.~8, fn.~10). We read this as a setting with a low verification burden; that classification is ours. The authors also report a residual difference in effective use by education (pp.~3--4): participants ``must still evaluate, select, and integrate AI-generated content'' (p.~4). In the NBER working-paper version of \citet{brynjolfsson2025work}, resolutions per hour rose by 34\% for the lowest pre-AI skill quintile and by about zero for the highest (pp.~15--16, Fig.~5), among 5,179 agents (abstract; p.~11). The published QJE version reports slightly different aggregates.
+
+\emph{Calibration.} Non-expert users overestimate the accuracy of LLM answers, and longer explanations raise their confidence without raising accuracy \citep[arXiv v2, pp.~12--13; 301 participants, p.~8]{steyvers2025know}. This supports $\theta<1$ at low $v$, but the study does not measure the gradient across $v$. Against a uniform reading of $\theta<1$, professional radiologists in \citet[abstract]{agarwal2023radiology} \emph{under}-weight AI predictions. The model's $\theta(v)$ rising in $v$ is compatible with both findings only if over-reliance is concentrated among users with low verification capacity, which neither study tests.
+
+\emph{Intermediated verification.} In a pragmatic cluster-assigned deployment (p.~2), which the authors state was equivalent to randomly allocating clinicians stratified by clinic (p.~7, fn.~2), across 39,849 visits, 106 clinicians and 15 clinics (p.~3), clinicians with an AI safety net made 16.0\% fewer diagnostic errors (95\% CI 6.9--24.2) and 12.7\% fewer treatment errors (6.8--18.3) \citep[Table~3, p.~16]{korom2025penda}. This is the intermediated channel of Proposition~\ref{prop:verification}(d): the AI output reaches the patient through a trained person who checks it. Patient-reported outcomes did not differ significantly (3.8\% versus 4.3\% not feeling better; p.~3), and several authors are affiliated with the AI supplier, which also funded the study (pp.~1, 10). The study does not report effects by clinician skill in the sections we read, so it cannot speak to the density condition.
+
+\emph{Absent:} no experiment we read compares open-ended, embedded and intermediated deployment of the same tool on the same population.
+
+\paragraph{Condition 3.} \citet[pp.~34--35]{garicano2026comment} cites radiology as a case where non-autonomy keeps a person in each slot. His packaging cost covers ``specifying the job, providing the right data, verifying the result, and making it safe to pay for'' (p.~35), which is the object $C(D)$ of Proposition~\ref{prop:autonomy}. \citet{kogan2023displacement} find that labour-augmenting exposure lowers incumbents' cumulative five-year earnings by 1--1.7\% (median to 90th percentile; p.~24) while entrants gain. On the tax side, \citet{acemoglu2020tax} estimate effective tax rates of 25.5\% on labour (33.5\% including the implicit taxes of means-tested programmes) and about 10\% on equipment and software in the 2010s (NBER WP, pp.~2, 25). In their model, moving to optimal taxes raises employment by 4.02\% (Table~1). \emph{Absent:} no measurement of packaging cost, no evidence linking intermediary density to the creation of AI-addressable tasks, and no measurement of how the knowledge of conversion-input holders varies with income, the third item of C3.
+
+\paragraph{Condition 4.} The evidence is the theoretical results of \citet[pp.~99, 106, 110--111]{athey2026competition}. \emph{Absent:} we read no estimates of pass-through of AI cost declines to end users in low-income settings, and no evidence on the access fees that intermediaries face.
+
+\paragraph{Condition 5.} \citet{brynjolfsson2025canaries} report, in the August 2026 version, that employment of 22--25-year-olds in the most AI-exposed occupations stands 19\% below where it would be had it kept pace with less-exposed peers. This is a descriptive measure using data to June 2026, and it operates mainly through reduced hiring (abstract; p.~2). Earlier versions headlined regression estimates of 13\% (July 2025 data) and 16\% (September 2025 data) (p.~3). The same paper reports faster employment growth for experienced workers in occupations involving tacit knowledge (p.~3), which is consistent with the premise that experience carries a complement AI does not supply. \citet[pp.~26--28]{ide2025automation} provides theory in which entry-level automation slows the diffusion of best practices. \citet[June 2026 version, p.~5; Fig.~5, p.~31]{hosseini2025seniority} compare junior with senior employment within firms that adopt generative AI, relative to non-adopters, and find that from 2023Q1 the coefficients decline, ``reaching roughly a 9 percent decline in junior employment relative to senior employment after six quarters''. The decline is concentrated in the most exposed occupations and comes mainly from slower hiring rather than more separations (abstract; p.~33; Table~4, p.~41).
+
+Against a pure-offloading reading, \citet{brynjolfsson2025work} find durable learning visible during software outages (WP, pp.~3, 17--19). In the Penda deployment, the share of visits in the AI group where the first AI output was a ``red'' flag fell from 45\% to 35\% over the study \citep[p.~18]{korom2025penda}. Practice with feedback also changes judgement: as reported in \citet[p.~288]{ludwig2026reflective}, a police training programme with simulator practice reduced non-lethal force and discretionary arrests by 23\% each among 2,070 officers. In the working paper itself \citep[pp.~5, 31--32]{dube2025policing}, this is a human-delivered training programme, not an AI deployment.
+
+\emph{Absent:} we found no direct measurement of apprenticeship intensity under AI adoption, and no evidence on mentor-to-apprentice ratios, the capacity $\chi$ of Corollary~\ref{cor:capacity}.
+
+\paragraph{Liability.} Directive (EU) 2024/2853 defines ``product'' to include software (Art.~4) and introduces presumptions of defectiveness and causation (Art.~10), with transposition due by 9 December 2026 (Art.~22) \citep{eu2024pld}. The Swedish Patient Injury Act compensates injury where there is ``övervägande sannolikhet'' (a preponderance of probability) that it was caused by care that could have been avoided (§6) and requires care providers to hold patient insurance (§12) \citep{sweden1996patient}. \emph{Absent:} no evidence on how losses from AI errors fall across household wealth.
+
+\section{Implications, stated conditionally}\label{sec:implications}
+
+The model ranks no objectives. Each statement below has the form ``if the objective is X, instrument class Y affects condition Z through mechanism M''. Whether an objective is worth pursuing, and at what cost, lies outside the paper.
+
+\paragraph{Condition 1.} If the objective is for the complementarity premium to reach the lower part of the distribution, instruments that widen the set of people allowed to supply conversion inputs act on $\tau(y)/y$ (Proposition~\ref{prop:valueshift}(iv)). Two examples are scope-of-practice rules and regulatory sandboxes. Utah's Standing Order No.~15, effective 14 August 2020, created a pilot sandbox in which nontraditional providers may offer legal services under supervision by an Office of Legal Services Innovation \citep{utah2020so15}. Instruments that keep service records portable to the service provider and client act on whether $t$ stays in Regime~H (Proposition~\ref{prop:regime}).
+
+\paragraph{Condition 2.} If the objective is that low-verification households gain from a fall in the posted price of AI-supplied cognition, intermediated verification lowers their expected error loss $\pi(v)L$ (Proposition~\ref{prop:verification}(d)). Public or default verification layers that route such households to a person who uses AI and bears responsibility for the result are one example. By Proposition~\ref{prop:verification}(d), the intermediated channel restores progressivity only where it serves every household for which it is efficient, the number of clients per intermediary exceeds $n^*(A)$, and the self-verifying households above the cutoff satisfy (d3). By part~(e), making the channel the default secures the first of these where a voluntary market would leave efficient users unserved. Disclosure of domain-specific error rates acts on $\theta$ \citep{steyvers2025know}.
+
+\paragraph{Condition 3.} If the objective is to keep human time scarce and wages compressed upward, instruments that lower the packaging cost $C(D)$ act through Proposition~\ref{prop:autonomy}(i), but only while AI is non-autonomous and while holders are employed before and after the change. Where the AI improvement raises $z_A$, the gain is progressive only where holders' knowledge does not fall with income (Proposition~\ref{prop:synthesis}, C3). One example is payment codes for intermediated services. Since 2024, Medicare's physician fee schedule has included codes for community health integration services furnished by auxiliary personnel, including community health workers (HCPCS G0019, G0022) \citep{cms2023pfs}. Open standardised data are another example. Tax treatment that taxes capital and labour more evenly acts on firms' choice between assisting and replacing labour \citep{acemoglu2020tax}.
+
+\paragraph{Condition 4.} If the objective is that cost declines reach users, instruments that discipline both usage fees and access fees act on $\rho$ and on $n^*(A)$ (Proposition~\ref{prop:market}). By \citet[p.~110]{athey2026competition}, a cap on one fee alone shifts extraction to the other. Interoperability rules and multi-source procurement act on market power and on capability loss.
+
+\paragraph{Condition 5.} If the objective is that the share of each cohort acquiring tacit knowledge not fall, a per-apprentice subsidy of at least $\bar p-p_c$ acts on $a^m$ (Proposition~\ref{prop:apprentice}). It does so fully only where mentor capacity is slack. Where capacity binds, instruments that raise the number of apprentices each expert can supervise act on $\chi$, and a delay in restoring demand has a cumulative cost (Corollary~\ref{cor:capacity}). Other instruments in the same class are supervised-practice requirements in licensing and the use of AI for practice rather than substitution in entry roles. The external value of an apprenticeship in the model is $\beta W(p_c)$, which rises as AI cheapens entry tasks.
+
+\paragraph{Liability.} If the objective is to remove the regressive risk-premium term, no-fault compensation with mandatory insurance acts through Proposition~\ref{prop:liability}(iii). It removes the risk premium; the income gradient of the expected loss remains and is addressed through condition~2. The Swedish patient injury scheme \citep{sweden1996patient} is an example, as is the extension of product liability to software \citep{eu2024pld}.
+
+\section{Testable predictions}\label{sec:predictions}
+
+\begin{enumerate}[label=P\arabic*.,leftmargin=2.5em]
+\item \emph{Deployment type predicts gap direction (condition 2; the commissioning party's proposal 017).} Across randomised studies of generative-AI assistance that report effects by baseline skill or education, gap widening should concentrate where users select and implement open-ended output. Gap narrowing should concentrate where output is embedded in a structured workflow or checked by a trained intermediary. The model predicts the sign from the effective-price gradient $eLyv'(y)$; a null difference across deployment types counts against condition~2.
+\item \emph{Intermediary density threshold (condition 2).} Where the same AI-assisted service is offered with and without a trained intermediary, the relative gain of low-income users should rise with the number of clients per intermediary up to a threshold, and be flat beyond it.
+\item \emph{Losers from overconfidence (condition 2).} Low-verification users should be the users with negative realised gains, and the share of losers should fall when calibrated uncertainty is displayed.
+\item \emph{Autonomy and wage compression (condition 3).} In occupations where AI remains non-autonomous, higher density of local intermediaries should go with wage compression and higher employment. Where AI is autonomous, the same density should not raise wages.
+\item \emph{Institutional apprenticeship commitments (condition 5; the commissioning party's proposal 018).} Where firms are bound by institutional apprenticeship commitments, as in Germany's dual system, $a^m$ behaves as $G(p_c+s)$ with $s>0$. Training places in AI-exposed occupations should therefore fall less, relative to less-exposed occupations, than entry-level employment in the same occupations in the United States. If they fall as much, a subsidy or commitment of the form modelled is not sufficient.
+\item \emph{Mentor capacity and persistence (condition 5).} Where mentor-to-apprentice ratios are tight, a temporary fall in entry hiring into AI-exposed occupations should be followed by a slower recovery of training places than where ratios are slack, even after demand for entrants recovers (Corollary~\ref{cor:capacity}).
+\item \emph{Visible versus unobserved checking (related to condition 2; proposal 016).} This prediction lies outside the formal model and is stated as a conjecture. If verification effort is allocated where errors are observed by others, then as AI lowers production cost, checking should rise on dimensions reviewers see, such as requested additional analyses, and fall on dimensions they do not, such as reference accuracy. The fabricated references in a 2026 volume chapter, discussed in Appendix~\ref{app:volume}, are an instance, not evidence.
+\end{enumerate}
+
+\section{Conclusion}\label{sec:conclusion}
+
+If AI supplies codifiable cognition but not conversion inputs, the gains from its spread follow the conversion inputs. In a joint economy in which holders of conversion inputs divide their time in fixed proportions between the factor-price and task channels, the gains are relatively progressive, and the next cohort's share of conversion-input holders does not fall, when the following conditions hold together:
+\begin{itemize}[itemsep=0pt]
+\item conversion inputs are held widely, with holdings no more concentrated than income;
+\item verification of AI output is intermediated and reaches by default everyone for whom it is efficient, and error risk is pooled;
+\item AI remains non-autonomous, packaging needs into tasks is cheap enough to keep holders employed, and holders' knowledge does not fall with income;
+\item cost declines and access fees leave each intermediary with more clients than the density threshold;
+\item apprenticeship is subsidised enough to offset cheaper AI, and mentor capacity is at least one apprentice per expert.
+\end{itemize}
+In the model each of these five conditions, taken as a whole, can fail alone and break the result; necessity is not shown for their separate components. A fall in the posted price of AI alone can be regressive. Intermediated verification restores relative progressivity only together with routing and the residual gradient condition; density alone does not. When mentor capacity binds, a temporary fall in apprenticeship persists across cohorts. The model's main limitations are its small-sector partial-equilibrium structure, the fixed, exogenous time allocation of the joint economy and its treatment of $(p,p_c,z_A,D)$ as an exogenous vector, the reduced-form treatment of verification capacity and overconfidence, the unmodelled distribution of $t$ across incomes within the next cohort, and the premise itself. If AI acquires tacit knowledge, Regime~C applies and the centralisation logic of \citet{brynjolfsson2026hayek} returns.
+
+\appendix
+\sloppy
+\section{Proofs}\label{app:proofs}
+
+The master copy of the model and proofs, with every step written out, is \texttt{model/derivations.md} in the replication package. This appendix reproduces the proofs. The review records are in \texttt{review/}.
+
+\paragraph{What the code checks.} \texttt{code/verify\_propositions.py} runs 88 symbolic and numerical checks and prints one further result as a record, which is neither judged nor counted; its output ends with ``CHECKS 88/88 COMPLETE''. The record is the weak-necessity construction for C1 at $\varphi=0.25$ under the holdings rule, which does not break the conclusion ($\Gamma(y)/y$ is non-increasing on the grid; largest increment $-2.9\times10^{-4}$); weak necessity is stated at $\varphi=0.5$ only and lists the checks by result. Table~\ref{tab:coverage} summarises the coverage. A numerical check on a grid or on random draws illustrates a result for the parameters checked. It is not a proof, and the proofs below do not rely on it.
+
+\begin{table}[h]\centering\small
+\caption{Coverage of \texttt{verify\_propositions.py} (revision round~3).}\label{tab:coverage}
+\begin{tabular}{p{0.16\textwidth}cp{0.62\textwidth}}
+\toprule
+Result & Checks & What is checked\\
+\midrule
+Proposition~1 & 5 & Closed forms (symbolic, three points); monotonicity and limit on a grid; the $\sigma>1$ case; the ``if and only if'' of (iv) for three holding profiles.\\
+Proposition~2 & 6 & No-trade condition, Bertrand equilibrium conditions and the premium bound on a $21^3$ grid of $(w,r_h,k_t)$; premium flat in $w$; limit $k_t\to0$; the tie $r_h=k_t$. Part~(iii) is a cited result and is not checked.\\
+Lemma~1 & 2 & Both derivative conditions, symbolically.\\
+Proposition~3 & 19 & (a) the threshold in both directions, and the premise $p_e<P_0$ by counterexample; (b) regressivity on a grid; (c) losers, the interval, $\pi=0$, $p\ge0$ and the boundary $R=\theta\pi L$; (d) and (d$_A$) above and below the threshold; (e) the existence form, including a case with no under-demand.\\
+Proposition~4 & 6 & Derivatives symbolically, including $z_j=1$; ratio compression on a grid; the autonomous wage.\\
+Proposition~5 & 2 & Pass-through and the envelope result for linear demand only.\\
+Proposition~6, Corollary~1 & 14 & Closed forms symbolically; the support and interior conditions by counterexample; the capacity law of motion and the set of stationary shares for $\chi=1$, $\chi>1$ and $\chi<1$.\\
+Proposition~7 & 5 & Monotonicity in $\lambda$; $\pi=0$; experience-rated pooling keeps the expected-loss gradient; the pooling-preference set.\\
+Proposition~8 & 29 & Baseline conditions and conclusion; the baseline at $\varphi\in\{0.25,0.5,0.75\}$; sufficiency on 400 random draws; the eight weak-necessity constructions of Table~\ref{tab:necessity} ($\varphi=0.5$), and the same eight at $\varphi=0.25$ and $\varphi=0.75$ under the holdings rule (fifteen checks; C1 at $\varphi=0.25$ is printed as a record and does not break the conclusion).\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Proof of Proposition~\ref{prop:valueshift}.} Zero profit gives $w^{1-\sigma}=(1-\alpha^\sigma p_c^{1-\sigma})/(1-\alpha)^\sigma$. For this to be positive we need $p_c<\alpha^{-\sigma/(1-\sigma)}$. Since $1-\sigma>0$, the right-hand side is strictly decreasing in $p_c$, which proves (i). With unit cost one, the cost share of $c$ is $\alpha^\sigma p_c^{1-\sigma}$, which is increasing in $p_c$ and tends to zero as $p_c\to0$; this proves (ii). Part (iii) sets $p_c=0$ in (i). Part (iv): with quasilinear utility and the price of $S$ fixed, a change in factor income is the household's equivalent variation. The gain relative to income is $\Delta w\,\tau(y)/y$ with $\Delta w=w(p_c^1)-w(p_c^0)>0$ by (i), so it is non-increasing in $y$ if and only if $\tau(y)/y$ is. For $\sigma>1$ (not used in the paper) the exponent $1-\sigma$ is negative. Zero profit at the fixed output price then requires $p_c>\alpha^{\sigma/(\sigma-1)}$; below that price cognition alone produces $S$ at a unit cost below one, so $t$ is inessential and the fixed-price assumption fails. On the admissible domain $s_t$ rises with $p_c$. The comparative statics are therefore qualitatively different, not a mirror image of (ii). $\square$
+
+\paragraph{Proof of Proposition~\ref{prop:regime}.} Regime~H follows from Proposition~\ref{prop:valueshift}. In Regime~C, holders (cost $r_h$) and the owner of the reproduced asset (cost $k_t$) compete in prices to supply a service that users value at $w(p_c)$ per unit. (i) No seller supplies below its cost and no user pays above $w(p_c)$, so if both costs exceed $w(p_c)$ there is no trade. (ii) Otherwise the lower-cost side can profitably serve the market. In the Bertrand outcome it charges the higher of the two costs, capped at $w(p_c)$: at a higher price the rival would undercut, and the cap is users' willingness to pay. This gives $P_C$. If $r_h\le k_t$, holders supply at $\min\{w,k_t\}$ and their premium is $\min\{w,k_t\}-r_h\le k_t$. At a tie $r_h=k_t\le w$ both sides have the same cost; the tie rule assigns supply to holders, and the price $k_t$ and the holders' premium of zero are the same under either assignment. If $k_t<r_h$, holders are undercut and earn no premium, and the owner's margin is $\min\{w,r_h\}-k_t$. (iii) Once $w(p_c)\ge k_t$ the premium in either case does not depend on $w(p_c)$, hence not on $p_c$, and it is at most $k_t$, which tends to zero. $\square$
+
+\paragraph{Proof of Lemma~\ref{lem:schedule}.} For entrants $EV=R-\tilde p$, so
+\[
+\frac{d(EV/y)}{dy}=\frac{y(R'-\tilde p')-(R-\tilde p)}{y^2}.
+\]
+Substituting $yR'=\eta R$ and $\tilde p'=-|\tilde p'|$, the numerator becomes $\tilde p+y|\tilde p'|-(1-\eta)R$. For incumbents $EV=P_0-\tilde p$, and the numerator is $y|\tilde p'|-(P_0-\tilde p)$. $EV$ is continuous at $R=P_0$. A continuous, piecewise-$C^1$ function is non-increasing if and only if its derivative is non-positive wherever it exists. $\square$
+
+\paragraph{Proof of Proposition~\ref{prop:verification}.}
+(a) By assumption $p_e<P_0$. With this constant effective price, the gain $EV$ is zero, then $R-p_e$, then $P_0-p_e$ as income rises, and is non-decreasing because $R$ is increasing. If some household does not buy, $EV/y$ is zero below the purchase threshold and positive above it, which contradicts monotonicity. Hence $p_e\le R(y_L)$ is necessary; it is implied by $p_e\le(1-\eta)R(y_L)$. Lemma~\ref{lem:schedule} with $\tilde p'=0$ requires $p_e\le(1-\eta)R(y)$ for every entrant, which by monotonicity of $R$ reduces to the condition at $y_L$. For the converse, if $p_e>(1-\eta)R(y_L)$, the derivative of $EV/y$ is strictly positive near $y_L$. If $\eta\ge1$, $(1-\eta)R\le0<p_e$, so the condition cannot hold. The premise $p_e<P_0$ is needed for the necessity half: if $p_e\ge P_0$, no entrant buys AI and incumbents gain nothing, so $EV/y\equiv0$ is non-increasing although $p_e\ge P_0>R(y_L)>(1-\eta)R(y_L)$.
+
+(b) Apply Lemma~\ref{lem:schedule} with $|\tilde p'|=eLv'(y)$.
+
+(c) The household buys if and only if $p\le R-\theta\pi L$. Its realised gain is $R-p-\pi L$, which is negative if and only if $p>R-\pi L$. The interval is non-empty because $(1-\theta)\pi L>0$, which needs both $\theta<1$ and $\pi>0$. Its intersection with $p\ge0$ is non-empty if and only if its upper end $R-\theta\pi L$ is non-negative. If $R-\pi L\ge0$, the intersection is the interval itself. If $R-\pi L<0$, it is $[0,R-\theta\pi L]$, closed at zero because $p=0$ lies strictly above the lower end; in particular, when $R=\theta\pi L$ it is $\{0\}$. Its length $(1-\theta(v))e(1-v)L$ is a product of non-negative, non-increasing functions of $v$.
+
+(d) Under (d1), the effective price is $\tilde p=p_I$, constant, up to the cutoff income at which $q=eL(v_I-v)$. Every household on that segment buys, because (d2) gives $p_I\le(1-\eta)R(y_L)<R(y)$. Lemma~\ref{lem:schedule} on that segment reduces to $p_I\le(1-\eta)R(y)$ for entrants, which (d2) gives at $y_L$ and hence everywhere. Incumbents on the segment satisfy the incumbent condition because $p_I<R(y_L)\le P_0$. At the cutoff $\tilde p$ is continuous, since $p_I=p_e$ there. Above the cutoff, (d3) is the lemma itself.
+
+(e) $b(y)-\hat b(y)=eL(1-\theta)(1-v)>0$ when $\theta<1$ and $v<1$. A household for which intermediation is efficient ($q\le b$) does not buy it if and only if $q>\hat b$, which gives the ``if and only if''. (e1) is a restatement. For (e2), with $q=0$ we need $0\le b$, true for $v<v_I$, and $\hat b<0$, which is $\theta(v)(1-v)<1-v_I$. At $v=v_I$ the left side is $\theta(v_I)(1-v_I)<1-v_I$ when $\theta(v_I)<1$, so by continuity the inequality holds on a left neighbourhood of $v_I$. Under default routing every household with $q\le b(y)$ is served, which is (d1). $\square$
+
+\paragraph{Proof of Proposition~\ref{prop:autonomy}.}
+(i) At most $H$ opportunities are active, and compute exceeds $H$, so $r^*=0$. Free entry and competition for each human's time give $w_j=s_j-C$ when this is positive. Differentiating, $\partial w_j/\partial D=c_1/D^2$. The ratio $(s_j-C)/(s_k-C)$ with $s_j>s_k>C$ is increasing in $C$, with derivative $(s_j-s_k)/(s_k-C)^2$, and $C$ falls with $D$. Finally $\partial w_j/\partial z_A=1-z_j\ge0$, with equality only at $z_j=1$.
+
+(ii) Opportunities solved by AI alone earn $z_A-C-r$. Free entry drives $r$ to $z_A-C>0$ before compute is exhausted. Zero profit on opportunities staffed by a human then gives $w_j=s_j-C-r^*=(1-z_A)z_j$. $\square$
+
+\paragraph{Proof of Proposition~\ref{prop:market}.} To first order, households gain $-Q\,dp^*/dk=\rho Q$ per unit of cost decline. By the envelope theorem $d\Pi^*/dk=-Q$. The domestic share of profit is $1-f$. Both are derivatives, so the stated changes hold up to $o(|dk|)$. Because $A$ is a fixed amount per intermediary, it adds to the fixed cost: the zero-profit fee is $m+(F+A)/n$, and substituting it in (d2) gives (d2$_A$). $\square$
+
+\paragraph{Proof of Proposition~\ref{prop:apprentice}.} A firm hires a novice if and only if $y_N-w_N-\kappa_j\ge y_N-p_c$. With $w_N\ge0$ binding at $w_N=0$, this is $\kappa_j\le p_c$, so firms demand $G(p_c)$. Socially, an apprenticeship is worth $p_c+\beta W$ against cost $\kappa_j$, so the efficient demand is $G(p_c+\beta W)$. Because capacity does not bind, $\chi T_{t-1}\ge a^*\ge a^m$, equation~\eqref{eq:capacity} gives $T_t=a_t$ and the rates are attained. Strictness: $\beta>0$, $W>0$ and $p_c<\bar\kappa$ give $p_c<\min\{p_c+\beta W,\bar\kappa\}$, and $g>0$ on that interval gives $G(p_c+\beta W)>G(p_c)$ and a positive loss. The loss is the integral of the social net value $p_c+\beta W-\kappa$ over the apprenticeships the market omits, which are those with $\kappa\in(p_c,\min\{p_c+\beta W,\bar\kappa\}]$. With a subsidy $s$, firms hire if $\kappa_j\le p_c+s$: $s^*=\beta W$ gives $a^*$, and $s=\bar p-p_c$ gives $G(\bar p)$, which is attained when $\chi T_{t-1}\ge G(\bar p)$. With $G$ uniform and $p_c+\beta W\le\bar\kappa$, no truncation occurs, so $a^*-a^m=\beta W/\bar\kappa$ and the loss is $\int_{p_c}^{p_c+\beta W}(p_c+\beta W-\kappa)/\bar\kappa\,d\kappa=(\beta W)^2/(2\bar\kappa)$. Both are increasing in $W$, which is decreasing in $p_c$. $\square$
+
+\paragraph{Proof of Corollary~\ref{cor:capacity}.} (i) Stationarity means $T=\min\{a,\chi T\}$. If $\chi<1$ and $T>0$, then $T\le\chi T<T$, a contradiction. If $\chi>1$ and $0<T<a$, stationarity requires $T=\chi T$, which is impossible for $T>0$; and $T=a$ is stationary because $\chi a>a$. If $\chi=1$, $\min\{a,T\}=T$ for every $T\in(0,a]$, and from any $T_0>0$ the path is $T_t=\min\{a,T_0\}$ for $t\ge1$. (ii) $T_1=\min\{a_L,\chi a_H\}=a_L$ because $\chi\ge1$. Suppose $T_{t}=\min\{a_H,\chi^{t-1}a_L\}$ for some $t\ge1$. Then $T_{t+1}=\min\{a_H,\chi T_t\}=\min\{a_H,\chi a_H,\chi^{t}a_L\}=\min\{a_H,\chi^{t}a_L\}$, using $\chi a_H\ge a_H$. With $\chi=1$ this is $a_L$ for every $t$. With $\chi>1$, $T_t=a_H$ once $\chi^{t-1}\ge a_H/a_L$. (iii) The cumulative shortfall is $(a_H-a_L)+\sum_{t\ge2}(a_H-T_t)$. Each later term is non-negative and the $t=2$ term is positive if and only if $\chi a_L<a_H$; if $\chi a_L\ge a_H$, all later terms are zero. (iv) $T_t\le\chi T_{t-1}$ for every $t$, so $T_t\le\chi^tT_0$. $\square$
+
+\paragraph{Proof of Proposition~\ref{prop:liability}.} (i) $RP=\lambda^{-1}\ln(1-\pi+\pi e^{\lambda L})-\pi L$ is the CARA risk premium of the loss lottery, the amount by which the certainty-equivalent cost of bearing the loss exceeds its expected value $\pi L$. For a non-degenerate lottery ($0<\pi<1$, $L>0$) it is positive by Jensen's inequality and strictly increasing in $\lambda$ \citep{pratt1964risk}. Composing with $\lambda'<0$ gives a premium strictly decreasing in $y$. (ii) Self-bearing costs $\pi L+RP(y)$ in certainty-equivalent terms, and pooling costs $(1+\ell)\pi L$. With $\pi$ common, $RP(y)$ is decreasing and $\ell\pi L$ is constant, so the set where $RP(y)\ge\ell\pi L$ is a lower interval. (iii) Under pooling the household bears no risk, so the risk premium disappears from its effective price. The remaining term, $(1+\ell)\pi(y)L$, has derivative $-(1+\ell)eLv'(y)$, which is the gradient in Proposition~\ref{prop:verification} scaled by $1+\ell$. $\square$
+
+\paragraph{Proof of Proposition~\ref{prop:synthesis}.} \emph{Consumer part.} C2 gives (d1) and (d3) and C4 gives (d2$_A$), with the maintained assumptions $R(y_L)\le P_0$ and a positive denominator. Under pooled liability the risk-premium term is absent (Proposition~\ref{prop:liability}(iii)), so the effective-price schedule is that of Proposition~\ref{prop:verification}(d) with fee $q_A$ and with $L$ replaced by $(1+\ell)L$; the conditions are stated in that form. That proposition gives $EV_{\text{cons}}(y)/y$ non-increasing.
+
+\emph{Factor-income part.} The time allocation is feasible: the need-solving wage $w(p_c^k)$ is fixed by zero profit whatever the quantity $\varphi\int\tau\,dF$ of $t$ supplied, and at most $H=(1-\varphi)\int\tau\,dF<\mu$ opportunities are staffed in the task market, so $r^*=0$ in both states as in Proposition~\ref{prop:autonomy}(i). By C3, AI is non-autonomous in both states. Since $s_j$ is increasing in $z_A$ and $C$ is decreasing in $D$, $C(D^0)<s^0_{\min}$ implies $C(D^1)<s^1_{\min}$, so every holder is employed in both states and $w_T^k(z)=z_A^k+(1-z_A^k)z-C(D^k)$. Hence
+\[
+\Delta w_T(y)=(z_A^1-z_A^0)\,(1-z(y))+[C(D^0)-C(D^1)].
+\]
+Both terms are non-negative. The first is non-increasing in $y$ because $z(y)$ is non-decreasing (C3), and the second does not depend on $y$. With $\Delta w_P=w(p_c^1)-w(p_c^0)\ge0$ (Proposition~\ref{prop:valueshift}(i)), $g(y)=\varphi\Delta w_P+(1-\varphi)\Delta w_T(y)$ is non-negative and non-increasing, since multiplying by the positive constants $\varphi$ and $1-\varphi$ preserves both properties. By C1, $h(y)=\tau(y)/y$ is non-negative and non-increasing. For $y<y'$, $g(y)h(y)\ge g(y')h(y)\ge g(y')h(y')$, using $h(y)\ge0$ for the first inequality and $g(y')\ge0$ for the second. So $\tau(y)g(y)/y$ is non-increasing.
+
+\emph{Sum and next cohort.} A sum of non-increasing functions is non-increasing, so $\Gamma(y)/y$ is non-increasing. By C5, $G(p_c+s)\ge G(\bar p)=T_0$ and $\chi T_0\ge T_0$, so $T_1=\min\{G(p_c+s),\chi T_0\}\ge T_0$.
+
+\emph{Weak necessity.} The eight parameterisations of Table~\ref{tab:necessity} are defined in \texttt{code/prop8.py}, with $\varphi=0.5$; the baseline conclusion is also checked at $\varphi=0.25$ and $\varphi=0.75$. For each, \texttt{code/verify\_propositions.py} evaluates every condition and the maintained assumptions on the income grid, confirms that only the targeted condition fails, and confirms that $\Gamma(y)/y$ increases on part of the grid or that $T_1<T_0$. This establishes the existence claim for those parameterisations. $\square$
+
+\section{Parameters}\label{app:params}
+\input{params_table.tex}
+
+\section{Search strings}\label{app:search}
+\input{search_table.tex}
+
+\section{Versions of sources and a note on the volume}\label{app:versions}\label{app:volume}
+Numbers in this paper are taken from the following versions, which differ in places from published versions:
+\begin{itemize}[itemsep=0pt]
+\item \citet{brynjolfsson2025work}: NBER WP 31161, revised November 2023.
+\item \citet{otis2026uneven}: OSF preprint hdjpk, file version~3.
+\item \citet{dube2025policing}: NBER WP 31651.
+\item \citet{acemoglu2020tax}: NBER WP 27052.
+\item \citet{steyvers2025know}: arXiv v2.
+\item \citet{brynjolfsson2025canaries}: first version August 2025; all numbers are from the August 2026 version (data to June 2026). The citation year 2025 refers to the first version.
+\item \citet{ide2025automation}: arXiv v9.
+\item \citet{hosseini2025seniority}: SSRN version of 6 June 2026 (first version 31 August 2025). The citation year 2025 refers to the first version.
+\end{itemize}
+Volume page numbers are printed pages. Pages 35, 55, 63, 64, 106, 110, 277, 282, 288, 308, 316, 322, 383 and 404 were checked against page images of the PDF (replication package, \texttt{reading\_notes/volume\_pdf\_checks.md}). Pages 33--34, 99, 111, 179 and 310--311 were read in the volume's OCR text layer only.
+
+The reference list of chapter~12 of the volume contains two entries whose bibliographic details do not match any real paper, although the claims they support are real. The first is printed as ``Agarwal, Rohan, Jenna Smith, and Kevin Lee. 2025. Journal of Artificial Intelligence Research 74''; a matching paper is \citet{agarwal2024longtail}. The second is printed as ``Kandpal, Niyati, et al. 2023, arXiv:2307.XXXX''; a matching paper is \citet{kandpal2023longtail}. We note this because this paper's reference list was verified entry by entry by a separate line for that reason.
+
+\section{AI disclosure (full)}\label{app:disclosure}
+\begin{itemize}[itemsep=1pt]
+\item \textbf{Question:} posed by the human convenor of AIgora Society.
+\item \textbf{Paper design} (question, core argument, model structure and claims): written by a research agent built on Claude Opus~5.5 (\texttt{claude-opus-5-5}), operating through Claude Code desktop.
+\item \textbf{Literature retrieval and reading, formalisation and proofs, numerical illustration, evidence review, drafting:} Claude Science, running on Claude Opus~5.5 (\texttt{claude-opus-5-5}). Revision round~2 was carried out in a new Claude Science session, which worked from the files left by the earlier session. The full text of \citet{hosseini2025seniority} (SSRN version of 6 June 2026) was obtained on 16 October 2026, and the citation of it was changed to a direct citation following the original.
+\item \textbf{First proof review (14 October 2026):} separate single-shot model calls on \texttt{claude-sonnet-5} (not sub-agents, which were unavailable), which received only the model environment and the proposition statements, with proofs withheld. This is the same model family as the author line. It found two false statements (the ``bounded factor'' wording in Proposition~1(iii) and the owner's margin in Proposition~2) and a mis-formulation of Proposition~8, which were corrected in the first draft. Record: \texttt{review/review\_record.md}.
+\item \textbf{Acceptance review and non-Claude review (15 October 2026):} the commissioning research agent reviewed every proposition, and a non-Claude model (OpenAI GPT, \texttt{gpt-5.6-terra}, via the Codex command-line tool, read-only) independently reviewed the formal results. They found that the proof of Proposition~8 wrongly treated the wage change as common across holders and combined two models without specifying a joint economy; that Proposition~6 lacked positivity, support and mentor-capacity conditions and overstated the value of an apprenticeship; that Proposition~2 lacked a participation condition; and that Propositions~3 and~7 lacked assumptions. They also found two misstatements of sources (Hall's capital share and the wording of the Swedish statute). Revision round~1 corrected all of these; Proposition~8 and Proposition~6 were revised as the commissioning party specified. The GPT report (verbatim) and the acceptance review record (translated into English) are in \texttt{review/}.
+\item \textbf{Second acceptance review and second non-Claude review (16 October 2026):} the commissioning research agent completed a second acceptance review, and \texttt{gpt-5.6-terra}, through the same tool, a second review of the revised formal results. They found that the joint economy of Proposition~8 did not specify how holders' time is allocated between the need-solving sector and the task market; that Corollary~1(i) was false for $\chi=1$; and that Proposition~3(a) omitted the premise $p_e<P_0$. Minor problems were the left endpoint in Proposition~3(c), the wording of Proposition~4(i) when $z_j=1$, the undefined discount factor $\beta$ in Section~\ref{sec:apprentice}, a missing tie rule in Proposition~2, and wording in the abstract, introduction and conclusion. The acceptance review also found that a page reference it had itself supplied in round~1 was wrong (\citealp{korom2025penda}, p.~3, not p.~2), and recommended two wording changes in the evidence section. This revision (round~2) corrects all of these; Proposition~8 was revised with the fixed time share specified by the commissioning party. The second GPT report (verbatim), the second acceptance record and the commissioning party's check of new evidence entries (both translated into English) are in \texttt{review/}. The round-2 revisions were reviewed again on 16 October 2026 (next item).
+\item \textbf{Third acceptance review and third non-Claude review (16 October 2026):} the commissioning research agent and \texttt{gpt-5.6-terra} reviewed the round-2 revisions. They found that the numerical example of Proposition~8 used a separate price on its apprenticeship side ($p_c=0.672$, while the factor-price side used $p_c^1=0.5$), so that the baseline check of C5 and the C5 part of the random draws did not refer to the joint economy as written; the proof was not affected. This revision (round~3) uses a single price, $p_c^1=0.672$, on both sides, and states the rule for holdings in the weak-necessity constructions. The round-3 return note had stated that this rule makes the constructions hold at every $\varphi$; that claim rested on a trial run before the price was unified and is not correct. The author line found this, reported it as a stop point, and, as the commissioning party ruled, weak necessity is now stated at $\varphi=0.5$ only, with the results at $\varphi=0.25$ and $\varphi=0.75$ reported under Table~\ref{tab:necessity}. The third GPT report (verbatim) is in \texttt{review/}. The round-3 revisions were reviewed on 16 October 2026 by the commissioning research agent and by \texttt{gpt-5.6-terra}, which found no major problem; one omission in the README was corrected afterwards.
+\item \textbf{Independent citation verification:} a separate line that received only the reference list and queried bibliographic databases. The verification table is \texttt{citations/verification\_table.csv}.
+\item \textbf{Approval:} the human convenor approves the final text.
+\end{itemize}
+No part of the analysis or text of this draft was written by a human.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+\end{document}
