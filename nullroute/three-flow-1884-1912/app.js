@@ -37,7 +37,7 @@ function hel(tag, cls, text) { var e = document.createElement(tag); if (cls) e.c
 function cards() {
   var c = D.summary.cards, box = $('cards'); box.innerHTML = '';
   var src_med = T('各公司当年数值的中位数；跨年区间为各年中位数的平均值。数据来自贸易部铁路年报。',
-                  'Values printed in the Board of Trade returns; median over companies for each year, multi-year spans averaged over the yearly medians. Ratio table, task 010 return box.');
+                  'Values printed in the Board of Trade returns; median over companies for each year, multi-year spans averaged over the yearly medians. Ratio table, task 024 return box.');
   var defs = [
     { cls: 'rpm', lab: T('每列车英里收入', 'Receipts per train mile'),
       fig: fmt1(c.rpm.v1) + ' → ' + fmt1(c.rpm.v2) + ' → ' + fmt1(c.rpm.v3),
@@ -52,7 +52,7 @@ function cards() {
       fig: c.up1900.n_up + T(' 家 ／ ', ' of ') + c.up1900.n_both + T(' 家', ''),
       yrs: c.up1900.y,
       src: T('1899 与 1900 两年均有数据的公司共 ' + c.up1900.n_both + ' 家，1900 年的营运支出全部高于 1899 年。数据来自贸易部铁路年报。',
-             'Companies with an expenditure value in both 1899 and 1900: ' + c.up1900.n_both + ', all of them rising; expenditure per train mile as printed in the Board of Trade returns, task 010 ratio table.') },
+             'Companies with an expenditure value in both 1899 and 1900: ' + c.up1900.n_both + ', all of them rising; expenditure per train mile as printed in the Board of Trade returns, task 024 ratio table.') },
   ];
   defs.forEach(function (d) {
     var card = hel('div', 'card'); card.setAttribute('data-card', d.cls);
