@@ -2,7 +2,11 @@
    用法见各页末尾的 SigmaCharts.line / .bars / .ranges 调用。不依赖外部库。 */
 (function () {
   const NS = "http://www.w3.org/2000/svg";
-  const fmt = (v, d) => (v == null ? "—" : Number(v).toLocaleString("zh-CN", { maximumFractionDigits: d == null ? 2 : d }));
+  // 页面 <html lang> 以 en 开头时，图里的固定文字用英文
+  const EN = /^en/i.test(document.documentElement.lang || "");
+  const T = EN ? { table: "Show data table", year: "Year", group: "Group", colon: ": ", lp: " (", rp: ")" }
+               : { table: "展开数据表", year: "年份", group: "组", colon: "：", lp: "（", rp: "）" };
+  const fmt = (v, d) => (v == null ? "—" : Number(v).toLocaleString(EN ? "en-US" : "zh-CN", { maximumFractionDigits: d == null ? 2 : d }));
   function el(tag, attrs, parent) {
     const n = document.createElementNS(NS, tag);
     for (const k in attrs) n.setAttribute(k, attrs[k]);
@@ -33,7 +37,7 @@
   function hideTip(host) { tipBox(host).hidden = true; }
   function table(host, cols, rows) {
     const d = document.createElement("details"); d.className = "ctab";
-    d.innerHTML = "<summary>展开数据表</summary>";
+    d.innerHTML = "<summary>" + T.table + "</summary>";
     const tb = document.createElement("table");
     tb.innerHTML = "<thead><tr>" + cols.map(c => "<th>" + c + "</th>").join("") + "</tr></thead><tbody>" +
       rows.map(r => "<tr>" + r.map(c => "<td>" + (c == null ? "—" : c) + "</td>").join("") + "</tr>").join("") + "</tbody>";
@@ -57,13 +61,14 @@
     const x0 = opt.xMin != null ? opt.xMin : Math.min(...xs), x1 = opt.xMax != null ? opt.xMax : Math.max(...xs);
     const y0 = opt.yMin != null ? opt.yMin : Math.min(0, ...ys), y1 = opt.yMax != null ? opt.yMax : Math.max(...ys) * 1.08;
     const X = v => m.l + (v - x0) / (x1 - x0) * (W - m.l - m.r);
-    const Y = v => H - m.b - (v - y0) / (y1 - y0) * (H - m.t - m.b);
+    const L = opt.log ? v => Math.log10(v) : v => v;
+    const Y = v => H - m.b - (L(v) - L(y0)) / (L(y1) - L(y0)) * (H - m.t - m.b);
     const svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": opt.aria || "" });
     (opt.bands || []).forEach(b => {
       el("rect", { x: X(b.x0), y: m.t, width: X(b.x1) - X(b.x0), height: H - m.t - m.b, class: "band" }, svg);
       if (b.label) { const t = el("text", { x: X(b.x0) + 4, y: m.t + 13, class: "bandlab" }, svg); t.textContent = b.label; }
     });
-    niceTicks(y0, y1, 5).forEach(v => {
+    (opt.yTicks || niceTicks(y0, y1, 5)).forEach(v => {
       el("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), class: "grid" }, svg);
       const t = el("text", { x: m.l - 8, y: Y(v) + 4, class: "tick", "text-anchor": "end" }, svg); t.textContent = fmt(v);
     });
@@ -82,9 +87,16 @@
     });
     if (opt.yLabel) { const t = el("text", { x: m.l, y: m.t - 4, class: "axlab" }, svg); t.textContent = opt.yLabel; }
     if (opt.xLabel) { const t = el("text", { x: W - m.r, y: H - 6, class: "axlab", "text-anchor": "end" }, svg); t.textContent = opt.xLabel; }
+    // area：{lo:[[x,y]...], hi:[[x,y]...], color}，在两条边之间填一块浅色区域（例如估计范围）
+    (opt.areas || []).forEach(ar => {
+      const d = ar.hi.map((p, i) => (i ? "L" : "M") + X(p[0]).toFixed(1) + "," + Y(p[1]).toFixed(1)).join("") +
+        ar.lo.slice().reverse().map(p => "L" + X(p[0]).toFixed(1) + "," + Y(p[1]).toFixed(1)).join("") + "Z";
+      el("path", { d: d, fill: ar.color, "fill-opacity": ar.opacity || 0.18, stroke: "none" }, svg);
+    });
     opt.series.forEach(s => {
       const pts = s.points.filter(p => p[1] != null);
-      el("path", { d: pts.map((p, i) => (i ? "L" : "M") + X(p[0]).toFixed(1) + "," + Y(p[1]).toFixed(1)).join(""),
+      // maxGap：相邻两点的横坐标相差超过它就断开，缺数据的年份不连线
+      el("path", { d: pts.map((p, i) => (i && !((s.maxGap != null ? s.maxGap : opt.maxGap) && p[0] - pts[i - 1][0] > (s.maxGap != null ? s.maxGap : opt.maxGap)) ? "L" : "M") + X(p[0]).toFixed(1) + "," + Y(p[1]).toFixed(1)).join(""),
         fill: "none", stroke: s.color, "stroke-width": 2, "stroke-dasharray": s.dash ? "5 4" : "none", "stroke-linejoin": "round" }, svg);
       if (s.dots !== false) pts.forEach(p => el("circle", { cx: X(p[0]), cy: Y(p[1]), r: 4, fill: s.color, stroke: "#0d1117", "stroke-width": 2 }, svg));
       if (opt.labelEnd && pts.length) {
@@ -100,7 +112,7 @@
       let best = xsU[0]; xsU.forEach(v => { if (Math.abs(X(v) - sx) < Math.abs(X(best) - sx)) best = v; });
       cross.setAttribute("x1", X(best)); cross.setAttribute("x2", X(best)); cross.setAttribute("visibility", "visible");
       const rows = opt.series.map(s => { const p = s.points.find(q => q[0] === best); return p && p[1] != null ?
-        '<div><i style="background:' + s.color + '"></i>' + s.name + "：<b>" + fmt(p[1], opt.yDigits) + "</b>" + (s.unit || opt.unit || "") + (p[2] ? '<em>' + p[2] + '</em>' : "") + "</div>" : ""; }).join("");
+        '<div><i style="background:' + s.color + '"></i>' + s.name + T.colon + "<b>" + fmt(p[1], opt.yDigits) + "</b>" + (s.unit || opt.unit || "") + (p[2] ? '<em>' + p[2] + '</em>' : "") + "</div>" : ""; }).join("");
       const hr = host.getBoundingClientRect();
       showTip(host, "<h5>" + (opt.xFmt ? opt.xFmt(best) : best) + "</h5>" + rows, ev.clientX - hr.left, ev.clientY - hr.top);
     }
@@ -110,7 +122,7 @@
     legend(host, opt.series);
     host.appendChild(svg);
     const xsT = xsU;
-    table(host, [opt.xName || "年份"].concat(opt.series.map(s => s.name + (s.unit || opt.unit ? "（" + (s.unit || opt.unit) + "）" : ""))),
+    table(host, [opt.xName || T.year].concat(opt.series.map(s => s.name + (s.unit || opt.unit ? T.lp + (s.unit || opt.unit) + T.rp : ""))),
       xsT.map(v => [opt.xFmt ? opt.xFmt(v) : v].concat(opt.series.map(s => { const p = s.points.find(q => q[0] === v); return p ? fmt(p[1], opt.yDigits) : null; }))));
   }
 
@@ -137,7 +149,7 @@
         const vt = el("text", { x: lw + w + 6, y: y + bh - 3, class: "val" }, svg); vt.textContent = fmt(v, opt.digits) + (opt.unitShort || "");
         const hit = el("rect", { x: lw - 4, y: y - 1, width: W - lw, height: bh + 2, fill: "transparent" }, svg);
         const show = ev => { const hr = host.getBoundingClientRect();
-          showTip(host, "<h5>" + g.label + "</h5><div><i style='background:" + s.color + "'></i>" + s.name + "：<b>" + fmt(v, opt.digits) + "</b>" + (opt.unit || "") + "</div>" + (g.notes && g.notes[i] ? "<p>" + g.notes[i] + "</p>" : ""), ev.clientX - hr.left, ev.clientY - hr.top); };
+          showTip(host, "<h5>" + g.label + "</h5><div><i style='background:" + s.color + "'></i>" + s.name + T.colon + "<b>" + fmt(v, opt.digits) + "</b>" + (opt.unit || "") + "</div>" + (g.notes && g.notes[i] ? "<p>" + g.notes[i] + "</p>" : ""), ev.clientX - hr.left, ev.clientY - hr.top); };
         hit.addEventListener("pointermove", show); hit.addEventListener("pointerdown", show);
         hit.addEventListener("pointerleave", () => hideTip(host));
         y += bh + gap;
@@ -146,7 +158,7 @@
     });
     legend(host, opt.series);
     host.appendChild(svg);
-    table(host, [opt.groupName || "组"].concat(opt.series.map(s => s.name + (opt.unit ? "（" + opt.unit + "）" : ""))),
+    table(host, [opt.groupName || T.group].concat(opt.series.map(s => s.name + (opt.unit ? T.lp + opt.unit + T.rp : ""))),
       opt.groups.map(g => [g.label].concat(g.values.map(v => fmt(v, opt.digits)))));
   }
 
@@ -186,5 +198,5 @@
       opt.rows.flatMap(r => r.items.map(it => [r.label, it.name, fmt(it.lo), fmt(it.hi), it.note || ""])));
   }
 
-  window.SigmaCharts = { line, bars, ranges };
+  window.SigmaCharts = { line, bars, ranges, util: { el, fmt, width, showTip, hideTip, table, legend, EN, T } };
 })();
