@@ -194,7 +194,7 @@
       y += r.items.length * rowH + rpad;
     });
     host.appendChild(svg);
-    table(host, ["量", "来源", "下限", "上限", "说明"],
+    table(host, (EN ? ["Quantity", "Source", "Low", "High", "Note"] : ["量", "来源", "下限", "上限", "说明"]),
       opt.rows.flatMap(r => r.items.map(it => [r.label, it.name, fmt(it.lo), fmt(it.hi), it.note || ""])));
   }
 
