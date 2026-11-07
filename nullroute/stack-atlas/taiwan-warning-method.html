@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex"><title>Stack Atlas</title>
+<style>
+:root{color-scheme:light dark;--bg:#f7f5ef;--ink:#1c1c1c;--muted:#5d5d5d;--line:#cfc8b8;--accent:#3d5a80}
+@media (prefers-color-scheme:dark){:root{--bg:#16181c;--ink:#e8e6e1;--muted:#a3a09a;--line:#3a3d44;--accent:#8fb0d8}}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Noto Sans SC",sans-serif}
+main{width:100%;max-width:360px;padding:0 16px}
+h1{font-size:22px;font-weight:600;margin:0 0 8px} p{color:var(--muted);font-size:15px;margin:0 0 18px}
+form{display:flex;gap:8px} input{flex:1;min-width:0;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--ink)}
+button{font-size:15px;padding:9px 16px;border:0;border-radius:6px;background:var(--accent);color:#fff;cursor:pointer}
+#m{margin-top:12px;min-height:1.4em}
+</style></head>
+<body><main><h1>Stack Atlas</h1><p>这个仪表盘需要输入密码才能查看。</p>
+<form id="f"><input type="password" id="p" autocomplete="current-password" aria-label="密码" placeholder="密码" required><button>进入</button></form>
+<p id="m" role="status"></p></main>
+<script src="./gate.js" data-root="./"></script></body></html>
