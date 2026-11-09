@@ -23,25 +23,37 @@ function db() {
   });
 }
 async function keyOp(mode, fn) {
-  const d = await db();
-  return new Promise((res) => {
-    const req = fn(d.transaction("k", mode).objectStore("k"));
-    req.onsuccess = () => res(req.result || null);
-    req.onerror = () => res(null);
-  });
+  try {
+    const d = await db();
+    return await new Promise((res) => {
+      try { const req = fn(d.transaction("k", mode).objectStore("k"));
+        req.onsuccess = () => res(req.result || null);
+        req.onerror = () => res(null);
+      } catch (e) { res(null); }
+    });
+  } catch (e) { return null; }
 }
 // 2026-11-09：有的手机浏览器里，页面存进 IndexedDB 的密钥，这里读不到（存储分开放）。页面验证密码后另用 postMessage 把密钥直接交过来，
 // 这里放在内存里，也存一份进自己这边的 IndexedDB；取密钥时先看内存。
+// 2026-11-09 第二次改：iPhone 的 Safari 里，页面存进 IndexedDB 的 CryptoKey 对象，在 Service Worker 里取不出来（WebKit 存 CryptoKey 时
+// 用只有网页里才有的主密钥包起来），直接 postMessage 过来也不行。所以改存派生出的 32 字节原始密钥（"raw"），这里自己 importKey。
 let MEMKEY = null;
-const getKey = async () => MEMKEY || (MEMKEY = await keyOp("readonly", (s) => s.get("key")));
-const clearKey = () => { MEMKEY = null; return keyOp("readwrite", (s) => s.delete("key")); };
+const fromRaw = (raw) => crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["decrypt"]);
+async function getKey() {
+  if (MEMKEY) return MEMKEY;
+  const raw = await keyOp("readonly", (s) => s.get("raw"));
+  if (raw) { try { MEMKEY = await fromRaw(raw); return MEMKEY; } catch (e) {} }
+  const old = await keyOp("readonly", (s) => s.get("key"));   // 旧版存的 CryptoKey；桌面浏览器上仍可用
+  if (old) { MEMKEY = old; return MEMKEY; }
+  return null;
+}
+const clearKey = async () => { MEMKEY = null; await keyOp("readwrite", (s) => s.delete("raw")); return keyOp("readwrite", (s) => s.delete("key")); };
 self.addEventListener("message", (e) => {
-  const d = e.data || {}, port = e.ports && e.ports[0];
-  if (d.type === "key" && d.key) {
-    MEMKEY = d.key;
-    e.waitUntil(keyOp("readwrite", (s) => s.put(d.key, "key")).then(() => port && port.postMessage({ok: true}), () => port && port.postMessage({ok: true, idb: false})));
+  const d = e.data || {}, port = e.ports && e.ports[0], reply = (x) => { try { port && port.postMessage(x); } catch (er) {} };
+  if (d.type === "key" && d.raw) {
+    e.waitUntil(fromRaw(d.raw).then((k) => { MEMKEY = k; return keyOp("readwrite", (s) => s.put(d.raw, "raw")); }).then(() => reply({ok: true}), (er) => reply({ok: false, err: String(er)})));
   } else if (d.type === "status") {
-    e.waitUntil(getKey().then((k) => port && port.postMessage({hasKey: !!k}), () => port && port.postMessage({hasKey: false})));
+    e.waitUntil(getKey().then((k) => reply({hasKey: !!k}), (er) => reply({hasKey: false, err: String(er)})));
   }
 });
 
@@ -55,7 +67,7 @@ self.addEventListener("fetch", (e) => {
 });
 
 async function serve(req, rel) {
-  const key = await getKey();
+  let key = null; try { key = await getKey(); } catch (e) {}
   if (!key) return fetch(req);
   const enc = SCOPE + "locked/" + rel.split("/").map(encodeURIComponent).join("/") + ".bin";
   const r = await fetch(enc, { cache: "no-cache" });

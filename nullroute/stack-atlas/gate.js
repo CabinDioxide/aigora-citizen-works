@@ -42,8 +42,9 @@
       };
     });
   }
-  const putKey = (key) => idb("readwrite", (s) => s.put(key, "key"));
-  const hasKey = () => idb("readonly", (s) => s.get("key")).then((k) => !!k, () => false);
+  // 存的是派生出的 32 字节原始密钥（"raw"），不是 CryptoKey 对象：iPhone 的 Safari 里 Service Worker 取不出页面存的 CryptoKey
+  const putRaw = (raw) => idb("readwrite", (s) => s.put(raw, "raw"));
+  const hasKey = () => idb("readonly", (s) => s.get("raw")).then((k) => !!k, () => false);
   const within = (p, ms) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms))]);
   const TRIED = "atlas-lock-reloaded";
   // 和解密脚本说话：把密钥直接交给它，或者问它读不读得到密钥；3 秒不回就算没回
@@ -52,10 +53,10 @@
     if (!w) throw new Error("no active worker");
     return within(new Promise((res) => { const ch = new MessageChannel(); ch.port1.onmessage = (e) => res(e.data || {}); w.postMessage(msgObj, [ch.port2]); }), 3000);
   }
-  const getKey = () => idb("readonly", (s) => s.get("key"));
+  const getRaw = () => idb("readonly", (s) => s.get("raw"));
   async function diag() {
     const ctl = !!navigator.serviceWorker.controller;
-    let sw = "未回应"; try { sw = (await ask({type: "status"})).hasKey ? "是" : "否"; } catch (e) {}
+    let sw = "未回应"; try { const r = await ask({type: "status"}); sw = (r.hasKey ? "是" : "否") + (r.err ? "，" + r.err : ""); } catch (e) {}
     const ua = navigator.userAgent.replace(/\s*\(KHTML, like Gecko\)/, "").slice(0, 160);
     return zh ? `（诊断：页面已被解密脚本接管＝${ctl ? "是" : "否"}；解密脚本读得到密钥＝${sw}；浏览器：${ua}）`
               : ` (diagnosis: page controlled by the service worker = ${ctl}; worker has key = ${sw}; browser: ${ua})`;
@@ -68,7 +69,7 @@
     if (tried) { msg.textContent = T.stuck + await diag(); try { sessionStorage.removeItem(TRIED); } catch (e) {} return; }
     msg.textContent = T.retry;
     try { await within(navigator.serviceWorker.ready, 10000); } catch (e) { msg.textContent = T.slow; return; }
-    try { await ask({type: "key", key: await getKey()}); } catch (e) {}
+    try { await ask({type: "key", raw: await getRaw()}); } catch (e) {}
     try { sessionStorage.setItem(TRIED, "1"); } catch (e) {}
     location.reload();
   });
@@ -78,10 +79,10 @@
     msg.textContent = T.wait;
     try {
       const lock = await (await fetch(new URL("lock.json", base), { cache: "no-cache" })).json();
-      const material = await crypto.subtle.importKey("raw", new TextEncoder().encode(input.value), "PBKDF2", false, ["deriveKey"]);
-      const key = await crypto.subtle.deriveKey(
-        { name: "PBKDF2", salt: b64(lock.salt), iterations: lock.iterations, hash: "SHA-256" },
-        material, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+      const material = await crypto.subtle.importKey("raw", new TextEncoder().encode(input.value), "PBKDF2", false, ["deriveBits"]);
+      const raw = new Uint8Array(await crypto.subtle.deriveBits(
+        { name: "PBKDF2", salt: b64(lock.salt), iterations: lock.iterations, hash: "SHA-256" }, material, 256));
+      const key = await crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["decrypt"]);
       const check = b64(lock.check);
       try {
         await crypto.subtle.decrypt({ name: "AES-GCM", iv: check.slice(0, 12) }, key, check.slice(12));
@@ -91,10 +92,10 @@
         return;
       }
       msg.textContent = T.ok;
-      await putKey(key);
+      await putRaw(raw);
       try { await reg; } catch (e) { msg.textContent = T.slow + "（" + e + "）"; return; }
       try { await within(navigator.serviceWorker.ready, 10000); } catch (e) { msg.textContent = T.slow; return; }
-      try { await ask({type: "key", key}); } catch (e) {}
+      try { await ask({type: "key", raw}); } catch (e) {}
       try { sessionStorage.setItem(TRIED, "1"); } catch (e) {}
       location.reload();
     } catch (e) {
