@@ -37,7 +37,7 @@ async function keyOp(mode, fn) {
 // 这里放在内存里，也存一份进自己这边的 IndexedDB；取密钥时先看内存。
 // 2026-11-09 第二次改：iPhone 的 Safari 里，页面存进 IndexedDB 的 CryptoKey 对象，在 Service Worker 里取不出来（WebKit 存 CryptoKey 时
 // 用只有网页里才有的主密钥包起来），直接 postMessage 过来也不行。所以改存派生出的 32 字节原始密钥（"raw"），这里自己 importKey。
-const VERSION = "2026-11-09e";   // 诊断时报出，看手机上跑的是不是新版
+const VERSION = "2026-11-09f";   // 诊断时报出，看手机上跑的是不是新版
 let MEMKEY = null;
 const fromRaw = (raw) => crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["decrypt"]);
 async function getKey() {
@@ -54,7 +54,7 @@ self.addEventListener("message", (e) => {
   if (d.type === "key" && d.raw) {
     e.waitUntil(fromRaw(d.raw).then((k) => { MEMKEY = k; return keyOp("readwrite", (s) => s.put(d.raw, "raw")); }).then(() => reply({ok: true}), (er) => reply({ok: false, err: String(er)})));
   } else if (d.type === "status") {
-    e.waitUntil(getKey().then((k) => reply({hasKey: !!k, v: VERSION}), (er) => reply({hasKey: false, err: String(er), v: VERSION})));
+    e.waitUntil(getKey().then(async (k) => reply({hasKey: !!k, v: VERSION, last: LASTERR || await keyOp("readonly", (st) => st.get("last"))}), (er) => reply({hasKey: false, err: String(er), v: VERSION, last: LASTERR})));
   }
 });
 
@@ -67,20 +67,37 @@ self.addEventListener("fetch", (e) => {
   e.respondWith(serve(e.request, rel));
 });
 
+// 2026-11-09 第三次改：主人 iPhone 上「页面已被接管＝是、读得到密钥＝是」，仍回到输密码页。只有两种可能：取密文没取到，或取到的密文解不开。
+// 原先解不开就清掉密钥，页面又把密钥交回来，反复如此，也看不出是哪一种。现在：取不到或解不开时，绕过缓存再取一次；
+// 仍不行，先用 lock.json 的校验串试这把密钥——密钥对，就不清密钥（是文件的问题），记下哪一个文件、哪一步、什么错，诊断时报出。
+let LASTERR = null;
+async function fetchPlain(rel, key, bust) {
+  const enc = SCOPE + "locked/" + rel.split("/").map(encodeURIComponent).join("/") + ".bin" + (bust ? "?t=" + Date.now() : "");
+  const r = await fetch(enc, { cache: bust ? "reload" : "no-cache" });
+  if (!r.ok) throw { step: "取密文", detail: "HTTP " + r.status };
+  const buf = new Uint8Array(await r.arrayBuffer());
+  try { return await crypto.subtle.decrypt({ name: "AES-GCM", iv: buf.slice(0, 12) }, key, buf.slice(12)); }
+  catch (e) { throw { step: "解密", detail: (e && e.name || String(e)) + "，" + buf.length + " 字节" }; }
+}
+async function keyIsRight(key) {
+  try { const lock = await (await fetch(SCOPE + "lock.json", { cache: "reload" })).json();
+    const c = Uint8Array.from(atob(lock.check), (x) => x.charCodeAt(0));
+    await crypto.subtle.decrypt({ name: "AES-GCM", iv: c.slice(0, 12) }, key, c.slice(12)); return true; } catch (e) { return false; }
+}
 async function serve(req, rel) {
   let key = null; try { key = await getKey(); } catch (e) {}
-  if (!key) return fetch(req);
-  const enc = SCOPE + "locked/" + rel.split("/").map(encodeURIComponent).join("/") + ".bin";
-  const r = await fetch(enc, { cache: "no-cache" });
-  if (!r.ok) return fetch(req);
-  const buf = new Uint8Array(await r.arrayBuffer());
-  try {
-    const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: buf.slice(0, 12) }, key, buf.slice(12));
+  if (!key) { LASTERR = { rel, step: "取密钥", detail: "没有密钥" }; return fetch(req); }
+  let plain = null, err = null;
+  try { plain = await fetchPlain(rel, key, false); } catch (e1) {
+    try { plain = await fetchPlain(rel, key, true); } catch (e2) { err = e2; }
+  }
+  if (plain) {
     const ext = rel.split(".").pop().toLowerCase();
     return new Response(plain, { headers: { "Content-Type": TYPES[ext] || "application/octet-stream", "Cache-Control": "no-store" } });
-  } catch (err) {
-    // 密码换过：旧密钥解不开，清掉，回到输密码的页面
-    await clearKey();
-    return fetch(req);
   }
+  const right = await keyIsRight(key);
+  LASTERR = { rel, step: err && err.step || "未知", detail: (err && err.detail || String(err)) + (right ? "；密钥核对正确" : "；密钥核对不通过，已清除") };
+  await keyOp("readwrite", (st) => st.put(LASTERR, "last"));   // Safari 会随时停掉这个脚本，内存里的记录会丢，另存一份
+  if (!right) await clearKey();   // 密码换过：旧密钥解不开，清掉，回到输密码的页面
+  return fetch(req);
 }

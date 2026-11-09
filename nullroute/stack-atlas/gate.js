@@ -56,7 +56,7 @@
   const getRaw = () => idb("readonly", (s) => s.get("raw"));
   async function diag() {
     const ctl = !!navigator.serviceWorker.controller;
-    let sw = "未回应"; try { const r = await ask({type: "status"}); sw = (r.hasKey ? "是" : "否") + (r.err ? "，" + r.err : "") + "；解密脚本版本＝" + (r.v || "旧版"); } catch (e) {}
+    let sw = "未回应"; try { const r = await ask({type: "status"}); sw = (r.hasKey ? "是" : "否") + (r.err ? "，" + r.err : "") + "；解密脚本版本＝" + (r.v || "旧版") + (r.last ? "；最近一次没打开的文件＝" + r.last.rel + "，卡在" + r.last.step + "：" + r.last.detail : ""); } catch (e) {}
     const ua = navigator.userAgent.replace(/\s*\(KHTML, like Gecko\)/, "").slice(0, 160);
     return zh ? `（诊断：页面已被解密脚本接管＝${ctl ? "是" : "否"}；解密脚本读得到密钥＝${sw}；浏览器：${ua}）`
               : ` (diagnosis: page controlled by the service worker = ${ctl}; worker has key = ${sw}; browser: ${ua})`;
