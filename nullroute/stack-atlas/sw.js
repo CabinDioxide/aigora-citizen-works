@@ -37,7 +37,7 @@ async function keyOp(mode, fn) {
 // 这里放在内存里，也存一份进自己这边的 IndexedDB；取密钥时先看内存。
 // 2026-11-09 第二次改：iPhone 的 Safari 里，页面存进 IndexedDB 的 CryptoKey 对象，在 Service Worker 里取不出来（WebKit 存 CryptoKey 时
 // 用只有网页里才有的主密钥包起来），直接 postMessage 过来也不行。所以改存派生出的 32 字节原始密钥（"raw"），这里自己 importKey。
-const VERSION = "2026-11-09f";   // 诊断时报出，看手机上跑的是不是新版
+const VERSION = "2026-11-09g";   // 诊断时报出，看手机上跑的是不是新版
 let MEMKEY = null;
 const fromRaw = (raw) => crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["decrypt"]);
 async function getKey() {
@@ -63,6 +63,9 @@ self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET" || !url.href.startsWith(SCOPE)) return;
   let rel = decodeURIComponent(url.pathname.slice(SCOPE_PATH.length));
   if (rel === "" || rel.endsWith("/")) rel += "index.html";
+  // 2026-11-09：Cloudflare Pages 把 xxx.html 的网址改成不带后缀的 xxx（308 跳转），密文却按原文件名存成 locked/xxx.html.bin。
+  // 所以最后一段没有后缀时，按 xxx.html 去找。GitHub Pages 上网址本来就带 .html，不受影响。
+  else if (!rel.split("/").pop().includes(".")) rel += ".html";
   if (OPEN.has(rel) || rel.startsWith("locked/")) return;
   e.respondWith(serve(e.request, rel));
 });
