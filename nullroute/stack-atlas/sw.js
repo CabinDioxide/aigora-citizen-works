@@ -30,8 +30,20 @@ async function keyOp(mode, fn) {
     req.onerror = () => res(null);
   });
 }
-const getKey = () => keyOp("readonly", (s) => s.get("key"));
-const clearKey = () => keyOp("readwrite", (s) => s.delete("key"));
+// 2026-11-09：有的手机浏览器里，页面存进 IndexedDB 的密钥，这里读不到（存储分开放）。页面验证密码后另用 postMessage 把密钥直接交过来，
+// 这里放在内存里，也存一份进自己这边的 IndexedDB；取密钥时先看内存。
+let MEMKEY = null;
+const getKey = async () => MEMKEY || (MEMKEY = await keyOp("readonly", (s) => s.get("key")));
+const clearKey = () => { MEMKEY = null; return keyOp("readwrite", (s) => s.delete("key")); };
+self.addEventListener("message", (e) => {
+  const d = e.data || {}, port = e.ports && e.ports[0];
+  if (d.type === "key" && d.key) {
+    MEMKEY = d.key;
+    e.waitUntil(keyOp("readwrite", (s) => s.put(d.key, "key")).then(() => port && port.postMessage({ok: true}), () => port && port.postMessage({ok: true, idb: false})));
+  } else if (d.type === "status") {
+    e.waitUntil(getKey().then((k) => port && port.postMessage({hasKey: !!k}), () => port && port.postMessage({hasKey: false})));
+  }
+});
 
 self.addEventListener("fetch", (e) => {
   const url = new URL(e.request.url);

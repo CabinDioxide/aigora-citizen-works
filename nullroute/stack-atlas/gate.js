@@ -46,14 +46,29 @@
   const hasKey = () => idb("readonly", (s) => s.get("key")).then((k) => !!k, () => false);
   const within = (p, ms) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms))]);
   const TRIED = "atlas-lock-reloaded";
+  // 和解密脚本说话：把密钥直接交给它，或者问它读不读得到密钥；3 秒不回就算没回
+  async function ask(msgObj) {
+    const r = await within(navigator.serviceWorker.ready, 10000), w = r.active;
+    if (!w) throw new Error("no active worker");
+    return within(new Promise((res) => { const ch = new MessageChannel(); ch.port1.onmessage = (e) => res(e.data || {}); w.postMessage(msgObj, [ch.port2]); }), 3000);
+  }
+  const getKey = () => idb("readonly", (s) => s.get("key"));
+  async function diag() {
+    const ctl = !!navigator.serviceWorker.controller;
+    let sw = "未回应"; try { sw = (await ask({type: "status"})).hasKey ? "是" : "否"; } catch (e) {}
+    const ua = navigator.userAgent.replace(/\s*\(KHTML, like Gecko\)/, "").slice(0, 160);
+    return zh ? `（诊断：页面已被解密脚本接管＝${ctl ? "是" : "否"}；解密脚本读得到密钥＝${sw}；浏览器：${ua}）`
+              : ` (diagnosis: page controlled by the service worker = ${ctl}; worker has key = ${sw}; browser: ${ua})`;
+  }
 
   // 已经输过密码（密钥在），页面却仍是输密码页：说明这次载入没被 Service Worker 接管。先等它接管再载入一次；再不行就说明原因。
   hasKey().then(async (k) => {
     if (!k) return;
     let tried = false; try { tried = sessionStorage.getItem(TRIED) === "1"; } catch (e) {}
-    if (tried) { msg.textContent = T.stuck; try { sessionStorage.removeItem(TRIED); } catch (e) {} return; }
+    if (tried) { msg.textContent = T.stuck + await diag(); try { sessionStorage.removeItem(TRIED); } catch (e) {} return; }
     msg.textContent = T.retry;
     try { await within(navigator.serviceWorker.ready, 10000); } catch (e) { msg.textContent = T.slow; return; }
+    try { await ask({type: "key", key: await getKey()}); } catch (e) {}
     try { sessionStorage.setItem(TRIED, "1"); } catch (e) {}
     location.reload();
   });
@@ -79,6 +94,7 @@
       await putKey(key);
       try { await reg; } catch (e) { msg.textContent = T.slow + "（" + e + "）"; return; }
       try { await within(navigator.serviceWorker.ready, 10000); } catch (e) { msg.textContent = T.slow; return; }
+      try { await ask({type: "key", key}); } catch (e) {}
       try { sessionStorage.setItem(TRIED, "1"); } catch (e) {}
       location.reload();
     } catch (e) {
