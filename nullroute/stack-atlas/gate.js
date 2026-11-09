@@ -56,7 +56,7 @@
   const getRaw = () => idb("readonly", (s) => s.get("raw"));
   async function diag() {
     const ctl = !!navigator.serviceWorker.controller;
-    let sw = "未回应"; try { const r = await ask({type: "status"}); sw = (r.hasKey ? "是" : "否") + (r.err ? "，" + r.err : ""); } catch (e) {}
+    let sw = "未回应"; try { const r = await ask({type: "status"}); sw = (r.hasKey ? "是" : "否") + (r.err ? "，" + r.err : "") + "；解密脚本版本＝" + (r.v || "旧版"); } catch (e) {}
     const ua = navigator.userAgent.replace(/\s*\(KHTML, like Gecko\)/, "").slice(0, 160);
     return zh ? `（诊断：页面已被解密脚本接管＝${ctl ? "是" : "否"}；解密脚本读得到密钥＝${sw}；浏览器：${ua}）`
               : ` (diagnosis: page controlled by the service worker = ${ctl}; worker has key = ${sw}; browser: ${ua})`;
@@ -66,7 +66,8 @@
   hasKey().then(async (k) => {
     if (!k) return;
     let tried = false; try { tried = sessionStorage.getItem(TRIED) === "1"; } catch (e) {}
-    if (tried) { msg.textContent = T.stuck + await diag(); try { sessionStorage.removeItem(TRIED); } catch (e) {} return; }
+    if (tried) { let kr = ""; try { const r = await ask({type: "key", raw: await getRaw()}); kr = r.ok ? "；交密钥＝成功" : "；交密钥＝失败，" + (r.err || ""); } catch (e) { kr = "；交密钥＝" + e; }
+      msg.textContent = T.stuck + (await diag()).replace(/[）)]$/, kr + "）"); try { sessionStorage.removeItem(TRIED); } catch (e) {} return; }
     msg.textContent = T.retry;
     try { await within(navigator.serviceWorker.ready, 10000); } catch (e) { msg.textContent = T.slow; return; }
     try { await ask({type: "key", raw: await getRaw()}); } catch (e) {}

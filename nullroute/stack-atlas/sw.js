@@ -37,6 +37,7 @@ async function keyOp(mode, fn) {
 // 这里放在内存里，也存一份进自己这边的 IndexedDB；取密钥时先看内存。
 // 2026-11-09 第二次改：iPhone 的 Safari 里，页面存进 IndexedDB 的 CryptoKey 对象，在 Service Worker 里取不出来（WebKit 存 CryptoKey 时
 // 用只有网页里才有的主密钥包起来），直接 postMessage 过来也不行。所以改存派生出的 32 字节原始密钥（"raw"），这里自己 importKey。
+const VERSION = "2026-11-09d";   // 诊断时报出，看手机上跑的是不是新版
 let MEMKEY = null;
 const fromRaw = (raw) => crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["decrypt"]);
 async function getKey() {
@@ -53,7 +54,7 @@ self.addEventListener("message", (e) => {
   if (d.type === "key" && d.raw) {
     e.waitUntil(fromRaw(d.raw).then((k) => { MEMKEY = k; return keyOp("readwrite", (s) => s.put(d.raw, "raw")); }).then(() => reply({ok: true}), (er) => reply({ok: false, err: String(er)})));
   } else if (d.type === "status") {
-    e.waitUntil(getKey().then((k) => reply({hasKey: !!k}), (er) => reply({hasKey: false, err: String(er)})));
+    e.waitUntil(getKey().then((k) => reply({hasKey: !!k, v: VERSION}), (er) => reply({hasKey: false, err: String(er), v: VERSION})));
   }
 });
 
